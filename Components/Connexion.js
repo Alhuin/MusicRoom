@@ -8,7 +8,7 @@ class Connexion extends React.Component {
                 <Text>Veuillez vous connecter</Text>
                 <Image
                     style= {styles.mainIcon}
-                    source={require('../../MusicRoom/assets/deezer-png-300.png')}
+                    source={require('../assets/deezer-png-300.png')}
                 />
                 <Text>Pas encore de compte ?</Text><Text onPress = {() => {this.props.navigation.navigate("Inscription")}}> Inscrivez-vous !</Text>
             </View>
