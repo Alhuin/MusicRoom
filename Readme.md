@@ -7,6 +7,7 @@ A Music playlist sharing crossplatform app in react-native & nodeJs
 ``git clone https://github.com/Alhuin/MusicRoom.git``<br/>
 ``cd MusicRoom``<br/>
 ``npm install``<br/>
+``npm install -g react-native-cli``<br/>
 ``npm start``<br/>
 
 in another shell instance :<br/>
