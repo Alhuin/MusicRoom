@@ -1,3 +1,4 @@
+import {Platform} from "react-native"
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Connexion from '../Components/Connexion'
 import Inscription from '../Components/Inscription'
@@ -6,22 +7,13 @@ import Test from '../Components/test'
 
 const AppStackNavigator = createStackNavigator({
     Inscription: {
-        screen: Inscription,
-        navigationOptions: {
-            title: 'Inscription'
-        }
+        screen: Inscription
     },
-    Connection: {
-        screen: Connexion,
-        navigationOptions: {
-            title: 'Connexion'
-        }
+    Connexion: {
+        screen: Connexion
     },
     Home: {
-        screen: Home,
-        navigationOptions: {
-            title: 'Accueil'
-        }
+        screen: Home
     }
 });
 

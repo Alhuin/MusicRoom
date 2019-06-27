@@ -72,17 +72,18 @@ class Inscription extends React.Component {
                                 title='Sign Up'
                                 onPress={() => {
                                     Keyboard.dismiss();
-                                    this._login()
+                                    // this._login();
+                                    this.props.navigation.navigate("Home")
                                 }}
                                 style={{marginTop:"200%"}}
                             />
                         </View>
                         <View style={{flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-                            <SocialButton type='facebook' text='Sign In With Facebook' opacity={0.5} height={40}
+                            <SocialButton type='facebook' text='Sign Up With Facebook' opacity={0.5} height={40}
                                           width={220} action={() => {
                                 alert("facebook login")
                             }}/>
-                            <SocialButton type='google' text='Sign In With Google' opacity={0.5} height={40}
+                            <SocialButton type='google' text='Sign Up With Google' opacity={0.5} height={40}
                                           width={220} action={() => {
                                 alert("google login")
                             }}/>
