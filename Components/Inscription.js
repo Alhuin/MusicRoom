@@ -2,6 +2,7 @@ import React from 'react'
 import {Image, StyleSheet, View, Button, KeyboardAvoidingView, Keyboard} from "react-native";
 import SocialButton from "rtg-rn-social-buttons";
 import {Container, Header, Content, Form, Item as FormItem, Input, Text, Label} from 'native-base';
+import {API_login} from '../API/Api'
 
 
 class Inscription extends React.Component {
@@ -72,8 +73,8 @@ class Inscription extends React.Component {
                                 title='Sign Up'
                                 onPress={() => {
                                     Keyboard.dismiss();
-                                    // this._login();
-                                    this.props.navigation.navigate("Home")
+                                    API_login();
+                                    // this.props.navigation.navigate("Home")
                                 }}
                                 style={{marginTop:"200%"}}
                             />
