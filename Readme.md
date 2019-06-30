@@ -15,7 +15,7 @@ in another shell instance :<br/>
 
 ## Views
 
- - Inscription ( premiere visite )
+ - Connexion ( premiere visite )
  - Connexion ( visites futures )
  - Choix du service 
 	 - **Music Track Vote** : Génération live d’enchainement de musiques par vote. 
@@ -28,7 +28,7 @@ in another shell instance :<br/>
 
 ```mermaid
 graph LR
-A[Premiere visite] --> B[Inscription : Oauth2 / Email - passwd -> Mail confirmation]
+A[Premiere visite] --> B[Connexion : Oauth2 / Email - passwd -> Mail confirmation]
 B --> C[Rattacher compte Deezer +? Autre réseau]
 C --> E
 D[Visites futures] --> E[Connexion: Oauth2 / Email-passwd]
