@@ -1,4 +1,4 @@
-const server = "http://4d92c387.ngrok.io";
+const server = "http://859427a8.ngrok.io";
 
 export function login(login, password) {
 
