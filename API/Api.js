@@ -1,7 +1,7 @@
-const server = "http://68f93cc9.ngrok.io";
-import Navigation from '../src/Navigation/Navigation'
+const server = "http://41df045c.ngrok.io";
 
 export function login(login, password) {
+
     console.log('login: ' + login + ', password: ' + password);
     fetch(server + '/login', {
         method: "POST",
@@ -12,12 +12,21 @@ export function login(login, password) {
         body: JSON.stringify({login, password}),
     })
         .then(async (response) => {
-        response = await response.json();
-        console.log(response);
-
-    })
+            console.log(response.status);
+            let data = await response.json();
+            if (response.status === 200) {
+                alert("Login OK for user " + data.name + " " + data.familyName);
+            }
+            else if (response.status === 400){
+                alert("error : " + data.error);
+            }
+            else {
+                alert('Server Error');
+            }
+            return data;
+        })
+        .then((responseData) => console.log(responseData))
         .catch((error) => {
             console.error(error);
-            return false
         })
 }

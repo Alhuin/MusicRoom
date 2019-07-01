@@ -27,7 +27,6 @@ export default class CustomForm extends React.Component {
                 alert("Sign Up TODO");
             }
             else if (this.props.type === "Sign In") {
-                alert("Sign In TOFetch");
                 login(this.state.email, this.state.password);
             }
         }
