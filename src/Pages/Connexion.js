@@ -1,10 +1,7 @@
 import React from 'react'
-import {StyleSheet, View, TouchableOpacity, KeyboardAvoidingView} from "react-native";
-import {Text} from "native-base";
+import {StyleSheet, KeyboardAvoidingView} from "react-native";
 
-import CustomForm from '../Components/CustomForm'
-import Logo from '../Components/Logo'
-import SocialLogin from '../Components/SocialLogin'
+import Components from '../Components'
 
 class Connexion extends React.Component {
 
@@ -15,7 +12,7 @@ class Connexion extends React.Component {
         }
     }
 
-    _changePage = () => {
+    changePage = () => {
         if (this.state.type === 'Sign Up') {
             this.setState({type: 'Sign In'});
         } else {
@@ -26,32 +23,18 @@ class Connexion extends React.Component {
     render() {
 
         const type = this.state.type;
-        let text;
-        let other;
-
-        if (type === "Sign Up"){
-            text = <Text style={styles.contextText}>Already have an account ?</Text>;
-            other = "Sign In";
-        } else {
-            text = <Text style={styles.contextText}>Don't have an account yet ?</Text>;
-            other = "Sign Up";
-        }
 
         return (
-            <KeyboardAvoidingView style={styles.container} behavior={"height"}>
+            <KeyboardAvoidingView style={styles.container} behavior="height">
 
-                <Logo/>
+                <Components.Logo/>
 
-                <CustomForm type={type}/>
+                <Components.CustomForm type={type}/>
 
-                <SocialLogin type={type}/>
+                <Components.SocialLogin type={type}/>
 
-                <View style={styles.context}>
-                    {text}
-                    <TouchableOpacity onPress={this._changePage}>
-                        <Text style={styles.contextLink}> {other} !</Text>
-                    </TouchableOpacity>
-                </View>
+                <Components.LoginContext type={type} changePage={this.changePage}/>
+
             </KeyboardAvoidingView>
         )
     }
@@ -62,21 +45,10 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:"center",
         justifyContent: "center",
-    },
-    context:{
-        flexGrow:1,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        paddingVertical: 16,
-        flexDirection: 'row',
-    },
-    contextText: {
+        // borderWidth:1,
+        // borderColor:'red',
 
-    },
-    contextLink:{
-        fontWeight: 'bold',
     }
-
 });
 
 export default Connexion

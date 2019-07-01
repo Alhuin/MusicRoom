@@ -71,7 +71,10 @@ const styles = StyleSheet.create({
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
+            paddingVertical:20,
             width: 300,
+            // borderWidth:1,
+            // borderColor:'yellow',
         },
         inputBox: {
             width: 300,
