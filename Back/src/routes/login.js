@@ -1,5 +1,5 @@
 import {Router} from 'express';
-
+const bcrypt = require('bcrypt');
 const router = Router();
 
 router.post('/',  (req, res) => {
@@ -10,7 +10,7 @@ router.post('/',  (req, res) => {
             res.status(500).send(err);
         }
         else if (users.length) {
-            if (users[0].password === password) {
+            if (bcrypt.compareSync(password, users[0].password)) {
                 res.status(200).json(users[0]);
             }
             else {

@@ -7,6 +7,7 @@ import cors from 'cors';
 import express from 'express';
 import models, {connectDb} from './models';
 import routes from "./routes";
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -69,17 +70,21 @@ connectDb().then(async () => {
 
 const seedDatas = async () => {
 
+    let salt = await bcrypt.genSaltSync(10);
+    let hash = await bcrypt.hashSync('Ge4rt3ln@', salt);
     const user1 = new models.User({
         login: 'Alhuin',
-        password: 'Ge4rt3ln@',
+        password: hash,
         name: 'Julien',
         familyName: 'Janin-Reynaud',
         email: 'janin.reynaud.julien@gmail.com'
     });
 
+    let salty = await bcrypt.genSaltSync(10);
+    let hashy = await bcrypt.hashSync('admin', salty);
     const admin = new models.User({
         login: 'admin',
-        password: 'admin',
+        password: hashy,
         name: 'Julien',
         familyName: 'Janin-Reynaud',
         email: 'julien.janinr@protonmail.com'

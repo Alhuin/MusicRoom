@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import Utils from '../utils'
 import models from "../models";
+const bcrypt = require('bcrypt');
 
 const router = Router();
 
@@ -43,9 +44,13 @@ router.post('/', async (req, res) => {
     let familyName = req.body.familyName;
     let email = req.body.email;
 
+
+    let salt = await bcrypt.genSaltSync(10);
+    let hash = await bcrypt.hashSync(password, salt);
+
     const user = await new models.User({
         login,
-        password,
+        password: hash,
         name,
         familyName,
         email,
