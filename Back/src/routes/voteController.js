@@ -1,6 +1,6 @@
 import voteService from '../services/voteService'
 
-const getVotes = function(req, res) {
+function getVotes(req, res) {
 
     voteService.getVotes()
         .then((response) => {
@@ -14,9 +14,9 @@ const getVotes = function(req, res) {
                 .status(error.status)
                 .send(error.msg);
         })
-};
+}
 
-const getVoteById = function(req, res) {
+function getVoteById(req, res) {
 
     if ((req.params.voteId && utils.isValidId(req.params.voteId))){
         voteService.getVoteById(req.params.voteId)
@@ -35,9 +35,9 @@ const getVoteById = function(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
-const deleteVoteById = function(req, res) {
+function deleteVoteById(req, res) {
 
     if ((req.params.voteId && utils.isValidId(req.params.voteId))){
         voteService.deleteVoteById(req.params.voteId)
@@ -56,7 +56,7 @@ const deleteVoteById = function(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
 export default {
     getVoteById,

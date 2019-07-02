@@ -1,7 +1,7 @@
 import musicService from '../services/musicService'
 import utils from '../utils'
 
-const getMusics = function(req, res) {
+function getMusics(req, res) {
 
     musicService.getMusics()
         .then((response) => {
@@ -15,9 +15,9 @@ const getMusics = function(req, res) {
                 .status(error.status)
                 .send(error.msg);
         })
-};
+}
 
-const getMusicById = function(req, res) {
+function getMusicById(req, res) {
 
     if ((req.params.musicId && utils.isValidId(req.params.musicId))){
         musicService.getMusicById(req.params.musicId)
@@ -36,9 +36,9 @@ const getMusicById = function(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
-const deleteMusicById = function(req, res) {
+function deleteMusicById(req, res) {
 
     if ((req.params.musicId && utils.isValidId(req.params.musicId))){
         musicService.deleteMusicById(req.params.musicId)
@@ -57,7 +57,7 @@ const deleteMusicById = function(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
 export default {
     getMusicById,

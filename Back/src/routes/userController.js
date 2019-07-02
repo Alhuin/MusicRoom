@@ -1,7 +1,7 @@
 import userService from '../services/userService'
 import utils from '../utils'
 
-const getUsers = function(req, res) {
+function getUsers(req, res) {
 
     userService.getUsers()
         .then((response) => {
@@ -17,7 +17,7 @@ const getUsers = function(req, res) {
         })
 };
 
-const getUserById = function(req, res) {
+function getUserById(req, res) {
 
     if ((req.params.userId && utils.isValidId(req.params.userId))){
         userService.getUserById(req.params.userId)
@@ -38,7 +38,7 @@ const getUserById = function(req, res) {
     }
 };
 
-const deleteUserById = function(req, res) {
+function deleteUserById(req, res) {
 
     if ((req.params.userId && utils.isValidId(req.params.userId))){
         userService.deleteUserById(req.params.userId)
@@ -59,7 +59,7 @@ const deleteUserById = function(req, res) {
     }
 };
 
-const addUser = function(req, res) {
+function addUser(req, res) {
 
     // checker email valide et les uniques
 
@@ -83,7 +83,7 @@ const addUser = function(req, res) {
     }
 };
 
-const confirmEmail = function(req, res) {
+function confirmEmail(req, res) {
 
     if (req.params.token && req.body.userId) {
         userService.sendMailToken(req.body.userId)

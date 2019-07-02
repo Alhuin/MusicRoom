@@ -22,7 +22,7 @@ function initMailer() {
     });
 
     return transporter;
-};
+}
 
 function sendMail(mailOptions, resolve, reject) {
 
@@ -44,7 +44,7 @@ function sendMail(mailOptions, resolve, reject) {
             });
         }
     });
-};
+}
 
 export default sendMail
 
