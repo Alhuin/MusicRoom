@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
-import User from './user';
-import Music from './music';
-import Playlist from './playlist';
-import Vote from './vote';
-import Token from './token';
+import UserModel from './userModel';
+import MusicModel from './musicModel';
+import PlaylistModel from './playlistModel';
+import VoteModel from './voteModel';
+import TokenModel from './tokenModel';
 
-const models = { User, Music, Playlist, Vote, Token };
+const models = { User: UserModel, Music: MusicModel, Playlist: PlaylistModel, Vote: VoteModel, Token: TokenModel };
 
 const connectDb = () => {
     return mongoose.connect(

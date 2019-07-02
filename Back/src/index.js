@@ -6,7 +6,7 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 import models, {connectDb} from './models';
-import routes from "./routes";
+import API from "./routes";
 const bcrypt = require('bcrypt');
 
 const app = express();
@@ -32,17 +32,7 @@ app.use(async (req, res, next) => {
     next();
 });
 
-app.use('/users', routes.user);
-
-app.use('/session', routes.session);
-
-app.use('/musics', routes.music);
-
-app.use('/playlists', routes.playlist);
-
-app.use('/votes', routes.vote);
-
-app.use('/login', routes.login);
+app.use('/api', API);
 
 connectDb().then(async () => {
 
@@ -88,11 +78,12 @@ const seedDatas = async () => {
         password: hashy,
         name: 'Julien',
         familyName: 'Janin-Reynaud',
-        email: 'julien.janinr@protonmail.com'
+        email: 'julien.janinr@protonmail.com',
+        isVerified: true,
     });
 
     const playlist = new models.Playlist({
-        name: 'AweSome Playlist',
+        name: 'AweSome PlaylistModel',
         users: [admin],
     });
 

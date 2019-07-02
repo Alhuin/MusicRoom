@@ -27,7 +27,7 @@ export function login(login, password) {
         })
         .then((responseData) => console.log(responseData))
         .catch((error) => {
-            console.error(error);
+            console.error(error.msg);
         })
 }
 
@@ -55,6 +55,6 @@ export function addUser(login, password, name, familyName, email) {
         })
         .then((responseData) => console.log(responseData))
         .catch((error) => {
-            console.error(error);
+            console.error(error.msg);
         })
 }

@@ -1,7 +1,7 @@
 import nodeMailer from "nodemailer";
 var transporter = false;
 
-const initMailer = () => {
+function initMailer() {
 
     const transporter = nodeMailer.createTransport({
         host: "smtp.mailtrap.io",
@@ -15,37 +15,33 @@ const initMailer = () => {
 
     transporter.verify(function (error) {
         if (error) {
-            console.log(error);
+            console.error(error.msg);
         } else {
-            console.log('Server is ready to take our messages');
+            // console.log('Server is ready to take our messages');
         }
     });
 
     return transporter;
 };
 
-const sendMail = (res, to, subject, text) => {
+function sendMail(mailOptions, resolve, reject) {
 
     if (!(transporter)) {
         transporter = initMailer();
     }
-
-    var mailOptions = {
-        from: '"MusicRoom Team" <team@musicroom.com>',
-        to,
-        subject,
-        text,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            // console.log("500");
-            res.status(500).send(error);
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            reject({
+                status: 500,
+                msg: err.msg,
+            })
         }
         else {
-            // console.log("200");
-            res.status(200).send({msg: 'An email has been sent to ' + to + '.'});
-            console.log('Message sent: %s', info.messageId);
+            // console.log('Message sent: %s', info.messageId);
+            resolve({
+                status:200,
+                data: {msg: 'An email has been sent to ' + mailOptions.to + '.'}
+            });
         }
     });
 };
