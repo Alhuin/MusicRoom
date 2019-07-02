@@ -22,6 +22,17 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    passwordResetToken: {
+        type: String,
+    },
+    passwordResetExpires: {
+        type: Date,
+    },
+    roles : [{type: String}]
 });
 
 userSchema.statics.findByLoginOrEmail = async function (login) {

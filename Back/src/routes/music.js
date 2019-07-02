@@ -2,9 +2,7 @@ import {Router} from 'express';
 import Utils from '../utils'
 
 const router = Router();
-/**
- *   curl GET "http://localhost:3000/musics
- */
+
 router.get('/', (req, res) => {
     res.locals.models.Music.find({}, (err, musics) => {
         if (err) {
@@ -19,16 +17,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:musicId', (req, res) => {
-    if (!Utils.isValidId(req.params.playlistId)) {
+    if (!Utils.isValidId(req.params.musicId)) {
         return res.status(400).send("Invalid Id.");
 
     }
     res.locals.models.Music.findById(req.params.musicId, (err, music) => {
         if (err) {
             res.status(500).send(err);
-            return;
         }
-        if (music) {
+        else if (music) {
             res.status(200).send(music);
         } else {
             res.status(400).end();
@@ -36,25 +33,19 @@ router.get('/:musicId', (req, res) => {
     });
 });
 
-router.delete('/:musicId', async (req, res) => {
+router.delete('/:musicId', (req, res) => {
     if (!Utils.isValidId(req.params.musicId)) {
         return res.status(400).send("Invalid Id.");
     }
-    await res.locals.models.Music.findById(req.params.musicId, async (err, music) => {
+    res.locals.models.Music.findById(req.params.musicId, (err, music) => {
         if (err) {
             res.status(500).send(err);
-            return;
         }
-        if (music) {
-            let result = null;
-            result = await music.remove();
-            if (result !== null) {
-                res.status(200).send(music);
-            } else {
-                res.status(500).end();
-            }
+        else if (music) {
+            music.remove();
+            res.status(200).send(music);
         } else {
-            res.status(400).end();
+            res.status(400).send("Found no music with this id.");
         }
     });
 

@@ -11,13 +11,16 @@ router.post('/',  (req, res) => {
         }
         else if (users.length) {
             if (bcrypt.compareSync(password, users[0].password)) {
-                res.status(200).json(users[0]);
+                if (!(users[0].isVerified)){
+                    return res.status(400).send({"error": "User not verified"});
+                }
+                res.status(200).send(users[0]);
             }
             else {
-                res.status(400).json({"error": "Wrong Password"});
+                res.status(400).send({"error": "Invalid Password"});
             }
         } else {
-            res.status(400).json({"error": "Wrong Login"});
+            res.status(400).send({"error": "Invalid Login"});
         }
     });
 });

@@ -4,8 +4,9 @@ import User from './user';
 import Music from './music';
 import Playlist from './playlist';
 import Vote from './vote';
+import Token from './token';
 
-const models = { User, Music, Playlist, Vote };
+const models = { User, Music, Playlist, Vote, Token };
 
 const connectDb = () => {
     return mongoose.connect(

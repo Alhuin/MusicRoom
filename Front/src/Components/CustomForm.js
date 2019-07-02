@@ -42,6 +42,7 @@ export default class CustomForm extends React.Component {
         const password = this.state.password;
 
         if (!(userName.length && password.length)) {
+            alert("error, empty field.");
             console.log("error, empty field");
         }
         else {
@@ -53,10 +54,12 @@ export default class CustomForm extends React.Component {
                 const confirmPassword = this.state.confirmPassword;
 
                 if (!(name.length && familyName.length && email.length && confirmPassword.length)) {
+                    alert("error, empty field.");
                     console.log("error, empty field");
                 }
                 else {
                     if (password !== confirmPassword) {
+                        alert("error, passwords don't match");
                         console.log("error, passwords don't match");
                     }
                     else {

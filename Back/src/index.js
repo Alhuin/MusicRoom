@@ -50,6 +50,7 @@ connectDb().then(async () => {
 
     if (process.env.ERASE_DATABASE_ONSYNC) {
         await Promise.all([
+            models.Token.deleteMany({}),
             models.User.deleteMany({}),
             models.Music.deleteMany({}),
             models.Playlist.deleteMany({}),
@@ -75,9 +76,9 @@ const seedDatas = async () => {
     const user1 = new models.User({
         login: 'Alhuin',
         password: hash,
-        name: 'Julien',
-        familyName: 'Janin-Reynaud',
-        email: 'janin.reynaud.julien@gmail.com'
+        name: 'Jul',
+        familyName: 'Janin-R',
+        email: 'janin.reynaud.julien@gma'
     });
 
     let salty = await bcrypt.genSaltSync(10);

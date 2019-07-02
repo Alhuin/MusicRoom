@@ -1,4 +1,4 @@
-const server = "http://3f4b1f3c.ngrok.io";
+const server = "http://1d71db7f.ngrok.io";
 
 export function login(login, password) {
 
@@ -12,7 +12,7 @@ export function login(login, password) {
         body: JSON.stringify({login, password}),
     })
         .then(async (response) => {
-            console.log(response.status);
+            // console.log(response.status);
             let data = await response.json();
             if (response.status === 200) {
                 alert("Login OK for user " + data.name + " " + data.familyName);
@@ -33,6 +33,8 @@ export function login(login, password) {
 
 export function addUser(login, password, name, familyName, email) {
 
+    // console.log('in addUser');
+    // console.log('POST on ' + server + '/users');
     fetch(server + '/users', {
         method: "POST",
         headers: {
@@ -42,10 +44,9 @@ export function addUser(login, password, name, familyName, email) {
         body: JSON.stringify({login, password, name, familyName, email}),
     })
         .then(async (response) => {
-            console.log(response.status);
             let data = await response.json();
             if (response.status === 200) {
-                alert("User " + data.name + " " + data.familyName + " successfully created");
+                alert(data.msg);
             }
             else {
                 alert('Server Error');
