@@ -130,12 +130,18 @@ function addUser(login, password, name, familyName, email) {
                         });
                     }
                     else {
+                        let link =  process.env.SERVER + "/api/users/confirm/" + token.token;
+
                         let mailOptions = {
                             from: '"MusicRoom Team" <team@musicroom.com>',
                             to: user.email,
                             subject: 'Account Verification TokenModel',
-                            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' +
-                                '$(SERVER ENV)' + '\/users\/confirmation\/' + token.token + '.\n',
+                            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: ' +
+                                process.env.SERVER + '\/api\/users\/confirmation\/' + token.token + '.\n',
+                            html: '<html><body><h2>Welcome to MusicRoom !</h2>' +
+                                '<p>Please verify your account by clicking on ' +
+                                '<a href="'+ link + '">this link.' +
+                                '</a></p></body></html>',
                         };
                         utils.sendMail(mailOptions, resolve, reject);
                     }
@@ -143,7 +149,7 @@ function addUser(login, password, name, familyName, email) {
             }
         });
     });
-};
+}
 
 function confirmEmail(tokenString) {
 
@@ -189,7 +195,7 @@ function confirmEmail(tokenString) {
                                 else {
                                     resolve({
                                         status: 200,
-                                        data,
+                                        data,       // user is now verified & can login
                                     })
                                 }
                             });

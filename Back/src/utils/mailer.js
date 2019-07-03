@@ -8,8 +8,8 @@ function initMailer() {
         port: 2525,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: '4234ef9be3c4ef', // generated ethereal user
-            pass: '0170cf1096bdef' // generated ethereal password
+            user: 'f95c1b9bdecaa5', // generated ethereal user
+            pass: '749f167913a5e1' // generated ethereal password
         }
     });
 
@@ -29,8 +29,8 @@ function sendMail(mailOptions, resolve, reject) {
     if (!(transporter)) {
         transporter = initMailer();
     }
-    transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
             reject({
                 status: 500,
                 msg: err.msg,

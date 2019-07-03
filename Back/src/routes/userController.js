@@ -15,7 +15,7 @@ function getUsers(req, res) {
                 .status(error.status)
                 .send(error.msg);
         })
-};
+}
 
 function getUserById(req, res) {
 
@@ -36,7 +36,7 @@ function getUserById(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
 function deleteUserById(req, res) {
 
@@ -57,7 +57,7 @@ function deleteUserById(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
 function addUser(req, res) {
 
@@ -81,12 +81,12 @@ function addUser(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
 function confirmEmail(req, res) {
 
-    if (req.params.token && req.body.userId) {
-        userService.sendMailToken(req.body.userId)
+    if (req.params.token) {
+        userService.confirmEmail(req.params.token)
             .then((response) => {
                 res
                     .status(response.status)
@@ -101,7 +101,7 @@ function confirmEmail(req, res) {
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
 export default {
     getUserById,
