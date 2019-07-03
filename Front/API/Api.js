@@ -1,9 +1,9 @@
-const server = "http://20ecd674.ngrok.io";
+const server = "http://dcf2c5d7.ngrok.io";
 
 export function login(login, password) {
 
     console.log('login: ' + login + ', password: ' + password);
-    fetch(server + '/login', {
+    fetch(server + '/api/login', {
         method: "POST",
         headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -35,7 +35,7 @@ export function addUser(login, password, name, familyName, email) {
 
     // console.log('in addUser');
     // console.log('POST on ' + server + '/users');
-    fetch(server + '/users', {
+    fetch(server + '/api/users', {
         method: "POST",
         headers: {
             'Accept': 'application/json, text/plain, */*',
