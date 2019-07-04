@@ -103,12 +103,33 @@ function confirmEmail(req, res) {
     }
 }
 
+function askPasswordReset(req, res) {
+
+    if (req.body.loginOrEmail) {
+        userService.askPasswordReset(req.body.loginOrEmail)
+            .then((response) => {
+                res
+                    .status(response.status)
+                    .send(response.data);
+            })
+            .catch((error) => {
+                res
+                    .status(error.status)
+                    .send(error.msg);
+            })
+    }
+    else {
+        res.status(400).send({msg: 'Wrong Parameters'});
+    }
+}
+
 export default {
     getUserById,
     getUsers,
     deleteUserById,
     addUser,
     confirmEmail,
+    askPasswordReset,
 }
 
 // router.post('/resend', (req, res) => {

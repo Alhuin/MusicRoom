@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 
 const tokenSchema = new mongoose.Schema({
+    type:{
+      type: String,
+      required: true
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

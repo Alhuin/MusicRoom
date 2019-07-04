@@ -19,6 +19,7 @@ router.post('/login', loginController.login);
 /**             Users                 **/
 
 router.get('/users', userController.getUsers);
+router.post('/users/askPasswordReset', userController.askPasswordReset);
 router.get('/users/:userId', userController.getUserById);
 router.delete('/users/:userId', userController.deleteUserById);
 router.post('/users', userController.addUser);

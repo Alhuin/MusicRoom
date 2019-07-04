@@ -1,43 +1,38 @@
 import nodeMailer from "nodemailer";
-var transporter = false;
 
-function initMailer() {
-
-    const transporter = nodeMailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: 'f95c1b9bdecaa5', // generated ethereal user
-            pass: '749f167913a5e1' // generated ethereal password
-        }
-    });
-
-    transporter.verify(function (error) {
-        if (error) {
-            console.error(error.msg);
-        } else {
-            // console.log('Server is ready to take our messages');
-        }
-    });
-
-    return transporter;
-}
+let transporter = false;
 
 function sendMail(mailOptions, resolve, reject) {
 
     if (!(transporter)) {
-        transporter = initMailer();
+        transporter = nodeMailer.createTransport({
+            service: "gmail",
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: process.env.GMAIL_USER, // generated ethereal user
+                pass: process.env.GMAIL_PASSWORD, // generated ethereal password
+            },
+            pool: true, // use pooled connection
+            maxConnections: 1, // set limit to 1 connection only
+        });
+        transporter.verify(function (error) {
+            if (error) {
+                console.error(error.msg);
+            } else {
+                console.log('Server is ready to take our messages');
+            }
+        });
     }
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
+            console.log('sendMail 500');
             reject({
                 status: 500,
-                msg: err.msg,
+                msg: error.response,
             })
         }
         else {
-            // console.log('Message sent: %s', info.messageId);
+            console.log('Message sent: %s', info.messageId);
             resolve({
                 status:200,
                 data: {msg: 'An email has been sent to ' + mailOptions.to + '.'}

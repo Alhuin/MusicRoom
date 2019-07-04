@@ -14,14 +14,12 @@ function getUsers() {
                     status: 500,
                     msg: error.msg,
                 })
-            }
-            else if (!users.length) {
+            } else if (!users.length) {
                 reject({
                     status: 401,
                     msg: 'No Musics in Database'
                 })
-            }
-            else {
+            } else {
                 resolve({
                     status: 200,
                     data: users,
@@ -41,14 +39,12 @@ function getUserById(userId) {
                     status: 500,
                     msg: error.msg,
                 })
-            }
-            else if (!user) {
+            } else if (!user) {
                 reject({
                     status: 401,
                     msg: 'No user with this id in Database'
                 })
-            }
-            else {
+            } else {
                 resolve({
                     status: 200,
                     data: user,
@@ -68,22 +64,19 @@ function deleteUserById(userId) {
                     status: 500,
                     msg: error.msg,
                 })
-            }
-            else if (!user) {
+            } else if (!user) {
                 reject({
                     status: 401,
                     msg: 'No user with this id in Database'
                 })
-            }
-            else {
+            } else {
                 user.remove((error, user) => {
                     if (error) {
                         reject({
                             status: 500,
                             msg: error.msg,
                         })
-                    }
-                    else {
+                    } else {
                         resolve({
                             status: 200,
                             data: user,
@@ -116,9 +109,9 @@ function addUser(login, password, name, familyName, email) {
                     status: 500,
                     msg: error.msg,
                 })
-            }
-            else {
+            } else {
                 let token = new TokenModel({
+                    type: 'verifyMail',
                     user: user._id,
                     token: crypto.randomBytes(16).toString('hex')
                 });
@@ -128,9 +121,8 @@ function addUser(login, password, name, familyName, email) {
                             status: 500,
                             msg: error.msg,
                         });
-                    }
-                    else {
-                        let link =  process.env.SERVER + "/api/users/confirm/" + token.token;
+                    } else {
+                        let link = process.env.SERVER + "/api/users/confirm/" + token.token;
 
                         let mailOptions = {
                             from: '"MusicRoom Team" <team@musicroom.com>',
@@ -140,7 +132,7 @@ function addUser(login, password, name, familyName, email) {
                                 process.env.SERVER + '\/api\/users\/confirmation\/' + token.token + '.\n',
                             html: '<html><body><h2>Welcome to MusicRoom !</h2>' +
                                 '<p>Please verify your account by clicking on ' +
-                                '<a href="'+ link + '">this link.' +
+                                '<a href="' + link + '">this link.' +
                                 '</a></p></body></html>',
                         };
                         utils.sendMail(mailOptions, resolve, reject);
@@ -155,35 +147,31 @@ function confirmEmail(tokenString) {
 
     return new Promise((resolve, reject) => {
 
-        TokenModel.findOne({token: tokenString}, (error, token) => {
+        TokenModel.findOne({token: tokenString, type: 'verifyMail'}, (error, token) => {
             if (error) {
                 reject({
                     status: 500,
                     msg: error.msg,
                 })
-            }
-            else if (!token) {
+            } else if (!token) {
                 reject({
                     status: 400,
                     msg: 'No Token with this id, it may have expired'
                 })
-            }
-            else {
+            } else {
                 UserModel.findById(token.user, (error, user) => {
                     if (error) {
                         reject({
                             status: 500,
                             msg: error.msg,
                         })
-                    }
-                    else if (user) {
+                    } else if (user) {
                         if (user.isVerified) {
                             reject({
                                 status: 400,
                                 msg: 'User already verified'
                             })
-                        }
-                        else {
+                        } else {
                             user.isVerified = true;
                             user.save((error, data) => {
                                 if (error) {
@@ -191,8 +179,7 @@ function confirmEmail(tokenString) {
                                         status: 500,
                                         msg: error.msg,
                                     })
-                                }
-                                else {
+                                } else {
                                     resolve({
                                         status: 200,
                                         data,       // user is now verified & can login
@@ -200,8 +187,7 @@ function confirmEmail(tokenString) {
                                 }
                             });
                         }
-                    }
-                    else {
+                    } else {
                         reject({
                             status: 400,
                             msg: 'No user for this Token in Database'
@@ -213,10 +199,108 @@ function confirmEmail(tokenString) {
     });
 }
 
+function findUserByLoginOrEmail(loginOrEmail) {
+
+    return new Promise((resolve, reject) => {
+        UserModel.findOne({login: loginOrEmail}, (error, userByLogin) => {
+            if (error) {
+                reject({
+                    status: 500,
+                    msg: error.msg,
+                })
+            } else if (!userByLogin) {
+                UserModel.findOne({email: loginOrEmail}, (error, userByEmail) => {
+                    if (error) {
+                        reject({
+                            status: 500,
+                            msg: error.msg,
+                        })
+                    } else if (!userByEmail) {
+                        reject({
+                            status: 400,
+                            msg: 'No User for this Login or Email',
+                        })
+                    } else {
+                        resolve({
+                            status: 200,
+                            data: userByEmail,
+                        })
+                    }
+                })
+            } else {
+                resolve({
+                    status: 200,
+                    data: userByLogin
+                })
+            }
+        })
+    });
+}
+
+function askPasswordReset(loginOrEmail) {
+
+    return new Promise((resolve, reject) => {
+
+        findUserByLoginOrEmail(loginOrEmail)
+            .then((response) => {
+                let user = response.data;
+                TokenModel.findOne({user: user._id, type: 'resetPassword'}, (error, tokenByUser) => {
+                    let token;
+                    if (error) {
+                        reject({
+                            status: 500,
+                            msg: error.msg,
+                        })
+                    } else if (!tokenByUser) {
+                        token = new TokenModel({
+                            type: 'resetPassword',
+                            user: user._id,
+                            token: crypto.randomBytes(16).toString('hex')
+                        });
+                    } else {
+                        token = tokenByUser;
+                        token.token = crypto.randomBytes(16).toString('hex');
+                        token.createdAt = Date.now();
+                    }
+                    token.save(function (error) {
+                        if (error) {
+                            reject({
+                                status: 500,
+                                msg: error.msg,
+                            });
+                        } else {
+                            let link = process.env.SERVER + "/api/users/resetPassword/" + token.token;
+                            let mailOptions = {
+                                from: '"MusicRoom Team" <team@musicroom.com>',
+                                to: user.email,
+                                subject: 'Music Room - Password reset',
+                                text: 'Hello,\n\n' + 'Please reset your password by clicking the link: ' +
+                                    process.env.SERVER + '\/api\/users\/resetPassword\/' + token.token + '.\n',
+                                html: '<html><body><h2>Music Room - You asked for a new password !</h2>' +
+                                    '<p>You will be able to reset your password by clicking ' +
+                                    '<a href="' + link + '">this link.' +
+                                    '</a></p><p>If you\'re not at the origin of this request, please ignore this message.</p></body></html>',
+                            };
+                            utils.sendMail(mailOptions, resolve, reject);
+                        }
+                    })
+                })
+            })
+            .catch((error) => {
+                reject({
+                    status: error.status,
+                    msg: error.msg
+                })
+            })
+
+    })
+}
+
 export default {
     getUsers,
     getUserById,
     deleteUserById,
     addUser,
     confirmEmail,
+    askPasswordReset,
 }
