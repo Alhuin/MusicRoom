@@ -13,7 +13,7 @@ function getMusics(req, res) {
             console.error(error.msg);
             res
                 .status(error.status)
-                .send(error.msg);
+                .send(error);
         })
 }
 
@@ -30,7 +30,7 @@ function getMusicById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
@@ -51,7 +51,7 @@ function deleteMusicById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {

@@ -2,7 +2,7 @@ const server = "http://b2f06caf.ngrok.io";
 
 export function login(login, password) {
 
-    console.log('login: ' + login + ', password: ' + password);
+    // console.log('login: ' + login + ', password: ' + password);
     fetch(server + '/api/login', {
         method: "POST",
         headers: {
@@ -12,13 +12,13 @@ export function login(login, password) {
         body: JSON.stringify({login, password}),
     })
         .then(async (response) => {
-            console.log(response.status);
+            // console.log(response);
             let data = await response.json();
             if (response.status === 200) {
                 alert("Login OK for user " + data.name + " " + data.familyName);
             }
             else if (response.status === 400 || response.status === 401){
-                alert("error : " + data.error);
+                alert("error : "+ data.msg);
             }
             else {
                 alert('Server Error');
@@ -27,7 +27,8 @@ export function login(login, password) {
         })
         .then((responseData) => console.log(responseData))
         .catch((error) => {
-            console.error(error.msg);
+            // console.log('catch login front');
+            console.error(error);
         })
 }
 
@@ -55,6 +56,6 @@ export function addUser(login, password, name, familyName, email) {
         })
         .then((responseData) => console.log(responseData))
         .catch((error) => {
-            console.error(error.msg);
+            console.error(error);
         })
 }

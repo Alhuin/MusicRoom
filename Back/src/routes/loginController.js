@@ -13,13 +13,13 @@ function login(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send({error});
             })
     }
     else {
         res.status(400).send({msg: "Wrong Parameters"});
     }
-};
+}
 
 export default {
     login,

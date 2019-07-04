@@ -12,7 +12,7 @@ function getVotes(req, res) {
             console.error(error.msg);
             res
                 .status(error.status)
-                .send(error.msg);
+                .send(error);
         })
 }
 
@@ -29,7 +29,7 @@ function getVoteById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
@@ -50,7 +50,7 @@ function deleteVoteById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {

@@ -105,6 +105,7 @@ function addUser(login, password, name, familyName, email) {
 
         user.save((error, user) => {
             if (error) {
+                console.log('addUser 500');
                 reject({
                     status: 500,
                     msg: error.msg,

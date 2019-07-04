@@ -13,7 +13,7 @@ function getUsers(req, res) {
             console.error(error.msg);
             res
                 .status(error.status)
-                .send(error.msg);
+                .send(error);
         })
 }
 
@@ -30,7 +30,7 @@ function getUserById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
@@ -51,7 +51,7 @@ function deleteUserById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
@@ -72,10 +72,10 @@ function addUser(req, res) {
                     .send(response.data);
             })
             .catch((error) => {
-                console.error(error.msg);
+                console.error(error);
                 res
                     .status(500)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
@@ -95,7 +95,7 @@ function confirmEmail(req, res) {
             .catch((error) => {
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
@@ -115,7 +115,7 @@ function askPasswordReset(req, res) {
             .catch((error) => {
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {

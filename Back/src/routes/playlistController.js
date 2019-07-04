@@ -13,7 +13,7 @@ function getPlaylists(req, res) {
             console.error(error.msg);
             res
                 .status(error.status)
-                .send(error.msg);
+                .send(error);
         })
 }
 
@@ -30,7 +30,7 @@ function getPlaylistById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
@@ -51,7 +51,7 @@ function deletePlaylistById(req, res) {
                 console.error(error.msg);
                 res
                     .status(error.status)
-                    .send(error.msg);
+                    .send(error);
             })
     }
     else {
