@@ -32,11 +32,8 @@ class Connexion extends React.Component {
                 <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow:1}}>
                     <View style={styles.content}>
                         <Components.Logo/>
-
                         <Components.CustomForm type={type}/>
-
                         <Components.SocialLogin type={type}/>
-
                         <Components.LoginContext type={type} changePage={this.changePage} style={styles.loginContext}/>
                     </View>
                 </ScrollView>
