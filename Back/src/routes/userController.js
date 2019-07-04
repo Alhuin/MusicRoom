@@ -65,18 +65,23 @@ function addUser(req, res) {
 
     if ((req.body.login && req.body.password && req.body.name &&
         req.body.familyName && req.body.email)){
-        userService.addUser(req.body.login, req.body.password, req.body.name, req.body.familyName, req.body.email)
-            .then((response) => {
-                res
-                    .status(response.status)
-                    .send(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-                res
-                    .status(500)
-                    .send(error);
-            })
+        if (!req.body.email.includes('@')){
+            res.status(400).send({msg : 'Invalid email address'});
+        }
+        else {
+            userService.addUser(req.body.login, req.body.password, req.body.name, req.body.familyName, req.body.email)
+                .then((response) => {
+                    res
+                        .status(response.status)
+                        .send(response.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    res
+                        .status(500)
+                        .send(error);
+                })
+        }
     }
     else {
         res.status(400).send({msg: "Wrong Parameters"});

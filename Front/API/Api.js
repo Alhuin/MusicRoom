@@ -49,6 +49,9 @@ export function addUser(login, password, name, familyName, email) {
             if (response.status === 200) {
                 alert(data.msg);
             }
+            else if (response.status === 400 || response.status === 401){
+                alert("error : "+ data.msg);
+            }
             else {
                 alert('Server Error');
             }

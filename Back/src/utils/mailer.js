@@ -4,6 +4,8 @@ let transporter = false;
 
 function sendMail(mailOptions, resolve, reject) {
 
+    // console.log('mailOptions : ');
+    // console.log(mailOptions);
     if (!(transporter)) {
         transporter = nodeMailer.createTransport({
             service: "gmail",
@@ -26,9 +28,10 @@ function sendMail(mailOptions, resolve, reject) {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log('sendMail 500');
+            console.log(error);
             reject({
                 status: 500,
-                msg: error.response,
+                msg: error.name,
             })
         }
         else {
