@@ -1,6 +1,9 @@
 import userService from '../services/userService'
 import utils from '../utils'
 
+const mailRegex = new RegExp(
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
 function getUsers(req, res) {
 
     userService.getUsers()
@@ -65,7 +68,7 @@ function addUser(req, res) {
 
     if ((req.body.login && req.body.password && req.body.name &&
         req.body.familyName && req.body.email)){
-        if (!req.body.email.includes('@')){
+        if (!req.body.email.match(mailRegex)){
             res.status(400).send({msg : 'Invalid email address'});
         }
         else {
@@ -77,9 +80,15 @@ function addUser(req, res) {
                 })
                 .catch((error) => {
                     console.error(error);
-                    res
-                        .status(500)
-                        .send(error);
+                    if (error.status === 400) {
+                        res.status(400)
+                            .send(error)
+                    }
+                    else {
+                        res
+                            .status(500)
+                            .send(error);
+                    }
                 })
         }
     }

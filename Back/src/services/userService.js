@@ -105,11 +105,20 @@ function addUser(login, password, name, familyName, email) {
 
         user.save((error, user) => {
             if (error) {
-                console.log('addUser 500');
-                reject({
-                    status: 500,
-                    msg: error.msg,
-                })
+                console.log('addUser error');
+                if (error.code === 11000) {                                                // Duplicate Key
+                    let field = error.message.split("index: ")[1].split('_')[0];
+                    reject({
+                        status: 400,
+                        msg: "An account with this " + field + " already exists.",
+                    })
+                }
+                else {
+                    reject({
+                        status: 500,
+                        msg: error.msg,
+                    })
+                }
             } else {
                 let token = new TokenModel({
                     type: 'verifyMail',
