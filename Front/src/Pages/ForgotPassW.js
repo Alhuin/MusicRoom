@@ -1,22 +1,14 @@
 import React from 'react'
-import {StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View} from "react-native";
-
+import {StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View} from "react-native"
 import Components from '../Components'
-import Connexion from "./Connexion";
 
-class ForgotPass extends React.Component {
+class ForgotPassW extends React.Component {
 
     constructor (props) {
         super(props);
-        this.state = {
-            type: "Forgot Pass",
-        }
     }
 
     render() {
-
-        const type = this.state.type;
-
         return (
             <KeyboardAvoidingView
                 style={styles.container}
@@ -25,7 +17,7 @@ class ForgotPass extends React.Component {
                 <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow:1}}>
                     <View style={styles.content}>
                         <Components.Logo/>
-                        <Components.Forgot type={type}/>
+                        <Components.ForgotPass/>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -57,4 +49,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Connexion
+export default ForgotPassW

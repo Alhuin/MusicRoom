@@ -1,6 +1,7 @@
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Connexion from '../Pages/Connexion'
 import Home from '../Pages/Home'
+import ForgotPassW from '../Pages/ForgotPassW'
 
 const AppStackNavigator = createStackNavigator({
     Connexion: {
@@ -11,6 +12,9 @@ const AppStackNavigator = createStackNavigator({
     },
     Home: {
         screen: Home
+    },
+    ForgotPassW: {
+        screen: ForgotPassW
     }
 });
 

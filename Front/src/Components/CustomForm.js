@@ -1,8 +1,9 @@
 import React from "react";
-import {Button, Keyboard, View, StyleSheet, TextInput} from "react-native";
+import {Button, Keyboard, View, StyleSheet, TextInput, Text, TouchableOpacity} from "react-native";
 import {login, addUser} from "../../API/Api";
 
 export default class CustomForm extends React.Component {
+
     state = {
         email: '',
         password: '',
@@ -74,6 +75,10 @@ export default class CustomForm extends React.Component {
             }
         }
     };
+    _newForgotPassPage = () =>
+    {
+        this.props.navigation.navigate("ForgotPassW")
+    };
 
     render() {
 
@@ -81,6 +86,8 @@ export default class CustomForm extends React.Component {
         let familyNameInput = null;
         let emailInput = null;
         let passwordConfirmInput = null;
+        let forgotPass = null;
+        let forgotText = "Forgot your password ? Click here";
 
         if (this.props.type === "Sign Up") {
             passwordConfirmInput = <TextInput
@@ -109,6 +116,10 @@ export default class CustomForm extends React.Component {
                 underlineColorAndroid={"grey"}
                 style={styles.inputBox}
                 placeholder={"Email"}/>;
+        }
+        else if (this.props.type === "Sign In") {
+            forgotPass = <TouchableOpacity onPress={this._newForgotPassPage}>
+                            <Text>{forgotText}</Text></TouchableOpacity>;
         }
 
         return (
@@ -141,6 +152,7 @@ export default class CustomForm extends React.Component {
                         }}
                     />
                 </View>
+                {forgotPass}
             </View>
         )
     }
