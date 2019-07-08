@@ -58,3 +58,29 @@ export function addUser(login, password, name, familyName, email) {
             console.error(error.msg);
         })
 }
+
+export function findUserByLoginOrEmail(login) {
+
+    fetch(server + '/api/users', {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({login}),
+    })
+        .then(async (response) => {
+            let data = await response.json();
+            if (response.status === 200) {
+                alert("An email has been send");
+            }
+            else {
+                alert('Server Error');
+            }
+            return data;
+        })
+        .then((responseData) => console.log(responseData))
+        .catch((error) => {
+            console.error(error.msg);
+        })
+}

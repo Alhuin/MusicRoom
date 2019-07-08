@@ -1,5 +1,6 @@
 import React from 'react'
-import {StyleSheet, View, TextInput, Button} from "react-native";
+import {StyleSheet, View, TextInput, Button, Keyboard} from "react-native";
+import {findUserByLoginOrEmail} from "../../API/Api";
 
 export default class ForgotPass extends React.Component {
     state = {
@@ -14,7 +15,19 @@ export default class ForgotPass extends React.Component {
 
 
     _submitAction = () => {
-        alert("coucou");
+        const userName = this.state.login;
+
+        if (!userName.length) {
+            alert("Please enter your email or login");
+        }
+        else
+        {
+            //Appel controlleur pour verfier login/email?
+            //si on passe
+            // /!\ Je ne suis pas sur de l'utilisation de l'API LOL la fonction si dessous a ete rajouter dans API front et est nomé pareil que
+            //dans back user service
+            findUserByLoginOrEmail(userName);
+        }
     };
 
     render() {
@@ -26,7 +39,7 @@ export default class ForgotPass extends React.Component {
                     autoCapitalize={'none'}
                     underlineColorAndroid={"grey"}
                     style={styles.inputBox}
-                    placeholder={"Login"}
+                    placeholder={"Login or email"}
                 />
                 <View style={styles.submitButton}>
                     <Button
