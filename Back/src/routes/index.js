@@ -24,6 +24,7 @@ router.get('/users/:userId', userController.getUserById);
 router.delete('/users/:userId', userController.deleteUserById);
 router.post('/users', userController.addUser);
 router.get('/users/confirm/:token', userController.confirmEmail);
+router.get('/users/sendConfirmEmail/:loginOrEmail', userController.sendConfirmEmail);
 
 
 /**             Musics                 **/

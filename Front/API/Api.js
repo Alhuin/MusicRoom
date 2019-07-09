@@ -23,7 +23,7 @@ export function login(login, password) {
                 alert("error : " + data.msg);
             }
             else {
-                alert('WTF Server Error');
+                alert('Server Error');
             }
             return data;
         })
@@ -53,11 +53,11 @@ export function addUser(login, password, name, familyName, email) {
                 alert('error : ' + data.msg)
             }
             else {
-                alert('WTF Server Error');
+                alert('Server Error');
             }
         })
         .catch((error) => {
-            // console.error(error.msg);
+            console.error(error.msg);
         })
 }
 //

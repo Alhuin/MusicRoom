@@ -92,6 +92,25 @@ function addUser(req, res) {
     }
 }
 
+function sendConfirmEmail(req, res) {
+
+    if (req.params.loginOrEmail) {
+        userService.sendConfirmEmail(req.params.loginOrEmail)
+            .then((response) => {
+                res
+                    .status(response.status)
+                    .send(response.data);
+            })
+            .catch((error) => {
+                res
+                    .status(error.status)
+                    .send(error);
+            })
+    } else {
+        res.status(400).send({msg: "Wrong Parameters"})
+    }
+}
+
 function confirmEmail(req, res) {
     // console.log('confirmEmailCtrl');
 
@@ -142,6 +161,7 @@ export default {
     addUser,
     confirmEmail,
     askPasswordReset,
+    sendConfirmEmail,
 }
 
 // router.post('/resend', (req, res) => {

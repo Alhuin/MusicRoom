@@ -3,6 +3,7 @@ import TokenModel from '../models/tokenModel'
 import utils from '../utils'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
+import sendMail from "../utils/mailer";
 
 function getUsers() {
 
@@ -121,6 +122,21 @@ function addUser(login, password, name, familyName, email) {
                     })
                 }
             } else {
+                sendMailToken(user)
+                    .then((response) => {
+                        resolve({
+                            status: response.status,
+                            data: response.data,
+                        })
+                    })
+                    .catch((error) => {
+                        reject({
+                            status: error.status,
+                            msg: error.msg,
+                        })
+                    })
+
+                /*
                 let token = new TokenModel({
                     type: 'verifyMail',
                     user: user._id,
@@ -147,10 +163,82 @@ function addUser(login, password, name, familyName, email) {
                         };
                         utils.sendMail(mailOptions, resolve, reject);
                     }
-                });
+                });*/
             }
         });
     });
+}
+
+function sendConfirmEmail(loginOrEmail) {
+
+    return new Promise ((resolve, reject) => {
+
+        findUserByLoginOrEmail(loginOrEmail)
+            .then((response) => {
+                let user = response.data;
+                if (user.isVerified) {
+                    reject({
+                        status: 400,
+                        msg: "User is already verified",
+                    })
+                }
+                sendMailToken(user)
+                    .then((response) => {
+                        resolve({
+                            status: 200,
+                            data: response.data,
+                        })
+                    })
+                    .catch((error) => {
+                        reject({
+                            status: error.status,
+                            msg: error.msg,
+                        })
+                    })
+            })
+            .catch((error) => {
+                reject({
+                    status: error.status,
+                    msg: error.msg,
+                })
+            })
+    })
+}
+
+function sendMailToken(user) {
+
+    return new Promise((resolve, reject) => {
+
+        let token = new TokenModel({
+            type: 'verifyMail',
+            user: user._id,
+            token: crypto.randomBytes(16).toString('hex')
+        });
+
+        token.save(function (error) {
+            if (error) {
+                reject({
+                    status: 500,
+                    msg: error.msg,
+                });
+            }
+            else {
+                let link = process.env.SERVER + "/api/users/confirm/" + token.token;
+
+                let mailOptions = {
+                    from: '"MusicRoom Team"',
+                    to: user.email,
+                    subject: 'Account Verification Token',
+                    text: 'Hello,\n\n' + 'Please verify your account by clicking the link: ' + link + '.\n',
+                    html: '<html><body><h2>Welcome to MusicRoom !</h2>' +
+                        '<p>Please verify your account by clicking on ' +
+                        '<a href="' + link + '" rel="nofollow noreferrer noopener">this link.' +
+                        '</a></p></body></html>',
+                };
+                utils.sendMail(mailOptions, resolve, reject);
+            }
+        });
+    })
 }
 
 function confirmEmail(tokenString) {
@@ -314,4 +402,5 @@ export default {
     addUser,
     confirmEmail,
     askPasswordReset,
+    sendConfirmEmail,
 }

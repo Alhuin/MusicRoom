@@ -100,7 +100,7 @@ const seedDatas = async () => {
         password: hash,
         name: 'Jul',
         familyName: 'Janin-R',
-        email: 'janin.reynaud.julien@gma'
+        email: 'musicroomtestuser@gmail.com'
     });
 
     let salty = await bcrypt.genSaltSync(10);
