@@ -90,6 +90,7 @@ function deleteUserById(userId) {
 
 function addUser(login, password, name, familyName, email) {
 
+    // console.log('addUserServ');
     return new Promise(async (resolve, reject) => {
 
         let salt = await bcrypt.genSaltSync(10);
@@ -105,7 +106,7 @@ function addUser(login, password, name, familyName, email) {
 
         user.save((error, user) => {
             if (error) {
-                console.log('addUser error');
+                // console.log('addUser error');
                 if (error.code === 11000) {                                                // Duplicate Key
                     let field = error.message.split("index: ")[1].split('_')[0];
                     reject({
@@ -135,14 +136,13 @@ function addUser(login, password, name, familyName, email) {
                         let link = process.env.SERVER + "/api/users/confirm/" + token.token;
 
                         let mailOptions = {
-                            from: '"MusicRoom Team" <team@musicroom.com>',
+                            from: '"MusicRoom Team"',
                             to: user.email,
-                            subject: 'Account Verification TokenModel',
-                            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: ' +
-                                process.env.SERVER + '\/api\/users\/confirmation\/' + token.token + '.\n',
+                            subject: 'Account Verification Token',
+                            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: ' + link + '.\n',
                             html: '<html><body><h2>Welcome to MusicRoom !</h2>' +
                                 '<p>Please verify your account by clicking on ' +
-                                '<a href="' + link + '">this link.' +
+                                '<a href="' + link + '" rel="nofollow noreferrer noopener">this link.' +
                                 '</a></p></body></html>',
                         };
                         utils.sendMail(mailOptions, resolve, reject);
@@ -155,6 +155,7 @@ function addUser(login, password, name, familyName, email) {
 
 function confirmEmail(tokenString) {
 
+    // console.log('confirmEmailSrv');
     return new Promise((resolve, reject) => {
 
         TokenModel.findOne({token: tokenString, type: 'verifyMail'}, (error, token) => {

@@ -65,7 +65,7 @@ function deleteUserById(req, res) {
 function addUser(req, res) {
 
     // checker email valide et les uniques
-
+    // console.log('addUserCtrl');
     if ((req.body.login && req.body.password && req.body.name &&
         req.body.familyName && req.body.email)){
         if (!req.body.email.match(mailRegex)){
@@ -98,15 +98,18 @@ function addUser(req, res) {
 }
 
 function confirmEmail(req, res) {
+    // console.log('confirmEmailCtrl');
 
     if (req.params.token) {
         userService.confirmEmail(req.params.token)
             .then((response) => {
+                console.log(response);
                 res
                     .status(response.status)
                     .send(response.data);
             })
             .catch((error) => {
+                console.log(error);
                 res
                     .status(error.status)
                     .send(error);

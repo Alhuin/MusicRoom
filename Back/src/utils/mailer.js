@@ -27,7 +27,7 @@ function sendMail(mailOptions, resolve, reject) {
     }
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log('sendMail 500');
+            // console.log('sendMail 500');
             console.log(error);
             reject({
                 status: 500,

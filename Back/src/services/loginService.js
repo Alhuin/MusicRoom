@@ -2,6 +2,7 @@ import UserModel from '../models/userModel'
 import bcrypt from 'bcrypt';
 
 function login(login, password) {
+    // console.log('loginSrv');
 
     return new Promise((resolve, reject) => {
         UserModel.find({login}, (error, users) => {

@@ -23,6 +23,30 @@ app.use(express.urlencoded({ extended: true }));
  *      - locals.me : the current user (not handled yet)
  */
 
+function logResponseBody(req, res, next) {
+    var oldWrite = res.write,
+        oldEnd = res.end;
+
+    var chunks = [];
+
+    res.write = function (chunk) {
+        chunks.push(chunk);
+
+        oldWrite.apply(res, arguments);
+    };
+
+    res.end = function (chunk) {
+        if (chunk)
+            chunks.push(chunk);
+
+        let log = req.method + ' ' + req.path + '  -->  ' + res.statusCode;
+        console.log('\x1b[36m%s\x1b[0m', log);
+        oldEnd.apply(res, arguments);
+    };
+
+    next();
+}
+
 app.use(async (req, res, next) => {
     res.locals = {
         models,
@@ -31,6 +55,8 @@ app.use(async (req, res, next) => {
     res.locals.me = await users[0];
     next();
 });
+
+app.use(logResponseBody);
 
 app.use('/api', API);
 
@@ -78,7 +104,7 @@ const seedDatas = async () => {
         password: hashy,
         name: 'Julien',
         familyName: 'Janin-Reynaud',
-        email: 'julien.janinr@protonmail.com',
+        email: 'julien.janinr@pmail.com',
         isVerified: true,
     });
 
