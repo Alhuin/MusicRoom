@@ -79,15 +79,10 @@ function addUser(req, res) {
                         .send(response.data);
                 })
                 .catch((error) => {
-                    console.error(error);
-                    if (error.status === 400) {
-                        res.status(400)
-                            .send(error)
-                    }
-                    else {
+                    if (error.status === 400 || error.status === 401 || error.status === 500) {
                         res
-                            .status(500)
-                            .send(error);
+                            .status(error.status)
+                            .send(error)
                     }
                 })
         }

@@ -40,7 +40,13 @@ function logResponseBody(req, res, next) {
             chunks.push(chunk);
 
         let log = req.method + ' ' + req.path + '  -->  ' + res.statusCode;
-        console.log('\x1b[36m%s\x1b[0m', log);
+        if (res.statusCode === 200)
+            console.log('\n[HTTP REQUEST] \x1b[32m%s\x1b[0m\n', log);
+        else if (res.statusCode === 500)
+            console.log('\n[HTTP REQUEST] \x1b[31m%s\x1b[0m\n', log);
+        else {
+            console.log('\n[HTTP REQUEST] \x1b[33m%s\x1b[0m\n', log);
+        }
         oldEnd.apply(res, arguments);
     };
 

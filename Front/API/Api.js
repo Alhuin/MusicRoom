@@ -23,7 +23,7 @@ export function login(login, password) {
                 alert("error : " + data.msg);
             }
             else {
-                alert('Server Error');
+                alert('WTF Server Error');
             }
             return data;
         })
@@ -36,8 +36,6 @@ export function login(login, password) {
 
 export function addUser(login, password, name, familyName, email) {
 
-    // console.log('in addUser');
-    // console.log('POST on ' + server + '/users');
     fetch(server + '/api/users', {
         method: "POST",
         headers: {
@@ -51,39 +49,40 @@ export function addUser(login, password, name, familyName, email) {
             if (response.status === 200) {
                 alert(data.msg);
             }
-            else {
-                alert('Server Error');
-            }
-            return data;
-        })
-        .then((responseData) => console.log(responseData))
-        .catch((error) => {
-            console.error(error.msg);
-        })
-}
-
-export function findUserByLoginOrEmail(login) {
-
-    fetch(server + '/api/users', {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({login}),
-    })
-        .then(async (response) => {
-            let data = await response.json();
-            if (response.status === 200) {
-                alert("An email has been send");
+            else if (response.status === 400 || response.status === 401){
+                alert('error : ' + data.msg)
             }
             else {
-                alert('Server Error');
+                alert('WTF Server Error');
             }
-            return data;
         })
-        .then((responseData) => console.log(responseData))
         .catch((error) => {
-            console.error(error.msg);
+            // console.error(error.msg);
         })
 }
+//
+// export function findUserByLoginOrEmail(login) {
+//
+//     fetch(server + '/api/users', {
+//         method: "POST",
+//         headers: {
+//             'Accept': 'application/json, text/plain, */*',
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({login}),
+//     })
+//         .then(async (response) => {
+//             let data = await response.json();
+//             if (response.status === 200) {
+//                 alert("An email has been send");
+//             }
+//             else {
+//                 alert('Server Error');
+//             }
+//             return data;
+//         })
+//         .then((responseData) => console.log(responseData))
+//         .catch((error) => {
+//             console.error(error.msg);
+//         })
+// }
