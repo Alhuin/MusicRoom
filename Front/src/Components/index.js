@@ -5,8 +5,8 @@ import SocialLogin from './SocialLogin';
 
 
 export default {
-    CustomForm,
-    LoginContext,
-    Logo,
-    SocialLogin,
+  CustomForm,
+  LoginContext,
+  Logo,
+  SocialLogin,
 };

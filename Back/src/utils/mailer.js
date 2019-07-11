@@ -1,50 +1,40 @@
-import nodeMailer from "nodemailer";
-var transporter = false;
+import nodeMailer from 'nodemailer';
+import CustomError from '../services/errorHandler';
 
-function initMailer() {
-
-    const transporter = nodeMailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: '4234ef9be3c4ef', // generated ethereal user
-            pass: '0170cf1096bdef' // generated ethereal password
-        }
-    });
-
-    transporter.verify(function (error) {
-        if (error) {
-            console.error(error.msg);
-        } else {
-            // console.log('Server is ready to take our messages');
-        }
-    });
-
-    return transporter;
-}
+let transporter = false;
 
 function sendMail(mailOptions, resolve, reject) {
-
-    if (!(transporter)) {
-        transporter = initMailer();
-    }
-    transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-            reject({
-                status: 500,
-                msg: err.msg,
-            })
-        }
-        else {
-            // console.log('Message sent: %s', info.messageId);
-            resolve({
-                status:200,
-                data: {msg: 'An email has been sent to ' + mailOptions.to + '.'}
-            });
-        }
+  if (!(transporter)) {
+    transporter = nodeMailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+      pool: true, // use pooled connection
+      maxConnections: 1, // set limit to 1 connection only
     });
+    transporter.verify((error) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else {
+        console.log('Server is ready to take our messages');
+      }
+    });
+  }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      reject(new CustomError(error, 500));
+    } else {
+      console.log('Message sent: %s', info.messageId);
+      resolve({
+        status: 200,
+        data: { msg: `An email has been sent to ${mailOptions.to}` },
+      });
+    }
+  });
 }
 
-export default sendMail
-
+export default sendMail;
