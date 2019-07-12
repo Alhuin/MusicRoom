@@ -1,13 +1,15 @@
 const server = 'http://10.4.2.3:3000/api';
 
-export function login(userName, password) {
+export function login(toto, password) {
   fetch(`${server}/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userName, password }),
+    body: JSON.stringify({
+      login: toto, password,
+    }),
   })
     .then(async (response) => {
       // console.log(response.status);
@@ -19,11 +21,10 @@ export function login(userName, password) {
       } else {
         alert('Server Error');
       }
-      return data;
+      console.log(data);
     })
-    .then(responseData => console.log(responseData))
     .catch((error) => {
-      console.error(error.msg);
+      console.error(error);
     });
 }
 
@@ -48,7 +49,29 @@ export function addUser(userName, password, name, familyName, email) {
       // console.log(data);
     })
     .catch((error) => {
-      console.log('du cul');
-      console.error(error.msg);
+      console.error(error);
+    });
+}
+
+export function sendEmailToken(loginOrEMail) {
+  fetch(`${server}/api/users/emailToken/`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ loginOrEMail }),
+  })
+    .then(async (response) => {
+      const data = await response.json();
+      if (response.status === 200) {
+        alert('An email has been sent');
+      } else {
+        alert('Server Error');
+      }
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
     });
 }

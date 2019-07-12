@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Button, Keyboard, View, StyleSheet, TextInput,
+  Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text,
 } from 'react-native';
 
 import { login, addUser } from '../../API/Api';
@@ -72,11 +72,18 @@ export default class CustomForm extends React.Component {
     }
   };
 
+  newForgotPassPage = () => {
+    const { navigate } = this.props;
+    navigate('ForgotPassW');
+  };
+
   render() {
     let nameInput = null;
     let familyNameInput = null;
     let emailInput = null;
     let passwordConfirmInput = null;
+    let forgotPass = null;
+    const forgotText = 'Forgot your password ? Click here';
     const { type } = this.props;
     if (type === 'Sign Up') {
       passwordConfirmInput = (
@@ -117,6 +124,14 @@ export default class CustomForm extends React.Component {
           placeholder="Email"
         />
       );
+    } else if (type === 'Sign In') {
+      forgotPass = (
+        <TouchableOpacity
+          onPress={this.newForgotPassPage}
+        >
+          <Text>{forgotText}</Text>
+        </TouchableOpacity>
+      );
     }
 
     return (
@@ -149,6 +164,7 @@ export default class CustomForm extends React.Component {
             }}
           />
         </View>
+        {forgotPass}
       </View>
     );
   }

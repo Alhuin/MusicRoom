@@ -11,6 +11,7 @@ module.exports = {
         'react/prefer-stateless-function': 'off',
         'no-console': 'off',
         'no-alert': 'off',
+        'no-underscore-dangle': 'off',
     },
     'globals': {
         "fetch": false
