@@ -78,24 +78,24 @@ export function sendEmailToken(loginOrEmail) {
 }
 
 export function sendPasswordToken(loginOrEmail) {
-    fetch(`${server}/api/users/emailToken/`, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
+  fetch(`${server}/api/users/emailToken/`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
     },
-        body: JSON.stringify({ loginOrEmail }),
+    body: JSON.stringify({loginOrEmail}),
   })
-        .then(async (response) => {
-            const data = await response.json();
-            if (response.status === 200) {
-                alert('An email has been sent');
-            } else {
-                alert('Server Error');
-            }
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+    .then(async (response) => {
+      const data = await response.json();
+      if (response.status === 200) {
+        alert('An email has been sent');
+      } else {
+        alert('Server Error');
+      }
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
