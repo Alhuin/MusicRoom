@@ -140,7 +140,9 @@ function updatePassword(userId, newPassword) {
   });
 }
 
-/*     Mail Tokens         */
+/*     Tokens         */
+
+//  Password
 
 function sendPasswordToken(loginOrEmail) {
   return new Promise((resolve, reject) => {
@@ -198,6 +200,8 @@ function confirmPasswordToken(tokenString) {
     });
   });
 }
+
+//  Email
 
 function askEmailToken(loginOrEmail) {
   return new Promise((resolve, reject) => {

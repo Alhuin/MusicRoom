@@ -16,10 +16,6 @@ export default class CustomForm extends React.Component {
     familyName: '',
   };
 
-  // updateState = (key, value) => {
-  //   this.setState({ [key]: value });
-  // };
-
   updateLogin = (text) => {
     this.setState({ userName: text });
   };
@@ -58,10 +54,10 @@ export default class CustomForm extends React.Component {
       } = this.state;
 
       if (!(name.length && familyName.length && email.length && confirmPassword.length)) {
-        alert('error, empty field.');
+        alert('error: empty field.');
         console.log('error, empty field');
       } else if (password !== confirmPassword) {
-        alert('error, passwords don\'t match');
+        alert('error: passwords don\'t match');
         console.log('error, passwords don\'t match');
       } else {
         addUser(userName, password, name, familyName, email);
@@ -72,9 +68,8 @@ export default class CustomForm extends React.Component {
   };
 
   newForgotPassPage = () => {
-    console.log(this.props);
     const { navigation } = this.props;
-    navigation.navigate('ForgotPassW');
+    navigation.navigate('SendTokens');
   };
 
   render() {
@@ -127,6 +122,7 @@ export default class CustomForm extends React.Component {
     } else if (type === 'Sign In') {
       forgotPass = (
         <TouchableOpacity
+          style={styles.forgotPass}
           onPress={this.newForgotPassPage}
         >
           <Text>{forgotText}</Text>
@@ -183,5 +179,8 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     width: 150,
+  },
+  forgotPass: {
+    paddingTop: 10,
   },
 });

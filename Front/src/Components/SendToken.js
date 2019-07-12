@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, TextInput, Button, Keyboard,
 } from 'react-native';
-import { sendEmailToken } from '../../API/Api';
+import { sendEmailToken, sendPasswordToken } from '../../API/Api';
 
 export default class SendToken extends React.Component {
   state = {
@@ -21,10 +21,10 @@ export default class SendToken extends React.Component {
       if (!loginOrEmail.length) {
         alert('Please enter your email or login');
       } else {
-        sendEmailToken(loginOrEmail);
+        sendPasswordToken(loginOrEmail);
       }
     } else {
-      //coucou
+      //  coucou
     }
   };
 
@@ -56,10 +56,12 @@ export default class SendToken extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
     width: 300,
+    // borderWidth: 1,                LAISSEZ LES
+    // borderColor: 'red',
   },
   inputBox: {
     width: 300,

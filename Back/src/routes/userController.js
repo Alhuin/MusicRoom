@@ -100,7 +100,9 @@ function updatePassword(req, res) {
   }
 }
 
-/*    Mail Tokens    */
+/*    Tokens    */
+
+//  Email
 
 function sendEmailToken(req, res) {
   if (req.body.loginOrEmail) {
@@ -139,6 +141,8 @@ function confirmEmailToken(req, res) {
     res.status(400).send({ msg: 'Wrong Parameters' });
   }
 }
+
+//  Password
 
 function sendPasswordToken(req, res) {
   if (req.body.loginOrEmail) {

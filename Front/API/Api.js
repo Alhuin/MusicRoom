@@ -12,16 +12,11 @@ export function login(userName, password) {
     }),
   })
     .then(async (response) => {
-      // console.log(response.status);
       const data = await response.json();
       if (response.status === 200) {
         alert(`Login OK for user ${data.name} ${data.familyName}`);
-      } else if (response.status === 400) {
-        alert(`error : ${data.msg}`);
-      } else if (response.status === 401) {
-        alert(`error : ${data.msg}`);
       } else {
-        alert('Server Error');
+        alert(`error ${data.status}: ${data.msg}`);
       }
     })
     .catch((error) => {
@@ -45,7 +40,7 @@ export function addUser(userName, password, name, familyName, email) {
       if (response.status === 200) {
         alert(data.msg);
       } else {
-        alert('Server Error');
+        alert(`error ${data.status}: ${data.msg}`);
       }
       // console.log(data);
     })
@@ -55,7 +50,7 @@ export function addUser(userName, password, name, familyName, email) {
 }
 
 export function sendEmailToken(loginOrEmail) {
-  fetch(`${server}/api/users/emailToken/`, {
+  fetch(`${server}/users/emailToken/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -65,37 +60,42 @@ export function sendEmailToken(loginOrEmail) {
   })
     .then(async (response) => {
       const data = await response.json();
+      console.log(data);
       if (response.status === 200) {
         alert('An email has been sent');
       } else {
-        alert('Server Error');
+        alert(`error ${data.status}: ${data.msg}`);
       }
-      console.log(data);
+      // console.log(data);
     })
     .catch((error) => {
+      console.log(error);
       console.error(error);
     });
 }
 
 export function sendPasswordToken(loginOrEmail) {
-  fetch(`${server}/api/users/emailToken/`, {
+  fetch(`${server}/users/passToken/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({loginOrEmail}),
+    body: JSON.stringify({ loginOrEmail }),
   })
     .then(async (response) => {
+      console.log(response);
       const data = await response.json();
+      console.log(data);
       if (response.status === 200) {
         alert('An email has been sent');
       } else {
-        alert('Server Error');
+        alert(`error ${data.status}: ${data.msg}`);
       }
-      console.log(data);
+      // console.log(data);
     })
     .catch((error) => {
+      console.log(error);
       console.error(error);
     });
 }
