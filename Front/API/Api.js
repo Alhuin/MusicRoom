@@ -1,6 +1,6 @@
 const server = 'http://10.4.2.3:3000/api';
 
-export function login(toto, password) {
+export function login(userName, password) {
   fetch(`${server}/login`, {
     method: 'POST',
     headers: {
@@ -8,7 +8,7 @@ export function login(toto, password) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      login: toto, password,
+      login: userName, password,
     }),
   })
     .then(async (response) => {
@@ -17,11 +17,12 @@ export function login(toto, password) {
       if (response.status === 200) {
         alert(`Login OK for user ${data.name} ${data.familyName}`);
       } else if (response.status === 400) {
-        alert(`error : ${data.error}`);
+        alert(`error : ${data.msg}`);
+      } else if (response.status === 401) {
+        alert(`error : ${data.msg}`);
       } else {
         alert('Server Error');
       }
-      console.log(data);
     })
     .catch((error) => {
       console.error(error);

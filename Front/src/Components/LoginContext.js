@@ -9,10 +9,10 @@ export default class LoginContext extends Component {
     let other;
     const { type, changePage } = this.props;
     if (type === 'Sign Up') {
-      contextText = <Text style={styles.contextText}>Already have an account ?</Text>;
+      contextText = <Text style={styles.contextText}>Already have an account ? </Text>;
       other = 'Sign In !';
     } else {
-      contextText = <Text style={styles.contextText}>Don&apos;t have an account yet ?</Text>;
+      contextText = <Text style={styles.contextText}>Don&apos;t have an account yet ? </Text>;
       other = 'Sign Up !';
     }
 

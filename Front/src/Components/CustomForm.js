@@ -72,8 +72,9 @@ export default class CustomForm extends React.Component {
   };
 
   newForgotPassPage = () => {
-    const { navigate } = this.props;
-    navigate('ForgotPassW');
+    console.log(this.props);
+    const { navigation } = this.props;
+    navigation.navigate('ForgotPassW');
   };
 
   render() {

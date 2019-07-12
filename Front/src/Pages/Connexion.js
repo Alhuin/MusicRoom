@@ -23,7 +23,7 @@ class Connexion extends React.Component {
 
   render() {
     const { type } = this.state;
-
+    const { navigation } = this.props;
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -37,7 +37,7 @@ class Connexion extends React.Component {
         >
           <View style={styles.content}>
             <Components.Logo />
-            <Components.CustomForm type={type} />
+            <Components.CustomForm type={type} navigation={navigation} />
             <Components.SocialLogin type={type} />
             <Components.LoginContext
               type={type}
