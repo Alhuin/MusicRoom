@@ -21,7 +21,6 @@ export default class CustomForm extends React.Component {
   // };
 
   updateLogin = (text) => {
-    console.log(text);
     this.setState({ userName: text });
   };
 
