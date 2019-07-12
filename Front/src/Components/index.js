@@ -2,7 +2,7 @@ import CustomForm from './CustomForm';
 import LoginContext from './LoginContext';
 import Logo from './Logo';
 import SocialLogin from './SocialLogin';
-import ForgotPass from './ForgotPass';
+import SendToken from './SendToken';
 
 
 export default {
@@ -10,5 +10,5 @@ export default {
   LoginContext,
   Logo,
   SocialLogin,
-  ForgotPass,
+  SendToken,
 };

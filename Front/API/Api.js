@@ -54,14 +54,14 @@ export function addUser(userName, password, name, familyName, email) {
     });
 }
 
-export function sendEmailToken(loginOrEMail) {
+export function sendEmailToken(loginOrEmail) {
   fetch(`${server}/api/users/emailToken/`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ loginOrEMail }),
+    body: JSON.stringify({ loginOrEmail }),
   })
     .then(async (response) => {
       const data = await response.json();
@@ -75,4 +75,27 @@ export function sendEmailToken(loginOrEMail) {
     .catch((error) => {
       console.error(error);
     });
+}
+
+export function sendPasswordToken(loginOrEmail) {
+    fetch(`${server}/api/users/emailToken/`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+    },
+        body: JSON.stringify({ loginOrEmail }),
+  })
+        .then(async (response) => {
+            const data = await response.json();
+            if (response.status === 200) {
+                alert('An email has been sent');
+            } else {
+                alert('Server Error');
+            }
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 }

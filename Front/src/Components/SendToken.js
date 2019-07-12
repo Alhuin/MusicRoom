@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { sendEmailToken } from '../../API/Api';
 
-export default class ForgotPass extends React.Component {
+export default class SendToken extends React.Component {
   state = {
     loginOrEmail: '',
   };
@@ -13,14 +13,18 @@ export default class ForgotPass extends React.Component {
     this.setState({ loginOrEmail: text });
   };
 
-
   _submitAction = () => {
-    const { loginOrEmail } = this.state;
+    const { type } = this.props;
+    if (type === 'Forgot Pass') {
+      const { loginOrEmail } = this.state;
 
-    if (!loginOrEmail.length) {
-      alert('Please enter your email or login');
+      if (!loginOrEmail.length) {
+        alert('Please enter your email or login');
+      } else {
+        sendEmailToken(loginOrEmail);
+      }
     } else {
-      sendEmailToken(loginOrEmail);
+      //coucou
     }
   };
 

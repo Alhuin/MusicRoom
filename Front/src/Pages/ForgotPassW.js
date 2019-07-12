@@ -1,11 +1,19 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View
+  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View,
 } from 'react-native';
 import Components from '../Components';
 
 class ForgotPassW extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: 'Forgot Pass',
+    };
+  }
+
   render() {
+    const { type } = this.state;
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -19,7 +27,7 @@ class ForgotPassW extends React.Component {
         >
           <View style={styles.content}>
             <Components.Logo />
-            <Components.ForgotPass />
+            <Components.SendToken type={type} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
