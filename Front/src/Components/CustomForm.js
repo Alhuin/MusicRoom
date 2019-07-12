@@ -11,42 +11,43 @@ export default class CustomForm extends React.Component {
     email: '',
     password: '',
     confirmPassword: '',
-    login: '',
+    userName: '',
     name: '',
     familyName: '',
   };
 
-  updateState = (key, value) => {
-    this.setState({ [key]: value });
+  // updateState = (key, value) => {
+  //   this.setState({ [key]: value });
+  // };
+
+  updateLogin = (text) => {
+    console.log(text);
+    this.setState({ userName: text });
   };
-  //
-  // updateLogin = (text) => {
-  //   this.setState({ login: text });
-  // };
-  //
-  // updatePassword = (text) => {
-  //   this.setState({ password: text });
-  // };
-  //
-  // updateConfirmPassword = (text) => {
-  //   this.setState({ confirmPassword: text });
-  // };
-  //
-  // updateName = (text) => {
-  //   this.setState({ name: text });
-  // };
-  //
-  // updateFamilyName = (text) => {
-  //   this.setState({ familyName: text });
-  // };
-  //
-  // updateEmail = (text) => {
-  //   this.setState({ email: text });
-  // };
+
+  updatePassword = (text) => {
+    this.setState({ password: text });
+  };
+
+  updateConfirmPassword = (text) => {
+    this.setState({ confirmPassword: text });
+  };
+
+  updateName = (text) => {
+    this.setState({ name: text });
+  };
+
+  updateFamilyName = (text) => {
+    this.setState({ familyName: text });
+  };
+
+  updateEmail = (text) => {
+    this.setState({ email: text });
+  };
 
   submitAction = () => {
     const {
-      login: userName, password,
+      userName, password,
     } = this.state;
     const { type } = this.props;
     if (!(userName.length && password.length)) {
@@ -80,7 +81,7 @@ export default class CustomForm extends React.Component {
     if (type === 'Sign Up') {
       passwordConfirmInput = (
         <TextInput
-          onChangeText={this.updateState('confirmPassword')}
+          onChangeText={this.updateConfirmPassword}
           underlineColorAndroid="grey"
           secureTextEntry
           style={styles.inputBox}
@@ -89,7 +90,7 @@ export default class CustomForm extends React.Component {
       );
       nameInput = (
         <TextInput
-          onChangeText={this.updateState('name')}
+          onChangeText={this.updateName}
           autoCorrect={false}
           underlineColorAndroid="grey"
           style={styles.inputBox}
@@ -98,7 +99,7 @@ export default class CustomForm extends React.Component {
       );
       familyNameInput = (
         <TextInput
-          onChangeText={this.updateState('familyName')}
+          onChangeText={this.updateFamilyName}
           autoCorrect={false}
           underlineColorAndroid="grey"
           style={styles.inputBox}
@@ -107,7 +108,7 @@ export default class CustomForm extends React.Component {
       );
       emailInput = (
         <TextInput
-          onChangeText={this.updateState('email')}
+          onChangeText={this.updateEmail}
           autoCorrect={false}
           autoCapitalize="none"
           keyboard-type="email-address"
@@ -121,7 +122,7 @@ export default class CustomForm extends React.Component {
     return (
       <View style={styles.container}>
         <TextInput
-          onChangeText={this.updateState('login')}
+          onChangeText={this.updateLogin}
           autoCorrect={false}
           autoCapitalize="none"
           underlineColorAndroid="grey"
@@ -129,7 +130,7 @@ export default class CustomForm extends React.Component {
           placeholder="Login"
         />
         <TextInput
-          onChangeText={this.updateState('password')}
+          onChangeText={this.updatePassword}
           underlineColorAndroid="grey"
           style={styles.inputBox}
           placeholder="Password"

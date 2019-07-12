@@ -57,6 +57,8 @@ function deleteUserById(req, res) {
 }
 
 function addUser(req, res) {
+  console.log(req.body.login + req.body.password + req.body.name
+    + req.body.familyName + req.body.email);
   // checker email valide et les champs uniques
   if ((req.body.login && req.body.password && req.body.name
     && req.body.familyName && req.body.email)) {

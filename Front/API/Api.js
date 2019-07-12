@@ -1,4 +1,4 @@
-const server = 'http://1d71db7f.ngrok.io';
+const server = 'http://10.4.2.3:3000/api';
 
 export function login(userName, password) {
   fetch(`${server}/login`, {
@@ -35,7 +35,7 @@ export function addUser(userName, password, name, familyName, email) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      userName, password, name, familyName, email,
+      login: userName, password, name, familyName, email,
     }),
   })
     .then(async (response) => {
@@ -45,10 +45,10 @@ export function addUser(userName, password, name, familyName, email) {
       } else {
         alert('Server Error');
       }
-      return data;
+      // console.log(data);
     })
-    .then(responseData => console.log(responseData))
     .catch((error) => {
+      console.log('du cul');
       console.error(error.msg);
     });
 }

@@ -30,6 +30,7 @@ router.get('/users/emailToken/:token', userController.confirmEmailToken);
 router.post('/users/passToken/', userController.sendPasswordToken);
 router.get('/users/passToken/:token', userController.confirmPasswordToken);
 
+
 /*             Musics                 */
 
 router.get('/musics', musicController.getMusics);

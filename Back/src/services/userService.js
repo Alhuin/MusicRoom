@@ -161,7 +161,7 @@ function sendPasswordToken(loginOrEmail) {
               to: user.email,
               subject: 'New Password Request',
               text: `Hello,\n\nYou can reset your password by clicking the link:
-              \nhttp://$(SERVER ENV)/users/resetPassword/${savedToken.token}.\n`,
+              \n${process.env.SERVER}/api/users/resetPassword/${savedToken.token}.\n`,
             };
             utils.sendMail(mailOptions, resolve, reject);
           }
@@ -227,7 +227,7 @@ function _sendEmailToken(user, resolve, reject) {
         to: user.email,
         subject: 'Account Verification Token',
         text: `Hello,\n\nPlease verify your account by clicking the link:
-              \nhttp://$(SERVER ENV)/users/confirmation/${savedToken.token}.\n`,
+              \n${process.env.SERVER}/api/users/confirmation/${savedToken.token}.\n`,
       };
       utils.sendMail(mailOptions, resolve, reject);
     }
@@ -260,6 +260,7 @@ function confirmEmailToken(tokenString) {
                   status: 200,
                   data: savedUser,
                 });
+                // OUVRIR APP POUR LOGIN
               }
             });
           }
