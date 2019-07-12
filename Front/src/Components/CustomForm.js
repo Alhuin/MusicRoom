@@ -68,7 +68,12 @@ export default class CustomForm extends React.Component {
       }
     } else if (type === 'Sign In') {
       login(userName, password);
+
     }
+  };
+  _newForgotPassPage = () =>
+  {
+    this.props.navigate("ForgotPassW")
   };
 
   render() {
@@ -76,6 +81,8 @@ export default class CustomForm extends React.Component {
     let familyNameInput = null;
     let emailInput = null;
     let passwordConfirmInput = null;
+    let forgotPass = null;
+    let forgotText = "Forgot your password ? Click here";
     const { type } = this.props;
     if (type === 'Sign Up') {
       passwordConfirmInput = (
@@ -116,6 +123,9 @@ export default class CustomForm extends React.Component {
           placeholder="Email"
         />
       );
+    } else if (this.props.type === "Sign In") {
+      forgotPass = <TouchableOpacity onPress={this._newForgotPassPage}>
+        <Text>{forgotText}</Text></TouchableOpacity>;
     }
 
     return (
@@ -148,6 +158,7 @@ export default class CustomForm extends React.Component {
             }}
           />
         </View>
+        {forgotPass}
       </View>
     );
   }
