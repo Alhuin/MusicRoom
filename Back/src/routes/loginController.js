@@ -9,10 +9,11 @@ function login(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
+        console.log(error);
         res
           .status(error.status)
-          .send(error.msg);
+          .send(error);
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });

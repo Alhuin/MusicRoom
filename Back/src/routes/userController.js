@@ -57,6 +57,7 @@ function deleteUserById(req, res) {
 }
 
 function addUser(req, res) {
+  console.log(req.body);
   // checker email valide et les champs uniques
   if ((req.body.login && req.body.password && req.body.name
     && req.body.familyName && req.body.email)) {
@@ -99,7 +100,9 @@ function updatePassword(req, res) {
   }
 }
 
-/*    Mail Tokens    */
+/*    Tokens    */
+
+//  Email
 
 function sendEmailToken(req, res) {
   if (req.body.loginOrEmail) {
@@ -138,6 +141,8 @@ function confirmEmailToken(req, res) {
     res.status(400).send({ msg: 'Wrong Parameters' });
   }
 }
+
+//  Password
 
 function sendPasswordToken(req, res) {
   if (req.body.loginOrEmail) {
