@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View,
+  StyleSheet, View,
 } from 'react-native';
 import Components from '../Components';
 
