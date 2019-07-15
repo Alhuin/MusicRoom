@@ -1,190 +1,195 @@
-import userService from '../services/userService'
-import utils from '../utils'
+import userService from '../services/userService';
+import utils from '../utils';
 
-const mailRegex = new RegExp(
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+/*    Fetch     */
 
 function getUsers(req, res) {
-
-    userService.getUsers()
-        .then((response) => {
-            res
-                .status(response.status)
-                .send(response.data);
-        })
-        .catch((error) => {
-            console.error(error.msg);
-            res
-                .status(error.status)
-                .send(error);
-        })
+  userService.getUsers()
+    .then((response) => {
+      res
+        .status(response.status)
+        .send(response.data);
+    })
+    .catch((error) => {
+      console.error(error.msg);
+      res
+        .status(error.status)
+        .send(error.msg);
+    });
 }
 
 function getUserById(req, res) {
-
-    if ((req.params.userId && utils.isValidId(req.params.userId))){
-        userService.getUserById(req.params.userId)
-            .then((response) => {
-                res
-                    .status(response.status)
-                    .send(response.data);
-            })
-            .catch((error) => {
-                console.error(error.msg);
-                res
-                    .status(error.status)
-                    .send(error);
-            })
-    }
-    else {
-        res.status(400).send({msg: "Wrong Parameters"});
-    }
+  if ((req.params.userId && utils.isValidId(req.params.userId))) {
+    userService.getUserById(req.params.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
 }
 
 function deleteUserById(req, res) {
-
-    if ((req.params.userId && utils.isValidId(req.params.userId))){
-        userService.deleteUserById(req.params.userId)
-            .then((response) => {
-                res
-                    .status(response.status)
-                    .send(response.data);
-            })
-            .catch((error) => {
-                console.error(error.msg);
-                res
-                    .status(error.status)
-                    .send(error);
-            })
-    }
-    else {
-        res.status(400).send({msg: "Wrong Parameters"});
-    }
+  if ((req.params.userId && utils.isValidId(req.params.userId))) {
+    userService.deleteUserById(req.params.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
 }
 
 function addUser(req, res) {
-
-    // checker email valide et les uniques
-    // console.log('addUserCtrl');
-    if ((req.body.login && req.body.password && req.body.name &&
-        req.body.familyName && req.body.email)){
-        if (!req.body.email.match(mailRegex)){
-            res.status(400).send({msg : 'Invalid email address'});
-        }
-        else {
-            userService.addUser(req.body.login, req.body.password, req.body.name, req.body.familyName, req.body.email)
-                .then((response) => {
-                    res
-                        .status(response.status)
-                        .send(response.data);
-                })
-                .catch((error) => {
-                    if (error.status === 400 || error.status === 401 || error.status === 500) {
-                        res
-                            .status(error.status)
-                            .send(error)
-                    }
-                })
-        }
-    }
-    else {
-        res.status(400).send({msg: "Wrong Parameters"});
-    }
+  console.log(req.body);
+  // checker email valide et les champs uniques
+  if ((req.body.login && req.body.password && req.body.name
+    && req.body.familyName && req.body.email)) {
+    userService.addUser(req.body.login, req.body.password, req.body.name,
+      req.body.familyName, req.body.email)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
 }
 
-function sendConfirmEmail(req, res) {
+/*    User Interface    */
 
-    if (req.params.loginOrEmail) {
-        userService.sendConfirmEmail(req.params.loginOrEmail)
-            .then((response) => {
-                res
-                    .status(response.status)
-                    .send(response.data);
-            })
-            .catch((error) => {
-                res
-                    .status(error.status)
-                    .send(error);
-            })
-    } else {
-        res.status(400).send({msg: "Wrong Parameters"})
-    }
+function updatePassword(req, res) {
+  if (req.body.userId && req.body.password) {
+    userService.updatePassword(req.body.userId, req.body.password)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong parameters' });
+  }
 }
 
-function confirmEmail(req, res) {
-    // console.log('confirmEmailCtrl');
+/*    Tokens    */
 
-    if (req.params.token) {
-        userService.confirmEmail(req.params.token)
-            .then((response) => {
-                console.log(response);
-                res
-                    .status(response.status)
-                    .send(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-                res
-                    .status(error.status)
-                    .send(error);
-            })
-    }
-    else {
-        res.status(400).send({msg: "Wrong Parameters"});
-    }
+//  Email
+
+function sendEmailToken(req, res) {
+  if (req.body.loginOrEmail) {
+    userService.askEmailToken(req.body.loginOrEmail)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
 }
 
-function askPasswordReset(req, res) {
+function confirmEmailToken(req, res) {
+  if (req.params.token) {
+    userService.confirmEmailToken(req.params.token)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
 
-    if (req.body.loginOrEmail) {
-        userService.askPasswordReset(req.body.loginOrEmail)
-            .then((response) => {
-                res
-                    .status(response.status)
-                    .send(response.data);
-            })
-            .catch((error) => {
-                res
-                    .status(error.status)
-                    .send(error);
-            })
-    }
-    else {
-        res.status(400).send({msg: 'Wrong Parameters'});
-    }
+//  Password
+
+function sendPasswordToken(req, res) {
+  if (req.body.loginOrEmail) {
+    userService.sendPasswordToken(req.body.loginOrEmail)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function confirmPasswordToken(req, res) {
+  if (req.params.token) {
+    userService.confirmPasswordToken(req.params.token)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
 }
 
 export default {
-    getUserById,
-    getUsers,
-    deleteUserById,
-    addUser,
-    confirmEmail,
-    askPasswordReset,
-    sendConfirmEmail,
-}
-
-// router.post('/resend', (req, res) => {
-//
-//         res.locals.models.User.findOne({ email: req.body.email }, function (err, user) {
-//             if (!user) return res.status(400).send({ msg: 'We were unable to find a user with that email.' });
-//             if (user.isVerified) return res.status(400).send({ msg: 'This account has already been verified. Please log in.' });
-//
-//             // Create a verification token, save it, and send email
-//             var token = new res.locals.models.Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
-//
-//             // Save the token
-//             token.save(function (err) {
-//                 if (err) { return res.status(500).send({ msg: err.message }); }
-//
-//                 // Send the email
-//                 var transporter = nodemailer.createTransport({ service: 'Sendgrid', auth: { user: process.env.SENDGRID_USERNAME, pass: process.env.SENDGRID_PASSWORD } });
-//                 var mailOptions = { from: 'no-reply@codemoto.io', to: user.email, subject: 'Account Verification TokenModel', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
-//                 transporter.sendMail(mailOptions, function (err) {
-//                     if (err) { return res.status(500).send({ msg: err.message }); }
-//                     res.status(200).send('A verification email has been sent to ' + user.email + '.');
-//                 });
-//             });
-//
-//         });
-// });
+  getUserById,
+  getUsers,
+  deleteUserById,
+  addUser,
+  sendEmailToken,
+  sendPasswordToken,
+  confirmEmailToken,
+  confirmPasswordToken,
+  updatePassword,
+};

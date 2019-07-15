@@ -1,98 +1,65 @@
-import MusicModel from '../models/musicModel'
+import MusicModel from '../models/musicModel';
+import CustomError from './errorHandler';
 
 function getMusics() {
-
-    return new Promise((resolve, reject) => {
-
-        MusicModel.find({}, (error, musics) => {
-            if (error) {
-                reject({
-                    status: 500,
-                    msg: error.msg,
-                })
-            }
-            else if (!musics.length) {
-                reject({
-                    status: 401,
-                    msg: 'No Musics in Database'
-                })
-            }
-            else {
-                resolve({
-                    status: 200,
-                    data: musics,
-                })
-            }
+  return new Promise((resolve, reject) => {
+    MusicModel.find({}, (error, musics) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!musics.length) {
+        reject(new CustomError('No musics in database', 400));
+      } else {
+        resolve({
+          status: 200,
+          data: musics,
         });
+      }
     });
+  });
 }
 
 function getMusicById(musicId) {
-
-    return new Promise((resolve, reject) => {
-
-        MusicModel.findById(musicId, (error, music) => {
-            if (error) {
-                reject({
-                    status: 500,
-                    msg: error.msg,
-                })
-            }
-            else if (!music) {
-                reject({
-                    status: 401,
-                    msg: 'No Music with this id in Database'
-                })
-            }
-            else {
-                resolve({
-                    status: 200,
-                    data: music,
-                })
-            }
+  return new Promise((resolve, reject) => {
+    MusicModel.findById(musicId, (error, music) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!music) {
+        reject(new CustomError('No music with this id in databse', 400));
+      } else {
+        resolve({
+          status: 200,
+          data: music,
         });
+      }
     });
+  });
 }
 
 function deleteMusicById(musicId) {
-
-    return new Promise((resolve, reject) => {
-
-        MusicModel.findById(musicId, (error, music) => {
-            if (error) {
-                reject({
-                    status: 500,
-                    msg: error.msg,
-                })
-            }
-            else if (!music) {
-                reject({
-                    status: 401,
-                    msg: 'No Music with this id in Database'
-                })
-            }
-            else {
-                music.remove((error, music) => {
-                    if (error) {
-                        reject({
-                            status: 500,
-                            msg: error.msg,
-                        })
-                    }
-                    else {
-                        resolve({
-                            status: 200,
-                            data: music,
-                        })
-                    }
-                })
-            }
+  return new Promise((resolve, reject) => {
+    MusicModel.findById(musicId, (error, music) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!music) {
+        reject(new CustomError('No music with this id in database', 400));
+      } else {
+        music.remove((removeError, musicRemoved) => {
+          if (removeError) {
+            reject(new CustomError(removeError, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: musicRemoved,
+            });
+          }
         });
+      }
     });
+  });
 }
 
 export default {
-    getMusics,
-    getMusicById,
-    deleteMusicById,
-}
+  getMusics,
+  getMusicById,
+  deleteMusicById,
+};
