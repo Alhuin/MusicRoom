@@ -99,3 +99,27 @@ export function sendPasswordToken(loginOrEmail) {
       console.error(error);
     });
 }
+
+export function getAllPlaylists() {
+  fetch(`${server}/playlists`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(async (response) => {
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (response.status === 200) {
+        alert('GetAllPlaylists is success');
+      } else {
+        alert(`error ${data.status}: ${data.msg}`);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      console.error(error);
+    });
+}
