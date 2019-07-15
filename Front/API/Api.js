@@ -1,6 +1,6 @@
 const server = 'http://10.4.2.3:3000/api';
 
-export function login(userName, password) {
+function login(userName, password) {
   fetch(`${server}/login`, {
     method: 'POST',
     headers: {
@@ -24,7 +24,7 @@ export function login(userName, password) {
     });
 }
 
-export function addUser(userName, password, name, familyName, email) {
+function addUser(userName, password, name, familyName, email) {
   fetch(`${server}/users`, {
     method: 'POST',
     headers: {
@@ -49,7 +49,7 @@ export function addUser(userName, password, name, familyName, email) {
     });
 }
 
-export function sendEmailToken(loginOrEmail) {
+function sendEmailToken(loginOrEmail) {
   fetch(`${server}/users/emailToken/`, {
     method: 'POST',
     headers: {
@@ -69,12 +69,11 @@ export function sendEmailToken(loginOrEmail) {
       // console.log(data);
     })
     .catch((error) => {
-      console.log(error);
       console.error(error);
     });
 }
 
-export function sendPasswordToken(loginOrEmail) {
+function sendPasswordToken(loginOrEmail) {
   fetch(`${server}/users/passToken/`, {
     method: 'POST',
     headers: {
@@ -84,9 +83,7 @@ export function sendPasswordToken(loginOrEmail) {
     body: JSON.stringify({ loginOrEmail }),
   })
     .then(async (response) => {
-      console.log(response);
       const data = await response.json();
-      console.log(data);
       if (response.status === 200) {
         alert('An email has been sent');
       } else {
@@ -95,7 +92,38 @@ export function sendPasswordToken(loginOrEmail) {
       // console.log(data);
     })
     .catch((error) => {
-      console.log(error);
       console.error(error);
     });
 }
+
+function updatePassword(userId, password) {
+  fetch(`${server}/users/newPass/`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId, password }),
+  })
+    .then(async (response) => {
+      const data = await response.json();
+      console.log(data);
+      if (response.status === 200) {
+        alert('Your password has been updated.');
+      } else {
+        alert(`error ${data.status}: ${data.msg}`);
+      }
+      // console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+export {
+  login,
+  addUser,
+  sendEmailToken,
+  sendPasswordToken,
+  updatePassword,
+};

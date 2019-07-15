@@ -3,6 +3,7 @@ import LoginContext from './LoginContext';
 import Logo from './Logo';
 import SocialLogin from './SocialLogin';
 import SendToken from './SendToken';
+import UpdatePassForm from './UpdatePassForm';
 
 
 export default {
@@ -11,4 +12,5 @@ export default {
   Logo,
   SocialLogin,
   SendToken,
+  UpdatePassForm,
 };
