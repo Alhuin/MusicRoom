@@ -4,14 +4,14 @@ import Home from '../Pages/Home';
 import SendTokens from '../Pages/SendTokens';
 
 const AppStackNavigator = createStackNavigator({
-  Home: {
-    screen: Home,
-  },
   Connexion: {
     screen: Connexion,
     navigationOptions: {
       header: null,
     },
+  },
+  Home: {
+    screen: Home,
   },
   SendTokens: {
     screen: SendTokens,
