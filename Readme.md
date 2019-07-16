@@ -12,7 +12,6 @@ installer mongodb https://docs.mongodb.com/manual/installation/<br/>
 ``mkdir /data/db``<br/>
 ``mongod`` (lance une instance de la base de données, tu peux fermer l'onglet du terminal)<br/> 
 ``npm start`` (va lancer le serveur express sur le port 3000)<br/>
-``./ngrock http 3000`` ( assigne une adresse externe au serveur qui tourne sur le port 3000)<br/>
 
 PS: tout ça même pas besoin de le faire pour vous si je le run de chez moi.
 
@@ -22,7 +21,8 @@ PS: tout ça même pas besoin de le faire pour vous si je le run de chez moi.
 ``export ANDROID_SDK_ROOT=/Users/julien/Library/Android/sdk`` (sur mac)<br/>
 ``npm install``<br/>
 ``npm start``<br/>
-Connexion au Back : changer l’adresse du serveur ngrock dans API/Api.js ligne 1<br/>
+Connexion au Back : changer l’adresse du serveur dans API/Api.js ligne 1 avec l'IP du mac qui fait tourner le serveur<br/>
+
 
 dans un autre terminal, dans /Front :<br/>
 ``react-native run-android``<br/>
@@ -42,6 +42,9 @@ doc de l’Api https://documenter.getpostman.com/view/6579841/S1a7UQAv?version=l
 	 -  **MusicModel PlaylistModel Editor** : Édition de playlists à plusieurs en temps réel.
  - Page de profil
  - Page modification des comptes liés
+ - Page de reset de mot de passe
+ - Page d'envoi de tokens
+ - Page de connexion aux réseaux sociaux (post login)
 
 ## Structure
 
