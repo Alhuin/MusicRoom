@@ -1,4 +1,4 @@
-const server = 'http://10.4.2.3:3000/api';
+const server = 'http://10.2.2.5:3000/api';
 
 export function login(userName, password) {
   fetch(`${server}/login`, {
@@ -101,8 +101,9 @@ export function sendPasswordToken(loginOrEmail) {
 }
 
 export function getAllPlaylists() {
+  console.log('Entering');
   fetch(`${server}/playlists`, {
-    method: 'POST',
+    method: 'GET',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
@@ -110,7 +111,9 @@ export function getAllPlaylists() {
   })
     .then(async (response) => {
       console.log(response);
+      // const data = await response.text();
       const data = await response.json();
+      console.log('----------------------------');
       console.log(data);
       if (response.status === 200) {
         alert('GetAllPlaylists is success');

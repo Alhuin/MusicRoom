@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    //  borderWidth: 1,                LAISSEZ LES
-    //  borderColor: 'green',
+    borderWidth: 1,
+    borderColor: 'green',
   },
   name: {
     fontSize: 18,
