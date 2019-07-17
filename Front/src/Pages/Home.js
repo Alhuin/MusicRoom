@@ -14,12 +14,12 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playlists: getAllPlaylists(),
+      playlists: [],
     };
   }
 
   componentDidMount(): void {
-    this.setState({ playlists: getAllPlaylists() });
+    getAllPlaylists().then(res => this.setState({ playlists: res }));
   }
 
   render() {
@@ -34,7 +34,7 @@ class Home extends React.Component {
             style={styles.playlists}
             data={playlists}
             renderItem={
-              ({ item }) => <Components.Playlist name={item.name} userId={-1} />
+              ({ item }) => <Components.Playlist name={item.name} />
             }
           />
         </View>

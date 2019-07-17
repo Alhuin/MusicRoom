@@ -2,7 +2,6 @@ import playlistService from '../services/playlistService';
 import utils from '../utils';
 
 function getPlaylists(req, res) {
-  console.log("Bip");
   playlistService.getPlaylists()
     .then((response) => {
       res
