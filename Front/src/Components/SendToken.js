@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     width: 300,
-    // borderWidth: 1,                LAISSEZ LES
+    // borderWidth: 1,
     // borderColor: 'red',
   },
   inputBox: {

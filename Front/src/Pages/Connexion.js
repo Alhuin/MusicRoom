@@ -1,16 +1,21 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View,
+  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View, Linking,
 } from 'react-native';
 import Components from '../Components';
 
 class Connexion extends React.Component {
+  static navigationOptions = { // A
+    title: 'Home',
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       type: 'Sign Up',
     };
   }
+
 
   changePage = () => {
     const { type } = this.state;
@@ -20,6 +25,38 @@ class Connexion extends React.Component {
       this.setState({ type: 'Sign Up' });
     }
   };
+
+
+  /*componentDidMount() { // B
+    if (Platform.OS === 'android') {
+      Linking.getInitialURL().then(url => {
+        this.navigate(url);
+      });
+    } else {
+      Linking.addEventListener('url', this.handleOpenURL);
+    }
+  }
+
+  componentWillUnmount() { // C
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL = (event) => { // D
+    this.navigate(event.url);
+  }
+
+  navigate = (url) => { // E
+    const { navigate } = this.props.navigation;
+    const route = url.replace(/.*?:\/\//g, '');
+    const id = route.match(/\/([^\/]+)\/?$/)[1];
+    const routeName = route.split('/')[0];
+
+    if (routeName === 'people') {
+      navigate('People', {id, name: 'chris'});
+    }
+    ;
+  };*/
+
 
   render() {
     const { type } = this.state;
