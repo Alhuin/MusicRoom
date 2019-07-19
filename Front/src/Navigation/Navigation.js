@@ -6,6 +6,9 @@ import SendTokens from '../Pages/SendTokens';
 const AppStackNavigator = createStackNavigator({
   Home: {
     screen: Home,
+    navigationOptions: {
+      header: null,
+    },
   },
   Connexion: {
     screen: Connexion,

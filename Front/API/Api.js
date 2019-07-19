@@ -1,4 +1,4 @@
-const server = 'http://10.1.9.5:3000/api';
+const server = 'http://10.4.6.5:3000/api';
 
 export function login(userName, password) {
   fetch(`${server}/login`, {
@@ -101,7 +101,6 @@ export function sendPasswordToken(loginOrEmail) {
 }
 
 export function getAllPlaylists() {
-  console.log('Entering');
   return fetch(`${server}/playlists`, {
     method: 'GET',
     headers: {
@@ -111,9 +110,9 @@ export function getAllPlaylists() {
   })
     .then((response) => {
       if (response.status === 200) {
-        alert('GetAllPlaylists is success');
+        // alert('GetAllPlaylists is success');
       } else {
-        alert(`error ${response.status}: ${response.msg}`);
+        // alert(`error ${response.status}: ${response.msg}`);
       }
       return response.json();
     })

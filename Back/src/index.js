@@ -74,37 +74,41 @@ const seedDatas = async () => {
     email: 'julien.janinr@protonmail.com',
     isVerified: true,
   });
-  const playlist = new models.Playlist({
-    name: 'AweSome PlaylistModel',
-    users: [admin],
-  });
-  const music1 = new models.Music({
-    name: 'Hit The Road Jack',
-    artist: 'Ray Charles',
-    user: user1,
-    playlist,
-  });
-  const music2 = new models.Music({
-    name: 'Kingdom Of Hardcore',
-    artist: 'Unlogix',
-    user: admin,
-    playlist,
-  });
-  const vote1 = new models.Vote({
-    value: 1,
-    user: user1,
-    music: music1,
-  });
-  const vote2 = new models.Vote({
-    value: 1,
-    user: admin,
-    music: music2,
-  });
+
   await admin.save();
   await user1.save();
-  await playlist.save();
-  await music1.save();
-  await music2.save();
-  await vote1.save();
-  await vote2.save();
+
+  for (let i = 0; i < 20; i++) {
+    const playlist = new models.Playlist({
+      name: `${i} - AweSome PlaylistModel of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
+      users: [admin],
+    });
+    const music1 = new models.Music({
+      name: 'Hit The Road Jack',
+      artist: 'Ray Charles',
+      user: user1,
+      playlist,
+    });
+    const music2 = new models.Music({
+      name: 'Kingdom Of Hardcore',
+      artist: 'Unlogix',
+      user: admin,
+      playlist,
+    });
+    const vote1 = new models.Vote({
+      value: 1,
+      user: user1,
+      music: music1,
+    });
+    const vote2 = new models.Vote({
+      value: 1,
+      user: admin,
+      music: music2,
+    });
+    await playlist.save();
+    await music1.save();
+    await music2.save();
+    await vote1.save();
+    await vote2.save();
+  }
 };

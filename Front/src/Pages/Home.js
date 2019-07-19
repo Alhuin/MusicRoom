@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Container, Header,
+  Container, Header, Icon, Left, Body, Right, Title, Button
 } from 'native-base';
 import {
-  Text, View, FlatList, StyleSheet, TextInput,
+  Text, FlatList, StyleSheet, TextInput, ScrollView,
 } from 'react-native';
 
 
@@ -22,22 +22,37 @@ class Home extends React.Component {
     getAllPlaylists().then(res => this.setState({ playlists: res }));
   }
 
+  _keyExtractor = item => item._id;
+
   render() {
     const { playlists } = this.state;
     return (
-      <Container>
-        <Header androidStatusBarColor="black" style={{ display: 'none' }} />
-        <View padder>
-          <Text style={styles.title}>Home</Text>
-          <TextInput style={styles.finder} placeholder="Rechercher..." />
+      <Container style={styles.container}>
+        <Header>
+          <Left>
+            <Button transparent>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Body>
+            <Title>Header</Title>
+          </Body>
+          <Right>
+            <Button transparent>
+              <Icon name="search" />
+            </Button>
+          </Right>
+        </Header>
+        <ScrollView style={styles.scrollView}>
           <FlatList
             style={styles.playlists}
             data={playlists}
             renderItem={
-              ({ item }) => <Components.Playlist name={item.name} />
+              ({ item }) => <Components.PlaylistCollapsed name={item.name} />
             }
+            keyExtractor={this._keyExtractor}
           />
-        </View>
+        </ScrollView>
       </Container>
     );
   }
@@ -45,29 +60,26 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'black',
+    color: 'white',
   },
   scrollView: {
     width: '100%',
   },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  loginContext: {
-    alignItems: 'flex-end',
-  },
+  // content: {
+  //   flex: 1,
+  //   alignItems: 'center',
+  //   justifyContent: 'space-between',
+  // },
+  // loginContext: {
+  //   alignItems: 'flex-end',
+  // },
   title: {
-    fontSize: 18,
-  },
-  finder: {
-    width: '100%',
+    fontSize: 22,
+    // color: 'white',
   },
   playlists: {
-    backgroundColor: 'red',
+    // backgroundColor: '#999966',
     width: '100%',
   },
   playlist: {
