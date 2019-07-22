@@ -8,6 +8,8 @@
     "lint": "eslint *.js **/*.js"
   },
   "dependencies": {
+    "acorn": "^6.2.1",
+    "acorn-jsx": "^5.0.1",
     "native-base": "^2.12.1",
     "react": "16.8.3",
     "react-native": "^0.59.9",
