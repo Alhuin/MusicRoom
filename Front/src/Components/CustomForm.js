@@ -63,7 +63,13 @@ export default class CustomForm extends React.Component {
         addUser(userName, password, name, familyName, email);
       }
     } else if (type === 'Sign In') {
-      login(userName, password);
+      login(userName, password)
+        .then(() => {
+          navigation.navigate('Home');
+        })
+        .catch((error) => {
+          alert(error.msg);
+        });
     }
   };
 
