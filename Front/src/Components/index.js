@@ -4,6 +4,7 @@ import Logo from './Logo';
 import SocialLogin from './SocialLogin';
 import SendToken from './SendToken';
 import UpdatePassForm from './UpdatePassForm';
+import PlaylistCollapsed from './PlaylistCollapsed';
 
 
 export default {
@@ -12,5 +13,6 @@ export default {
   Logo,
   SocialLogin,
   SendToken,
+  PlaylistCollapsed,
   UpdatePassForm,
 };

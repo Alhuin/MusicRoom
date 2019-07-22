@@ -13,10 +13,15 @@ const AppStackNavigator = createStackNavigator({
   },
   Home: {
     screen: Home,
+    navigationOptions: {
+      header: null,
+    },
   },
   SendTokens: {
     screen: SendTokens,
-    header: null,
+    navigationOptions: {
+      header: null,
+    },
   },
   UpdatePass: {
     screen: UpdatePass,

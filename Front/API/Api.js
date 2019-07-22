@@ -1,27 +1,34 @@
+import CustomError from './errorHandler';
+
 const server = 'http://10.3.1.3:3000/api';
 
 function login(userName, password) {
-  fetch(`${server}/login`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      login: userName, password,
-    }),
-  })
-    .then(async (response) => {
-      const data = await response.json();
-      if (response.status === 200) {
-        alert(`Login OK for user ${data.name} ${data.familyName}`);
-      } else {
-        alert(`error ${data.status}: ${data.msg}`);
-      }
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login: userName, password,
+      }),
     })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve({
+            status: 200,
+            data: data.data,
+          });
+        } else {
+          reject(new CustomError(data.msg, data.status));
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
 }
 
 function addUser(userName, password, name, familyName, email) {
@@ -120,10 +127,44 @@ function updatePassword(userId, password) {
     });
 }
 
+function getPlaylists() {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          // alert('GetAllPlaylists is success');
+          resolve({
+            status: 200,
+            data,
+          });
+        } else if (response.status === 404) {
+          reject(new CustomError('Page Not Found', 404));
+        } else {
+          reject(new CustomError(data.msg, data.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error);
+        reject(new CustomError(error.msg, error.status));
+        // console.error(error);
+      });
+  });
+}
+
 export {
   login,
   addUser,
   sendEmailToken,
   sendPasswordToken,
   updatePassword,
+  getPlaylists,
 };
