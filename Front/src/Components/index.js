@@ -3,7 +3,7 @@ import LoginContext from './LoginContext';
 import Logo from './Logo';
 import SocialLogin from './SocialLogin';
 import SendToken from './SendToken';
-import Playlist from './Playlist';
+import PlaylistCollapsed from './PlaylistCollapsed';
 
 
 export default {
@@ -12,5 +12,5 @@ export default {
   Logo,
   SocialLogin,
   SendToken,
-  Playlist,
+  PlaylistCollapsed,
 };

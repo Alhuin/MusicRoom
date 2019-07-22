@@ -106,26 +106,35 @@ export function sendPasswordToken(loginOrEmail) {
     });
 }
 
-export function getAllPlaylists() {
-  fetch(`${server}/playlists`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(async (response) => {
-      console.log(response);
-      const data = await response.json();
-      console.log(data);
-      if (response.status === 200) {
-        alert('GetAllPlaylists is success');
-      } else {
-        alert(`error ${data.status}: ${data.msg}`);
-      }
+export function getPlaylists() {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
     })
-    .catch((error) => {
-      console.log(error);
-      console.error(error);
-    });
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          // alert('GetAllPlaylists is success');
+          resolve({
+            status: 200,
+            data,
+          });
+        } else if (response.status === 404) {
+          reject(new CustomError('Page Not Found', 404));
+        } else {
+          reject(new CustomError(data.msg, data.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error);
+        reject(new CustomError(error.msg, error.status));
+        // console.error(error);
+      });
+  });
 }
