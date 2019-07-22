@@ -16,7 +16,13 @@ class Home extends React.Component {
           <FlatList
             data={getAllPlaylists()}
             renderItem={
-              ({ item }) => <Components.Playlist style={styles.playlist} name={item.name} userId={-1} />
+              ({ item }) => (
+                <Components.Playlist
+                  style={styles.playlist}
+                  name={item.name}
+                  userId={-1}
+                />
+              )
             }
           />
         </View>

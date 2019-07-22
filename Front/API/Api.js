@@ -1,27 +1,34 @@
-const server = 'http://10.4.2.3:3000/api';
+import CustomError from './errorHandler';
+
+const server = 'http://10.3.1.3:3000/api';
 
 export function login(userName, password) {
-  fetch(`${server}/login`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      login: userName, password,
-    }),
-  })
-    .then(async (response) => {
-      const data = await response.json();
-      if (response.status === 200) {
-        alert(`Login OK for user ${data.name} ${data.familyName}`);
-      } else {
-        alert(`error ${data.status}: ${data.msg}`);
-      }
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login: userName, password,
+      }),
     })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve({
+            status: 200,
+            data: data.data,
+          });
+        } else {
+          reject(new CustomError(data.msg, data.status));
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
 }
 
 export function addUser(userName, password, name, familyName, email) {
@@ -69,7 +76,6 @@ export function sendEmailToken(loginOrEmail) {
       // console.log(data);
     })
     .catch((error) => {
-      console.log(error);
       console.error(error);
     });
 }

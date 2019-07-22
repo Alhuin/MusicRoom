@@ -44,7 +44,7 @@ export default class CustomForm extends React.Component {
     const {
       userName, password,
     } = this.state;
-    const { type } = this.props;
+    const { type, navigation } = this.props;
     if (!(userName.length && password.length)) {
       alert('error, empty field.');
       console.log('error, empty field');
@@ -63,7 +63,13 @@ export default class CustomForm extends React.Component {
         addUser(userName, password, name, familyName, email);
       }
     } else if (type === 'Sign In') {
-      login(userName, password);
+      login(userName, password)
+        .then(() => {
+          navigation.navigate('Home');
+        })
+        .catch((error) => {
+          alert(error.msg);
+        });
     }
   };
 
