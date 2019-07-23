@@ -1,36 +1,36 @@
-import {Image, View, StyleSheet} from "react-native";
-import {Text} from "native-base";
-import React, {Component} from "react";
+import { Image, View, StyleSheet } from 'react-native';
+import { Text } from 'native-base';
+import React, { Component } from 'react';
 
 export default class Logo extends Component {
-    render() {
-        return (
-            <View style={styles.container}>
-                <Image
-                    style={styles.mainIcon}
-                    source={require('../Images/deezer-png-300.png')}
-                />
-                <Text style={styles.title}>MusicRoom</Text>
-            </View>
-        )
-    }
+  render() {
+    return (
+      <View style={styles.container}>
+        <Image
+          style={styles.mainIcon}
+          source={require('../Images/deezer-png-300.png')}
+        />
+        <Text style={styles.title}>MusicRoom</Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-   container: {
-       flex:1,
-       justifyContent:'center',
-       alignItems:'center',
-       // borderWidth:1,
-       // borderColor:'green',
-   },
-    title: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginTop: 20,
-    },
-    mainIcon: {
-       width: 100,
-        height: 100,
-    }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    //  borderWidth: 1,                LAISSEZ LES
+    //  borderColor: 'green',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
+  mainIcon: {
+    width: 100,
+    height: 100,
+  },
 });

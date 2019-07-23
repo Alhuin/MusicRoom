@@ -1,60 +1,170 @@
-const server = "http://1d71db7f.ngrok.io";
+import CustomError from './errorHandler';
 
-export function login(login, password) {
+const server = 'http://10.3.1.3:3000/api';
 
-    console.log('login: ' + login + ', password: ' + password);
-    fetch(server + '/login', {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({login, password}),
+function login(userName, password) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login: userName, password,
+      }),
     })
-        .then(async (response) => {
-            // console.log(response.status);
-            let data = await response.json();
-            if (response.status === 200) {
-                alert("Login OK for user " + data.name + " " + data.familyName);
-            }
-            else if (response.status === 400){
-                alert("error : " + data.error);
-            }
-            else {
-                alert('Server Error');
-            }
-            return data;
-        })
-        .then((responseData) => console.log(responseData))
-        .catch((error) => {
-            console.error(error.msg);
-        })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve({
+            status: 200,
+            data: data.data,
+          });
+        } else {
+          reject(new CustomError(data.msg, data.status));
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
 }
 
-export function addUser(login, password, name, familyName, email) {
-
-    // console.log('in addUser');
-    // console.log('POST on ' + server + '/users');
-    fetch(server + '/users', {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({login, password, name, familyName, email}),
+function addUser(userName, password, name, familyName, email) {
+  fetch(`${server}/users`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      login: userName, password, name, familyName, email,
+    }),
+  })
+    .then(async (response) => {
+      const data = await response.json();
+      if (response.status === 200) {
+        alert(data.msg);
+      } else {
+        alert(`error ${data.status}: ${data.msg}`);
+      }
+      // console.log(data);
     })
-        .then(async (response) => {
-            let data = await response.json();
-            if (response.status === 200) {
-                alert(data.msg);
-            }
-            else {
-                alert('Server Error');
-            }
-            return data;
-        })
-        .then((responseData) => console.log(responseData))
-        .catch((error) => {
-            console.error(error.msg);
-        })
+    .catch((error) => {
+      console.error(error);
+    });
 }
+
+function sendEmailToken(loginOrEmail) {
+  fetch(`${server}/users/emailToken/`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ loginOrEmail }),
+  })
+    .then(async (response) => {
+      const data = await response.json();
+      console.log(data);
+      if (response.status === 200) {
+        alert('An email has been sent');
+      } else {
+        alert(`error ${data.status}: ${data.msg}`);
+      }
+      // console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+function sendPasswordToken(loginOrEmail) {
+  fetch(`${server}/users/passToken/`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ loginOrEmail }),
+  })
+    .then(async (response) => {
+      const data = await response.json();
+      if (response.status === 200) {
+        alert('An email has been sent');
+      } else {
+        alert(`error ${data.status}: ${data.msg}`);
+      }
+      // console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+function updatePassword(userId, password) {
+  fetch(`${server}/users/newPass/`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId, password }),
+  })
+    .then(async (response) => {
+      const data = await response.json();
+      console.log(data);
+      if (response.status === 200) {
+        alert('Your password has been updated.');
+      } else {
+        alert(`error ${data.status}: ${data.msg}`);
+      }
+      // console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+function getPlaylists() {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          // alert('GetAllPlaylists is success');
+          resolve({
+            status: 200,
+            data,
+          });
+        } else if (response.status === 404) {
+          reject(new CustomError('Page Not Found', 404));
+        } else {
+          reject(new CustomError(data.msg, data.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error);
+        reject(new CustomError(error.msg, error.status));
+        // console.error(error);
+      });
+  });
+}
+
+export {
+  login,
+  addUser,
+  sendEmailToken,
+  sendPasswordToken,
+  updatePassword,
+  getPlaylists,
+};

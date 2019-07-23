@@ -5,8 +5,9 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
-import models, {connectDb} from './models';
-import API from "./routes";
+import models, { connectDb } from './models';
+import API from './routes';
+
 const bcrypt = require('bcrypt');
 
 const app = express();
@@ -24,35 +25,29 @@ app.use(express.urlencoded({ extended: true }));
  */
 
 app.use(async (req, res, next) => {
-    res.locals = {
-        models,
-    };
-    let users = await models.User.find({login: "Alhuin"});
-    res.locals.me = await users[0];
-    next();
+  res.locals = {
+    models,
+  };
+  const users = await models.User.find({ login: 'Alhuin' });
+  res.locals.me = await users[0];
+  next();
 });
 
 app.use('/api', API);
 
 connectDb().then(async () => {
-
-    /* Erase the database if ERASE_DATABASE_ONSYNC is true in .env */
-
-    if (process.env.ERASE_DATABASE_ONSYNC) {
-        await Promise.all([
-            models.Token.deleteMany({}),
-            models.User.deleteMany({}),
-            models.Music.deleteMany({}),
-            models.Playlist.deleteMany({}),
-            models.Vote.deleteMany({}),
-        ]);
-    }
-
-    seedDatas();
-
-    app.listen(process.env.PORT, () =>
-        console.log(`Example app listening on port ${process.env.PORT}!`),
-    );
+  /* Erase the database if ERASE_DATABASE_ONSYNC is true in .env */
+  if (process.env.ERASE_DATABASE_ONSYNC) {
+    await Promise.all([
+      models.Token.deleteMany({}),
+      models.User.deleteMany({}),
+      models.Music.deleteMany({}),
+      models.Playlist.deleteMany({}),
+      models.Vote.deleteMany({}),
+    ]);
+  }
+  seedDatas();
+  app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`));
 });
 
 /**
@@ -60,65 +55,61 @@ connectDb().then(async () => {
  */
 
 const seedDatas = async () => {
+  const salt = await bcrypt.genSaltSync(10);
+  const hash = await bcrypt.hashSync('Ge4rt3ln@', salt);
+  const user1 = new models.User({
+    login: 'Alhuin',
+    password: hash,
+    name: 'Jul',
+    familyName: 'Janin-R',
+    email: 'janin.reynaud.julien@gma',
+  });
+  const salty = await bcrypt.genSaltSync(10);
+  const hashy = await bcrypt.hashSync('admin', salty);
+  const admin = new models.User({
+    login: 'admin',
+    password: hashy,
+    name: 'Julien',
+    familyName: 'Janin-Reynaud',
+    email: 'julien.janinr@protonmail.com',
+    isVerified: true,
+  });
 
-    let salt = await bcrypt.genSaltSync(10);
-    let hash = await bcrypt.hashSync('Ge4rt3ln@', salt);
-    const user1 = new models.User({
-        login: 'Alhuin',
-        password: hash,
-        name: 'Jul',
-        familyName: 'Janin-R',
-        email: 'janin.reynaud.julien@gma'
-    });
+  await admin.save();
+  await user1.save();
 
-    let salty = await bcrypt.genSaltSync(10);
-    let hashy = await bcrypt.hashSync('admin', salty);
-    const admin = new models.User({
-        login: 'admin',
-        password: hashy,
-        name: 'Julien',
-        familyName: 'Janin-Reynaud',
-        email: 'julien.janinr@protonmail.com',
-        isVerified: true,
-    });
-
+  for (let i = 0; i < 20; i += 1) {
     const playlist = new models.Playlist({
-        name: 'AweSome PlaylistModel',
-        users: [admin],
+      name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
+      users: [admin],
     });
-
+    // playlist.save();
     const music1 = new models.Music({
-        name: 'Hit The Road Jack',
-        artist: 'Ray Charles',
-        user: user1,
-        playlist: playlist,
+      name: 'Hit The Road Jack',
+      artist: 'Ray Charles',
+      user: user1,
+      playlist,
     });
-
     const music2 = new models.Music({
-        name: 'Kingdom Of Hardcore',
-        artist: 'Unlogix',
-        user: admin,
-        playlist: playlist,
+      name: 'Kingdom Of Hardcore',
+      artist: 'Unlogix',
+      user: admin,
+      playlist,
     });
-
-
     const vote1 = new models.Vote({
-        value: 1,
-        user: user1,
-        music: music1,
+      value: 1,
+      user: user1,
+      music: music1,
     });
-
     const vote2 = new models.Vote({
-        value: 1,
-        user: admin,
-        music: music2,
+      value: 1,
+      user: admin,
+      music: music2,
     });
-
-    await admin.save();
-    await user1.save();
-    await playlist.save();
-    await music1.save();
-    await music2.save();
-    await vote1.save();
-    await vote2.save();
+    playlist.save();
+    music1.save();
+    music2.save();
+    vote1.save();
+    vote2.save();
+  }
 };
