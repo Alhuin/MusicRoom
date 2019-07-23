@@ -7,7 +7,7 @@
     		<dict>
     			<key>CFBundleURLSchemes</key>
     			<array>
-    				<string>MusicRoom</string>
+    				<string>musicroom</string>
     			</array>
     		</dict>
     	</array>

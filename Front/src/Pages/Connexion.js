@@ -27,36 +27,19 @@ class Connexion extends React.Component {
   };
 
 
-  /*componentDidMount() { // B
-    if (Platform.OS === 'android') {
-      Linking.getInitialURL().then(url => {
-        this.navigate(url);
-      });
-    } else {
-      Linking.addEventListener('url', this.handleOpenURL);
-    }
+  componentDidMount() {
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        console.log("Initial url is: " + url);
+        const route = url.replace(/.*?:\/\//g, '');
+        const routeName = route.split('/')[0];
+        const id = route.match(/\/([^\/]+)\/?$/)[1];
+        //alert(id);
+        const { navigation } = this.props;
+        navigation.navigate(id);
+      }
+    }).catch(err => console.error('An error occurred', err));
   }
-
-  componentWillUnmount() { // C
-    Linking.removeEventListener('url', this.handleOpenURL);
-  }
-
-  handleOpenURL = (event) => { // D
-    this.navigate(event.url);
-  }
-
-  navigate = (url) => { // E
-    const { navigate } = this.props.navigation;
-    const route = url.replace(/.*?:\/\//g, '');
-    const id = route.match(/\/([^\/]+)\/?$/)[1];
-    const routeName = route.split('/')[0];
-
-    if (routeName === 'people') {
-      navigate('People', {id, name: 'chris'});
-    }
-    ;
-  };*/
-
 
   render() {
     const { type } = this.state;
