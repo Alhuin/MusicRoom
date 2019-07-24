@@ -2,7 +2,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Connexion from '../Pages/Connexion';
 import Home from '../Pages/Home';
 import SendTokens from '../Pages/SendTokens';
-import UpdatePassword from '../Pages/UpdatePass';
+import UpdatePass from '../Pages/UpdatePass';
 
 const AppStackNavigator = createStackNavigator({
   Connexion: {
@@ -23,8 +23,8 @@ const AppStackNavigator = createStackNavigator({
       header: null,
     },
   },
-  UpdatePassword: {
-    screen: UpdatePassword,
+  UpdatePass: {
+    screen: UpdatePass,
     navigationOptions: {
       header: null,
     },

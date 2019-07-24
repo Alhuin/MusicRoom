@@ -34,6 +34,7 @@ export default class UpdatePassForm extends React.Component {
     return (
       <View style={styles.container}>
         <TextInput
+          secureTextEntry
           onChangeText={this._updateNewPass}
           autoCorrect={false}
           autoCapitalize="none"
@@ -42,6 +43,7 @@ export default class UpdatePassForm extends React.Component {
           placeholder="New password"
         />
         <TextInput
+          secureTextEntry
           onChangeText={this._updateNewPassConfirm}
           autoCorrect={false}
           autoCapitalize="none"

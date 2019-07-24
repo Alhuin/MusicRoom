@@ -163,7 +163,7 @@ function sendPasswordToken(loginOrEmail) {
               to: user.email,
               subject: 'New Password Request',
               text: `Hello,\n\nYou can reset your password by clicking the link:
-              \n${process.env.SERVER}/api/users/passToken/${savedToken.token}.\n`,
+              \n${process.env.SERVER}/api/users/passToken/${savedToken.token}\n`,
             };
             utils.sendMail(mailOptions, resolve, reject);
           }
@@ -193,7 +193,6 @@ function confirmPasswordToken(tokenString) {
               status: 200,
               data: user,
             });
-            // OUVRIR APP POUR SAISIR NEW PW
           }
         });
       }

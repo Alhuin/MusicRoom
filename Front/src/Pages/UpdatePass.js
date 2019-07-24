@@ -5,12 +5,11 @@ import {
 import Components from '../Components';
 
 class UpdatePass extends React.Component {
-
   render() {
     return (
       <View style={styles.container}>
-        <Components.Logo/>
-        <Components.UpdatePassForm/>
+        <Components.Logo />
+        <Components.UpdatePassForm />
       </View>
     );
   }

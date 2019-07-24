@@ -129,7 +129,7 @@ function confirmEmailToken(req, res) {
       .then((response) => {
         res
           .status(response.status)
-          .send(response.data);
+          .redirect('musicroom://music/Connexion');
       })
       .catch((error) => {
         console.error(error);
@@ -166,10 +166,11 @@ function sendPasswordToken(req, res) {
 function confirmPasswordToken(req, res) {
   if (req.params.token) {
     userService.confirmPasswordToken(req.params.token)
-      .then((response) => {
+      .then(async (response) => {
+        const data = await response.data;
         res
           .status(response.status)
-          .send(response.data);
+          .redirect(`musicroom://music/UpdatePass/${data._id}`);
       })
       .catch((error) => {
         console.error(error);
