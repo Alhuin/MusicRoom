@@ -3,7 +3,7 @@ import LoginContext from './LoginContext';
 import Logo from './Logo';
 import SocialLogin from './SocialLogin';
 import SendToken from './SendToken';
-
+import PlaylistCollapsed from './PlaylistCollapsed';
 
 export default {
   CustomForm,
@@ -11,4 +11,5 @@ export default {
   Logo,
   SocialLogin,
   SendToken,
+  PlaylistCollapsed,
 };
