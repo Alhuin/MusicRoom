@@ -2,6 +2,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Connexion from '../Pages/Connexion';
 import Home from '../Pages/Home';
 import SendTokens from '../Pages/SendTokens';
+import UpdatePassword from '../Pages/UpdatePass';
 
 const AppStackNavigator = createStackNavigator({
   Connexion: {
@@ -18,6 +19,12 @@ const AppStackNavigator = createStackNavigator({
   },
   SendTokens: {
     screen: SendTokens,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  UpdatePassword: {
+    screen: UpdatePassword,
     navigationOptions: {
       header: null,
     },

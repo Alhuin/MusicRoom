@@ -65,7 +65,11 @@ export default class CustomForm extends React.Component {
     } else if (type === 'Sign In') {
       login(userName, password)
         .then(() => navigation.navigate('Home'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          if (error.status === 401) {
+            alert(error.msg);
+          }
+        });
     }
   };
 
