@@ -1,4 +1,4 @@
-const server = 'http://10.4.2.3:3000/api';
+const server = 'http://10.4.6.5:3000/api';
 
 export function login(userName, password) {
   fetch(`${server}/login`, {
