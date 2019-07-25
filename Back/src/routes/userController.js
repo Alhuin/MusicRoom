@@ -87,7 +87,7 @@ function updatePassword(req, res) {
       .then((response) => {
         res
           .status(response.status)
-          .send(response.data);
+          .redirect('musicroom://music/Connexion/Sign%20In');
       })
       .catch((error) => {
         console.error(error);
