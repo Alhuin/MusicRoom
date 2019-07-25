@@ -129,7 +129,7 @@ function confirmEmailToken(req, res) {
       .then((response) => {
         res
           .status(response.status)
-          .redirect('musicroom://music/Connexion');
+          .redirect('musicroom://music/Connexion/Sign%20In');
       })
       .catch((error) => {
         console.error(error);
@@ -170,7 +170,7 @@ function confirmPasswordToken(req, res) {
         const data = await response.data;
         res
           .status(response.status)
-          .redirect(`musicroom://music/UpdatePass/${data._id}`);
+          .redirect(`musicroom://music/UpdatePass/${data._id}`);// hacher le userId
       })
       .catch((error) => {
         console.error(error);

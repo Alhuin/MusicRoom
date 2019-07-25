@@ -8,7 +8,6 @@ export default class UpdatePassForm extends React.Component {
   state = {
     newPass: '',
     newPassConfirm: '',
-    userId: '',
   };
 
   _updateNewPass = (text) => {
@@ -20,11 +19,14 @@ export default class UpdatePassForm extends React.Component {
   };
 
   _updatePassword() {
-    const { newPass, newPassConfirm, userId } = this.state;
+    const { newPass, newPassConfirm } = this.state;
+    const { userId } = this.props;
     if (!(newPass.length && newPassConfirm.length)) {
       alert('error: Empty input');
     } else if (newPass !== newPassConfirm) {
       alert('error: Passwords don\'t match');
+    } else if (userId === undefined){
+      alert('Could not update your password, please ask for a new link.');
     } else {
       updatePassword(userId, newPass);
     }

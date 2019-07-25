@@ -3,8 +3,15 @@ import Connexion from '../Pages/Connexion';
 import Home from '../Pages/Home';
 import SendTokens from '../Pages/SendTokens';
 import UpdatePass from '../Pages/UpdatePass';
+import Entry from '../Pages/Entry';
 
 const AppStackNavigator = createStackNavigator({
+  Entry: {
+    screen: Entry,
+    navigationOptions: {
+      header: null,
+    },
+  },
   Connexion: {
     screen: Connexion,
     navigationOptions: {

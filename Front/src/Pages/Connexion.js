@@ -1,62 +1,18 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View, Linking,
+  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View,
 } from 'react-native';
 import Components from '../Components';
 
 class Connexion extends React.Component {
   constructor(props) {
     super(props);
+    const { navigation } = this.props;
+    const type = navigation.getParam('data');
     this.state = {
-      type: 'Sign Up',
+      type: (type === undefined ? 'Sign Up' : type),
     };
   }
-
-
-  componentDidMount() {
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        const { navigation } = this.props;
-        if (Platform.OS === 'android') {
-          const page = this.parseUrl(url, false);
-          const token = this.parseUrl(url, true);
-          console.log(`token = ${token}`);
-          console.log(`page = ${page}`);
-          if (page !== null) {
-            if (token !== null) {
-              navigation.navigate(page, { token });
-            }
-            navigation.navigate(page);
-          }
-        } else if (Platform.OS === 'ios') {
-          Linking.addEventListener('url', this.handleOpenURL);
-        }
-      }
-    });
-  }
-
-  parseUrl = (url, token) => {
-    console.log(url);
-    const route = url.replace(/.*?:\/\//g, '');
-    const routes = route.match(/\/([^/]+)\/?$/);
-    if (token) {
-      return routes[2];
-    }
-    return routes[1];
-  };
-
-  handleOpenURL = (event) => {
-    const { navigation } = this.props;
-    const page = this.parseUrl(event.url, false);
-    const token = this.parseUrl(event.url, true);
-    if (page !== null) {
-      if (token !== null) {
-        navigation.navigate(page, { token });
-      } else {
-        navigation.navigate(page);
-      }
-    }
-  };
 
   changePage = () => {
     const { type } = this.state;

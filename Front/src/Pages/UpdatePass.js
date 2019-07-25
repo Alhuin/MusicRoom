@@ -6,10 +6,11 @@ import Components from '../Components';
 
 class UpdatePass extends React.Component {
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <Components.Logo />
-        <Components.UpdatePassForm />
+        <Components.UpdatePassForm userId={navigation.getParam('data')} />
       </View>
     );
   }
