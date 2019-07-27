@@ -82,12 +82,13 @@ function addUser(req, res) {
 /*    User Interface    */
 
 function updatePassword(req, res) {
+  console.log('ctrl');
   if (req.body.userId && req.body.password) {
     userService.updatePassword(req.body.userId, req.body.password)
       .then((response) => {
         res
           .status(response.status)
-          .redirect('musicroom://music/Connexion/Sign%20In');
+          .send(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -129,7 +130,7 @@ function confirmEmailToken(req, res) {
       .then((response) => {
         res
           .status(response.status)
-          .redirect('musicroom://music/Connexion/Sign%20In');
+          .redirect('musicroom://music/Connexion/');
       })
       .catch((error) => {
         console.error(error);
@@ -170,7 +171,7 @@ function confirmPasswordToken(req, res) {
         const data = await response.data;
         res
           .status(response.status)
-          .redirect(`musicroom://music/UpdatePass/${data._id}`);// hacher le userId
+          .redirect(`musicroom://music/UpdatePass/${data._id}`);
       })
       .catch((error) => {
         console.error(error);

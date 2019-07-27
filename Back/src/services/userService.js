@@ -116,17 +116,20 @@ function _getUserByLoginOrEmail(loginOrEmail) {
 /*    User Interface    */
 
 function updatePassword(userId, newPassword) {
+  console.log('Service');
   return new Promise((resolve, reject) => {
-    UserModel.findOne({ _id: userId }, (error, user) => {
+    UserModel.findOne({ _id: userId }, async (error, user) => {
       if (error) {
         reject(new CustomError(error, 500));
       } else if (!user) {
         reject(new CustomError('[Update Password] No user with this id', 400));
       } else {
         const updateUser = user;
-        updateUser.password = newPassword;
+        const salt = await bcrypt.genSaltSync(10);
+        updateUser.password = await bcrypt.hashSync(newPassword, salt);
         updateUser.save((saveError, newUser) => {
           if (saveError) {
+            console.log(saveError);
             reject(new CustomError(saveError, 500));
           } else {
             resolve({

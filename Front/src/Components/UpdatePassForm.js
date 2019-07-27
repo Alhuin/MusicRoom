@@ -19,8 +19,10 @@ export default class UpdatePassForm extends React.Component {
   };
 
   _updatePassword() {
+    console.log(this.props);
     const { newPass, newPassConfirm } = this.state;
-    const { userId } = this.props;
+    const { userId, navigation } = this.props;
+    console.log(`userId = ${userId}`);
     if (!(newPass.length && newPassConfirm.length)) {
       alert('error: Empty input');
     } else if (newPass !== newPassConfirm) {
@@ -28,7 +30,12 @@ export default class UpdatePassForm extends React.Component {
     } else if (userId === undefined){
       alert('Could not update your password, please ask for a new link.');
     } else {
-      updatePassword(userId, newPass);
+      updatePassword(userId, newPass)
+        .then(() => navigation.navigate('Connexion', { type: 'Sign In', toast: 'Password Updated' }))
+        .catch((error) => {
+          console.error(error);
+          navigation.navigate('Connexion', { type: 'Sign In' });
+        });
     }
   }
 

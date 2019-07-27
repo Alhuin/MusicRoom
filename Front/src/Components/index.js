@@ -1,4 +1,5 @@
-import CustomForm from './CustomForm';
+import SignInForm from './SignInForm';
+import SignUpForm from './SignUpForm';
 import LoginContext from './LoginContext';
 import Logo from './Logo';
 import SocialLogin from './SocialLogin';
@@ -7,7 +8,8 @@ import PlaylistCollapsed from './PlaylistCollapsed';
 import UpdatePassForm from './UpdatePassForm';
 
 export default {
-  CustomForm,
+  SignInForm,
+  SignUpForm,
   LoginContext,
   Logo,
   SocialLogin,

@@ -1,8 +1,9 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.6.5:3000/api';
+const server = 'http://192.168.1.17:3000/api';
 
 function login(userName, password) {
+  console.log(`userName=${userName}, pass=${password}`);
   return new Promise((resolve, reject) => {
     fetch(`${server}/login`, {
       method: 'POST',
@@ -17,7 +18,6 @@ function login(userName, password) {
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
-          console.log('login OK');
           resolve({
             status: 200,
             data: data.data,
@@ -106,27 +106,27 @@ function sendPasswordToken(loginOrEmail) {
 }
 
 function updatePassword(userId, password) {
-  fetch(`${server}/users/newPass/`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ userId, password }),
-  })
-    .then(async (response) => {
-      const data = await response.json();
-      console.log(data);
-      if (response.status === 200) {
-        alert('Your password has been updated.');
-      } else {
-        alert(`error ${data.status}: ${data.msg}`);
-      }
-      // console.log(data);
+  return new Promise((resolve, reject) => {
+    console.log(`ici ${userId}`);
+    fetch(`${server}/users/newPass/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, password }),
     })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then(
+        resolve({
+          status: 200,
+          data: { msg: 'Password Updated' },
+        }),
+      )
+      .catch((error) => {
+        console.error(error);
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
 }
 
 function getPlaylists() {

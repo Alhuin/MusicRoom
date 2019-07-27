@@ -7,19 +7,22 @@ export default class LoginContext extends Component {
   render() {
     let contextText;
     let other;
-    const { type, changePage } = this.props;
+    let route;
+    const { type, navigation } = this.props;
     if (type === 'Sign Up') {
       contextText = <Text style={styles.contextText}>Already have an account ? </Text>;
       other = 'Sign In !';
+      route = 'Connexion';
     } else {
       contextText = <Text style={styles.contextText}>Don&apos;t have an account yet ? </Text>;
       other = 'Sign Up !';
+      route = 'Inscription';
     }
 
     return (
       <View style={styles.container}>
         {contextText}
-        <TouchableOpacity onPress={changePage}>
+        <TouchableOpacity onPress={() => navigation.navigate(route)}>
           <Text style={styles.contextLink}>{other}</Text>
         </TouchableOpacity>
       </View>

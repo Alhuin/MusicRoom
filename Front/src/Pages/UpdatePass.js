@@ -10,7 +10,7 @@ class UpdatePass extends React.Component {
     return (
       <View style={styles.container}>
         <Components.Logo />
-        <Components.UpdatePassForm userId={navigation.getParam('data')} />
+        <Components.UpdatePassForm userId={navigation.getParam('userId')} navigation={navigation} />
       </View>
     );
   }

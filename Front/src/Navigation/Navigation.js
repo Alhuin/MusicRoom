@@ -1,22 +1,32 @@
+import React from 'react';
+import Platform from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Connexion from '../Pages/Connexion';
 import Home from '../Pages/Home';
 import SendTokens from '../Pages/SendTokens';
 import UpdatePass from '../Pages/UpdatePass';
-import Entry from '../Pages/Entry';
+import Inscription from '../Pages/Inscription';
 
 const AppStackNavigator = createStackNavigator({
-  Entry: {
-    screen: Entry,
+  // Entry: {
+  //   screen: Entry,
+  //   navigationOptions: {
+  //     header: null,
+  //   },
+  // },
+  Inscription: {
+    screen: Inscription,
     navigationOptions: {
       header: null,
     },
+    path: 'Inscription',
   },
   Connexion: {
     screen: Connexion,
     navigationOptions: {
       header: null,
     },
+    path: 'Connexion',
   },
   Home: {
     screen: Home,
@@ -35,7 +45,14 @@ const AppStackNavigator = createStackNavigator({
     navigationOptions: {
       header: null,
     },
+    path: 'UpdatePass/:userId',
   },
 });
 
-export default createAppContainer(AppStackNavigator);
+const prefix = 'musicroom://music/';
+
+const App = createAppContainer(AppStackNavigator);
+
+const MainApp = () => <App uriPrefix={prefix} />;
+
+export default MainApp;
