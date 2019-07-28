@@ -16,9 +16,7 @@ class Connexion extends React.Component {
       >
         <View style={styles.content}>
           <Components.Logo />
-          <Components.SignInForm
-            navigation={navigation}
-          />
+          <Components.SignInForm navigation={navigation} />
           <Components.SocialLogin type={type} />
           <Components.LoginContext
             type={type}

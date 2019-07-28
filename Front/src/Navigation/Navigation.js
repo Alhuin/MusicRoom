@@ -1,5 +1,4 @@
 import React from 'react';
-import Platform from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Connexion from '../Pages/Connexion';
 import Home from '../Pages/Home';
@@ -8,12 +7,6 @@ import UpdatePass from '../Pages/UpdatePass';
 import Inscription from '../Pages/Inscription';
 
 const AppStackNavigator = createStackNavigator({
-  // Entry: {
-  //   screen: Entry,
-  //   navigationOptions: {
-  //     header: null,
-  //   },
-  // },
   Inscription: {
     screen: Inscription,
     navigationOptions: {
@@ -21,12 +14,24 @@ const AppStackNavigator = createStackNavigator({
     },
     path: 'Inscription',
   },
+  Inscription_noTransition: {
+    screen: Inscription,
+    navigationOptions: {
+      header: null,
+    },
+  },
   Connexion: {
     screen: Connexion,
     navigationOptions: {
       header: null,
     },
     path: 'Connexion',
+  },
+  Connexion_noTransition: {
+    screen: Connexion,
+    navigationOptions: {
+      header: null,
+    },
   },
   Home: {
     screen: Home,
@@ -47,6 +52,15 @@ const AppStackNavigator = createStackNavigator({
     },
     path: 'UpdatePass/:userId',
   },
+}, {
+  transitionConfig: () => ({
+    screenInterpolator: (sceneProps) => {
+      if (sceneProps.scene.route.routeName.endsWith('_noTransition')) {
+        return 0;
+      }
+      return 260;
+    },
+  }),
 });
 
 const prefix = 'musicroom://music/';

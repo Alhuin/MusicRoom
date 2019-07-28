@@ -21,9 +21,7 @@ class Connexion extends React.Component {
         >
           <View style={styles.content}>
             <Components.Logo />
-            <Components.SignUpForm
-              navigation={navigation}
-            />
+            <Components.SignUpForm />
             <Components.SocialLogin type={type} />
             <Components.LoginContext
               navigation={navigation}

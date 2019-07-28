@@ -1,6 +1,7 @@
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Text } from 'native-base';
 import React, { Component } from 'react';
+import NavigationUtils from '../Navigation/NavigationUtils';
 
 
 export default class LoginContext extends Component {
@@ -8,21 +9,21 @@ export default class LoginContext extends Component {
     let contextText;
     let other;
     let route;
-    const { type, navigation } = this.props;
+    const { type } = this.props;
     if (type === 'Sign Up') {
       contextText = <Text style={styles.contextText}>Already have an account ? </Text>;
       other = 'Sign In !';
-      route = 'Connexion';
+      route = 'Connexion_noTransition';
     } else {
       contextText = <Text style={styles.contextText}>Don&apos;t have an account yet ? </Text>;
       other = 'Sign Up !';
-      route = 'Inscription';
+      route = 'Inscription_noTransition';
     }
 
     return (
       <View style={styles.container}>
         {contextText}
-        <TouchableOpacity onPress={() => navigation.navigate(route)}>
+        <TouchableOpacity onPress={() => NavigationUtils.resetStack(this, route, null)}>
           <Text style={styles.contextLink}>{other}</Text>
         </TouchableOpacity>
       </View>
