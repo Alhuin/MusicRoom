@@ -57,7 +57,6 @@ function deleteUserById(req, res) {
 }
 
 function addUser(req, res) {
-  console.log(req.body);
   // checker email valide et les champs uniques
   if ((req.body.login && req.body.password && req.body.name
     && req.body.familyName && req.body.email)) {
@@ -82,7 +81,6 @@ function addUser(req, res) {
 /*    User Interface    */
 
 function updatePassword(req, res) {
-  console.log('ctrl');
   if (req.body.userId && req.body.password) {
     userService.updatePassword(req.body.userId, req.body.password)
       .then((response) => {
@@ -130,7 +128,7 @@ function confirmEmailToken(req, res) {
       .then((response) => {
         res
           .status(response.status)
-          .redirect('musicroom://music/Connexion/');
+          .redirect('musicroom://music/auth/signIn/');
       })
       .catch((error) => {
         console.error(error);
@@ -171,7 +169,7 @@ function confirmPasswordToken(req, res) {
         const data = await response.data;
         res
           .status(response.status)
-          .redirect(`musicroom://music/UpdatePass/${data._id}`);
+          .redirect(`musicroom://music/auth/updatePass/${data._id}`);
       })
       .catch((error) => {
         console.error(error);

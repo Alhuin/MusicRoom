@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, TextInput, Button, Keyboard,
 } from 'react-native';
-import NavigationUtils from '../Navigation/NavigationUtils';
+import NavigationUtils from '../navigation/NavigationUtils';
 import { updatePassword } from '../../API/Api';
 
 export default class UpdatePassForm extends React.Component {
@@ -23,7 +23,7 @@ export default class UpdatePassForm extends React.Component {
     console.log(this.props);
     const { newPass, newPassConfirm } = this.state;
     const { userId } = this.props;
-    console.log(`userId = ${userId}`);
+    // console.log(`userId = ${userId}`);
     if (!(newPass.length && newPassConfirm.length)) {
       alert('error: Empty input');
     } else if (newPass !== newPassConfirm) {

@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text,
 } from 'react-native';
-import NavigationUtils from '../Navigation/NavigationUtils';
 import { login } from '../../API/Api';
 
 export default class SignInForm extends React.Component {
@@ -24,12 +23,13 @@ export default class SignInForm extends React.Component {
     const {
       userName, password,
     } = this.state;
+    const { navigation } = this.props;
     if (!(userName.length && password.length)) {
       alert('error, empty field.');
       console.log('error, empty field');
     } else {
       login(userName, password)
-        .then(() => NavigationUtils.resetStack(this, 'Home', null))
+        .then(() => navigation.navigate('app'))
         .catch((error) => {
           if (error.status === 401) {
             alert(error.msg);

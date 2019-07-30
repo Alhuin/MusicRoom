@@ -8,7 +8,7 @@ export default class Logo extends Component {
       <View style={styles.container}>
         <Image
           style={styles.mainIcon}
-          source={require('../Images/deezer-png-300.png')}
+          source={require('../assets/images/deezer-png-300.png')}
         />
         <Text style={styles.title}>MusicRoom</Text>
       </View>

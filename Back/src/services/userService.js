@@ -116,7 +116,6 @@ function _getUserByLoginOrEmail(loginOrEmail) {
 /*    User Interface    */
 
 function updatePassword(userId, newPassword) {
-  console.log('Service');
   return new Promise((resolve, reject) => {
     UserModel.findOne({ _id: userId }, async (error, user) => {
       if (error) {

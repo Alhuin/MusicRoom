@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View,
 } from 'react-native';
-import Components from '../Components';
+import Components from '../components';
 
 class SendTokens extends React.Component {
   constructor(props) {

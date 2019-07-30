@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View,
+  StyleSheet, KeyboardAvoidingView, Platform, View, ScrollView,
 } from 'react-native';
-import Components from '../Components';
+import Components from '../components';
 
 class Connexion extends React.Component {
   render() {
     const { navigation } = this.props;
-    const type = 'Sign Up';
+    const type = 'Sign In';
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -21,11 +21,11 @@ class Connexion extends React.Component {
         >
           <View style={styles.content}>
             <Components.Logo />
-            <Components.SignUpForm />
+            <Components.SignInForm navigation={navigation} />
             <Components.SocialLogin type={type} />
             <Components.LoginContext
-              navigation={navigation}
               type={type}
+              navigation={navigation}
               style={styles.loginContext}
             />
           </View>

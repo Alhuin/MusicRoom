@@ -3,7 +3,7 @@ import CustomError from './errorHandler';
 const server = 'http://192.168.1.17:3000/api';
 
 function login(userName, password) {
-  console.log(`userName=${userName}, pass=${password}`);
+  // console.log(`userName=${userName}, pass=${password}`);
   return new Promise((resolve, reject) => {
     fetch(`${server}/login`, {
       method: 'POST',
@@ -69,7 +69,7 @@ function sendEmailToken(loginOrEmail) {
   })
     .then(async (response) => {
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (response.status === 200) {
         alert('An email has been sent');
       } else {
@@ -107,7 +107,6 @@ function sendPasswordToken(loginOrEmail) {
 
 function updatePassword(userId, password) {
   return new Promise((resolve, reject) => {
-    console.log(`ici ${userId}`);
     fetch(`${server}/users/newPass/`, {
       method: 'POST',
       headers: {
@@ -154,7 +153,6 @@ function getPlaylists() {
         }
       })
       .catch((error) => {
-        console.log('error');
         console.log(error);
         reject(new CustomError(error.msg, error.status));
         // console.error(error);

@@ -1,15 +1,29 @@
 import React from 'react';
 import {
-  Container, Header, Icon, Left, Body, Right, Title, Button,
-} from 'native-base';
-import {
-  FlatList, StyleSheet,
+  FlatList, StyleSheet, Platform, View,
 } from 'react-native';
-
-import Components from '../Components';
+import { Icon } from 'native-base';
+import { NavigationScreenProps } from 'react-navigation';
+import Components from '../components';
 import { getPlaylists } from '../../API/Api';
 
 class Home extends React.Component {
+  static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
+    headerTitle: 'Home ',
+    headerTitleStyle: { paddingLeft: 50 },
+    headerLeft: Platform.select({
+      ios: null,
+      android: (
+        <Icon
+          ios="ios-menu"
+          android="md-menu"
+          style={{ paddingLeft: 20 }}
+          onPress={() => navigation.toggleDrawer()}
+        />
+      ),
+    }),
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,25 +41,11 @@ class Home extends React.Component {
       });
   }
 
+
   render() {
     const { playlists } = this.state;
     return (
-      <Container style={styles.container}>
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Header</Title>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon name="search" />
-            </Button>
-          </Right>
-        </Header>
+      <View style={styles.container}>
         <FlatList
           data={playlists}
           keyExtractor={item => item._id.toString()}
@@ -59,7 +59,7 @@ class Home extends React.Component {
             )
           }
         />
-      </Container>
+      </View>
     );
   }
 }
