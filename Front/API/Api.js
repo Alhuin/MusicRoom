@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://192.168.1.17:3000/api';
+const server = 'http://10.3.1.3:3000/api';
 
 function login(userName, password) {
   // console.log(`userName=${userName}, pass=${password}`);

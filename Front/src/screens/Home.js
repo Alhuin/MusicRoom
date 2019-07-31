@@ -1,28 +1,26 @@
 import React from 'react';
 import {
-  FlatList, StyleSheet, Platform, View,
+  FlatList, StyleSheet, View,
 } from 'react-native';
-import { Icon } from 'native-base';
-import { NavigationScreenProps } from 'react-navigation';
 import Components from '../components';
 import { getPlaylists } from '../../API/Api';
 
 class Home extends React.Component {
-  static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
-    headerTitle: 'Home ',
-    headerTitleStyle: { paddingLeft: 50 },
-    headerLeft: Platform.select({
-      ios: null,
-      android: (
-        <Icon
-          ios="ios-menu"
-          android="md-menu"
-          style={{ paddingLeft: 20 }}
-          onPress={() => navigation.toggleDrawer()}
-        />
-      ),
-    }),
-  });
+  // static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
+  //   headerTitle: 'Home ',
+  //   headerTitleStyle: { paddingLeft: 50 },
+  //   headerLeft: Platform.select({
+  //     ios: null,
+  //     android: (
+  //       <Icon
+  //         ios="ios-menu"
+  //         android="md-menu"
+  //         style={{ paddingLeft: 20 }}
+  //         onPress={() => navigation.toggleDrawer()}
+  //       />
+  //     ),
+  //   }),
+  // });
 
   constructor(props) {
     super(props);

@@ -1,27 +1,24 @@
 import React from 'react';
-import {
-  StyleSheet, View, Text,
-} from 'react-native';
-import Components from '../components';
+import { View, Text } from 'react-native';
+import { isSignedIn } from '../auth';
 
-class Loading extends React.Component {
+export default class Loading extends React.Component {
+  componentDidMount() {
+    const { navigation } = this.props;
+    isSignedIn()
+      .then((res) => {
+        if (res) {
+          navigation.navigate('app');
+        } else {
+          navigation.navigate('auth');
+        }
+      })
+      .catch(() => alert('An error occurred'));
+  }
+
   render() {
     return (
-      <View style={styles.content}>
-        <Components.Logo />
-        <Text>Loading</Text>
-      </View>
+      <View><Text>Loader</Text></View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-});
-
-export default Loading;

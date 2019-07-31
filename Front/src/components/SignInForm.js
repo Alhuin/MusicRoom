@@ -4,6 +4,7 @@ import {
   Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text,
 } from 'react-native';
 import { login } from '../../API/Api';
+import { onSignIn } from '../auth';
 
 export default class SignInForm extends React.Component {
   state = {
@@ -29,7 +30,10 @@ export default class SignInForm extends React.Component {
       console.log('error, empty field');
     } else {
       login(userName, password)
-        .then(() => navigation.navigate('app'))
+        .then(() => {
+          onSignIn();
+          navigation.navigate('app');
+        })
         .catch((error) => {
           if (error.status === 401) {
             alert(error.msg);

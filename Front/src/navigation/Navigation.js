@@ -4,10 +4,18 @@ import {
   createAppContainer,
   createBottomTabNavigator,
   createSwitchNavigator,
-  createDrawerNavigator, NavigationScreenProps,
+  createDrawerNavigator,
+  NavigationScreenProps,
+  DrawerItems,
 } from 'react-navigation';
-import { Platform } from 'react-native';
+import {
+  Platform,
+  Button,
+  SafeAreaView,
+  View,
+} from 'react-native';
 import { Icon } from 'native-base';
+import { onSignOut } from '../auth';
 import Connexion from '../screens/Connexion';
 import Home from '../screens/Home';
 import SendTokens from '../screens/SendTokens';
@@ -116,6 +124,26 @@ const MainNavigator = Platform.select({
       path: 'main',
     },
     'Settings ': AppSettings,
+  },
+  {
+    contentComponent: props => (
+      <View style={{ flex: 1 }}>
+        <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+          <DrawerItems {...props} />
+          <Button
+            title="Logout"
+            onPress={() => {
+              const { navigation } = props;
+              onSignOut();
+              navigation.navigate('auth');
+            }}
+          />
+        </SafeAreaView>
+      </View>
+    ),
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute: 'DrawerClose',
+    drawerToggleRoute: 'DrawerToggle',
   }),
 });
 
@@ -135,7 +163,7 @@ const RootSwitch = createSwitchNavigator(
       path: 'auth',
     },
   },
-  { initialRouteName: 'auth' },
+  // { initialRouteName: 'auth' },
 );
 
 const prefix = 'musicroom://music/';

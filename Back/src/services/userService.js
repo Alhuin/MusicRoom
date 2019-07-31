@@ -164,7 +164,7 @@ function sendPasswordToken(loginOrEmail) {
               from: '"MusicRoom Team" <team@musicroom.com>',
               to: user.email,
               subject: 'New Password Request',
-              text: `Hello,\n\nYou can reset your password by clicking the link:
+              text: `Hello,\n\nYou can reset your password by clicking the link below:
               \n${process.env.SERVER}/api/users/passToken/${savedToken.token}\n`,
             };
             utils.sendMail(mailOptions, resolve, reject);
@@ -230,8 +230,8 @@ function _sendEmailToken(user, resolve, reject) {
       const mailOptions = {
         from: '"MusicRoom Team" <team@musicroom.com>',
         to: user.email,
-        subject: 'Account Verification Token',
-        text: `Hello,\n\nPlease verify your account by clicking the link:
+        subject: 'Account Verification',
+        text: `Hello,\n\nPlease verify your account by clicking the link below:
               \n${process.env.SERVER}/api/users/emailToken/${savedToken.token}.\n`,
       };
       utils.sendMail(mailOptions, resolve, reject);
