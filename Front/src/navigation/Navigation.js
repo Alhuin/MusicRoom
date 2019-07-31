@@ -85,7 +85,7 @@ const HomeNavigator = createStackNavigator({
     screen: Home,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Home',
-      headerTitleStyle: { paddingLeft: 50 },
+      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
       headerLeft: Platform.select({
         ios: null,
         android: (
