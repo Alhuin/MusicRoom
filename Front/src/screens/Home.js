@@ -6,22 +6,6 @@ import Components from '../components';
 import { getPlaylists } from '../../API/Api';
 
 class Home extends React.Component {
-  // static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
-  //   headerTitle: 'Home ',
-  //   headerTitleStyle: { paddingLeft: 50 },
-  //   headerLeft: Platform.select({
-  //     ios: null,
-  //     android: (
-  //       <Icon
-  //         ios="ios-menu"
-  //         android="md-menu"
-  //         style={{ paddingLeft: 20 }}
-  //         onPress={() => navigation.toggleDrawer()}
-  //       />
-  //     ),
-  //   }),
-  // });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -30,6 +14,9 @@ class Home extends React.Component {
   }
 
   componentDidMount(): void {
+    // const { navigation } = this.props;
+    // const user = navigation.getParam('user'); // Logged In User is passed as prop
+    // console.log(user);
     getPlaylists()
       .then((response) => {
         this.setState({ playlists: response.data });
@@ -38,7 +25,6 @@ class Home extends React.Component {
         console.error(error);
       });
   }
-
 
   render() {
     const { playlists } = this.state;

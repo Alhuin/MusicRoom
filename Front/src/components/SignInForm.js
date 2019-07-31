@@ -30,9 +30,11 @@ export default class SignInForm extends React.Component {
       console.log('error, empty field');
     } else {
       login(userName, password)
-        .then(() => {
-          onSignIn();
-          navigation.navigate('app');
+        .then((user) => {
+          console.log('login return');
+          console.log(user);
+          onSignIn(JSON.stringify(user));
+          navigation.navigate('HomePage', { user });
         })
         .catch((error) => {
           if (error.status === 401) {

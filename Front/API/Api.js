@@ -18,16 +18,35 @@ function login(userName, password) {
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
-          resolve({
-            status: 200,
-            data: data.data,
-          });
+          resolve(data);
         } else {
           reject(new CustomError(data.msg, data.status));
         }
       })
       .catch((error) => {
         console.error(error);
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
+function getUserById(userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/users/${userId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        }
+        // console.log(data);
+      })
+      .catch((error) => {
         reject(new CustomError(error.msg, error.status));
       });
   });
@@ -167,4 +186,5 @@ export {
   sendPasswordToken,
   updatePassword,
   getPlaylists,
+  getUserById,
 };

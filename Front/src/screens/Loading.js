@@ -6,9 +6,11 @@ export default class Loading extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
     isSignedIn()
-      .then((res) => {
-        if (res) {
-          navigation.navigate('app');
+      .then((user) => {
+        // console.log('isSignedIn');
+        // console.log(user);
+        if (user) {
+          navigation.navigate('HomePage', { user: JSON.parse(user) });
         } else {
           navigation.navigate('auth');
         }

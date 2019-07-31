@@ -81,7 +81,7 @@ const AuthNavigator = createStackNavigator({
 // HomeNavigator Handles Home screens by stack
 
 const HomeNavigator = createStackNavigator({
-  Home: {
+  HomePage: {
     screen: Home,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Home',
@@ -112,18 +112,18 @@ const HomeNavigator = createStackNavigator({
 
 const MainNavigator = Platform.select({
   ios: createBottomTabNavigator({
-    'Home ': {
+    Home: {
       screen: HomeNavigator,
       path: 'main',
     },
-    'Settings ': AppSettings,
+    Settings: AppSettings,
   }),
   android: createDrawerNavigator({
-    'Home ': {
+    Main: {
       screen: HomeNavigator,
       path: 'main',
     },
-    'Settings ': AppSettings,
+    Settings: AppSettings,
   },
   {
     contentComponent: props => (
