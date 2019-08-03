@@ -3,8 +3,35 @@ import {
   FlatList, StyleSheet,
 } from 'react-native';
 import TrackInSearch from './TrackInSearch';
+import Player from '../services/Player';
 
 class TrackListInSearch extends React.Component {
+  state = {
+    playing: null,
+  };
+  //
+  // updatePlaying = (playing) => {
+  //   console.log('update playing track, new track: ');
+  //   this.setState({ playing });
+  // };
+
+  handlePress = (preview) => {
+    const { playing } = this.state;
+    alert(playing);
+    if (playing != null) {
+      playing.stop(() => {
+        console.log('stoping track');
+        console.log('playing new track');
+        const toPlay = Player.play(preview);
+        this.setState(toPlay);
+      });
+    } else {
+      console.log('playing new track');
+      const toPlay = Player.play(preview);
+      this.setState(toPlay);
+    }
+  };
+
   render() {
     const { tracks } = this.props;
     console.log(tracks);
@@ -12,7 +39,13 @@ class TrackListInSearch extends React.Component {
       <FlatList
         data={tracks}
         keyExtractor={item => item.id.toString()}
-        renderItem={item => <TrackInSearch track={item.item} />}
+        renderItem={item => (
+          <TrackInSearch
+            track={item.item}
+            handlePress={this.handlePress}
+          />
+        )
+        }
         onEndReachThreashold={0.5}
         // onEndReached={() => {
         //   if (this.page < this.totalPages) {

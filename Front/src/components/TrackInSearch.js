@@ -5,13 +5,14 @@ import {
 
 class TrackInSearch extends React.Component {
   render() {
-    const { track } = this.props;
-    console.log('track');
+    const { track, handlePress } = this.props;
     console.log(track);
     return (
       <TouchableOpacity
         style={styles.main_container}
-        onPress={() => alert(track.title)}
+        onPress={() => {
+          handlePress(track.preview);
+        }}
       >
         <Image
           style={styles.image}
