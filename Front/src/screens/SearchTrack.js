@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View,
+  AppState, StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
 import { getTracks } from '../../API/DeezerApi';
@@ -11,13 +11,34 @@ export default class SearchTrack extends React.Component {
     this.state = {
       tracks: [],
       searchedText: '',
+      playing: null,
     };
   }
+
+  componentDidMount(): void {
+    const { navigation } = this.props;
+    navigation.addListener('didBlur', this._onChangedPage);
+  }
+
+  componentWillUnmount(): void {
+    const { navigation } = this.props;
+    navigation.removeListener('change', this._onChangedPage);
+  }
+
+  _onChangedPage = () => {
+    const { playing } = this.state;
+    if (playing !== null) {
+      playing.stop();
+    }
+  };
 
   updateSearchedText = (text) => {
     this.setState({ searchedText: text });
   };
 
+  updatePlaying = (playing) => {
+    this.setState({ playing });
+  };
 
   searchTracks = () => {
     this.setState({ tracks: [] }, () => {
@@ -40,14 +61,18 @@ export default class SearchTrack extends React.Component {
   }
 
   render() {
-    const { tracks } = this.state;
+    const { tracks, playing } = this.state;
     return (
       <View style={styles.container}>
         <Components.SearchBar
           updateSearchedText={this.updateSearchedText}
           searchTracks={this.searchTracks}
         />
-        <Components.TracklistInSearch tracks={tracks} />
+        <Components.TracklistInSearch
+          tracks={tracks}
+          updatePlaying={this.updatePlaying}
+          playing={playing}
+        />
       </View>
     );
   }

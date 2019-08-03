@@ -6,20 +6,37 @@ import TrackInSearch from './TrackInSearch';
 import Player from '../services/Player';
 
 class TrackListInSearch extends React.Component {
-  state = {
-    playing: null,
-  };
+  // state = {
+  //   playing: null,
+  // };
+
+  // componentDidMount(): void {
+  //   AppState.addEventListener('change', this._handleAppStateChange);
+  // }
+  //
+  // componentWillUnmount(): void {
+  //   AppState.removeEventListener('change', this._handleAppStateChange);
+  // }
+  //
+  // _handleAppStateChange = (currentAppState) => {
+  //   if (currentAppState === 'background') {
+  //     const { playing } = this.state;
+  //     if (playing !== null){
+  //       playing.stop();
+  //     }
+  //   }
+  // };
 
   handlePress = (preview) => {
-    const { playing } = this.state;
+    const { playing, updatePlaying } = this.props;
     if (playing !== null) {
       playing.stop(() => {
         const toPlay = Player.play(preview);
-        this.setState({ playing: toPlay });
+        updatePlaying(toPlay);
       });
     } else {
       const toPlay = Player.play(preview);
-      this.setState({ playing: toPlay });
+      updatePlaying(toPlay);
     }
   };
 
