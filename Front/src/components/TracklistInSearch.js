@@ -9,26 +9,17 @@ class TrackListInSearch extends React.Component {
   state = {
     playing: null,
   };
-  //
-  // updatePlaying = (playing) => {
-  //   console.log('update playing track, new track: ');
-  //   this.setState({ playing });
-  // };
 
   handlePress = (preview) => {
     const { playing } = this.state;
-    alert(playing);
-    if (playing != null) {
+    if (playing !== null) {
       playing.stop(() => {
-        console.log('stoping track');
-        console.log('playing new track');
         const toPlay = Player.play(preview);
-        this.setState(toPlay);
+        this.setState({ playing: toPlay });
       });
     } else {
-      console.log('playing new track');
       const toPlay = Player.play(preview);
-      this.setState(toPlay);
+      this.setState({ playing: toPlay });
     }
   };
 

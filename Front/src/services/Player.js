@@ -6,9 +6,9 @@ const play = (url) => {
       console.log('error loading track:', error);
     } else {
       track.play();
-      return track;
     }
   });
+  return track;
 };
 
 const stop = (track) => {
