@@ -6,6 +6,9 @@ import SocialLogin from './SocialLogin';
 import SendToken from './SendToken';
 import PlaylistCollapsed from './PlaylistCollapsed';
 import UpdatePassForm from './UpdatePassForm';
+import TrackInSearch from './TrackInSearch';
+import SearchBar from './SearchBar';
+import TracklistInSearch from './TracklistInSearch';
 
 export default {
   SignInForm,
@@ -16,4 +19,7 @@ export default {
   SendToken,
   PlaylistCollapsed,
   UpdatePassForm,
+  TrackInSearch,
+  TracklistInSearch,
+  SearchBar,
 };

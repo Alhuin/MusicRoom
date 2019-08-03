@@ -5,7 +5,7 @@ import {
 import Components from '../components';
 import { getPlaylists } from '../../API/BackApi';
 
-class Home extends React.Component {
+class Playlists extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Playlists;

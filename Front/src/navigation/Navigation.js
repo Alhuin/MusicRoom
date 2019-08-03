@@ -24,6 +24,7 @@ import Inscription from '../screens/Inscription';
 import UserSettings from '../screens/UserSettings';
 import AppSettings from '../screens/AppSettings';
 import Loading from '../screens/Loading';
+import SearchTrack from '../screens/SearchTrack';
 
 // Auth Navigator Handles Authentication screens by stack
 
@@ -119,11 +120,14 @@ const MainNavigator = Platform.select({
     Settings: AppSettings,
   }),
   android: createDrawerNavigator({
-    Main: {
+    Home: {
       screen: HomeNavigator,
       path: 'main',
     },
     Settings: AppSettings,
+    SearchTrack: {
+      screen: SearchTrack,
+    },
   },
   {
     contentComponent: props => (

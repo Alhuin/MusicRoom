@@ -21,7 +21,7 @@ PS: tout ça même pas besoin de le faire pour vous si je le run de chez moi.
 ``export ANDROID_SDK_ROOT=/Users/julien/Library/Android/sdk`` (sur mac)<br/>
 ``npm install``<br/>
 ``npm start``<br/>
-Connexion au Back : changer l’adresse du serveur dans API/Api.js ligne 1 avec l'IP du mac qui fait tourner le serveur<br/>
+Connexion au Back : changer l’adresse du serveur dans API/BackApi.js ligne 1 avec l'IP du mac qui fait tourner le serveur<br/>
 
 
 dans un autre terminal, dans /Front :<br/>

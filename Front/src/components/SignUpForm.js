@@ -4,7 +4,7 @@ import {
   Button, Keyboard, View, StyleSheet, TextInput,
 } from 'react-native';
 
-import { addUser } from '../../API/Api';
+import { addUser } from '../../API/BackApi';
 
 export default class CustomForm extends React.Component {
   state = {

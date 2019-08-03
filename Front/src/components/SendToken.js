@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, TextInput, Button, Keyboard,
 } from 'react-native';
-import { sendPasswordToken } from '../../API/Api';
+import { sendPasswordToken } from '../../API/BackApi';
 
 export default class SendToken extends React.Component {
   state = {

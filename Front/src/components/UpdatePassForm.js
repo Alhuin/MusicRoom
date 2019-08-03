@@ -3,7 +3,7 @@ import {
   StyleSheet, View, TextInput, Button, Keyboard,
 } from 'react-native';
 import NavigationUtils from '../navigation/NavigationUtils';
-import { updatePassword } from '../../API/Api';
+import { updatePassword } from '../../API/BackApi';
 
 export default class UpdatePassForm extends React.Component {
   state = {
