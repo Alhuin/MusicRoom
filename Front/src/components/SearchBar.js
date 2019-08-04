@@ -7,7 +7,7 @@ export default class SearchBar extends React.Component {
     return (
       <TextInput
         style={styles.textInput}
-        placeholder="Titre du film"
+        placeholder="Cliquer ici pour rechercher une musique"
         // style={/*lesStylesDeTaMaman*/}
         onChangeText={text => updateSearchedText(text)}
         onSubmitEditing={() => {
@@ -20,6 +20,6 @@ export default class SearchBar extends React.Component {
 
 const styles = StyleSheet.create({
   textInput: {
-    color: 'white',
+    backgroundColor: '#666666',
   },
 });

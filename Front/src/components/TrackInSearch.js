@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TouchableOpacity, Image, View, Text, StyleSheet,
+  TouchableOpacity, Image, View, Text, StyleSheet, Button, Keyboard,
 } from 'react-native';
 
 class TrackInSearch extends React.Component {
@@ -24,13 +24,27 @@ class TrackInSearch extends React.Component {
           </View>
           <View style={styles.artist_container}>
             <Text style={styles.artist_name}>
-              artist : {track.artist.name}
+              artist :
+              {' '}
+              {track.artist.name}
             </Text>
           </View>
           <View style={styles.album_container}>
             <Text style={styles.album_title}>
-              album : {track.album.title}
+              album :
+              {' '}
+              {track.album.title}
             </Text>
+            <View>
+              <Button
+                color="#666666"
+                title="Add music"
+                onPress={() => {
+                  alert('ca marche bro');
+                  // Method ajout music ->nouvelle page pour choisir la playlist a ajouter ou pas ?;
+                }}
+              />
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -66,6 +80,7 @@ const styles = StyleSheet.create({
   },
   artist_container: {
     flex: 5,
+    flexDirection: 'row',
   },
   artist_name: {
     fontStyle: 'italic',
@@ -75,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 5,
   },
   album_title: {
-    fontSize: 14,
+    fontSize: 11,
     color: 'grey',
   },
 
