@@ -9,6 +9,8 @@ import UpdatePassForm from './UpdatePassForm';
 import TrackInSearch from './TrackInSearch';
 import SearchBar from './SearchBar';
 import TracklistInSearch from './TracklistInSearch';
+import TracklistInPlaylist from './TracklistInPlaylist';
+import TrackInPlaylist from './TrackInPlaylist';
 
 export default {
   SignInForm,
@@ -21,5 +23,7 @@ export default {
   UpdatePassForm,
   TrackInSearch,
   TracklistInSearch,
+  TrackInPlaylist,
+  TracklistInPlaylist,
   SearchBar,
 };

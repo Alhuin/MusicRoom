@@ -14,9 +14,6 @@ class Playlists extends React.Component {
   }
 
   componentDidMount(): void {
-    // const { navigation } = this.props;
-    // const user = navigation.getParam('user'); // Logged In User is passed as prop
-    // console.log(user);
     getPlaylists()
       .then((response) => {
         this.setState({ playlists: response.data });
@@ -28,6 +25,7 @@ class Playlists extends React.Component {
 
   render() {
     const { playlists } = this.state;
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <FlatList
@@ -38,6 +36,8 @@ class Playlists extends React.Component {
               <Components.PlaylistCollapsed
                 style={styles.playlist}
                 name={item.name}
+                playlistId={item._id}
+                navigation={navigation}
                 userId={-1}
               />
             )

@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.5.6:3000/api';
+const server = 'http://10.3.1.3:3000/api';
 
 function login(userName, password) {
   // console.log(`userName=${userName}, pass=${password}`);
@@ -179,6 +179,48 @@ function getPlaylists() {
   });
 }
 
+function getPlaylistById(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
+function getMusicsByPlaylist(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/musicsByPlaylist/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -186,5 +228,7 @@ export {
   sendPasswordToken,
   updatePassword,
   getPlaylists,
+  getMusicsByPlaylist,
+  getPlaylistById,
   getUserById,
 };

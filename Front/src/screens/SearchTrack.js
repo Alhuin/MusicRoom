@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  AppState, StyleSheet, View,
+  StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
 import { getTracks } from '../../API/DeezerApi';
@@ -17,12 +17,11 @@ export default class SearchTrack extends React.Component {
 
   componentDidMount(): void {
     const { navigation } = this.props;
-    navigation.addListener('didBlur', this._onChangedPage);
+    this._navListener = navigation.addListener('didBlur', this._onChangedPage);
   }
 
   componentWillUnmount(): void {
-    const { navigation } = this.props;
-    navigation.removeListener('change', this._onChangedPage);
+    this._navListener.remove();
   }
 
   _onChangedPage = () => {

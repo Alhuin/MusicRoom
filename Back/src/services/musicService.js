@@ -35,6 +35,23 @@ function getMusicById(musicId) {
   });
 }
 
+function getMusicsByPlaylist(playlistId) {
+  return new Promise((resolve, reject) => {
+    MusicModel.find({ playlist: playlistId }, (error, musics) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!musics) {
+        reject(new CustomError('No musics for this Playlist databse', 400));
+      } else {
+        resolve({
+          status: 200,
+          data: musics,
+        });
+      }
+    });
+  });
+}
+
 function deleteMusicById(musicId) {
   return new Promise((resolve, reject) => {
     MusicModel.findById(musicId, (error, music) => {
@@ -61,5 +78,6 @@ function deleteMusicById(musicId) {
 export default {
   getMusics,
   getMusicById,
+  getMusicsByPlaylist,
   deleteMusicById,
 };

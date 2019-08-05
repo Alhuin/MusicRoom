@@ -15,7 +15,7 @@ import {
   View,
 } from 'react-native';
 import { Icon } from 'native-base';
-import { onSignOut } from '../auth';
+import { onSignOut } from '../services/auth';
 import Connexion from '../screens/Connexion';
 import Home from '../screens/Home';
 import SendTokens from '../screens/SendTokens';
@@ -25,6 +25,8 @@ import UserSettings from '../screens/UserSettings';
 import AppSettings from '../screens/AppSettings';
 import Loading from '../screens/Loading';
 import SearchTrack from '../screens/SearchTrack';
+import Playlists from '../screens/Playlists';
+import Playlist from '../screens/Playlist';
 
 // Auth Navigator Handles Authentication screens by stack
 
@@ -111,6 +113,24 @@ const HomeNavigator = createStackNavigator({
 
 // Main Navigator Handles HomeNavigator + Settings by drawer or tab
 
+const PlaylistNavigator = createDrawerNavigator({
+// Should be StackNavigator, but didBlur not firing so FO
+  Playlists: {
+    screen: Playlists,
+    navigationOptions: {
+      header: null,
+      drawerLockMode: 'locked-closed',
+    },
+  },
+  Playlist: {
+    screen: Playlist,
+    navigationOptions: {
+      header: null,
+      drawerLockMode: 'locked-closed',
+    },
+  },
+});
+
 const MainNavigator = Platform.select({
   ios: createBottomTabNavigator({
     Home: {
@@ -128,6 +148,7 @@ const MainNavigator = Platform.select({
     SearchTrack: {
       screen: SearchTrack,
     },
+    Playlists: PlaylistNavigator,
   },
   {
     contentComponent: props => (

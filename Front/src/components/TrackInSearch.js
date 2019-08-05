@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TouchableOpacity, Image, View, Text, StyleSheet, Button, Keyboard,
+  TouchableOpacity, Image, View, Text, StyleSheet, Button,
 } from 'react-native';
 
 class TrackInSearch extends React.Component {

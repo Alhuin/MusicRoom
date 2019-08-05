@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { isSignedIn } from '../auth';
+import { isSignedIn } from '../services/auth';
 
 export default class Loading extends React.Component {
   componentDidMount() {

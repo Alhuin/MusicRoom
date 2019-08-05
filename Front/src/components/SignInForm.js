@@ -4,7 +4,7 @@ import {
   Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text,
 } from 'react-native';
 import { login } from '../../API/BackApi';
-import { onSignIn } from '../auth';
+import { onSignIn } from '../services/auth';
 
 export default class SignInForm extends React.Component {
   state = {

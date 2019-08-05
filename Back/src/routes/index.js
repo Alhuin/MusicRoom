@@ -35,6 +35,7 @@ router.get('/users/passToken/:token', userController.confirmPasswordToken);
 
 router.get('/musics', musicController.getMusics);
 router.get('/musics/:musicId', musicController.getMusicById);
+router.get('/musicsByPlaylist/:playlistId', musicController.getMusicsByPlaylist);
 router.delete('/musics/:musicId', musicController.deleteMusicById);
 
 

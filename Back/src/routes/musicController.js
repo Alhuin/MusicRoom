@@ -35,6 +35,25 @@ function getMusicById(req, res) {
   }
 }
 
+function getMusicsByPlaylist(req, res) {
+  if ((req.params.playlistId && utils.isValidId(req.params.playlistId))) {
+    musicService.getMusicsByPlaylist(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function deleteMusicById(req, res) {
   if ((req.params.musicId && utils.isValidId(req.params.musicId))) {
     musicService.deleteMusicById(req.params.musicId)
@@ -57,5 +76,6 @@ function deleteMusicById(req, res) {
 export default {
   getMusicById,
   getMusics,
+  getMusicsByPlaylist,
   deleteMusicById,
 };

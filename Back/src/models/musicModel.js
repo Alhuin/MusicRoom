@@ -23,6 +23,15 @@ const musicSchema = new mongoose.Schema({
     ref: 'PlaylistModel',
     default: undefined,
   },
+  cover: {
+    type: String,
+  },
+  preview: {
+    type: String,
+  },
+  album: {
+    type: String,
+  },
 });
 
 /*

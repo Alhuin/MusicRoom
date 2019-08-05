@@ -89,12 +89,18 @@ const seedDatas = async () => {
       artist: 'Ray Charles',
       user: user1,
       playlist,
+      album: 'Ray Charles, Grandes Exitos',
+      preview: 'https://cdns-preview-2.dzcdn.net/stream/c-2193d7ef9f8d842ace9360836589727a-4.mp3',
+      cover: 'https://api.deezer.com/album/14030736/image',
     });
     const music2 = new models.Music({
       name: 'Kingdom Of Hardcore',
       artist: 'Unlogix',
       user: admin,
       playlist,
+      album: 'Kingdom of Hardcore',
+      cover: 'https://api.deezer.com/album/84599082/image',
+      preview: 'https://cdns-preview-5.dzcdn.net/stream/c-594da52b1f185e066c91662de81c734b-2.mp3',
     });
     const vote1 = new models.Vote({
       value: 1,
