@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FlatList, StyleSheet, View,
+  FlatList, StyleSheet, View, Text,
 } from 'react-native';
 import Components from '../components';
 import { getPlaylists } from '../../API/BackApi';
@@ -28,6 +28,9 @@ class Playlists extends React.Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
+        <Text style={styles.playlistHead}>
+          Playlists
+        </Text>
         <FlatList
           data={playlists}
           keyExtractor={item => item._id.toString()}
@@ -66,6 +69,14 @@ const styles = StyleSheet.create({
   },
   playlist: {
     margin: 0,
+  },
+  playlistHead: {
+    // borderWidth: 1,
+    // borderColor: 'grey',
+    color: 'white',
+    fontSize: 30,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
