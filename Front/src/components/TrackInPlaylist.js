@@ -3,10 +3,26 @@ import {
   TouchableOpacity, Image, View, Text, StyleSheet,
 } from 'react-native';
 import { Icon } from 'native-base';
+import { voteMusic } from '../../API/BackApi';
 
 class TrackInPlaylist extends React.Component {
+  _vote = (value) => {
+    const { track, playlistId, updateTracks } = this.props;
+    voteMusic(track._id, playlistId, value)
+      .then(() => {
+        updateTracks();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   render() {
-    const { track, handlePress } = this.props;
+    const {
+      track,
+      handlePress,
+    } = this.props;
+    // console.log(track);
     return (
       <TouchableOpacity
         style={styles.main_container}
@@ -19,34 +35,43 @@ class TrackInPlaylist extends React.Component {
           source={{ uri: track.cover }}
         />
         <View style={styles.content_container}>
-          <View style={styles.header_container}>
+          <View style={styles.title_container}>
             <Text style={styles.title_text}>{track.name}</Text>
           </View>
           <View style={styles.artist_container}>
             <Text style={styles.artist_name}>
-              artist :
-              {' '}
               {track.artist}
             </Text>
           </View>
           <View style={styles.album_container}>
             <Text style={styles.album_title}>
-              album :
-              {' '}
               {track.album}
             </Text>
           </View>
+        </View>
+        <View style={styles.voting_container}>
+          <View style={styles.note_container}>
+            <Text style={{ color: 'white' }}>{track.vote}</Text>
+          </View>
           <View style={styles.votes_container}>
-            <Icon
-              name="arrow-round-up"
-              style={{ color: 'white' }}
-              onPress={() => alert(`upvote music ${track._id}`)}
-            />
-            <Icon
-              name="arrow-round-down"
-              style={{ color: 'white' }}
-              onPress={() => alert(`downvote music ${track._id}`)}
-            />
+            <TouchableOpacity
+              style={styles.vote_container}
+              onPress={() => this._vote(1)}
+            >
+              <Icon
+                name="arrow-round-up"
+                style={{ color: 'green' }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.vote_container}
+              onPress={() => this._vote(-1)}
+            >
+              <Icon
+                name="arrow-round-down"
+                style={{ color: 'red' }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableOpacity>
@@ -58,52 +83,79 @@ const styles = StyleSheet.create({
   main_container: {
     height: 120,
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    // borderWidth: 1,
+    // borderColor: 'green',
   },
   image: {
-    width: 120,
-    height: 120,
-    margin: 5,
+    width: 110,
+    height: 110,
+    marginTop: 5,
+    marginLeft: 5,
   },
   content_container: {
-    flex: 1,
-    margin: 5,
-  },
-  header_container: {
+    flexDirection: 'column',
     flex: 3,
+    margin: 5,
+    justifyContent: 'center',
+    // borderWidth: 1,
+    // borderColor: 'yellow',
+  },
+  title_container: {
+    flex: 2,
     flexDirection: 'row',
   },
   title_text: {
     flexWrap: 'wrap',
     fontSize: 20,
     fontWeight: 'bold',
-    flex: 5,
     paddingRight: 5,
     color: 'white',
   },
   artist_container: {
-    flex: 5,
-    flexDirection: 'row',
+    flex: 1,
+    color: 'white',
   },
   artist_name: {
-    fontStyle: 'italic',
     color: 'white',
   },
   album_container: {
-    flex: 5,
+    flex: 1,
   },
   album_title: {
-    fontSize: 11,
-    color: 'grey',
+    fontStyle: 'italic',
+    color: 'white',
+  },
+  voting_container: {
+    flexDirection: 'row',
+    // borderWidth: 1,
+    // borderColor: 'blue',
+    flex: 2,
+  },
+  note_container: {
+    flex: 1,
+    color: 'white',
+    fontSize: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderWidth: 1,
+    // borderColor: 'green',
   },
   votes_container: {
-    position: 'absolute',
-    right: 5,
-    top: 10,
-    height: 100,
-    borderWidth: 1,
-    borderColor: 'orange',
+    flex: 1,
+    height: 120,
     flexDirection: 'column',
     justifyContent: 'space-around',
+    // borderWidth: 1,
+    // borderColor: 'orange',
+  },
+  vote_container: {
+    width: 50,
+    // borderWidth: 1,
+    // borderColor: 'white',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

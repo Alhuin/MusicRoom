@@ -172,7 +172,7 @@ function getPlaylists() {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         reject(new CustomError(error.msg, error.status));
         // console.error(error);
       });
@@ -200,9 +200,9 @@ function getPlaylistById(playlistId) {
   });
 }
 
-function getMusicsByPlaylist(playlistId) {
+function getMusicsByVoteInPlaylist(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/musicsByPlaylist/${playlistId}`, {
+    fetch(`${server}/musicsByVote/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -221,6 +221,31 @@ function getMusicsByPlaylist(playlistId) {
   });
 }
 
+function voteMusic(musicId, playlistId, value) {
+  // console.log('API request for vote');
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/voteMusic`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ musicId, playlistId, value }),
+    })
+      .then(async (response) => {
+        // console.log('api return 200');
+        // console.log(response);
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -228,7 +253,8 @@ export {
   sendPasswordToken,
   updatePassword,
   getPlaylists,
-  getMusicsByPlaylist,
+  getMusicsByVoteInPlaylist,
   getPlaylistById,
   getUserById,
+  voteMusic,
 };

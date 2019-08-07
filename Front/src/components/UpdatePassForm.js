@@ -20,7 +20,7 @@ export default class UpdatePassForm extends React.Component {
   };
 
   _updatePassword() {
-    console.log(this.props);
+    // console.log(this.props);
     const { newPass, newPassConfirm } = this.state;
     const { userId } = this.props;
     // console.log(`userId = ${userId}`);

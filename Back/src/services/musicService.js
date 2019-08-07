@@ -35,20 +35,22 @@ function getMusicById(musicId) {
   });
 }
 
-function getMusicsByPlaylist(playlistId) {
+function getMusicsByVote(playlistId) {
   return new Promise((resolve, reject) => {
-    MusicModel.find({ playlist: playlistId }, (error, musics) => {
-      if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!musics) {
-        reject(new CustomError('No musics for this Playlist databse', 400));
-      } else {
-        resolve({
-          status: 200,
-          data: musics,
-        });
-      }
-    });
+    MusicModel.find({ playlist: playlistId })
+      .sort({ vote: -1 })
+      .exec((error, musics) => {
+        if (error) {
+          reject(new CustomError(error, 500));
+        } else if (!musics) {
+          reject(new CustomError('No musics for this Playlist databse', 400));
+        } else {
+          resolve({
+            status: 200,
+            data: musics,
+          });
+        }
+      });
   });
 }
 
@@ -75,9 +77,37 @@ function deleteMusicById(musicId) {
   });
 }
 
+function voteMusic(musicId, playlistId, value) {
+  // console.log('voteMusic Service');
+  return new Promise((resolve, reject) => {
+    MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!music[0]) {
+        reject(new CustomError('No music with this id in database', 400));
+      } else {
+        const updatedMusic = music[0];
+        // console.log(updatedMusic);
+        updatedMusic.vote += value;
+        updatedMusic.save((saveError, savedMusic) => {
+          if (saveError) {
+            reject(new CustomError(saveError, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedMusic,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 export default {
   getMusics,
   getMusicById,
-  getMusicsByPlaylist,
+  getMusicsByVote,
   deleteMusicById,
+  voteMusic,
 };

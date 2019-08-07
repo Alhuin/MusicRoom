@@ -21,7 +21,7 @@ class TrackListInSearch extends React.Component {
 
   render() {
     const { tracks } = this.props;
-    console.log(tracks);
+    // console.log(tracks);
     return (
       <FlatList
         data={tracks}

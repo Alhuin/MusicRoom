@@ -20,7 +20,7 @@ class TracklistInPlaylist extends React.Component {
   };
 
   render() {
-    const { tracks } = this.props;
+    const { tracks, playlistId, updateTracks } = this.props;
     return (
       <FlatList
         data={tracks}
@@ -29,6 +29,8 @@ class TracklistInPlaylist extends React.Component {
           <TrackInPlaylist
             track={item.item}
             handlePress={this.handlePress}
+            playlistId={playlistId}
+            updateTracks={updateTracks}
           />
         )
         }

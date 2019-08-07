@@ -6,8 +6,8 @@ import React, { Component } from 'react';
 export default class PlaylistCollapsed extends Component { // WTF le nom ?
   _pressPlaylist = () => {
     const { navigation, playlistId } = this.props;
-    console.log(playlistId);
-    navigation.navigate('Playlist', { playlistId, navigation });
+    console.log(`You pressed playlist ${playlistId}`);
+    navigation.push('Playlist', { playlistId });
   };
 
   _longPressPlaylist = () => {

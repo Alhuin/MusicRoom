@@ -31,8 +31,8 @@ export default class SignInForm extends React.Component {
     } else {
       login(userName, password)
         .then((user) => {
-          console.log('login return');
-          console.log(user);
+          // console.log('login return');
+          // console.log(user);
           onSignIn(JSON.stringify(user));
           navigation.navigate('HomePage', { user });
         })

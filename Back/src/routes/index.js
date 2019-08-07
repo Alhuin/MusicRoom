@@ -35,8 +35,9 @@ router.get('/users/passToken/:token', userController.confirmPasswordToken);
 
 router.get('/musics', musicController.getMusics);
 router.get('/musics/:musicId', musicController.getMusicById);
-router.get('/musicsByPlaylist/:playlistId', musicController.getMusicsByPlaylist);
+router.get('/musicsByVote/:playlistId', musicController.getMusicsByVote);
 router.delete('/musics/:musicId', musicController.deleteMusicById);
+router.post('/voteMusic', musicController.voteMusic);
 
 
 /*             Playlists                 */

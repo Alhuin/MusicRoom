@@ -113,20 +113,18 @@ const HomeNavigator = createStackNavigator({
 
 // Main Navigator Handles HomeNavigator + Settings by drawer or tab
 
-const PlaylistNavigator = createDrawerNavigator({
+const PlaylistNavigator = createStackNavigator({
 // Should be StackNavigator, but didBlur not firing so FO
   Playlists: {
     screen: Playlists,
     navigationOptions: {
       header: null,
-      drawerLockMode: 'locked-closed',
     },
   },
   Playlist: {
     screen: Playlist,
     navigationOptions: {
       header: null,
-      drawerLockMode: 'locked-closed',
     },
   },
 });

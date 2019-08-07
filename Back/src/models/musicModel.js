@@ -32,6 +32,10 @@ const musicSchema = new mongoose.Schema({
   album: {
     type: String,
   },
+  vote: {
+    type: Number,
+    default: 0,
+  },
 });
 
 /*

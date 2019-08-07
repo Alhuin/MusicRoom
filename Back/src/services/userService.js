@@ -128,7 +128,7 @@ function updatePassword(userId, newPassword) {
         updateUser.password = await bcrypt.hashSync(newPassword, salt);
         updateUser.save((saveError, newUser) => {
           if (saveError) {
-            console.log(saveError);
+            console.error(saveError);
             reject(new CustomError(saveError, 500));
           } else {
             resolve({

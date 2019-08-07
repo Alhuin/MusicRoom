@@ -3,7 +3,7 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
-import { getMusicsByPlaylist } from '../../API/BackApi';
+import { getMusicsByVoteInPlaylist } from '../../API/BackApi';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -17,19 +17,15 @@ class Playlist extends React.Component {
 
   componentDidMount(): void {
     const { navigation } = this.props;
-    const playlistId = navigation.getParam('playlistId');
-    this._navListener = navigation.addListener('didBlur', this._onChangedPage);
-    getMusicsByPlaylist(playlistId)
-      .then((response) => {
-        this.setState({ tracks: response });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    console.log(navigation);
+    // this._navListener = navigation.addListener('didBlur', this._onChangedPage);
+    console.log(`Did Mount : You Opened Playlist ${navigation.getParam('playlistId')}`);
+    this.updateTracks();
   }
 
   componentWillUnmount(): void {
-    this._navListener.remove();
+    this._onChangedPage();
+    // this._navListener.remove();
   }
 
   _onChangedPage = () => {
@@ -37,6 +33,19 @@ class Playlist extends React.Component {
     if (playing !== null) {
       playing.stop();
     }
+  };
+
+  updateTracks = () => {
+    const { navigation } = this.props;
+    // console.log( this.props );
+    const playlistId = navigation.getParam('playlistId');
+    getMusicsByVoteInPlaylist(playlistId)
+      .then((response) => {
+        this.setState({ tracks: response });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   updateSearchedText = (text) => {
@@ -57,6 +66,8 @@ class Playlist extends React.Component {
 
   render() {
     const { tracks, playing } = this.state;
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
     return (
       <View style={styles.container}>
         <Components.SearchBar
@@ -67,6 +78,8 @@ class Playlist extends React.Component {
           tracks={tracks}
           updatePlaying={this.updatePlaying}
           playing={playing}
+          playlistId={playlistId}
+          updateTracks={this.updateTracks}
         />
       </View>
     );

@@ -6,7 +6,7 @@ import {
 class TrackInSearch extends React.Component {
   render() {
     const { track, handlePress } = this.props;
-    console.log(track);
+    // console.log(track);
     return (
       <TouchableOpacity
         style={styles.main_container}

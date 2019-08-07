@@ -9,8 +9,8 @@ function login(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        // console.error(error);
-        console.log(error);
+        console.error(error);
+        // console.log(error);
         res
           .status(error.status)
           .send(error);
