@@ -41,7 +41,7 @@ class Playlists extends React.Component {
                 name={item.name}
                 playlistId={item._id}
                 navigation={navigation}
-                userId={-1}
+                userId={item.users} // Ici recuperer les users (mais je pleurs l'object users dans playlist n'ai ps accessible pour avoir le nom de l'author)
               />
             )
           }

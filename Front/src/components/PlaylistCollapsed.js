@@ -12,11 +12,13 @@ export default class PlaylistCollapsed extends Component { // WTF le nom ?
   };
 
   _longPressPlaylist = () => {
-    alert('Open parameters');
+    const { userId } = this.props;
+    console.log(`you pressed long ${userId}`)
+    alert('ok');
   };
 
   render() {
-    const { name } = this.props;
+    const { name, userId } = this.props;
     // return (
     //   <Button
     //     title={name}
@@ -43,7 +45,7 @@ export default class PlaylistCollapsed extends Component { // WTF le nom ?
           <View
             style={styles.UserAndAuthor}
           >
-            <Text style={styles.Author}>Author : </Text>
+            <Text style={styles.Author}>Author : {userId}</Text>
             <Icon name="people" />
           </View>
         </View>
