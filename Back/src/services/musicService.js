@@ -104,10 +104,40 @@ function voteMusic(musicId, playlistId, value) {
   });
 }
 
+function downloadMusic(musicUrl) {
+  return new Promise((resolve, reject) => {
+    const { spawn } = require('child_process');
+    let stdout = '';
+    let stderr = '';
+    const deezpy = spawn('python3', ['/Users/jjanin-r/Projects/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
+    deezpy.stdout.on('data', (data) => {
+      stdout += data;
+    });
+
+    deezpy.stderr.on('data', (data) => {
+      stderr += data;
+    });
+
+    deezpy.on('close', (code) => {
+      if (code !== 0) {
+        reject(new CustomError(stderr, 500));
+      } else {
+        const path = stdout.replace('\n', '').match(/^Downloading: (.*)\.\.\.Done!$/);
+        resolve({
+          status: 200,
+          data: path[1],
+        });
+      }
+    });
+  });
+}
+
+
 export default {
   getMusics,
   getMusicById,
   getMusicsByVote,
   deleteMusicById,
   voteMusic,
+  downloadMusic,
 };
