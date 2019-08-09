@@ -1,0 +1,10 @@
+[DEFAULT]
+#Downloads can be downloaded in Deezpy's working directory,
+#or in a directory outside of Deezpy's working dir by typing the full path of the directory
+
+naming template = downloads/<Album Artist>/(<Year>) - <Album>/<Disc#>-<Track#> - <Title>
+playlist naming template = downloads/playlists/<Playlist Title>/<Track#> - <Title>
+quality = 1
+usertoken = f5b24d8a42f8360fad7c9243a6bd4ad617f2ef0ea4ae538ffcd26167eae6561dc445ac3b153bcadcb325b89d15faeab8644e11a19bd8167140d4ce76461124ae7f418b9ba8306b2b0c9dc60608306b22ba88f86b07970fed8e9dbe303a5e0141
+embed album art = False
+download lyrics = False
