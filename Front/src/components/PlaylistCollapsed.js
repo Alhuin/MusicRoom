@@ -2,6 +2,7 @@ import {
   StyleSheet, Text, View, TouchableWithoutFeedback,
 } from 'react-native';
 import React, { Component } from 'react';
+import { Icon } from 'native-base';
 
 export default class PlaylistCollapsed extends Component { // WTF le nom ?
   _pressPlaylist = () => {
@@ -11,11 +12,13 @@ export default class PlaylistCollapsed extends Component { // WTF le nom ?
   };
 
   _longPressPlaylist = () => {
-    alert('Open parameters');
+    const { userId } = this.props;
+    console.log(`you pressed long ${userId}`)
+    alert('ok');
   };
 
   render() {
-    const { name } = this.props;
+    const { name, userId } = this.props;
     // return (
     //   <Button
     //     title={name}
@@ -33,11 +36,18 @@ export default class PlaylistCollapsed extends Component { // WTF le nom ?
       <TouchableWithoutFeedback
         onPress={this._pressPlaylist}
         onLongPress={this._longPressPlaylist}
+        style={styles.elementPlay}
       >
         <View
           style={styles.container}
         >
-          <Text numberOfLines={1} style={styles.name}>{name}</Text>
+          <Text numberOfLines={3} style={styles.name}>{name}</Text>
+          <View
+            style={styles.UserAndAuthor}
+          >
+            <Text style={styles.Author}>Author : {userId}</Text>
+            <Icon name="people" />
+          </View>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -46,16 +56,35 @@ export default class PlaylistCollapsed extends Component { // WTF le nom ?
 
 const styles = StyleSheet.create({
   container: {
+    borderWidth: 2,
+    borderColor: 'black',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    height: 50,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    flexDirection: 'column',
+    height: 150,
     padding: 5,
+    backgroundColor: 'white',
   },
   name: {
+    // borderWidth: 1.5,
+    // borderColor: '#e6e6e6',
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    backgroundColor: 'white',
+    color: 'black',
+  },
+  elementPlay: {
+    flexDirection: 'row',
+  },
+  UserAndAuthor: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    top: 50,
+  },
+  Author: {
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
