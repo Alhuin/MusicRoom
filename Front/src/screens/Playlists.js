@@ -28,9 +28,11 @@ class Playlists extends React.Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
+        {/* Ca se gère dans navigation les headers */}
         <Text style={styles.playlistHead}>
           Playlists
         </Text>
+        {/* Component PlaylistList */}
         <FlatList
           data={playlists}
           keyExtractor={item => item._id.toString()}
@@ -41,11 +43,15 @@ class Playlists extends React.Component {
                 name={item.name}
                 playlistId={item._id}
                 navigation={navigation}
-                userId={item.users} // Ici recuperer les users (mais je pleurs l'object users dans playlist n'ai ps accessible pour avoir le nom de l'author)
+                userId={item.users}
+                // Ici recuperer les users(mais je pleurs l'object users
+                // dans playlist n'ai ps accessible pour avoir le nom de l'author)
               />
             )
           }
         />
+        {/* Fin component PlaylistList */}
+        <Components.AddFloatingButton style={styles.addButton} handlePress={() => alert('addPlaylist')} />
       </View>
     );
   }
@@ -77,6 +83,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  addButton: {
+    backgroundColor: 'orange',
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
   },
 });
 

@@ -94,7 +94,7 @@ function voteMusic(req, res) {
 }
 
 function downloadMusic(req, res) {
-  console.log(req.body.musicUrl);
+  // console.log(req.body.musicUrl);
   if (req.body.musicUrl && req.body.musicUrl !== '') {
     musicService.downloadMusic(req.body.musicUrl)
       .then((response) => {

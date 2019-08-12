@@ -7,7 +7,7 @@ import { Icon } from 'native-base';
 export default class PlaylistCollapsed extends Component { // WTF le nom ?
   _pressPlaylist = () => {
     const { navigation, playlistId } = this.props;
-    console.log(`You pressed playlist ${playlistId}`);
+    // console.log(`You pressed playlist ${playlistId}`);
     navigation.push('Playlist', { playlistId });
   };
 

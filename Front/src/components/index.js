@@ -11,6 +11,7 @@ import SearchBar from './SearchBar';
 import TracklistInSearch from './TracklistInSearch';
 import TracklistInPlaylist from './TracklistInPlaylist';
 import TrackInPlaylist from './TrackInPlaylist';
+import AddFloatingButton from './AddFloatingButton';
 
 export default {
   SignInForm,
@@ -26,4 +27,5 @@ export default {
   TrackInPlaylist,
   TracklistInPlaylist,
   SearchBar,
+  AddFloatingButton,
 };
