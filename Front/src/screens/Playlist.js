@@ -69,18 +69,21 @@ class Playlist extends React.Component {
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
     return (
-      <View style={styles.container}>
-        <Components.SearchBar
-          updateSearchedText={this.updateSearchedText}
-          searchTracks={this.searchTracks}
-        />
-        <Components.TracklistInPlaylist
-          tracks={tracks}
-          updatePlaying={this.updatePlaying}
-          playing={playing}
-          playlistId={playlistId}
-          updateTracks={this.updateTracks}
-        />
+      <View style={{ height: '100%' }}>
+        <View style={styles.container}>
+          <Components.SearchBar
+            updateSearchedText={this.updateSearchedText}
+            searchTracks={this.searchTracks}
+          />
+          <Components.TracklistInPlaylist
+            tracks={tracks}
+            updatePlaying={this.updatePlaying}
+            playing={playing}
+            playlistId={playlistId}
+            updateTracks={this.updateTracks}
+          />
+        </View>
+        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} />
       </View>
     );
   }

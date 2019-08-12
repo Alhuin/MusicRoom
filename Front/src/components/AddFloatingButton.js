@@ -1,32 +1,34 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import { Icon } from 'native-base';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+
 
 export default class AddFloatingButton extends React.Component {
   render() {
     const { handlePress } = this.props;
     return (
-      <TouchableOpacity style={styles.main_container} onPress={handlePress}>
-        <Icon
-          style={styles.icon}
-          name="add"
-        />
+      <TouchableOpacity onPress={handlePress} style={styles.fab}>
+        <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  main_container: {
-    borderRadius: 30,
-    height: 50,
-    width: 50,
-    flex: 1,
-    justifyContent: 'center',
+  fab: {
+    position: 'absolute',
+    width: 56,
+    height: 56,
     alignItems: 'center',
-    backgroundColor: 'green',
+    justifyContent: 'center',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#03A9F4',
+    borderRadius: 30,
+    elevation: 8,
   },
-  icon: {
-    color: 'blue',
+  fabIcon: {
+    transform: [{ translateY: -2 }],
+    fontSize: 40,
+    color: 'white',
   },
 });

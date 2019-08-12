@@ -4,7 +4,7 @@ import LoginContext from './LoginContext';
 import Logo from './Logo';
 import SocialLogin from './SocialLogin';
 import SendToken from './SendToken';
-import PlaylistCollapsed from './PlaylistCollapsed';
+import PlaylistInPlaylists from './PlaylistInPlaylists';
 import UpdatePassForm from './UpdatePassForm';
 import TrackInSearch from './TrackInSearch';
 import SearchBar from './SearchBar';
@@ -12,6 +12,7 @@ import TracklistInSearch from './TracklistInSearch';
 import TracklistInPlaylist from './TracklistInPlaylist';
 import TrackInPlaylist from './TrackInPlaylist';
 import AddFloatingButton from './AddFloatingButton';
+import PlaylistList from './PlaylistList'
 
 export default {
   SignInForm,
@@ -20,7 +21,7 @@ export default {
   Logo,
   SocialLogin,
   SendToken,
-  PlaylistCollapsed,
+  PlaylistCollapsed: PlaylistInPlaylists,
   UpdatePassForm,
   TrackInSearch,
   TracklistInSearch,
@@ -28,4 +29,5 @@ export default {
   TracklistInPlaylist,
   SearchBar,
   AddFloatingButton,
+  PlaylistList,
 };

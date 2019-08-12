@@ -82,18 +82,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     color: 'white',
   },
-  scrollView: {
-    width: '100%',
-  },
-  title: {
-    fontSize: 22,
-    // color: 'white',
-  },
-  playlistContainer: {
-    // backgroundColor: '#999966',
-    width: '100%',
-  },
-  playlist: {
-    margin: 0,
-  },
 });

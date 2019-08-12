@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FlatList, StyleSheet, View, Text,
+  StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
 import { getPlaylists } from '../../API/BackApi';
@@ -27,31 +27,11 @@ class Playlists extends React.Component {
     const { playlists } = this.state;
     const { navigation } = this.props;
     return (
-      <View style={styles.container}>
-        {/* Ca se gère dans navigation les headers */}
-        <Text style={styles.playlistHead}>
-          Playlists
-        </Text>
-        {/* Component PlaylistList */}
-        <FlatList
-          data={playlists}
-          keyExtractor={item => item._id.toString()}
-          renderItem={
-            ({ item }) => (
-              <Components.PlaylistCollapsed
-                style={styles.playlist}
-                name={item.name}
-                playlistId={item._id}
-                navigation={navigation}
-                userId={item.users}
-                // Ici recuperer les users(mais je pleurs l'object users
-                // dans playlist n'ai ps accessible pour avoir le nom de l'author)
-              />
-            )
-          }
-        />
-        {/* Fin component PlaylistList */}
-        <Components.AddFloatingButton style={styles.addButton} handlePress={() => alert('addPlaylist')} />
+      <View style={{ height: '100%' }}>
+        <View style={styles.container}>
+          <Components.PlaylistList playlists={playlists} navigation={navigation} />
+        </View>
+        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} />
       </View>
     );
   }
@@ -59,36 +39,7 @@ class Playlists extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
-    color: 'white',
-  },
-  scrollView: {
-    width: '100%',
-  },
-  title: {
-    fontSize: 22,
-    // color: 'white',
-  },
-  playlistContainer: {
-    // backgroundColor: '#999966',
-    width: '100%',
-  },
-  playlist: {
-    margin: 0,
-  },
-  playlistHead: {
-    // borderWidth: 1,
-    // borderColor: 'grey',
-    color: 'white',
-    fontSize: 30,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  addButton: {
-    backgroundColor: 'orange',
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
+    flex: 1,
   },
 });
 

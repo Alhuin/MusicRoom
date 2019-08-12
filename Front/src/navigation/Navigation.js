@@ -28,6 +28,18 @@ import SearchTrack from '../screens/SearchTrack';
 import Playlists from '../screens/Playlists';
 import Playlist from '../screens/Playlist';
 
+const createBurgerMenu = navigation => Platform.select({
+  ios: null,
+  android: (
+    <Icon
+      ios="ios-menu"
+      android="md-menu"
+      style={{ paddingLeft: 20 }}
+      onPress={() => navigation.toggleDrawer()}
+    />
+  ),
+});
+
 // Auth Navigator Handles Authentication screens by stack
 
 const AuthNavigator = createStackNavigator({
@@ -89,17 +101,7 @@ const HomeNavigator = createStackNavigator({
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Home',
       headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
-      headerLeft: Platform.select({
-        ios: null,
-        android: (
-          <Icon
-            ios="ios-menu"
-            android="md-menu"
-            style={{ paddingLeft: 20 }}
-            onPress={() => navigation.toggleDrawer()}
-          />
-        ),
-      }),
+      headerLeft: createBurgerMenu(navigation),
     }),
   },
   UserSettings: {
@@ -117,9 +119,11 @@ const PlaylistNavigator = createStackNavigator({
 // Should be StackNavigator, but didBlur not firing so FO
   Playlists: {
     screen: Playlists,
-    navigationOptions: {
-      header: null,
-    },
+    navigationOptions: ({ navigation }: NavigationScreenProps) => ({
+      headerTitle: 'Playlists',
+      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
+      headerLeft: createBurgerMenu(navigation),
+    }),
   },
   Playlist: {
     screen: Playlist,
