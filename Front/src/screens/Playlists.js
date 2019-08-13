@@ -10,6 +10,7 @@ class Playlists extends React.Component {
     super(props);
     this.state = {
       playlists: [],
+      modalVisible: false,
     };
   }
 
@@ -23,15 +24,25 @@ class Playlists extends React.Component {
       });
   }
 
+  setModalVisible = () => {
+    const { modalVisible } = this.state;
+    const visible = !modalVisible;
+    this.setState({ modalVisible: visible });
+  };
+
   render() {
-    const { playlists } = this.state;
+    const { playlists, modalVisible } = this.state;
     const { navigation } = this.props;
     return (
       <View style={{ height: '100%' }}>
+        <Components.AddPlaylistModal
+          setModalVisible={this.setModalVisible}
+          modalVisible={modalVisible}
+        />
         <View style={styles.container}>
           <Components.PlaylistList playlists={playlists} navigation={navigation} />
         </View>
-        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} icon="addPlaylist" />
+        <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addPlaylist" />
       </View>
     );
   }
