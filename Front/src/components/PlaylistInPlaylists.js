@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Icon } from 'native-base';
 
 export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM ?
   _pressPlaylist = () => {
@@ -12,6 +13,10 @@ export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM 
     return (
       <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
         <Text>{ name }</Text>
+        <View style={styles.Author}>
+          <Text>Author : </Text>
+          <Icon name="people" />
+        </View>
       </TouchableOpacity>
     );
   }
@@ -19,11 +24,17 @@ export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM 
 
 const styles = StyleSheet.create({
   list: {
+    flexDirection: 'column',
     margin: 5,
     backgroundColor: 'white',
-    height: 80,
+    height: 120,
     justifyContent: 'space-around',
-    paddingLeft: 10,
+    padding: 10,
     elevation: 1,
+  },
+  Author: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });

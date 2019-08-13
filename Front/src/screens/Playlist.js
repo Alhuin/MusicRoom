@@ -83,7 +83,7 @@ class Playlist extends React.Component {
             updateTracks={this.updateTracks}
           />
         </View>
-        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} />
+        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} icon="addMusic" />
       </View>
     );
   }

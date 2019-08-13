@@ -31,7 +31,7 @@ class Playlists extends React.Component {
         <View style={styles.container}>
           <Components.PlaylistList playlists={playlists} navigation={navigation} />
         </View>
-        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} />
+        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} icon="addPlaylist" />
       </View>
     );
   }
