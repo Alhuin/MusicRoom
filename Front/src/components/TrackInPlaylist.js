@@ -26,7 +26,6 @@ class TrackInPlaylist extends React.Component {
       track,
       handlePress,
     } = this.props;
-    // console.log(track);
     return (
       <TouchableOpacity
         activeOpacity={1}

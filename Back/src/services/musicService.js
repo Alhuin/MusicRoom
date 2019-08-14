@@ -79,14 +79,11 @@ function deleteMusicById(musicId) {
 }
 
 function voteMusic(userId, musicId, playlistId, value) {
-  console.log('voteMusic Service');
   return new Promise((resolve, reject) => {
     VoteModel.find({ user: userId, music: musicId, playlist: playlistId }, (voteError, votes) => {
-      // console.log(votes);
       if (voteError) {
         reject(new CustomError(voteError, 500));
       } else if (votes[0]) {
-        // console.log('already voted');
         reject(new CustomError('You already voted for this track.', 400));
       } else {
         MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
@@ -161,7 +158,6 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
   return new Promise((resolve, reject) => {
     downloadMusic(link)
       .then((path) => {
-        console.log('Music DL OK');
         const music = new MusicModel({
           user: userId,
           playlist: playlistId,
@@ -177,10 +173,8 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
         });
         music.save((saveError, savedMusic) => {
           if (saveError) {
-            console.log('Music Save KO');
             reject(new CustomError(saveError, 500));
           } else {
-            console.log('Music Save KO');
             resolve({
               status: 200,
               data: savedMusic,
@@ -189,7 +183,6 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
         });
       })
       .catch((error) => {
-        console.log('Music DL KO');
         reject(error);
       });
   });

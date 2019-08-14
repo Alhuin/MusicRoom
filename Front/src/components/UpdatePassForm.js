@@ -20,10 +20,8 @@ export default class UpdatePassForm extends React.Component {
   };
 
   _updatePassword() {
-    // console.log(this.props);
     const { newPass, newPassConfirm } = this.state;
     const { userId } = this.props;
-    // console.log(`userId = ${userId}`);
     if (!(newPass.length && newPassConfirm.length)) {
       alert('error: Empty input');
     } else if (newPass !== newPassConfirm) {

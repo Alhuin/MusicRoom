@@ -23,7 +23,6 @@ class TrackListInSearch extends React.Component {
     const {
       tracks, playlistId, updateTracks, userId, setModalVisible,
     } = this.props;
-    // console.log(tracks);
     return (
       <FlatList
         data={tracks}

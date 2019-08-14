@@ -74,7 +74,6 @@ function deleteMusicById(req, res) {
 }
 
 function voteMusic(req, res) {
-  // console.log('voteMusic ctrl');
   if (req.body.userId && req.body.musicId && req.body.playlistId && req.body.value
     && utils.isValidId(req.body.musicId) && utils.isValidId(req.body.playlistId)
     && (req.body.value === 1 || req.body.value === -1) && utils.isValidId(req.body.userId)) {
@@ -95,7 +94,6 @@ function voteMusic(req, res) {
 }
 
 function downloadMusic(req, res) {
-  // console.log(req.body.musicUrl);
   if (req.body.musicUrl && req.body.musicUrl !== '') {
     musicService.downloadMusic(req.body.musicUrl)
       .then((response) => {
@@ -120,7 +118,6 @@ function addMusicToPlaylist(req, res) {
     musicService.addMusicToPlaylist(req.body.playlistId, req.body.userId, req.body.artist,
       req.body.title, req.body.album, req.body.albumCover, req.body.preview, req.body.link)
       .then((response) => {
-        console.log(response);
         res
           .status(response.status)
           .send(response.data);

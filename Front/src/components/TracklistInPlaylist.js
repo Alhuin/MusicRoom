@@ -26,7 +26,6 @@ class TracklistInPlaylist extends React.Component {
       onRefresh,
       userId,
     } = this.props;
-    console.log(tracks);
     return (
       <FlatList
         data={tracks}

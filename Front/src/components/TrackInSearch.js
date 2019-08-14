@@ -55,7 +55,6 @@ class TrackInSearch extends React.Component {
                   addMusicToPlaylist(playlistId, userId, track.title, track.artist.name,
                     track.album.title, track.album.cover, track.preview, track.link)
                     .then((data) => {
-                      console.log(data);
                       setModalVisible();
                       updateTracks();
                     })

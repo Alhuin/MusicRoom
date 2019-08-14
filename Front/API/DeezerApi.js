@@ -7,8 +7,6 @@ function getArtists(text) {
   return fetch(url)
     .then(async (response) => {
       const data = await response.json();
-      // console.log('.then');
-      // console.log(data);
       return data.data;
     })
     .catch(error => console.error(error));

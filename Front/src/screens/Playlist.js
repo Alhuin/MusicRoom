@@ -19,9 +19,6 @@ class Playlist extends React.Component {
 
   componentDidMount(): void {
     const { navigation } = this.props;
-    // console.log(navigation);
-    // this._navListener = navigation.addListener('didBlur', this._onChangedPage);
-    console.log(`Did Mount : You Opened Playlist ${navigation.getParam('playlistId')}`);
     this.updateTracks();
   }
 

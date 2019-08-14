@@ -10,7 +10,6 @@ function login(req, res) {
       })
       .catch((error) => {
         console.error(error);
-        // console.log(error);
         res
           .status(error.status)
           .send(error);

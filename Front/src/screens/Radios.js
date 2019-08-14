@@ -14,9 +14,6 @@ class Radios extends React.Component {
   }
 
   componentDidMount(): void {
-    // const { navigation } = this.props;
-    // const user = navigation.getParam('user'); // Logged In User is passed as prop
-    // console.log(user);
     getPlaylists()
       .then((response) => {
         this.setState({ playlists: response.data });
