@@ -221,7 +221,7 @@ function getMusicsByVoteInPlaylist(playlistId) {
   });
 }
 
-function voteMusic(musicId, playlistId, value) {
+function voteMusic(userId, musicId, playlistId, value) {
   // console.log('API request for vote');
   return new Promise((resolve, reject) => {
     fetch(`${server}/voteMusic`, {
@@ -230,7 +230,9 @@ function voteMusic(musicId, playlistId, value) {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ musicId, playlistId, value }),
+      body: JSON.stringify({
+        userId, musicId, playlistId, value,
+      }),
     })
       .then(async (response) => {
         // console.log('api return 200');
@@ -238,10 +240,13 @@ function voteMusic(musicId, playlistId, value) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
+        } else {
+          reject(new CustomError(data.msg, response.status));
         }
       })
       .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
+        // console.log(error);
+        reject(error);
       });
   });
 }
@@ -263,17 +268,15 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
         const data = await response.json();
         if (response.status === 200) {
           // console.log('API request OK');
-          console.log(data);
-          if (response.status === 200) {
-            resolve(data);
-          }
+          // console.log(data);
+          resolve(data);
         } else {
           console.log(data.msg);
         }
       })
       .catch((error) => {
         // console.log('API request KO');
-        console.log(error);
+        // console.log(error);
         reject(new CustomError(error.msg, error.status));
       });
   });

@@ -12,7 +12,7 @@ function getMusics(req, res) {
       console.error(error);
       res
         .status(error.status)
-        .send(error.msg);
+        .send({ msg: error.msg });
     });
 }
 
@@ -28,7 +28,7 @@ function getMusicById(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -47,7 +47,7 @@ function getMusicsByVote(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -66,7 +66,7 @@ function deleteMusicById(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -75,10 +75,10 @@ function deleteMusicById(req, res) {
 
 function voteMusic(req, res) {
   // console.log('voteMusic ctrl');
-  if (req.body.musicId && req.body.playlistId && req.body.value
+  if (req.body.userId && req.body.musicId && req.body.playlistId && req.body.value
     && utils.isValidId(req.body.musicId) && utils.isValidId(req.body.playlistId)
-    && (req.body.value === 1 || req.body.value === -1)) {
-    musicService.voteMusic(req.body.musicId, req.body.playlistId, req.body.value)
+    && (req.body.value === 1 || req.body.value === -1) && utils.isValidId(req.body.userId)) {
+    musicService.voteMusic(req.body.userId, req.body.musicId, req.body.playlistId, req.body.value)
       .then((response) => {
         res
           .status(response.status)
@@ -87,10 +87,10 @@ function voteMusic(req, res) {
       .catch((error) => {
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send('Wrong Parameters');
+    res.status(400).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -106,7 +106,7 @@ function downloadMusic(req, res) {
       .catch((error) => {
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send('Wrong Parameters');
@@ -129,7 +129,7 @@ function addMusicToPlaylist(req, res) {
         console.error(error);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });

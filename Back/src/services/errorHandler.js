@@ -5,5 +5,6 @@ export default class CustomError extends Error {
     this.name = 'CustomError';
     this.msg = message;
     this.status = status;
+    console.log(this);
   }
 }

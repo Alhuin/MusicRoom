@@ -110,6 +110,7 @@ class Playlist extends React.Component {
             updateTracks={this.updateTracks}
             refreshing={refreshing}
             onRefresh={this._onRefresh}
+            userId={userId}
           />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addMusic" />

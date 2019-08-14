@@ -83,7 +83,7 @@ const seedDatas = async () => {
       name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
       users: [admin],
     });
-    // playlist.save();
+    playlist.save();
     const music1 = new models.Music({
       title: 'Hit The Road Jack',
       artist: 'Ray Charles',
@@ -94,6 +94,7 @@ const seedDatas = async () => {
       albumCover: 'https://api.deezer.com/album/14030736/image',
       votes: 1,
     });
+    music1.save();
     const music2 = new models.Music({
       title: 'Kingdom Of Hardcore',
       artist: 'Unlogix',
@@ -104,20 +105,20 @@ const seedDatas = async () => {
       preview: 'https://cdns-preview-5.dzcdn.net/stream/c-594da52b1f185e066c91662de81c734b-2.mp3',
       votes: 0,
     });
+    music2.save();
     const vote1 = new models.Vote({
       value: 1,
-      user: user1,
-      music: music1,
+      user: user1._id,
+      music: music1._id,
+      playlist: playlist._id,
     });
+    vote1.save();
     const vote2 = new models.Vote({
       value: 1,
-      user: admin,
-      music: music2,
+      user: admin._id,
+      music: music2._id,
+      playlist: playlist._id,
     });
-    playlist.save();
-    music1.save();
-    music2.save();
-    vote1.save();
     vote2.save();
   }
 };

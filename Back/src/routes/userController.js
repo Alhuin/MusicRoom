@@ -14,7 +14,7 @@ function getUsers(req, res) {
       console.error(error.msg);
       res
         .status(error.status)
-        .send(error.msg);
+        .send({ msg: error.msg });
     });
 }
 
@@ -30,7 +30,7 @@ function getUserById(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -49,7 +49,7 @@ function deleteUserById(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -71,7 +71,7 @@ function addUser(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -92,7 +92,7 @@ function updatePassword(req, res) {
         console.error(error);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong parameters' });
@@ -115,7 +115,7 @@ function sendEmailToken(req, res) {
         console.error(error);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -134,7 +134,7 @@ function confirmEmailToken(req, res) {
         console.error(error);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -155,7 +155,7 @@ function sendPasswordToken(req, res) {
         console.error(error);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -175,7 +175,7 @@ function confirmPasswordToken(req, res) {
         console.error(error);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });

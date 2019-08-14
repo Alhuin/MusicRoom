@@ -12,7 +12,7 @@ function getPlaylists(req, res) {
       console.error(error.msg);
       res
         .status(error.status)
-        .send(error.msg);
+        .send({ msg: error.msg });
     });
 }
 
@@ -28,7 +28,7 @@ function getPlaylistById(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
@@ -47,7 +47,7 @@ function deletePlaylistById(req, res) {
         console.error(error.msg);
         res
           .status(error.status)
-          .send(error.msg);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });

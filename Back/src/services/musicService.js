@@ -1,4 +1,5 @@
 import MusicModel from '../models/musicModel';
+import VoteModel from '../models/voteModel';
 import CustomError from './errorHandler';
 
 function getMusics() {
@@ -77,25 +78,46 @@ function deleteMusicById(musicId) {
   });
 }
 
-function voteMusic(musicId, playlistId, value) {
+function voteMusic(userId, musicId, playlistId, value) {
   console.log('voteMusic Service');
   return new Promise((resolve, reject) => {
-    MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
-      if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!music[0]) {
-        reject(new CustomError('No music with this id in database', 400));
+    VoteModel.find({ user: userId, music: musicId, playlist: playlistId }, (voteError, votes) => {
+      // console.log(votes);
+      if (voteError) {
+        reject(new CustomError(voteError, 500));
+      } else if (votes[0]) {
+        // console.log('already voted');
+        reject(new CustomError('You already voted for this track.', 400));
       } else {
-        const updatedMusic = music[0];
-        // console.log(updatedMusic);
-        updatedMusic.votes += value;
-        updatedMusic.save((saveError, savedMusic) => {
-          if (saveError) {
-            reject(new CustomError(saveError, 500));
+        MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
+          if (error) {
+            reject(new CustomError(error, 500));
+          } else if (!music[0]) {
+            reject(new CustomError('No music with this id in database', 400));
           } else {
-            resolve({
-              status: 200,
-              data: savedMusic,
+            const updatedMusic = music[0];
+            updatedMusic.votes += value;
+            updatedMusic.save((saveError, savedMusic) => {
+              if (saveError) {
+                reject(new CustomError(saveError, 500));
+              } else {
+                const newVote = new VoteModel({
+                  playlist: playlistId,
+                  music: musicId,
+                  user: userId,
+                  value,
+                });
+                newVote.save((voteSaveError) => {
+                  if (voteSaveError) {
+                    reject(new CustomError(voteSaveError, 500));
+                  } else {
+                    resolve({
+                      status: 200,
+                      data: savedMusic,
+                    });
+                  }
+                });
+              }
             });
           }
         });
@@ -126,8 +148,6 @@ function downloadMusic(musicUrl) {
         if (path === null) {
           path = stdout.replace('\n', '').match(/^(.*) already exists!$/);
         }
-        console.log('building path...');
-        console.log(stdout);
         resolve({
           status: 200,
           data: path[1],
@@ -153,7 +173,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
           preview,
           link,
           path: path.data,
-          votes: 1,
+          votes: 0,
         });
         music.save((saveError, savedMusic) => {
           if (saveError) {

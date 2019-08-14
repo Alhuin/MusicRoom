@@ -24,6 +24,7 @@ class TracklistInPlaylist extends React.Component {
       updateTracks,
       refreshing,
       onRefresh,
+      userId,
     } = this.props;
     console.log(tracks);
     return (
@@ -32,6 +33,7 @@ class TracklistInPlaylist extends React.Component {
         keyExtractor={item => item._id.toString()}
         renderItem={item => (
           <TrackInPlaylist
+            userId={userId}
             track={item.item}
             handlePress={this.handlePress}
             playlistId={playlistId}

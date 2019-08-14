@@ -1,13 +1,8 @@
 import mongoose from 'mongoose';
 
 const voteSchema = new mongoose.Schema({
-  date: {
-    type: Date,
-    default: Date.now(),
-  },
   value: {
-    type: Boolean,
-    default: undefined,
+    type: Number,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +11,10 @@ const voteSchema = new mongoose.Schema({
   music: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'MusicModel',
+  },
+  playlist: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'PlaylistModel',
   },
 });
 

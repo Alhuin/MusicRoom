@@ -1,19 +1,23 @@
 import React from 'react';
 import {
-  TouchableOpacity, Image, View, Text, StyleSheet,
+  TouchableOpacity, Image, View, Text, StyleSheet, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
 import { voteMusic } from '../../API/BackApi';
 
 class TrackInPlaylist extends React.Component {
   _vote = (value) => {
-    const { track, playlistId, updateTracks } = this.props;
-    voteMusic(track._id, playlistId, value)
+    const {
+      track, playlistId, updateTracks, userId,
+    } = this.props;
+    voteMusic(userId, track._id, playlistId, value)
       .then(() => {
         updateTracks();
       })
       .catch((error) => {
-        console.error(error);
+        if (error.status === 400) {
+          Alert.alert(error.msg);
+        }
       });
   };
 
