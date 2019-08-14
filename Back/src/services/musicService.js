@@ -38,7 +38,7 @@ function getMusicById(musicId) {
 function getMusicsByVote(playlistId) {
   return new Promise((resolve, reject) => {
     MusicModel.find({ playlist: playlistId })
-      .sort({ vote: -1 })
+      .sort({ votes: -1 })
       .exec((error, musics) => {
         if (error) {
           reject(new CustomError(error, 500));
@@ -78,7 +78,7 @@ function deleteMusicById(musicId) {
 }
 
 function voteMusic(musicId, playlistId, value) {
-  // console.log('voteMusic Service');
+  console.log('voteMusic Service');
   return new Promise((resolve, reject) => {
     MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
       if (error) {
@@ -88,7 +88,7 @@ function voteMusic(musicId, playlistId, value) {
       } else {
         const updatedMusic = music[0];
         // console.log(updatedMusic);
-        updatedMusic.vote += value;
+        updatedMusic.votes += value;
         updatedMusic.save((saveError, savedMusic) => {
           if (saveError) {
             reject(new CustomError(saveError, 500));
@@ -122,7 +122,12 @@ function downloadMusic(musicUrl) {
       if (code !== 0) {
         reject(new CustomError(stderr, 500));
       } else {
-        const path = stdout.replace('\n', '').match(/^Downloading: (.*)\.\.\.Done!$/);
+        let path = stdout.replace('\n', '').match(/^Downloading: (.*)\.\.\.Done!$/);
+        if (path === null) {
+          path = stdout.replace('\n', '').match(/^(.*) already exists!$/);
+        }
+        console.log('building path...');
+        console.log(stdout);
         resolve({
           status: 200,
           data: path[1],
@@ -132,6 +137,43 @@ function downloadMusic(musicUrl) {
   });
 }
 
+function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link) {
+  return new Promise((resolve, reject) => {
+    downloadMusic(link)
+      .then((path) => {
+        console.log('Music DL OK');
+        const music = new MusicModel({
+          user: userId,
+          playlist: playlistId,
+          artist,
+          date: Date.now(),
+          title,
+          album,
+          albumCover,
+          preview,
+          link,
+          path: path.data,
+          votes: 1,
+        });
+        music.save((saveError, savedMusic) => {
+          if (saveError) {
+            console.log('Music Save KO');
+            reject(new CustomError(saveError, 500));
+          } else {
+            console.log('Music Save KO');
+            resolve({
+              status: 200,
+              data: savedMusic,
+            });
+          }
+        });
+      })
+      .catch((error) => {
+        console.log('Music DL KO');
+        reject(error);
+      });
+  });
+}
 
 export default {
   getMusics,
@@ -140,4 +182,5 @@ export default {
   deleteMusicById,
   voteMusic,
   downloadMusic,
+  addMusicToPlaylist,
 };

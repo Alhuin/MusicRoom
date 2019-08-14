@@ -25,18 +25,27 @@ class TrackInPlaylist extends React.Component {
     // console.log(track);
     return (
       <TouchableOpacity
+        activeOpacity={1}
         style={styles.main_container}
-        onPress={() => {
-          handlePress(track.preview);
-        }}
       >
-        <Image
-          style={styles.image}
-          source={{ uri: track.cover }}
-        />
+        <TouchableOpacity
+          style={styles.previewCover}
+          onPress={() => {
+            handlePress(track.preview);
+          }}
+        >
+          <Image
+            style={styles.image}
+            source={{ uri: track.albumCover }}
+          />
+          <Image
+            source={require('../assets/images/play.png')}
+            style={{ height: 80, width: 80, position: 'absolute'  }}
+          />
+        </TouchableOpacity>
         <View style={styles.content_container}>
           <View style={styles.title_container}>
-            <Text style={styles.title_text}>{track.name}</Text>
+            <Text style={styles.title_text}>{track.title}</Text>
           </View>
           <View style={styles.artist_container}>
             <Text style={styles.artist_name}>
@@ -51,7 +60,7 @@ class TrackInPlaylist extends React.Component {
         </View>
         <View style={styles.voting_container}>
           <View style={styles.note_container}>
-            <Text style={{ color: 'white' }}>{track.vote}</Text>
+            <Text style={{ color: 'white' }}>{track.votes}</Text>
           </View>
           <View style={styles.votes_container}>
             <TouchableOpacity
@@ -86,6 +95,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     // borderWidth: 1,
     // borderColor: 'green',
+  },
+  previewCover: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: 110,

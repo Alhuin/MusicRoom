@@ -2,7 +2,8 @@ import React from 'react';
 import {
   StyleSheet, View,
 } from 'react-native';
-import Components from '../components';
+import SearchBar from './SearchBar';
+import TracklistInSearch from './TracklistInSearch';
 import { getTracks } from '../../API/DeezerApi';
 
 export default class SearchTrack extends React.Component {
@@ -15,13 +16,8 @@ export default class SearchTrack extends React.Component {
     };
   }
 
-  componentDidMount(): void {
-    const { navigation } = this.props;
-    this._navListener = navigation.addListener('didBlur', this._onChangedPage);
-  }
-
   componentWillUnmount(): void {
-    this._navListener.remove();
+    this._onChangedPage();
   }
 
   _onChangedPage = () => {
@@ -61,16 +57,21 @@ export default class SearchTrack extends React.Component {
 
   render() {
     const { tracks, playing } = this.state;
+    const { playlistId, userId, updateTracks, setModalVisible } = this.props;
     return (
       <View style={styles.container}>
-        <Components.SearchBar
+        <SearchBar
           updateSearchedText={this.updateSearchedText}
           searchTracks={this.searchTracks}
         />
-        <Components.TracklistInSearch
+        <TracklistInSearch
           tracks={tracks}
           updatePlaying={this.updatePlaying}
           playing={playing}
+          playlistId={playlistId}
+          userId={userId}
+          updateTracks={updateTracks}
+          setModalVisible={setModalVisible}
         />
       </View>
     );

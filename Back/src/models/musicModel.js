@@ -2,13 +2,16 @@ import mongoose from 'mongoose';
 import VoteModel from './voteModel';
 
 const musicSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
   artist: {
     type: String,
     required: true,
+  },
+  album: {
+    type: String,
   },
   date: {
     type: Date,
@@ -23,16 +26,19 @@ const musicSchema = new mongoose.Schema({
     ref: 'PlaylistModel',
     default: undefined,
   },
-  cover: {
+  albumCover: {
     type: String,
   },
   preview: {
     type: String,
   },
-  album: {
+  link: {
     type: String,
   },
-  vote: {
+  path: {
+    type: String,
+  },
+  votes: {
     type: Number,
     default: 0,
   },

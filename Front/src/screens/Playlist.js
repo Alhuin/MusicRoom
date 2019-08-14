@@ -12,6 +12,8 @@ class Playlist extends React.Component {
       tracks: [],
       searchedText: '',
       playing: null,
+      refreshing: false,
+      modalVisible: false,
     };
   }
 
@@ -35,18 +37,33 @@ class Playlist extends React.Component {
     }
   };
 
-  updateTracks = () => {
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.updateTracks().then(() => {
+      this.setState({ refreshing: false });
+    });
+  };
+
+  setModalVisible = () => {
+    const { modalVisible } = this.state;
+    const visible = !modalVisible;
+    this.setState({ modalVisible: visible });
+  };
+
+  updateTracks = () => new Promise((resolve, reject) => {
     const { navigation } = this.props;
     // console.log( this.props );
     const playlistId = navigation.getParam('playlistId');
     getMusicsByVoteInPlaylist(playlistId)
       .then((response) => {
         this.setState({ tracks: response });
+        resolve();
       })
       .catch((error) => {
         console.error(error);
+        reject(error);
       });
-  };
+  });
 
   updateSearchedText = (text) => {
     this.setState({ searchedText: text });
@@ -65,11 +82,21 @@ class Playlist extends React.Component {
   };
 
   render() {
-    const { tracks, playing } = this.state;
+    const {
+      tracks, playing, refreshing, modalVisible,
+    } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
+    const userId = global.user._id;
     return (
       <View style={{ height: '100%' }}>
+        <Components.AddMusicModal
+          setModalVisible={this.setModalVisible}
+          modalVisible={modalVisible}
+          playlistId={playlistId}
+          updateTracks={this.updateTracks}
+          userId={userId}
+        />
         <View style={styles.container}>
           <Components.SearchBar
             updateSearchedText={this.updateSearchedText}
@@ -81,9 +108,11 @@ class Playlist extends React.Component {
             playing={playing}
             playlistId={playlistId}
             updateTracks={this.updateTracks}
+            refreshing={refreshing}
+            onRefresh={this._onRefresh}
           />
         </View>
-        <Components.AddFloatingButton handlePress={() => alert('addPlaylist')} icon="addMusic" />
+        <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addMusic" />
       </View>
     );
   }

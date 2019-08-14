@@ -7,6 +7,8 @@ export const onSignOut = () => AsyncStorage.removeItem('loggedUser');
 export const isSignedIn = () => new Promise((resolve, reject) => {
   AsyncStorage.getItem('loggedUser')
     .then((res) => {
+      // console.log('isSignedIn: ');
+      // console.log(res);
       resolve(res);
     })
     .catch(err => reject(err));

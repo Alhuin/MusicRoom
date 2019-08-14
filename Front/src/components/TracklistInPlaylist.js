@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import TrackInPlaylist from './TrackInPlaylist';
 import Player from '../services/Player';
 
@@ -18,7 +18,14 @@ class TracklistInPlaylist extends React.Component {
   };
 
   render() {
-    const { tracks, playlistId, updateTracks } = this.props;
+    const {
+      tracks,
+      playlistId,
+      updateTracks,
+      refreshing,
+      onRefresh,
+    } = this.props;
+    console.log(tracks);
     return (
       <FlatList
         data={tracks}
@@ -29,6 +36,13 @@ class TracklistInPlaylist extends React.Component {
             handlePress={this.handlePress}
             playlistId={playlistId}
             updateTracks={updateTracks}
+          />
+        )
+        }
+        refreshControl={(
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
           />
         )
         }

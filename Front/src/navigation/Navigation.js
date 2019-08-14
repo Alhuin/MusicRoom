@@ -24,7 +24,7 @@ import Inscription from '../screens/Inscription';
 import UserSettings from '../screens/UserSettings';
 import AppSettings from '../screens/AppSettings';
 import Loading from '../screens/Loading';
-import SearchTrack from '../screens/SearchTrack';
+import SearchTrack from '../components/SearchTrack';
 import Playlists from '../screens/Playlists';
 import Playlist from '../screens/Playlist';
 
@@ -131,6 +131,12 @@ const PlaylistNavigator = createStackNavigator({
       header: null,
     },
   },
+  SearchTrack: {
+    screen: SearchTrack,
+    navigationOptions: {
+      header: null,
+    },
+  },
 });
 
 const MainNavigator = Platform.select({
@@ -147,9 +153,6 @@ const MainNavigator = Platform.select({
       path: 'main',
     },
     Settings: AppSettings,
-    SearchTrack: {
-      screen: SearchTrack,
-    },
     Playlists: PlaylistNavigator,
   },
   {

@@ -37,6 +37,7 @@ router.get('/musics', musicController.getMusics);
 router.get('/musics/:musicId', musicController.getMusicById);
 router.get('/musicsByVote/:playlistId', musicController.getMusicsByVote);
 router.delete('/musics/:musicId', musicController.deleteMusicById);
+router.post('/musics/add', musicController.addMusicToPlaylist);
 router.post('/voteMusic', musicController.voteMusic);
 router.post('/deezPy', musicController.downloadMusic);
 

@@ -3,14 +3,19 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { isSignedIn } from '../services/auth';
 
 export default class Loading extends React.Component {
+  constructor() {
+    super();
+    global.userId = '';
+  }
+
   componentDidMount() {
     const { navigation } = this.props;
     isSignedIn()
       .then((user) => {
-        // console.log('isSignedIn');
-        // console.log(user);
         if (user) {
-          navigation.navigate('HomePage', { user: JSON.parse(user) });
+          console.log(user);
+          global.user = JSON.parse(user);
+          navigation.navigate('app');
         } else {
           navigation.navigate('auth');
         }

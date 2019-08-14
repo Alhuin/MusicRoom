@@ -246,6 +246,39 @@ function voteMusic(musicId, playlistId, value) {
   });
 }
 
+function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover, preview, link) {
+  // console.log('API request for addMusic');
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/musics/add`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playlistId, userId, title, artist, album, albumCover, preview, link,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          // console.log('API request OK');
+          console.log(data);
+          if (response.status === 200) {
+            resolve(data);
+          }
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        // console.log('API request KO');
+        console.log(error);
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -257,4 +290,5 @@ export {
   getPlaylistById,
   getUserById,
   voteMusic,
+  addMusicToPlaylist,
 };

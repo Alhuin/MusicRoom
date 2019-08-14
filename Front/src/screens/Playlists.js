@@ -11,6 +11,7 @@ class Playlists extends React.Component {
     this.state = {
       playlists: [],
       modalVisible: false,
+      refreshing: false,
     };
   }
 
@@ -24,6 +25,13 @@ class Playlists extends React.Component {
       });
   }
 
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    getPlaylists().then(() => {
+      this.setState({ refreshing: false });
+    });
+  };
+
   setModalVisible = () => {
     const { modalVisible } = this.state;
     const visible = !modalVisible;
@@ -31,7 +39,7 @@ class Playlists extends React.Component {
   };
 
   render() {
-    const { playlists, modalVisible } = this.state;
+    const { playlists, modalVisible, refreshing } = this.state;
     const { navigation } = this.props;
     return (
       <View style={{ height: '100%' }}>
@@ -40,7 +48,12 @@ class Playlists extends React.Component {
           modalVisible={modalVisible}
         />
         <View style={styles.container}>
-          <Components.PlaylistList playlists={playlists} navigation={navigation} />
+          <Components.PlaylistList
+            playlists={playlists}
+            navigation={navigation}
+            refreshing={refreshing}
+            onRefresh={this._onRefresh}
+          />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addPlaylist" />
       </View>

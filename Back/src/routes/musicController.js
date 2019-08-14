@@ -74,6 +74,7 @@ function deleteMusicById(req, res) {
 }
 
 function voteMusic(req, res) {
+  // console.log('voteMusic ctrl');
   if (req.body.musicId && req.body.playlistId && req.body.value
     && utils.isValidId(req.body.musicId) && utils.isValidId(req.body.playlistId)
     && (req.body.value === 1 || req.body.value === -1)) {
@@ -112,6 +113,29 @@ function downloadMusic(req, res) {
   }
 }
 
+function addMusicToPlaylist(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId) && req.body.userId
+    && utils.isValidId(req.body.userId) && req.body.title && req.body.artist
+    && req.body.album && req.body.albumCover && req.body.preview && req.body.link) {
+    musicService.addMusicToPlaylist(req.body.playlistId, req.body.userId, req.body.artist,
+      req.body.title, req.body.album, req.body.albumCover, req.body.preview, req.body.link)
+      .then((response) => {
+        console.log(response);
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send(error.msg);
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getMusicById,
   getMusics,
@@ -119,4 +143,5 @@ export default {
   deleteMusicById,
   voteMusic,
   downloadMusic,
+  addMusicToPlaylist,
 };
