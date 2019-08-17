@@ -5,12 +5,34 @@ import {
   Text,
   View,
   TouchableHighlight,
+  TextInput,
+  Switch,
+  Button,
+  Alert,
 } from 'react-native';
+import { addPlaylist } from '../../API/BackApi';
 
 
 export default class AddPlaylistModal extends React.Component {
+  state = {
+    switchValue: false,
+    nameP: '',
+  }
+
+  _updatePlaylistName = (text) => {
+    this.setState({ nameP: text });
+  };
+
+  toggleSwitch = (value) => {
+    // onValueChange of the switch this function will be called
+    this.setState({ switchValue: value });
+    // state changes according to switch
+    // which will result in re-render the text
+  }
+
   render() {
     const { setModalVisible, modalVisible } = this.props;
+
     return (
       <Modal
         animationType="slide"
@@ -22,16 +44,38 @@ export default class AddPlaylistModal extends React.Component {
         }}
       >
         <View style={{ marginTop: 22 }}>
-          <View>
-            <Text>Add Playlist</Text>
-
-            <TouchableHighlight
+          <View styles={styles.Name}>
+            <TextInput
+              onChangeText={this._updatePlaylistName}
+              autoCorrect={false}
+              autoCapitalize="none"
+              underlineColorAndroid="grey"
+              style={styles.inputBox}
+              placeholder="Playlist name"
+            />
+            {/* eslint-disable-next-line react/destructuring-assignment */}
+            <Text>{this.state.switchValue ? 'Private' : 'Public'}</Text>
+            <Switch
+              style={styles.switch}
+              onValueChange={this.toggleSwitch}
+              value={this.state.switchValue}
+            />
+            <Button
+              style={styles.create}
+              title="Create playlist"
               onPress={() => {
-                setModalVisible();
+                addPlaylist(this.state.nameP, this.state.switchValue)
+                  .then(() => {
+                    setModalVisible();
+                    // eslint-disable-next-line max-len
+                    // ici problem de retour de promess dans back API a faire sinon les arg et tout passe bien
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    Alert.alert('An error occured on create playlist, please try again later.');
+                  });
               }}
-            >
-              <Text>Hide Modal</Text>
-            </TouchableHighlight>
+            />
           </View>
         </View>
       </Modal>
@@ -40,22 +84,15 @@ export default class AddPlaylistModal extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    width: 60,
-    height: 60,
+  Name: {
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    right: 20,
-    bottom: 20,
-    backgroundColor: '#03A9F4',
-    borderRadius: 30,
-    elevation: 8,
   },
-  fabIcon: {
-    transform: [{ translateX: +2 }],
-    height: 30,
-    width: 30,
-    color: 'white',
+  switch: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  create: {
+    alignItems: 'center',
   },
 });

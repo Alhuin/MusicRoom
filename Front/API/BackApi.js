@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
+const server = 'http://10.4.3.3:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -267,6 +267,12 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
+function addPlaylist(name, PrivOrPub)
+{
+  alert(`A new playlist named${name} is born and she is ${PrivOrPub}`);
+  // do some shit with back you know
+}
+
 export {
   login,
   addUser,
@@ -279,4 +285,5 @@ export {
   getUserById,
   voteMusic,
   addMusicToPlaylist,
+  addPlaylist,
 };
