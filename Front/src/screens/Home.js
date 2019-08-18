@@ -2,16 +2,20 @@ import React from 'react';
 import {
   Text, StyleSheet, View,
 } from 'react-native';
+import { Icon } from 'native-base';
 
 class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.textcard}>Bandeau informatif</Text>
         <View style={styles.cartes}>
-          <Text style={styles.textcard}>Last Playlist</Text>
+          <Text style={styles.textcard}>Party mode</Text>
+          <Icon name="musical-notes" />
         </View>
-        <Text style={styles.textcard}>Player/radio random</Text>
+        <View style={styles.cartes}>
+          <Text style={styles.textcard}>Radio mode</Text>
+          <Icon name="radio" />
+        </View>
       </View>
     );
   }
@@ -37,6 +41,8 @@ const styles = StyleSheet.create({
   textcard: {
     fontWeight: 'bold',
     alignItems: 'center',
+    fontSize: 30,
+    marginTop: 85,
   },
 });
 

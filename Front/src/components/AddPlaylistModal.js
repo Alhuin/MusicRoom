@@ -43,7 +43,7 @@ export default class AddPlaylistModal extends React.Component {
           // Alert.alert('Modal has been closed.');
         }}
       >
-        <View style={{ marginTop: 22 }}>
+        <View styles={styles.container}>
           <View styles={styles.Name}>
             <TextInput
               onChangeText={this._updatePlaylistName}
@@ -64,16 +64,17 @@ export default class AddPlaylistModal extends React.Component {
               style={styles.create}
               title="Create playlist"
               onPress={() => {
-                addPlaylist(this.state.nameP, this.state.switchValue)
-                  .then(() => {
-                    setModalVisible();
-                    // eslint-disable-next-line max-len
-                    // ici problem de retour de promess dans back API a faire sinon les arg et tout passe bien
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    Alert.alert('An error occured on create playlist, please try again later.');
-                  });
+                addPlaylist(this.state.nameP, this.state.switchValue);
+                // .then(() => {
+                //   setModalVisible();
+                //   // eslint-disable-next-line max-len
+                // eslint-disable-next-line max-len
+                //   // ici problem de retour de promess dans back API a faire sinon les arg et tout passe bien
+                // })
+                // .catch((error) => {
+                //   console.error(error);
+                //   Alert.alert('An error occured on create playlist, please try again later.');
+                // });
               }}
             />
           </View>
@@ -84,12 +85,18 @@ export default class AddPlaylistModal extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 30,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
   Name: {
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   switch: {
-    marginTop: 30,
     alignItems: 'center',
   },
   create: {
