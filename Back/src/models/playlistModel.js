@@ -7,6 +7,7 @@ const playlistSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  // laisser allowVotes ici ?
   allowVotes: {
     type: Boolean,
     required: true,
@@ -15,6 +16,9 @@ const playlistSchema = new mongoose.Schema({
   users: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'UserModel',
+  },
+  publicFlag: {
+    type: Boolean,
   },
 });
 

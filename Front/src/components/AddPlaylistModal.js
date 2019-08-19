@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
   TextInput,
   Switch,
   Button,
@@ -17,7 +16,7 @@ export default class AddPlaylistModal extends React.Component {
   state = {
     switchValue: false,
     nameP: '',
-  }
+  };
 
   _updatePlaylistName = (text) => {
     this.setState({ nameP: text });
@@ -28,11 +27,11 @@ export default class AddPlaylistModal extends React.Component {
     this.setState({ switchValue: value });
     // state changes according to switch
     // which will result in re-render the text
-  }
+  };
 
   render() {
-    const { setModalVisible, modalVisible } = this.props;
-
+    const { setModalVisible, modalVisible, userId } = this.props;
+    const { switchValue, nameP } = this.state;
     return (
       <Modal
         animationType="slide"
@@ -53,28 +52,24 @@ export default class AddPlaylistModal extends React.Component {
               style={styles.inputBox}
               placeholder="Playlist name"
             />
-            {/* eslint-disable-next-line react/destructuring-assignment */}
-            <Text>{this.state.switchValue ? 'Private' : 'Public'}</Text>
+            <Text>{switchValue ? 'Private' : 'Public'}</Text>
             <Switch
               style={styles.switch}
               onValueChange={this.toggleSwitch}
-              value={this.state.switchValue}
+              value={switchValue}
             />
             <Button
               style={styles.create}
               title="Create playlist"
               onPress={() => {
-                addPlaylist(this.state.nameP, this.state.switchValue);
-                // .then(() => {
-                //   setModalVisible();
-                //   // eslint-disable-next-line max-len
-                // eslint-disable-next-line max-len
-                //   // ici problem de retour de promess dans back API a faire sinon les arg et tout passe bien
-                // })
-                // .catch((error) => {
-                //   console.error(error);
-                //   Alert.alert('An error occured on create playlist, please try again later.');
-                // });
+                addPlaylist(nameP, switchValue, userId)
+                  .then(() => {
+                    setModalVisible();
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    Alert.alert('An error occured on create playlist, please try again later.');
+                  });
               }}
             />
           </View>

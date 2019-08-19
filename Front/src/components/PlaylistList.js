@@ -1,4 +1,4 @@
-import {FlatList, RefreshControl} from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import React from 'react';
 import PlaylistInPlaylists from './PlaylistInPlaylists';
 

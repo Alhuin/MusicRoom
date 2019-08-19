@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.3.3:3000/api';
+const server = 'http://10.4.4.6:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -267,10 +267,31 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
-function addPlaylist(name, PrivOrPub)
-{
-  alert(`A new playlist named${name} is born and she is ${PrivOrPub}`);
-  // do some shit with back you know
+function addPlaylist(name, publicFlag, userId) {
+  alert(`A new playlist named [${name}] is born and she is ${publicFlag} with this userId : ${userId}`);
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/add`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name, publicFlag, userId,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
 }
 
 export {

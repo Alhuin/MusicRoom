@@ -46,6 +46,7 @@ class Playlists extends React.Component {
         <Components.AddPlaylistModal
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
+          userId={global.user._id}
         />
         <View style={styles.container}>
           <Components.PlaylistList
