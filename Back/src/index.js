@@ -78,7 +78,7 @@ const seedDatas = async () => {
   await admin.save();
   await user1.save();
 
-  for (let i = 0; i < 20; i += 1) {
+  for (let i = 0; i < 2; i += 1) {
     const playlist = new models.Playlist({
       name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
       users: [admin],
