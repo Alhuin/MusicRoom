@@ -42,8 +42,8 @@ export default class AddPlaylistModal extends React.Component {
           // Alert.alert('Modal has been closed.');
         }}
       >
-        <View styles={styles.container}>
-          <View styles={styles.Name}>
+        <View style={styles.container}>
+          <View style={styles.Name}>
             <TextInput
               onChangeText={this._updatePlaylistName}
               autoCorrect={false}
@@ -81,7 +81,7 @@ export default class AddPlaylistModal extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
   Name: {
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-around',
   },
   switch: {
     alignItems: 'center',
