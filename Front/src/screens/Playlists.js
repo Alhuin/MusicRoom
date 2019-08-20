@@ -27,10 +27,23 @@ class Playlists extends React.Component {
 
   _onRefresh = () => {
     this.setState({ refreshing: true });
-    getPlaylists().then(() => {
+    this.updatePlaylist().then(() => {
       this.setState({ refreshing: false });
     });
   };
+
+  updatePlaylist = () => new Promise((resolve, reject) => {
+    // console.log( this.props );
+    getPlaylists()
+      .then((response) => {
+        this.setState({ playlists: response.data });
+        resolve();
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
 
   setModalVisible = () => {
     const { modalVisible } = this.state;
@@ -61,11 +74,9 @@ class Playlists extends React.Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
 });
-
 export default Playlists;
