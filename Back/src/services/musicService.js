@@ -78,65 +78,13 @@ function deleteMusicById(musicId) {
   });
 }
 
-// value = 1 || value = -1, checked in musicController
 function voteMusic(userId, musicId, playlistId, value) {
   return new Promise((resolve, reject) => {
     VoteModel.find({ user: userId, music: musicId, playlist: playlistId }, (voteError, votes) => {
       if (voteError) {
         reject(new CustomError(voteError, 500));
       } else if (votes[0]) {
-        MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
-          if (error) {
-            reject(new CustomError(error, 500));
-          } else if (!music[0]) {
-            reject(new CustomError('No music with this id in database', 400));
-          } else {
-            if (votes[0].value === value) {
-              const updatedMusic = music[0];
-              updatedMusic.votes += -value;
-              updatedMusic.save((saveError, savedMusic) => {
-                if (saveError) {
-                  reject(new CustomError(saveError, 500));
-                } else {
-                  const updatedVote = vote[0];
-                  updatedVote.value = value;
-                  updatedVote.save((voteSaveError) => {
-                    if (voteSaveError) {
-                      reject(new CustomError(voteSaveError, 500));
-                    } else {
-                      resolve({
-                        status: 200,
-                        data: savedMusic,
-                      });
-                    }
-                  });
-                }
-              });
-            } else {
-              // si votes = 1 et que je upvote -> votes = 2. Je downvote -> votes = 0.
-              const updatedMusic = music[0];
-              updatedMusic.votes += value * 2;
-              updatedMusic.save((saveError, savedMusic) => {
-                if (saveError) {
-                  reject(new CustomError(saveError, 500));
-                } else {
-                  const updatedVote = vote[0];
-                  updatedVote.value = value;
-                  updatedVote.save((voteSaveError) => {
-                    if (voteSaveError) {
-                      reject(new CustomError(voteSaveError, 500));
-                    } else {
-                      resolve({
-                        status: 200,
-                        data: savedMusic,
-                      });
-                    }
-                  });
-                }
-              });
-            }
-          }
-        });
+        reject(new CustomError('You already voted for this track.', 400));
       } else {
         MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
           if (error) {
@@ -174,6 +122,103 @@ function voteMusic(userId, musicId, playlistId, value) {
     });
   });
 }
+
+// value = 1 || value = -1, checked in musicController
+// function voteMusic(userId, musicId, playlistId, value) {
+//   return new Promise((resolve, reject) => {
+//     VoteModel.find({ user: userId, music: musicId, playlist: playlistId }, (voteError, votes) => {
+//       if (voteError) {
+//         reject(new CustomError(voteError, 500));
+//       } else if (votes[0]) {
+//         MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
+//           if (error) {
+//             reject(new CustomError(error, 500));
+//           } else if (!music[0]) {
+//             reject(new CustomError('No music with this id in database', 400));
+//           } else {
+//             if (votes[0].value === value) {
+//               const updatedMusic = music[0];
+//               updatedMusic.votes += -value;
+//               updatedMusic.save((saveError, savedMusic) => {
+//                 if (saveError) {
+//                   reject(new CustomError(saveError, 500));
+//                 } else {
+//                   const updatedVote = vote[0];
+//                   updatedVote.value = value;
+//                   updatedVote.save((voteSaveError) => {
+//                     if (voteSaveError) {
+//                       reject(new CustomError(voteSaveError, 500));
+//                     } else {
+//                       resolve({
+//                         status: 200,
+//                         data: savedMusic,
+//                       });
+//                     }
+//                   });
+//                 }
+//               });
+//             } else {
+//               // si votes = 1 et que je upvote -> votes = 2. Je downvote -> votes = 0.
+//               const updatedMusic = music[0];
+//               updatedMusic.votes += value * 2;
+//               updatedMusic.save((saveError, savedMusic) => {
+//                 if (saveError) {
+//                   reject(new CustomError(saveError, 500));
+//                 } else {
+//                   const updatedVote = vote[0];
+//                   updatedVote.value = value;
+//                   updatedVote.save((voteSaveError) => {
+//                     if (voteSaveError) {
+//                       reject(new CustomError(voteSaveError, 500));
+//                     } else {
+//                       resolve({
+//                         status: 200,
+//                         data: savedMusic,
+//                       });
+//                     }
+//                   });
+//                 }
+//               });
+//             }
+//           }
+//         });
+//       } else {
+//         MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
+//           if (error) {
+//             reject(new CustomError(error, 500));
+//           } else if (!music[0]) {
+//             reject(new CustomError('No music with this id in database', 400));
+//           } else {
+//             const updatedMusic = music[0];
+//             updatedMusic.votes += value;
+//             updatedMusic.save((saveError, savedMusic) => {
+//               if (saveError) {
+//                 reject(new CustomError(saveError, 500));
+//               } else {
+//                 const newVote = new VoteModel({
+//                   playlist: playlistId,
+//                   music: musicId,
+//                   user: userId,
+//                   value,
+//                 });
+//                 newVote.save((voteSaveError) => {
+//                   if (voteSaveError) {
+//                     reject(new CustomError(voteSaveError, 500));
+//                   } else {
+//                     resolve({
+//                       status: 200,
+//                       data: savedMusic,
+//                     });
+//                   }
+//                 });
+//               }
+//             });
+//           }
+//         });
+//       }
+//     });
+//   });
+// }
 
 function downloadMusic(musicUrl) {
   return new Promise((resolve, reject) => {
