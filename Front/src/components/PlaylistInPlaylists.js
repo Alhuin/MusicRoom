@@ -1,8 +1,32 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { Icon } from 'native-base';
+import { getUserById } from '../../API/BackApi';
 
 export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM ?
+  state = {
+    authorName: '',
+  };
+
+  componentDidMount(): void {
+    const { authorId, userId } = this.props;
+    if (this.props.name === 'ah') {
+      // alert('Authorid :' . authorId);
+    }
+    getUserById(authorId)
+      .then((response) => {
+        this.setState({ authorName: response.name });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   _pressPlaylist = () => {
     const { navigation, playlistId } = this.props;
     navigation.push('Playlist', { playlistId });
@@ -10,11 +34,14 @@ export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM 
 
   render() {
     const { name } = this.props;
+    const { authorName } = this.state;
     return (
       <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
         <Text>{ name }</Text>
         <View style={styles.Author}>
-          <Text>Author : </Text>
+          <Text>
+            Author : { authorName }
+          </Text>
           <Icon name="people" />
         </View>
       </TouchableOpacity>

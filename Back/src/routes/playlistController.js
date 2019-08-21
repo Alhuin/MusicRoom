@@ -37,8 +37,10 @@ function getPlaylistById(req, res) {
 
 function addPlaylist(req, res) {
   if (req.body.name && req.body.publicFlag !== undefined
-    && utils.isValidId(req.body.userId)) {
-    playlistService.addPlaylist(req.body.name, req.body.publicFlag, req.body.userId)
+    && utils.isValidId(req.body.userId)
+    && utils.isValidId(req.body.author)) {
+    playlistService.addPlaylist(req.body.name, req.body.publicFlag,
+      req.body.userId, req.body.author)
       .then((response) => {
         res
           .status(response.status)

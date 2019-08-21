@@ -62,7 +62,7 @@ export default class AddPlaylistModal extends React.Component {
               style={styles.create}
               title="Create playlist"
               onPress={() => {
-                addPlaylist(nameP, switchValue, userId)
+                addPlaylist(nameP, switchValue, userId, userId)
                   .then(() => {
                     setModalVisible();
                   })

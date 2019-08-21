@@ -36,10 +36,11 @@ function getPlaylistById(playlistId) {
   });
 }
 
-function addPlaylist(name, publicFlag, userId) {
+function addPlaylist(name, publicFlag, userId, author) {
   return new Promise((resolve, reject) => {
     const playlist = new models.Playlist({
       name,
+      author,
       publicFlag,
       users: [userId],
       allowVotes: true,

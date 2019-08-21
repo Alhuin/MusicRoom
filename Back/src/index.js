@@ -82,6 +82,7 @@ const seedDatas = async () => {
     const playlist = new models.Playlist({
       name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
       users: [admin],
+      author: admin,
     });
     playlist.save();
     const music1 = new models.Music({

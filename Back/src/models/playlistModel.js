@@ -20,6 +20,10 @@ const playlistSchema = new mongoose.Schema({
   publicFlag: {
     type: Boolean,
   },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserModel',
+  },
 });
 
 /*

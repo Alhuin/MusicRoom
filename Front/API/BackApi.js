@@ -267,7 +267,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
-function addPlaylist(name, publicFlag, userId) {
+function addPlaylist(name, publicFlag, userId, author) {
   alert(`A new playlist named [${name}] is born and she is ${publicFlag} with this userId : ${userId}`);
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/add`, {
@@ -277,7 +277,7 @@ function addPlaylist(name, publicFlag, userId) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name, publicFlag, userId,
+        name, publicFlag, userId, author,
       }),
     })
       .then(async (response) => {
