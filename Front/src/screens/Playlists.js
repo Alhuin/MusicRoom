@@ -49,6 +49,7 @@ class Playlists extends React.Component {
     const { modalVisible } = this.state;
     const visible = !modalVisible;
     this.setState({ modalVisible: visible });
+    this.updatePlaylist();
   };
 
   render() {
