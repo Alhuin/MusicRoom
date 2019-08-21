@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.4.6:3000/api';
+const server = 'http://10.4.6.3:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {

@@ -45,7 +45,7 @@ function getMusicsByVote(playlistId) {
         if (error) {
           reject(new CustomError(error, 500));
         } else if (!musics) {
-          reject(new CustomError('No musics for this Playlist databse', 400));
+          reject(new CustomError('No musics for this Playlist database', 400));
         } else {
           resolve({
             status: 200,
@@ -173,7 +173,7 @@ function downloadMusic(musicUrl) {
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';
-    const deezpy = spawn('python3', ['/Users/magaspar/Projects/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
+    const deezpy = spawn('python3', ['/Users/dguelpa/Projects/appBranch/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
     deezpy.stdout.on('data', (data) => {
       stdout += data;
     });
@@ -199,6 +199,7 @@ function downloadMusic(musicUrl) {
   });
 }
 
+/*
 function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link) {
   return new Promise((resolve, reject) => {
     downloadMusic(link)
@@ -230,6 +231,82 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
       .catch((error) => {
         reject(error);
       });
+  });
+}
+*/
+
+// si une musique existe deja, il y a un warning UnhandledPromiseRejectionWarning,
+// mais la musique n'est pas add, as intended
+
+function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link) {
+  return new Promise((resolve, reject) => {
+    isMusicInPlaylist(playlistId, artist, title, album, albumCover, preview, link)
+      .then((data) => {
+        if (!data.data) {
+          downloadMusic(link)
+            .then((path) => {
+              const music = new MusicModel({
+                user: userId,
+                playlist: playlistId,
+                artist,
+                date: Date.now(),
+                title,
+                album,
+                albumCover,
+                preview,
+                link,
+                path: path.data,
+                votes: 0,
+              });
+              music.save((saveError, savedMusic) => {
+                if (saveError) {
+                  reject(new CustomError(saveError, 500));
+                } else {
+                  resolve({
+                    status: 200,
+                    data: savedMusic,
+                  });
+                }
+              });
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        } else {
+          reject(new CustomError(`Strange, but it appears that a music exist in this playlist ${data.data}`), 500);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+function isMusicInPlaylist(playlistId, artist, title, album, albumCover, preview, link) {
+  return new Promise((resolve, reject) => {
+    MusicModel.find({
+      playlist: playlistId,
+      artist,
+      title,
+      album,
+      albumCover,
+      preview,
+      link,
+    }, (error, musics) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!musics || !musics.length) {
+        resolve({
+          status: 200,
+          data: false,
+        });
+      } else {
+        resolve({
+          status: 200,
+          data: musics,
+        });
+      }
+    });
   });
 }
 
