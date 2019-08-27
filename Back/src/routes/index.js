@@ -23,6 +23,7 @@ router.get('/users/:userId', userController.getUserById);
 router.delete('/users/:userId', userController.deleteUserById);
 router.post('/users', userController.addUser);
 router.post('/users/newPass/', userController.updatePassword);
+router.post('/users/validity/', userController.isValidUser);
 
 // Mail Tokens
 router.post('/users/emailToken/', userController.sendEmailToken);
@@ -55,6 +56,5 @@ router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 router.get('/votes', voteController.getVotes);
 router.get('/votes/:voteId', voteController.getVoteById);
 router.delete('/votes/:voteId', voteController.deleteVoteById);
-
 
 export default router;

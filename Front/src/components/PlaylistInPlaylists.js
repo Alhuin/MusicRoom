@@ -14,10 +14,7 @@ export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM 
   };
 
   componentDidMount(): void {
-    const { authorId, userId } = this.props;
-    if (this.props.name === 'ah') {
-      // alert('Authorid :' . authorId);
-    }
+    const { authorId } = this.props;
     getUserById(authorId)
       .then((response) => {
         this.setState({ authorName: response.name });

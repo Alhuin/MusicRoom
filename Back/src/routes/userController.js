@@ -78,6 +78,14 @@ function addUser(req, res) {
   }
 }
 
+function isValidUser(req, res) {
+  if (req.body.id && utils.isValidId(req.body.id)) {
+    res.status(200).send(true);
+  } else {
+    res.status(200).send(false);
+  }
+}
+
 /*    User Interface    */
 
 function updatePassword(req, res) {
@@ -192,4 +200,5 @@ export default {
   confirmEmailToken,
   confirmPasswordToken,
   updatePassword,
+  isValidUser,
 };

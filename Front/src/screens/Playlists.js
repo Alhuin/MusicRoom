@@ -18,6 +18,7 @@ class Playlists extends React.Component {
   componentDidMount(): void {
     getPlaylists()
       .then((response) => {
+        // alert(global.user._id);
         this.setState({ playlists: response.data });
       })
       .catch((error) => {
@@ -55,6 +56,7 @@ class Playlists extends React.Component {
   render() {
     const { playlists, modalVisible, refreshing } = this.state;
     const { navigation } = this.props;
+    // alert(global.user._id);
     return (
       <View style={{ height: '100%' }}>
         <Components.AddPlaylistModal

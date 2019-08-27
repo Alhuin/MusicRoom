@@ -10,16 +10,18 @@ export default class Loading extends React.Component {
 
   componentDidMount() {
     const { navigation } = this.props;
+    // alert("WAOUH")
     isSignedIn()
       .then((user) => {
         if (user) {
-          global.user = JSON.parse(user);
+          global.user = user;
           navigation.navigate('app');
+          // alert(global.user._id);
         } else {
           navigation.navigate('auth');
         }
       })
-      .catch(() => alert('An error occurred'));
+      .catch(error => alert(error + ' [Loading]'));
   }
 
   render() {

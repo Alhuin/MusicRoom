@@ -4,7 +4,7 @@ import {
   Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text,
 } from 'react-native';
 import { login } from '../../API/BackApi';
-import { onSignIn } from '../services/auth';
+import { isSignedIn, onSignIn } from '../services/auth';
 
 export default class SignInForm extends React.Component {
   state = {
@@ -31,8 +31,23 @@ export default class SignInForm extends React.Component {
     } else {
       login(userName, password)
         .then((user) => {
-          onSignIn(JSON.stringify(user));
-          navigation.navigate('HomePage', { user });
+          console.log(user);
+          onSignIn(JSON.stringify(user))
+            .then(() => {
+              isSignedIn()
+                .then((userSignedIn) => {
+                  if (userSignedIn) {
+                    global.user = userSignedIn;
+                    navigation.navigate('app');
+                    // alert(global.user._id);
+                  } else {
+                    navigation.navigate('auth');
+                  }
+                })
+                .catch(error => alert(error + ' [isSignedIn]'));
+            })
+            .catch(error => alert(error + ' [onSignIn]'));
+          // navigation.navigate('HomePage', { user });
         })
         .catch((error) => {
           if (error.status === 401) {

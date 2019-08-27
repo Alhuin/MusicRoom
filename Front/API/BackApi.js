@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.6.3:3000/api';
+const server = 'http://10.4.5.6:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -268,7 +268,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
 }
 
 function addPlaylist(name, publicFlag, userId, author) {
-  alert(`A new playlist named [${name}] is born and she is ${publicFlag} with this userId : ${userId}`);
+  // alert(`A new playlist named [${name}] is born and she is ${publicFlag} with this userId : ${userId}`);
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/add`, {
       method: 'POST',
@@ -294,6 +294,34 @@ function addPlaylist(name, publicFlag, userId, author) {
   });
 }
 
+function isValidId(id) {
+  // console.log("isValidId, id = " + id);
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/users/validity/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        console.log('error in back api');
+        reject(error);
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -307,4 +335,5 @@ export {
   voteMusic,
   addMusicToPlaylist,
   addPlaylist,
+  isValidId,
 };
