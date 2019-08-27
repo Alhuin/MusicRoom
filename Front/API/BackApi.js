@@ -42,6 +42,8 @@ function getUserById(userId) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
+        } else if (response.status === 400) {
+          resolve(undefined); // afin de renvoyer quelque chose meme si on ne trouve pas de user.
         }
       })
       .catch((error) => {
@@ -294,34 +296,6 @@ function addPlaylist(name, publicFlag, userId, author) {
   });
 }
 
-function isValidId(id) {
-  // console.log("isValidId, id = " + id);
-  return new Promise((resolve, reject) => {
-    fetch(`${server}/users/validity/`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id,
-      }),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          console.log(data.msg);
-        }
-      })
-      .catch((error) => {
-        console.log('error in back api');
-        reject(error);
-      });
-  });
-}
-
 export {
   login,
   addUser,
@@ -335,5 +309,4 @@ export {
   voteMusic,
   addMusicToPlaylist,
   addPlaylist,
-  isValidId,
 };

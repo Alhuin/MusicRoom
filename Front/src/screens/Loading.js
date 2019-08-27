@@ -13,6 +13,7 @@ export default class Loading extends React.Component {
     // alert("WAOUH")
     isSignedIn()
       .then((user) => {
+        console.log(user);
         if (user) {
           global.user = user;
           navigation.navigate('app');
@@ -21,7 +22,9 @@ export default class Loading extends React.Component {
           navigation.navigate('auth');
         }
       })
-      .catch(error => alert(error + ' [Loading]'));
+      .catch((error) => {
+        console.log(error + ' [Loading]');
+      });
   }
 
   render() {

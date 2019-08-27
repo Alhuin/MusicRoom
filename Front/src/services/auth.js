@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { isValidId } from '../../API/BackApi';
+import { getUserById } from '../../API/BackApi';
 
 export const onSignIn = user => AsyncStorage.setItem('loggedUser', user);
 
@@ -11,7 +11,7 @@ export const isSignedIn = () => new Promise((resolve, reject) => {
       if (res) {
         // console.log(JSON.parse(res));
         const user = JSON.parse(res);
-        isValidId(user._id)
+        getUserById(user._id)
           .then((response) => {
             // console.log("isValidId telling its : " + response);
             if (response) {
@@ -21,11 +21,11 @@ export const isSignedIn = () => new Promise((resolve, reject) => {
             }
           })
           .catch((error) => {
-            console.log('error in auth');
+            // console.log('error in auth + ' + error.msg);
             reject(error);
           });
       } else {
-        console.log('no logged user');
+        // console.log('no logged user');
         resolve(false);
       }
     })
