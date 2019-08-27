@@ -18,6 +18,7 @@ class Connexion extends React.Component {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
             <Components.Logo />

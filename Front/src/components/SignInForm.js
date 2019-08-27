@@ -31,7 +31,7 @@ export default class SignInForm extends React.Component {
     } else {
       login(userName, password)
         .then((user) => {
-          console.log(user);
+          // console.log(user);
           onSignIn(JSON.stringify(user))
             .then(() => {
               isSignedIn()
@@ -80,7 +80,9 @@ export default class SignInForm extends React.Component {
           placeholder="Password"
           secureTextEntry
         />
-        <View style={styles.submitButton}>
+        <View
+          style={styles.submitButton}
+        >
           <Button
             title="Sign In"
             onPress={() => {
