@@ -50,6 +50,22 @@ router.post('/playlists/add', playlistController.addPlaylist);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 
 
+/*             Partys                */
+
+router.get('/partys', partyController.getPartys);
+router.get('/partys/:partyId', partyController.getPartyById);
+router.post('/partys/add', partyController.addParty);
+router.delete('/partys/:partyId', partyController.deletePartyById);
+
+
+/*             Radios                */
+
+router.get('/radios', radioController.getRadios);
+router.get('/radios/:radioId', radioController.getRadioById);
+router.post('/radios/add', radioController.addRadio);
+router.delete('/radios/:radioId', radioController.deleteRadioById);
+
+
 /*             Votes                 */
 
 router.get('/votes', voteController.getVotes);
