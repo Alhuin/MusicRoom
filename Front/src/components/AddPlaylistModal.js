@@ -16,6 +16,8 @@ export default class AddPlaylistModal extends React.Component {
   state = {
     switchValue: false,
     nameP: '',
+    location: null,
+    type: null,
   };
 
   _updatePlaylistName = (text) => {
@@ -24,14 +26,27 @@ export default class AddPlaylistModal extends React.Component {
 
   toggleSwitch = (value) => {
     // onValueChange of the switch this function will be called
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const MyLocation = JSON.stringify(position);
+        this.setState({ location: MyLocation });
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: false, timeout: 10000 },
+    );
     this.setState({ switchValue: value });
-    // state changes according to switch
-    // which will result in re-render the text
+    if (this.state.type === null) {
+      this.setState({ type: 'GeolocOK' });
+    } else {
+      this.setState({ type: null });
+    }
   };
 
   render() {
     const { setModalVisible, modalVisible, userId } = this.props;
     const { switchValue, nameP } = this.state;
+
     return (
       <Modal
         animationType="slide"
@@ -52,12 +67,14 @@ export default class AddPlaylistModal extends React.Component {
               style={styles.inputBox}
               placeholder="Playlist name"
             />
-            <Text>{switchValue ? 'Private' : 'Public'}</Text>
+            <Text>{switchValue ? 'Public' : 'Private'}</Text>
             <Switch
               style={styles.switch}
               onValueChange={this.toggleSwitch}
               value={switchValue}
             />
+            <Text> { switchValue ? this.state.location : '' }</Text>
+
             <Button
               style={styles.create}
               title="Create playlist"
