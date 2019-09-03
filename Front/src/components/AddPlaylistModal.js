@@ -19,6 +19,7 @@ export default class AddPlaylistModal extends React.Component {
     nameP: '',
     location: null, // unused afficher car on n'envoie pas encore la location quelquepart.
     type: null,
+    date: new Date(),
   };
 
   _updatePlaylistName = (text) => {
