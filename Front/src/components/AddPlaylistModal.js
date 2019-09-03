@@ -1,4 +1,5 @@
 import React from 'react';
+import DatePicker from 'react-native-date-picker';
 import {
   Modal,
   StyleSheet,
@@ -16,7 +17,7 @@ export default class AddPlaylistModal extends React.Component {
   state = {
     switchValue: false,
     nameP: '',
-    location: null,
+    location: null, // unused afficher car on n'envoie pas encore la location quelquepart.
     type: null,
   };
 
@@ -26,7 +27,7 @@ export default class AddPlaylistModal extends React.Component {
 
   toggleSwitch = (value) => {
     // onValueChange of the switch this function will be called
-
+    // this.state.location = info conplete de geoloc
     navigator.geolocation.getCurrentPosition(
       position => {
         const MyLocation = JSON.stringify(position);
@@ -46,6 +47,21 @@ export default class AddPlaylistModal extends React.Component {
   render() {
     const { setModalVisible, modalVisible, userId } = this.props;
     const { switchValue, nameP } = this.state;
+    let dateP;
+    let datePTwo;
+
+    if (this.state.type === 'GeolocOK') {
+      dateP = <DatePicker
+        date={this.state.date}
+        onDateChange={date => this.setState({ date })}
+      />;
+      datePTwo = <DatePicker
+        date={this.state.date}
+        onDateChange={date => this.setState({ date })}
+      />;
+    } else {
+      dateP = <Text></Text>;
+    }
 
     return (
       <Modal
@@ -73,8 +89,9 @@ export default class AddPlaylistModal extends React.Component {
               onValueChange={this.toggleSwitch}
               value={switchValue}
             />
-            <Text> { switchValue ? this.state.location : '' }</Text>
-
+            <Text> { switchValue ? 'Geolocation is ON for public party' : '' }</Text>
+            {dateP}
+            {datePTwo}
             <Button
               style={styles.create}
               title="Create playlist"
