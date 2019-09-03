@@ -4,6 +4,8 @@ import musicController from './musicController';
 import playlistController from './playlistController';
 import voteController from './voteController';
 import loginController from './loginController';
+/*import partyController from './partyController';
+import radioController from './radioController';*/
 
 const router = Router();
 
@@ -50,17 +52,17 @@ router.post('/playlists/add', playlistController.addPlaylist);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 
 
-/*             Partys                */
+/*/!*             Partys                *!/
 
-/*router.get('/partys', partyController.getPartys);
+router.get('/partys', partyController.getPartys);
 router.get('/partys/:partyId', partyController.getPartyById);
 router.post('/partys/add', partyController.addParty);
-router.delete('/partys/:partyId', partyController.deletePartyById);*/
+router.delete('/partys/:partyId', partyController.deletePartyById);
 
 
-/*             Radios                */
+/!*             Radios                *!/
 
-/*router.get('/radios', radioController.getRadios);
+router.get('/radios', radioController.getRadios);
 router.get('/radios/:radioId', radioController.getRadioById);
 router.post('/radios/add', radioController.addRadio);
 router.delete('/radios/:radioId', radioController.deleteRadioById);*/

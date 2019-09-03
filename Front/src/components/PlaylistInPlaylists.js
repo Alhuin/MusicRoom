@@ -8,7 +8,9 @@ import {
 import { Icon } from 'native-base';
 import { getUserById } from '../../API/BackApi';
 
-export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM ?
+// must create two components PlaylistInParty and PlaylistInRadio or this one need to be modified
+
+export default class PlaylistInPlaylists extends React.Component {
   state = {
     authorName: '',
   };
@@ -30,19 +32,37 @@ export default class PlaylistInPlaylists extends React.Component {// WTF LE NOM 
   };
 
   render() {
-    const { name } = this.props;
+    const { name, roomType } = this.props;
     const { authorName } = this.state;
-    return (
-      <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
-        <Text>{ name }</Text>
-        <View style={styles.Author}>
-          <Text>
-            Author : { authorName }
-          </Text>
-          <Icon name="people" />
-        </View>
-      </TouchableOpacity>
-    );
+
+
+    if (roomType === 'radio') {
+      return (
+        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
+          <Text>{ name }</Text>
+          <View style={styles.Author}>
+            <Text>
+              Author : { authorName }
+            </Text>
+            <Icon name="people" />
+          </View>
+        </TouchableOpacity>
+      );
+    } else if (roomType === 'party') {
+      return (
+        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
+          <Text>{ name }</Text>
+          <View style={styles.Author}>
+            <Text>
+              Author : { authorName }
+            </Text>
+            <Icon name="people" />
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (null);
+    }
   }
 }
 

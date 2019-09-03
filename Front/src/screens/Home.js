@@ -5,20 +5,20 @@ import {
 import { Icon } from 'native-base';
 
 class Home extends React.Component {
-  _onPressPlaylists = () => {
-    const { navigation, playlistId } = this.props;
-    navigation.navigate('Playlists', { playlistId });
+  _onPressParty = () => {
+    const { navigation } = this.props;
+    navigation.navigate('PartysList');
   };
 
   _onPressRadio = () => {
-    const { navigation, playlistId } = this.props;
-    navigation.navigate('Radio', { playlistId }); // Page a creer
+    const { navigation } = this.props;
+    navigation.navigate('RadiosList');
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this._onPressPlaylists}>
+        <TouchableOpacity onPress={this._onPressParty}>
           <View style={styles.cartes}>
             <Text style={styles.textcard}>Party mode</Text>
             <Icon name="musical-notes" />

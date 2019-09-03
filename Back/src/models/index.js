@@ -4,8 +4,8 @@ import MusicModel from './musicModel';
 import PlaylistModel from './playlistModel';
 import VoteModel from './voteModel';
 import TokenModel from './tokenModel';
-import PartyModel from "./partyModel";
-import RadioModel from "./radioModel";
+import PartyModel from './partyModel';
+import RadioModel from './radioModel';
 
 const models = {
   User: UserModel,

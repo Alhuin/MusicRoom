@@ -13,7 +13,7 @@ export default class Loading extends React.Component {
     // alert("WAOUH")
     isSignedIn()
       .then((user) => {
-        console.log(user);
+        // console.log(user);
         if (user) {
           global.user = user;
           navigation.navigate('app');

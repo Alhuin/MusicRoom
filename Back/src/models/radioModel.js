@@ -15,7 +15,7 @@ const radioSchema = new mongoose.Schema({
     // we could pull off author, name, users, allowVotes, public / private settings
     // from playlist to put them here
     // We could.
-  }
+  },
 });
 
 const RadioModel = mongoose.model('RadioModel', radioSchema);

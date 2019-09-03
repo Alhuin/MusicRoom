@@ -10,6 +10,7 @@ class PlaylistList extends React.Component {
       refreshing,
       onRefresh,
       userId,
+      roomType,
     } = this.props;
     return (
       <FlatList
@@ -23,6 +24,7 @@ class PlaylistList extends React.Component {
               playlistId={item._id}
               navigation={navigation}
               userId={userId}
+              roomType={roomType}
               // Ici recuperer les users(mais je pleurs l'object users
               // dans playlist n'ai ps accessible pour avoir le nom de l'author)
             />

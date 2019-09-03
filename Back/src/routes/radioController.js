@@ -1,6 +1,5 @@
 import radioService from '../services/radioService';
 import utils from '../utils';
-import partyService from "../services/partyService";
 
 function getRadios(req, res) {
   radioService.getRadios()

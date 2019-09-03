@@ -1,6 +1,6 @@
 import PartyModel from '../models/partyModel';
 import CustomError from './errorHandler';
-import models from "../models";
+import models from '../models';
 
 function getPartys() {
   return new Promise((resolve, reject) => {

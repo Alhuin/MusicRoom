@@ -1,6 +1,5 @@
 import partyService from '../services/partyService';
 import utils from '../utils';
-import playlistService from "../services/playlistService";
 
 function getPartys(req, res) {
   partyService.getPartys()

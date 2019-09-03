@@ -5,7 +5,7 @@ import {
 import Components from '../components';
 import { getPlaylists } from '../../API/BackApi';
 
-class Radios extends React.Component {
+class Partys extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,7 +71,7 @@ class Radios extends React.Component {
             navigation={navigation}
             refreshing={refreshing}
             onRefresh={this._onRefresh}
-            roomType="radio"
+            roomType="party"
           />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default Radios;
+export default Partys;

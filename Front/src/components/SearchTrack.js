@@ -56,7 +56,12 @@ export default class SearchTrack extends React.Component {
 
   render() {
     const { tracks, playing } = this.state;
-    const { playlistId, userId, updateTracks, setModalVisible } = this.props;
+    const {
+      playlistId,
+      userId,
+      updateTracks,
+      setModalVisible,
+    } = this.props;
     return (
       <View style={styles.container}>
         <SearchBar

@@ -27,6 +27,8 @@ import Loading from '../screens/Loading';
 import SearchTrack from '../components/SearchTrack';
 import Playlists from '../screens/Playlists';
 import Playlist from '../screens/Playlist';
+import Radios from '../screens/Radios';
+import Partys from '../screens/Partys';
 
 const createBurgerMenu = navigation => Platform.select({
   ios: null,
@@ -115,9 +117,55 @@ const HomeNavigator = createStackNavigator({
 
 // Main Navigator Handles HomeNavigator + Settings by drawer or tab
 
-const PlaylistNavigator = createStackNavigator({
+const PartysNavigator = createStackNavigator({
+  PartysList: {
+    screen: Partys,
+    navigationOptions: ({ navigation }: NavigationScreenProps) => ({
+      headerTitle: 'Parties',
+      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
+      headerLeft: createBurgerMenu(navigation),
+    }),
+  },
+  Playlist: {
+    screen: Playlist,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  SearchTrack: {
+    screen: SearchTrack,
+    navigationOptions: {
+      header: null,
+    },
+  },
+});
+
+const RadiosNavigator = createStackNavigator({
+  RadiosList: {
+    screen: Radios,
+    navigationOptions: ({ navigation }: NavigationScreenProps) => ({
+      headerTitle: 'Radios',
+      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
+      headerLeft: createBurgerMenu(navigation),
+    }),
+  },
+  Playlist: {
+    screen: Playlist,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  SearchTrack: {
+    screen: SearchTrack,
+    navigationOptions: {
+      header: null,
+    },
+  },
+});
+
+/*const PlaylistNavigator = createStackNavigator({
 // Should be StackNavigator, but didBlur not firing so FO
-  Playlists: {
+  Playlistlist: {
     screen: Playlists,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Playlists',
@@ -137,7 +185,7 @@ const PlaylistNavigator = createStackNavigator({
       header: null,
     },
   },
-});
+});*/
 
 const MainNavigator = Platform.select({
   ios: createBottomTabNavigator({
@@ -153,7 +201,9 @@ const MainNavigator = Platform.select({
       path: 'main',
     },
     Settings: AppSettings,
-    Playlists: PlaylistNavigator,
+    // Playlists: PlaylistNavigator,
+    Parties: PartysNavigator,
+    Radios: RadiosNavigator,
   },
   {
     contentComponent: props => (

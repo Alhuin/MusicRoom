@@ -5,6 +5,8 @@ import {
 import Components from '../components';
 import { getPlaylists } from '../../API/BackApi';
 
+// this one must be changed to look for specific playlists, the ones in Partys / Radios
+
 class Playlists extends React.Component {
   constructor(props) {
     super(props);
@@ -16,9 +18,14 @@ class Playlists extends React.Component {
   }
 
   componentDidMount(): void {
+    // const { navigation } = this.props;
+    // console.log(navigation.getParam('roomType'));
+    // console.log(navigation.state.params);
+    // console.log(navigation);
     getPlaylists()
       .then((response) => {
         // alert(global.user._id);
+        console.log('setState');
         this.setState({ playlists: response.data });
       })
       .catch((error) => {
@@ -54,9 +61,18 @@ class Playlists extends React.Component {
   };
 
   render() {
-    const { playlists, modalVisible, refreshing } = this.state;
+    const {
+      playlists,
+      modalVisible,
+      refreshing,
+    } = this.state;
     const { navigation } = this.props;
     // alert(global.user._id);
+    // console.log(navigation);
+    // console.log(navigation.state)
+    // console.log('RoomType : ' + this.props.navigation.getParam('roomType', 'NO-ROOM-TYPE'));
+    // console.log('-------------------------');
+
     return (
       <View style={{ height: '100%' }}>
         <Components.AddPlaylistModal
@@ -72,7 +88,7 @@ class Playlists extends React.Component {
             onRefresh={this._onRefresh}
           />
         </View>
-        <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addPlaylist" />
+        <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />
       </View>
     );
   }

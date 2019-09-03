@@ -1,6 +1,6 @@
 import RadioModel from '../models/radioModel';
 import CustomError from './errorHandler';
-import models from "../models";
+import models from '../models';
 
 function getRadios() {
   return new Promise((resolve, reject) => {
