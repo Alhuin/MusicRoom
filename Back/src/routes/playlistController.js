@@ -35,12 +35,32 @@ function getPlaylistById(req, res) {
   }
 }
 
+function getPlaylistsFilteredByRoom(req, res) {
+  if (req.params.roomType) {
+    playlistService.getPlaylistsFilteredByRoom(req.params.roomType)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function addPlaylist(req, res) {
   if (req.body.name && req.body.publicFlag !== undefined
     && utils.isValidId(req.body.userId)
-    && utils.isValidId(req.body.author)) {
+    && utils.isValidId(req.body.author)
+    && req.body.roomType) {
     playlistService.addPlaylist(req.body.name, req.body.publicFlag,
-      req.body.userId, req.body.author)
+      req.body.userId, req.body.author, req.body.roomType)
       .then((response) => {
         res
           .status(response.status)
@@ -79,6 +99,7 @@ function deletePlaylistById(req, res) {
 export default {
   getPlaylistById,
   getPlaylists,
+  getPlaylistsFilteredByRoom,
   addPlaylist,
   deletePlaylistById,
 };

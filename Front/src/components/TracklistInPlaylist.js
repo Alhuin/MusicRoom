@@ -25,6 +25,7 @@ class TracklistInPlaylist extends React.Component {
       refreshing,
       onRefresh,
       userId,
+      roomType,
     } = this.props;
     return (
       <FlatList
@@ -37,6 +38,7 @@ class TracklistInPlaylist extends React.Component {
             handlePress={this.handlePress}
             playlistId={playlistId}
             updateTracks={updateTracks}
+            roomType={roomType}
           />
         )
         }

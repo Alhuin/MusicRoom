@@ -3,7 +3,7 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
-import { getPlaylists } from '../../API/BackApi';
+import { getPlaylistsFilteredByRoom } from '../../API/BackApi';
 
 class Radios extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Radios extends React.Component {
   }
 
   componentDidMount(): void {
-    getPlaylists()
+    getPlaylistsFilteredByRoom('radio')
       .then((response) => {
         this.setState({ playlists: response.data });
       })
@@ -33,7 +33,7 @@ class Radios extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
-    getPlaylists()
+    getPlaylistsFilteredByRoom('radio')
       .then((response) => {
         this.setState({ playlists: response.data });
         resolve();
@@ -64,6 +64,7 @@ class Radios extends React.Component {
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
           userId={global.user._id}
+          roomType="radio"
         />
         <View style={styles.container}>
           <Components.PlaylistList

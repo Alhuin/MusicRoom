@@ -47,6 +47,7 @@ router.post('/deezPy', musicController.downloadMusic);
 /*             Playlists                 */
 
 router.get('/playlists', playlistController.getPlaylists);
+router.get('/playlists/:roomType', playlistController.getPlaylistsFilteredByRoom);
 router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 router.post('/playlists/add', playlistController.addPlaylist);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);

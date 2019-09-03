@@ -36,7 +36,24 @@ function getPlaylistById(playlistId) {
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author) {
+function getPlaylistsFilteredByRoom(roomType) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.find({ roomType }, (error, playlist) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!playlist) {
+        reject(new CustomError('No playlist with this id in database', 400));
+      } else {
+        resolve({
+          status: 200,
+          data: playlist,
+        });
+      }
+    });
+  });
+}
+
+function addPlaylist(name, publicFlag, userId, author, roomType) {
   return new Promise((resolve, reject) => {
     const playlist = new models.Playlist({
       name,
@@ -44,8 +61,7 @@ function addPlaylist(name, publicFlag, userId, author) {
       publicFlag,
       users: [userId],
       allowVotes: true,
-      // à voir si on laisse cet allowVotes ici,
-      // ou bien dans un potentiel schema partyRoom qui le contiendrait
+      roomType,
     });
     playlist.save((saveError, savedPlaylist) => {
       if (saveError) {
@@ -86,6 +102,7 @@ function deletePlaylistById(playlistId) {
 export default {
   getPlaylists,
   getPlaylistById,
+  getPlaylistsFilteredByRoom,
   addPlaylist,
   deletePlaylistById,
 };

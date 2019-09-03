@@ -55,6 +55,7 @@ connectDb().then(async () => {
  */
 
 const seedDatas = async () => {
+  let roomType = 'party';
   const salt = await bcrypt.genSaltSync(10);
   const hash = await bcrypt.hashSync('Ge4rt3ln@', salt);
   const user1 = new models.User({
@@ -78,11 +79,13 @@ const seedDatas = async () => {
   await admin.save();
   await user1.save();
 
-  for (let i = 0; i < 2; i += 1) {
+  for (let i = 0; i < 5; i += 1) {
+    if (i > 2) { roomType = 'radio'; }
     const playlist = new models.Playlist({
       name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
       users: [admin],
       author: admin,
+      roomType,
     });
     playlist.save();
     const music1 = new models.Music({

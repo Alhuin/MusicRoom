@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.5.6:3000/api';
+const server = 'http://10.4.2.4:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -175,6 +175,38 @@ function getPlaylists() {
   });
 }
 
+function getPlaylistsFilteredByRoom(roomType) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/${roomType}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          // alert('GetAllPlaylists is success');
+          resolve({
+            status: 200,
+            data,
+          });
+        } else if (response.status === 404) {
+          reject(new CustomError('Page Not Found', 404));
+        } else {
+          reject(new CustomError(data.msg, data.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(new CustomError(error.msg, error.status));
+        // console.error(error);
+      });
+  });
+}
+
 function getPlaylistById(playlistId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/${playlistId}`, {
@@ -269,7 +301,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author) {
+function addPlaylist(name, publicFlag, userId, author, roomType) {
   // alert(`A new playlist named [${name}] is born and she is ${publicFlag} with this userId : ${userId}`);
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/add`, {
@@ -279,7 +311,7 @@ function addPlaylist(name, publicFlag, userId, author) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name, publicFlag, userId, author,
+        name, publicFlag, userId, author, roomType,
       }),
     })
       .then(async (response) => {
@@ -303,6 +335,7 @@ export {
   sendPasswordToken,
   updatePassword,
   getPlaylists,
+  getPlaylistsFilteredByRoom,
   getMusicsByVoteInPlaylist,
   getPlaylistById,
   getUserById,

@@ -7,7 +7,6 @@ const playlistSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  // laisser allowVotes ici ?
   allowVotes: {
     type: Boolean,
     required: true,
@@ -23,6 +22,10 @@ const playlistSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'UserModel',
+  },
+  roomType: {
+    type: String,
+    default: 'radio',
   },
 });
 

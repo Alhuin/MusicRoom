@@ -28,69 +28,112 @@ class TrackInPlaylist extends React.Component {
     const {
       track,
       handlePress,
+      roomType,
     } = this.props;
-    return (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.main_container}
-      >
+    if (roomType === 'radio') {
+      return (
         <TouchableOpacity
-          style={styles.previewCover}
-          onPress={() => {
-            handlePress(track.preview);
-          }}
+          activeOpacity={1}
+          style={styles.main_container}
         >
-          <Image
-            style={styles.image}
-            source={{ uri: track.albumCover }}
-          />
-          <Image
-            source={require('../assets/images/play.png')}
-            style={{ height: 80, width: 80, position: 'absolute'  }}
-          />
+          <TouchableOpacity
+            style={styles.previewCover}
+            onPress={() => {
+              handlePress(track.preview);
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={{ uri: track.albumCover }}
+            />
+            <Image
+              source={require('../assets/images/play.png')}
+              style={{ height: 80, width: 80, position: 'absolute' }}
+            />
+          </TouchableOpacity>
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>{track.title}</Text>
+            </View>
+            <View style={styles.artist_container}>
+              <Text style={styles.artist_name}>
+                {track.artist}
+              </Text>
+            </View>
+            <View style={styles.album_container}>
+              <Text style={styles.album_title}>
+                {track.album}
+              </Text>
+            </View>
+          </View>
         </TouchableOpacity>
-        <View style={styles.content_container}>
-          <View style={styles.title_container}>
-            <Text style={styles.title_text}>{track.title}</Text>
+      );
+    } else if (roomType === 'party') {
+      return (
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.main_container}
+        >
+          <TouchableOpacity
+            style={styles.previewCover}
+            onPress={() => {
+              handlePress(track.preview);
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={{ uri: track.albumCover }}
+            />
+            <Image
+              source={require('../assets/images/play.png')}
+              style={{ height: 80, width: 80, position: 'absolute' }}
+            />
+          </TouchableOpacity>
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>{track.title}</Text>
+            </View>
+            <View style={styles.artist_container}>
+              <Text style={styles.artist_name}>
+                {track.artist}
+              </Text>
+            </View>
+            <View style={styles.album_container}>
+              <Text style={styles.album_title}>
+                {track.album}
+              </Text>
+            </View>
           </View>
-          <View style={styles.artist_container}>
-            <Text style={styles.artist_name}>
-              {track.artist}
-            </Text>
+          <View style={styles.voting_container}>
+            <View style={styles.note_container}>
+              <Text style={{ color: 'white' }}>{track.votes}</Text>
+            </View>
+            <View style={styles.votes_container}>
+              <TouchableOpacity
+                style={styles.vote_container}
+                onPress={() => this._vote(1)}
+              >
+                <Icon
+                  name="arrow-round-up"
+                  style={{ color: 'green' }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.vote_container}
+                onPress={() => this._vote(-1)}
+              >
+                <Icon
+                  name="arrow-round-down"
+                  style={{ color: 'red' }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.album_container}>
-            <Text style={styles.album_title}>
-              {track.album}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.voting_container}>
-          <View style={styles.note_container}>
-            <Text style={{ color: 'white' }}>{track.votes}</Text>
-          </View>
-          <View style={styles.votes_container}>
-            <TouchableOpacity
-              style={styles.vote_container}
-              onPress={() => this._vote(1)}
-            >
-              <Icon
-                name="arrow-round-up"
-                style={{ color: 'green' }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.vote_container}
-              onPress={() => this._vote(-1)}
-            >
-              <Icon
-                name="arrow-round-down"
-                style={{ color: 'red' }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
+        </TouchableOpacity>
+      );
+    } else {
+      return (null);
+    }
   }
 }
 

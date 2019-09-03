@@ -46,7 +46,12 @@ export default class AddPlaylistModal extends React.Component {
   };
 
   render() {
-    const { setModalVisible, modalVisible, userId } = this.props;
+    const {
+      setModalVisible,
+      modalVisible,
+      userId,
+      roomType,
+    } = this.props;
     const { switchValue, nameP } = this.state;
     let dateP;
     let datePTwo;
@@ -97,7 +102,7 @@ export default class AddPlaylistModal extends React.Component {
               style={styles.create}
               title="Create playlist"
               onPress={() => {
-                addPlaylist(nameP, switchValue, userId, userId)
+                addPlaylist(nameP, switchValue, userId, userId, roomType)
                   .then(() => {
                     setModalVisible();
                   })

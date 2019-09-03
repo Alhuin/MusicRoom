@@ -3,7 +3,7 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
-import { getPlaylists } from '../../API/BackApi';
+import { getPlaylistsFilteredByRoom } from '../../API/BackApi';
 
 class Partys extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Partys extends React.Component {
   }
 
   componentDidMount(): void {
-    getPlaylists()
+    getPlaylistsFilteredByRoom('party')
       .then((response) => {
         this.setState({ playlists: response.data });
       })
@@ -33,7 +33,7 @@ class Partys extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
-    getPlaylists()
+    getPlaylistsFilteredByRoom('party')
       .then((response) => {
         this.setState({ playlists: response.data });
         resolve();
@@ -64,6 +64,7 @@ class Partys extends React.Component {
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
           userId={global.user._id}
+          roomType="party"
         />
         <View style={styles.container}>
           <Components.PlaylistList

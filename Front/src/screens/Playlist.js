@@ -84,6 +84,7 @@ class Playlist extends React.Component {
     } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
+    const roomType = navigation.getParam('roomType');
     const userId = global.user._id;
     return (
       <View style={{ height: '100%' }}>
@@ -108,6 +109,7 @@ class Playlist extends React.Component {
             refreshing={refreshing}
             onRefresh={this._onRefresh}
             userId={userId}
+            roomType={roomType}
           />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addMusic" />
