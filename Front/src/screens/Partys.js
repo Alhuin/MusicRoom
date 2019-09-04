@@ -3,7 +3,7 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
-import { getPlaylistsFilteredByRoom } from '../../API/BackApi';
+import { getPlaylistsFiltered, getPlaylistsFilteredByRoom } from '../../API/BackApi';
 
 class Partys extends React.Component {
   constructor(props) {
@@ -16,7 +16,9 @@ class Partys extends React.Component {
   }
 
   componentDidMount(): void {
-    getPlaylistsFilteredByRoom('party')
+    const userId = global.user._id;
+    getPlaylistsFiltered('party', userId)
+    // getPlaylistsFilteredByRoom('party')
       .then((response) => {
         this.setState({ playlists: response.data });
       })
@@ -33,7 +35,9 @@ class Partys extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
-    getPlaylistsFilteredByRoom('party')
+    const userId = global.user._id;
+    getPlaylistsFiltered('party', userId)
+    // getPlaylistsFilteredByRoom('party')
       .then((response) => {
         this.setState({ playlists: response.data });
         resolve();

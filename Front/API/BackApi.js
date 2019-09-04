@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.2.4:3000/api';
+const server = 'http://10.4.5.6:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -187,7 +187,6 @@ function getPlaylistsFilteredByRoom(roomType) {
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
-          // alert('GetAllPlaylists is success');
           resolve({
             status: 200,
             data,
@@ -196,13 +195,43 @@ function getPlaylistsFilteredByRoom(roomType) {
           reject(new CustomError('Page Not Found', 404));
         } else {
           reject(new CustomError(data.msg, data.status));
-          // alert(`error ${data.status}: ${data.msg}`);
         }
       })
       .catch((error) => {
         console.error(error);
         reject(new CustomError(error.msg, error.status));
-        // console.error(error);
+      });
+  });
+}
+
+function getPlaylistsFiltered(roomType, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/filtered`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        roomType, userId,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve({
+            status: 200,
+            data,
+          });
+        } else if (response.status === 404) {
+          reject(new CustomError('Page Not Found', 404));
+        } else {
+          reject(new CustomError(data.msg, data.status));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(new CustomError(error.msg, error.status));
       });
   });
 }
@@ -336,6 +365,7 @@ export {
   updatePassword,
   getPlaylists,
   getPlaylistsFilteredByRoom,
+  getPlaylistsFiltered,
   getMusicsByVoteInPlaylist,
   getPlaylistById,
   getUserById,

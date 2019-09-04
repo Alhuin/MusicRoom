@@ -54,6 +54,25 @@ function getPlaylistsFilteredByRoom(req, res) {
   }
 }
 
+function getPlaylistsFiltered(req, res) {
+  if (req.body.roomType && req.body.userId && utils.isValidId(req.body.userId)) {
+    playlistService.getPlaylistsFiltered(req.body.roomType, req.body.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function addPlaylist(req, res) {
   if (req.body.name && req.body.publicFlag !== undefined
     && utils.isValidId(req.body.userId)
@@ -100,6 +119,7 @@ export default {
   getPlaylistById,
   getPlaylists,
   getPlaylistsFilteredByRoom,
+  getPlaylistsFiltered,
   addPlaylist,
   deletePlaylistById,
 };

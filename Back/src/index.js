@@ -66,9 +66,9 @@ const seedDatas = async () => {
     email: 'janin.reynaud.julien@gma',
   });
   const salty = await bcrypt.genSaltSync(10);
-  const hashy = await bcrypt.hashSync('admin', salty);
+  const hashy = await bcrypt.hashSync('a', salty);
   const admin = new models.User({
-    login: 'admin',
+    login: 'a',
     password: hashy,
     name: 'Julien',
     familyName: 'Janin-Reynaud',
@@ -81,12 +81,23 @@ const seedDatas = async () => {
 
   for (let i = 0; i < 5; i += 1) {
     if (i > 2) { roomType = 'radio'; }
-    const playlist = new models.Playlist({
-      name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
-      users: [admin],
-      author: admin,
-      roomType,
-    });
+    let playlist;
+    if (i === 0) {
+      playlist = new models.Playlist({
+        name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
+        users: [user1],
+        author: admin,
+        roomType,
+        publicFlag: true,
+      });
+    } else {
+      playlist = new models.Playlist({
+        name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
+        users: [admin],
+        author: admin,
+        roomType,
+      });
+    }
     playlist.save();
     const music1 = new models.Music({
       title: 'Hit The Road Jack',

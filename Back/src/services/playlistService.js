@@ -38,16 +38,51 @@ function getPlaylistById(playlistId) {
 
 function getPlaylistsFilteredByRoom(roomType) {
   return new Promise((resolve, reject) => {
-    PlaylistModel.find({ roomType }, (error, playlist) => {
+    PlaylistModel.find({ roomType }, (error, playlists) => {
       if (error) {
         reject(new CustomError(error, 500));
-      } else if (!playlist) {
-        reject(new CustomError('No playlist with this id in database', 400));
+      } else if (!playlists) {
+        reject(new CustomError('No available playlist in database', 400));
       } else {
         resolve({
           status: 200,
-          data: playlist,
+          data: playlists,
         });
+      }
+    });
+  });
+}
+
+function getPlaylistsFiltered(roomType, userId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.find({ roomType }, (error, playlists) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!playlists) {
+        reject(new CustomError('No available playlist in database', 400));
+      } else {
+        for (let i = 0; i < playlists.length; i++) {
+          if (!playlists.publicFlag) {
+            let flag = false;
+            for (let j = 0; j < playlists[i].users.length; j++) {
+              if (String(playlists[i].users[j]._id) === userId) {
+                flag = true;
+              }
+            }
+            if (flag === false) {
+              playlists.splice(i, 1);
+              --i;
+            }
+          }
+        }
+        if (!playlists) {
+          reject(new CustomError('No available playlist in database', 400));
+        } else {
+          resolve({
+            status: 200,
+            data: playlists,
+          });
+        }
       }
     });
   });
@@ -103,6 +138,7 @@ export default {
   getPlaylists,
   getPlaylistById,
   getPlaylistsFilteredByRoom,
+  getPlaylistsFiltered,
   addPlaylist,
   deletePlaylistById,
 };
