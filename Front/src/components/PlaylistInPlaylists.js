@@ -27,8 +27,13 @@ export default class PlaylistInPlaylists extends React.Component {
   }
 
   _pressPlaylist = () => {
-    const { navigation, playlistId, roomType } = this.props;
-    navigation.push('Playlist', { playlistId, roomType });
+    const {
+      navigation,
+      playlistId,
+      roomType,
+      name,
+    } = this.props;
+    navigation.push('Playlist', { playlistId, roomType, name });
   };
 
   render() {

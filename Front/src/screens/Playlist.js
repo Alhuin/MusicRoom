@@ -1,14 +1,16 @@
 import React from 'react';
 import {
-  StyleSheet, View,
+  StyleSheet, View, Text, TouchableOpacity,
 } from 'react-native';
+import { Icon } from 'native-base';
 import Components from '../components';
-import { getMusicsByVoteInPlaylist } from '../../API/BackApi';
+import { getMusicsByVoteInPlaylist, isAdmin } from '../../API/BackApi';
 
 class Playlist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      admin: false,
       tracks: [],
       searchedText: '',
       playing: null,
@@ -18,7 +20,7 @@ class Playlist extends React.Component {
   }
 
   componentDidMount(): void {
-    const { navigation } = this.props;
+    this._isAdmin();
     this.updateTracks();
   }
 
@@ -62,6 +64,21 @@ class Playlist extends React.Component {
       });
   });
 
+  _isAdmin = () => {
+    const { navigation } = this.props;
+    const userId = global.user._id;
+    const playlistId = navigation.getParam('playlistId');
+    isAdmin(userId, playlistId)
+      .then((response) => {
+        if (response === true) {
+          this.setState({ admin: true });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   updateSearchedText = (text) => {
     this.setState({ searchedText: text });
   };
@@ -80,14 +97,39 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible,
+      tracks, playing, refreshing, modalVisible, admin,
     } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
+    const name = navigation.getParam('name');
     const userId = global.user._id;
+    let settingsIcon = (<Icon name="musical-notes" />);
+    if (admin === true) {
+      settingsIcon = (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('playlistSettings');
+            alert("Navigation to admin settings");
+          }}
+        >
+          <Icon name="settings" />
+        </TouchableOpacity>
+      );
+    }
     return (
       <View style={{ height: '100%' }}>
+        <View
+          style={styles.titleContainer}
+        >
+          {settingsIcon}
+          <Text
+            style={styles.title}
+            numberOfLines={1}
+          >
+            {name}
+          </Text>
+        </View>
         <Components.AddMusicModal
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
@@ -123,11 +165,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     color: 'white',
   },
-  scrollView: {
-    width: '100%',
+  titleContainer: {
+    width: '90%',
+    flexDirection: 'row',
+    padding: 10,
   },
   title: {
     fontSize: 22,
+    marginLeft: 10,
     // color: 'white',
   },
   playlistContainer: {

@@ -134,6 +134,27 @@ function deletePlaylistById(playlistId) {
   });
 }
 
+function isAdmin(userId, playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!playlist) {
+        reject(new CustomError('No playlist with this id in database', 400));
+      } else {
+        for (let i = 0; i < playlist.admins.length; i++) {
+          if (String(playlist.admins[i]._id) === userId) {
+            resolve({
+              status: 200,
+              data: true,
+            });
+          }
+        }
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -141,4 +162,5 @@ export default {
   getPlaylistsFiltered,
   addPlaylist,
   deletePlaylistById,
+  isAdmin,
 };

@@ -115,6 +115,28 @@ function deletePlaylistById(req, res) {
   }
 }
 
+function isAdmin(req, res) {
+  if (req.body.userId
+    && utils.isValidId(req.body.userId)
+    && req.body.playlistId
+    && utils.isValidId(req.body.playlistId)) {
+    playlistService.isAdmin(req.body.userId, req.body.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getPlaylistById,
   getPlaylists,
@@ -122,4 +144,5 @@ export default {
   getPlaylistsFiltered,
   addPlaylist,
   deletePlaylistById,
+  isAdmin,
 };

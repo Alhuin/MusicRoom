@@ -16,6 +16,10 @@ const playlistSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'UserModel',
   },
+  admins: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'UserModel',
+  },
   publicFlag: {
     type: Boolean,
   },
