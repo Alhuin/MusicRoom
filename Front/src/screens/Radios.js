@@ -3,7 +3,7 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
-import { getPlaylistsFilteredByRoom } from '../../API/BackApi';
+import { getPlaylistsFiltered } from '../../API/BackApi';
 
 class Radios extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Radios extends React.Component {
   }
 
   componentDidMount(): void {
-    getPlaylistsFilteredByRoom('radio')
+    getPlaylistsFiltered('radio', global.user._id)
       .then((response) => {
         this.setState({ playlists: response.data });
       })
@@ -33,7 +33,7 @@ class Radios extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
-    getPlaylistsFilteredByRoom('radio')
+    getPlaylistsFiltered('radio', global.user._id)
       .then((response) => {
         this.setState({ playlists: response.data });
         resolve();

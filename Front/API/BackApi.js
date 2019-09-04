@@ -357,6 +357,32 @@ function addPlaylist(name, publicFlag, userId, author, roomType) {
   });
 }
 
+function joinRoom(userId, playlistCode) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/join`, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, playlistCode,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -372,4 +398,5 @@ export {
   voteMusic,
   addMusicToPlaylist,
   addPlaylist,
+  joinRoom,
 };

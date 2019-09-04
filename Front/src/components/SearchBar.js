@@ -8,7 +8,6 @@ export default class SearchBar extends React.Component {
       <TextInput
         style={styles.textInput}
         placeholder="Cliquer ici pour rechercher une musique"
-        // style={/*lesStylesDeTaMaman*/}
         onChangeText={text => updateSearchedText(text)}
         onSubmitEditing={() => {
           searchTracks();

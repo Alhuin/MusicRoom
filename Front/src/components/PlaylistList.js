@@ -25,8 +25,6 @@ class PlaylistList extends React.Component {
               navigation={navigation}
               userId={userId}
               roomType={roomType}
-              // Ici recuperer les users(mais je pleurs l'object users
-              // dans playlist n'ai ps accessible pour avoir le nom de l'author)
             />
           )
         }

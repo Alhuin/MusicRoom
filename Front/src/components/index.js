@@ -15,6 +15,7 @@ import AddFloatingButton from './AddFloatingButton';
 import PlaylistList from './PlaylistList';
 import AddPlaylistModal from './AddPlaylistModal';
 import AddMusicModal from './AddMusicModal';
+import JoinPrivateRoom from './JoinPrivateRoom';
 import SearchTrack from './SearchTrack';
 
 export default {
@@ -36,4 +37,5 @@ export default {
   AddPlaylistModal,
   AddMusicModal,
   SearchTrack,
+  JoinPrivateRoom,
 };
