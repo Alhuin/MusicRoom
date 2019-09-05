@@ -35,6 +35,7 @@ class PlaylistList extends React.Component {
           />
         )
         }
+        contentContainerStyle={{ paddingBottom: 80 }}
       />
     );
   }
