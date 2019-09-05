@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import TrackInPlaylist from './TrackInPlaylist';
 import Player from '../services/Player';
 
@@ -49,6 +49,7 @@ class TracklistInPlaylist extends React.Component {
           />
         )
         }
+        style={styles.list}
         // onEndReachThreashold={0.5}
         // onEndReached={() => {
         //   if (this.page < this.totalPages) {
@@ -59,5 +60,11 @@ class TracklistInPlaylist extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  list: {
+    marginBottom: 50,
+  },
+});
 
 export default TracklistInPlaylist;
