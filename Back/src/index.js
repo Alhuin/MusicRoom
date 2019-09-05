@@ -40,7 +40,7 @@ app.use(async (req, res, next) => {
     }
     console.info(`--------------------------------------------------------------------------------------------------\n
     ${today.toLocaleTimeString("fr-FR", dateOptions)}:${today.getMilliseconds()}\n
-    ${color}${req.method}\t${req.originalUrl.toString().padEnd(50)}${res.statusCode} ${res.statusMessage}\x1b[0m\n`);
+    ${color}${req.method}\t${req.originalUrl.toString().padEnd(80)}${res.statusCode} ${res.statusMessage}\x1b[0m\n`);
   });
   next();
 });
