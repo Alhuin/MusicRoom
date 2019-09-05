@@ -10,7 +10,7 @@ import radioController from './radioController';*/
 const router = Router();
 
 router.get('/', (req, res) => {
-  res.status(200).send('OK');
+  res.status(200).send('Welcome to MusicRoom API !');
 });
 
 /*             Login                 */
