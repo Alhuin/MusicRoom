@@ -1,4 +1,4 @@
-import { FlatList, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import React from 'react';
 import PlaylistInPlaylists from './PlaylistInPlaylists';
 
@@ -35,16 +35,9 @@ class PlaylistList extends React.Component {
           />
         )
         }
-        style={styles.list}
       />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  list: {
-    marginBottom: 50,
-  },
-});
 
 export default PlaylistList;
