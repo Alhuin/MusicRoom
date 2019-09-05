@@ -31,9 +31,9 @@ app.use(async (req, res, next) => {
   res.on('finish', () => {
     const today = new Date();
     let color;
-    if (res.statusCode === 200) {
-      color = '\x1b[32m';
-    } else if (res.statusCode >= 400 && res.statusCode <= 500) {
+    if (res.statusCode >= 500) {
+      color = '\x1b[31m';
+    } else if (res.statusCode >= 400) {
       color = '\x1b[33m';
     } else {
       color = '\x1b[31m';
