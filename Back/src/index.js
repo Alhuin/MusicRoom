@@ -31,16 +31,16 @@ app.use(async (req, res, next) => {
   res.on('finish', () => {
     const today = new Date();
     let color;
-    if (res.statusCode === 200) {
-      color = '\x1b[32m';
-    } else if (res.statusCode >= 400 && res.statusCode <= 500) {
+    if (res.statusCode >= 500) {
+      color = '\x1b[31m';
+    } else if (res.statusCode >= 400) {
       color = '\x1b[33m';
     } else {
       color = '\x1b[31m';
     }
     console.info(`--------------------------------------------------------------------------------------------------\n
     ${today.toLocaleTimeString("fr-FR", dateOptions)}:${today.getMilliseconds()}\n
-    ${color}${req.method}\t${req.originalUrl.toString().padEnd(50)}${res.statusCode} ${res.statusMessage}\x1b[0m\n`);
+    ${color}${req.method}\t${req.originalUrl.toString().padEnd(80)}${res.statusCode} ${res.statusMessage}\x1b[0m\n`);
   });
   next();
 });
