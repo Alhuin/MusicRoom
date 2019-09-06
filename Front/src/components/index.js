@@ -17,6 +17,9 @@ import AddPlaylistModal from './AddPlaylistModal';
 import AddMusicModal from './AddMusicModal';
 import JoinPrivateRoom from './JoinPrivateRoom';
 import SearchTrack from './SearchTrack';
+import CollapsibleList from './CollapsibleList';
+import AdminListInSettings from './AdminListInSettings';
+import UserListInSettings from './UserListInSettings';
 
 export default {
   SignInForm,
@@ -38,4 +41,7 @@ export default {
   AddMusicModal,
   SearchTrack,
   JoinPrivateRoom,
+  CollapsibleList,
+  AdminListInSettings,
+  UserListInSettings,
 };

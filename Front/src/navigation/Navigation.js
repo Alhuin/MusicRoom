@@ -23,6 +23,7 @@ import UpdatePass from '../screens/UpdatePass';
 import Inscription from '../screens/Inscription';
 import UserSettings from '../screens/UserSettings';
 import AppSettings from '../screens/AppSettings';
+import PlaylistSettings from '../screens/PlaylistSettings';
 import Loading from '../screens/Loading';
 import SearchTrack from '../components/SearchTrack';
 import Playlists from '../screens/Playlists';
@@ -138,6 +139,12 @@ const PartysNavigator = createStackNavigator({
       header: null,
     },
   },
+  PlaylistSettings: {
+    screen: PlaylistSettings,
+    navigationOptions: {
+      header: null,
+    },
+  },
 });
 
 const RadiosNavigator = createStackNavigator({
@@ -161,31 +168,13 @@ const RadiosNavigator = createStackNavigator({
       header: null,
     },
   },
+  PlaylistSettings: {
+    screen: PlaylistSettings,
+    navigationOptions: {
+      header: null,
+    },
+  },
 });
-
-/*const PlaylistNavigator = createStackNavigator({
-// Should be StackNavigator, but didBlur not firing so FO
-  Playlistlist: {
-    screen: Playlists,
-    navigationOptions: ({ navigation }: NavigationScreenProps) => ({
-      headerTitle: 'Playlists',
-      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
-      headerLeft: createBurgerMenu(navigation),
-    }),
-  },
-  Playlist: {
-    screen: Playlist,
-    navigationOptions: {
-      header: null,
-    },
-  },
-  SearchTrack: {
-    screen: SearchTrack,
-    navigationOptions: {
-      header: null,
-    },
-  },
-});*/
 
 const MainNavigator = Platform.select({
   ios: createBottomTabNavigator({

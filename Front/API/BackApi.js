@@ -409,6 +409,52 @@ function isAdmin(userId, playlistId) {
   });
 }
 
+function getAdminsByPlaylistId(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/admins/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
+function getUsersByPlaylistId(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/users/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -426,4 +472,6 @@ export {
   addPlaylist,
   joinRoom,
   isAdmin,
+  getAdminsByPlaylistId,
+  getUsersByPlaylistId,
 };

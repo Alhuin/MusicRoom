@@ -1,6 +1,8 @@
+import mongoose from 'mongoose';
 import PlaylistModel from '../models/playlistModel';
 import CustomError from './errorHandler';
 import models from '../models';
+import UserModel from '../models/userModel';
 
 function getPlaylists() {
   return new Promise((resolve, reject) => {
@@ -155,6 +157,64 @@ function isAdmin(userId, playlistId) {
   });
 }
 
+function getAdminsByPlaylistId(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!playlist) {
+        reject(new CustomError('No playlist with this id in database', 400));
+      } else {
+        UserModel.find({
+          _id: {
+            $in: playlist.admins,
+          },
+        }, (err, admins) => {
+          if (error) {
+            reject(new CustomError(error, 500));
+          } else if (!admins) {
+            reject(new CustomError(`No admins in this playlist [${playlistId}]`, 400));
+          } else {
+            resolve({
+              status: 200,
+              data: admins,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+function getUsersByPlaylistId(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError(error, 500));
+      } else if (!playlist) {
+        reject(new CustomError('No playlist with this id in database', 400));
+      } else {
+        UserModel.find({
+          _id: {
+            $in: playlist.users,
+          },
+        }, (err, users) => {
+          if (error) {
+            reject(new CustomError(error, 500));
+          } else if (!users) {
+            reject(new CustomError(`No users in this playlist [${playlistId}]`, 400));
+          } else {
+            resolve({
+              status: 200,
+              data: users,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -163,4 +223,6 @@ export default {
   addPlaylist,
   deletePlaylistById,
   isAdmin,
+  getAdminsByPlaylistId,
+  getUsersByPlaylistId,
 };

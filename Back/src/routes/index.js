@@ -50,9 +50,12 @@ router.get('/playlists', playlistController.getPlaylists);
 router.get('/playlists/:roomType', playlistController.getPlaylistsFilteredByRoom);
 router.post('/playlists/filtered', playlistController.getPlaylistsFiltered);
 router.get('/playlists/:playlistId', playlistController.getPlaylistById);
+router.get('/playlists/admins/:playlistId', playlistController.getAdminsByPlaylistId);
+router.get('/playlists/users/:playlistId', playlistController.getUsersByPlaylistId);
 router.post('/playlists/add', playlistController.addPlaylist);
 router.post('/playlists/isAdmin', playlistController.isAdmin);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
+
 
 
 /*/!*             Partys                *!/

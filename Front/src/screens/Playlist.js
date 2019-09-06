@@ -104,13 +104,20 @@ class Playlist extends React.Component {
     const roomType = navigation.getParam('roomType');
     const name = navigation.getParam('name');
     const userId = global.user._id;
-    let settingsIcon = (<Icon name="musical-notes" />);
+    let settingsIcon = (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin });
+        }}
+      >
+        <Icon name="musical-notes" />
+      </TouchableOpacity>
+    );
     if (admin === true) {
       settingsIcon = (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('playlistSettings');
-            alert("Navigation to admin settings");
+            navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin });
           }}
         >
           <Icon name="settings" />
