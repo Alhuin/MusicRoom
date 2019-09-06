@@ -10,7 +10,6 @@ class UserListInSettings extends React.Component {
       refreshing,
       onRefresh,
     } = this.props;
-    console.log(users);
     return (
       <FlatList
         data={users}
@@ -31,7 +30,7 @@ class UserListInSettings extends React.Component {
           />
         )
         }
-        contentContainerStyle={{ paddingBottom: 80 }}
+        // contentContainerStyle={{ paddingBottom: 80 }}
         style={styles.list}
       />
     );

@@ -101,7 +101,7 @@ const seedDatas = async () => {
         author: admin,
         roomType,
         publicFlag: true,
-        admins: [user1],
+        admins: [admin],
       });
     } else {
       playlist = new models.Playlist({

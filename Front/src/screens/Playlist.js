@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'black',
     color: 'white',
+    height: '100%',
   },
   titleContainer: {
     width: '90%',
