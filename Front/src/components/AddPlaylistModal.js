@@ -107,6 +107,7 @@ export default class AddPlaylistModal extends React.Component {
                 addPlaylist(nameP, switchValue, userId, userId, roomType)
                   .then(() => {
                     setModalVisible();
+                    updatePlaylist();
                   })
                   .catch((error) => {
                     console.error(error);

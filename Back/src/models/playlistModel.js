@@ -27,6 +27,9 @@ const playlistSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'UserModel',
   },
+  authorName: {
+    type: String,
+  },
   roomType: {
     type: String,
     default: 'radio',

@@ -99,6 +99,7 @@ function addPlaylist(name, publicFlag, userId, author, roomType) {
       users: [userId],
       allowVotes: true,
       roomType,
+      authorName: author.name,
     });
     playlist.save((saveError, savedPlaylist) => {
       if (saveError) {

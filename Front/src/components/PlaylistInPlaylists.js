@@ -11,19 +11,8 @@ import { getUserById } from '../../API/BackApi';
 // must create two components PlaylistInParty and PlaylistInRadio or this one need to be modified
 
 export default class PlaylistInPlaylists extends React.Component {
-  state = {
-    authorName: '',
-  };
 
   componentDidMount(): void {
-    const { authorId } = this.props;
-    getUserById(authorId)
-      .then((response) => {
-        this.setState({ authorName: response.name });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   }
 
   _pressPlaylist = () => {
@@ -37,9 +26,7 @@ export default class PlaylistInPlaylists extends React.Component {
   };
 
   render() {
-    const { name, roomType } = this.props;
-    const { authorName } = this.state;
-
+    const { name, roomType, authorName } = this.props;
 
     if (roomType === 'radio') {
       return (
