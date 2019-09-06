@@ -48,7 +48,6 @@ class Radios extends React.Component {
     const { modalVisible } = this.state;
     const visible = !modalVisible;
     this.setState({ modalVisible: visible });
-    this.updatePlaylist();
   };
 
   render() {
@@ -65,6 +64,7 @@ class Radios extends React.Component {
           modalVisible={modalVisible}
           userId={global.user._id}
           roomType="radio"
+          updatePlaylist={this.updatePlaylist}
         />
         <View style={styles.container}>
           <Components.PlaylistList

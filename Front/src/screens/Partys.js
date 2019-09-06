@@ -48,7 +48,6 @@ class Partys extends React.Component {
     const { modalVisible } = this.state;
     const visible = !modalVisible;
     this.setState({ modalVisible: visible });
-    this.updatePlaylist();
   };
 
   render() {
@@ -65,6 +64,7 @@ class Partys extends React.Component {
           modalVisible={modalVisible}
           userId={global.user._id}
           roomType="party"
+          updatePlaylist={this.updatePlaylist}
         />
         <View style={styles.container}>
           <Components.PlaylistList

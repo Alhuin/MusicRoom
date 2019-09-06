@@ -51,6 +51,7 @@ export default class AddPlaylistModal extends React.Component {
       modalVisible,
       userId,
       roomType,
+      updatePlaylist,
     } = this.props;
     const { switchValue, nameP } = this.state;
     let dateP;
@@ -76,6 +77,7 @@ export default class AddPlaylistModal extends React.Component {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible();
+          updatePlaylist();
           // Alert.alert('Modal has been closed.');
         }}
       >
