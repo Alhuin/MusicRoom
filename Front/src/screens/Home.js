@@ -57,24 +57,22 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     color: 'white',
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
+    marginTop: 70,
   },
   cartes: {
     borderWidth: 3,
     borderRadius: 3,
     borderColor: '#000',
-    width: 300,
-    height: 300,
-    padding: 10,
+    width: '60%',
+    height: '60%',
+    // padding: 10,
     alignItems: 'center',
   },
   textcard: {
     fontWeight: 'bold',
-    alignItems: 'center',
     fontSize: 30,
-    marginTop: 85,
   },
 });
 
