@@ -35,14 +35,14 @@ class Home extends React.Component {
           modalVisible={modalVisible}
           userId={global.user._id}
         />
-        <TouchableOpacity onPress={this._onPressParty}>
-          <View style={styles.cartes}>
+        <TouchableOpacity onPress={this._onPressParty} style={styles.cartes}>
+          <View style={styles.place}>
             <Text style={styles.textcard}>Party mode</Text>
             <Icon name="musical-notes" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this._onPressRadio}>
-          <View style={styles.cartes}>
+        <TouchableOpacity onPress={this._onPressRadio} style={styles.cartes}>
+          <View style={styles.place}>
             <Text style={styles.textcard}>Radio mode</Text>
             <Icon name="radio" />
           </View>
@@ -57,17 +57,22 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     color: 'white',
-    alignItems: 'center',
+    width: '100%',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
     justifyContent: 'space-around',
-    marginTop: 70,
+    alignItems: 'center',
+    flex: 1,
   },
   cartes: {
     borderWidth: 3,
     borderRadius: 3,
     borderColor: '#000',
-    width: '60%',
-    height: '60%',
-    // padding: 10,
+    width: '80%',
+    aspectRatio: 1,
+    justifyContent: 'space-around',
+  },
+  place: {
     alignItems: 'center',
   },
   textcard: {
