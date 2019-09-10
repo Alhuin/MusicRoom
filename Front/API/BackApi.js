@@ -455,6 +455,84 @@ function getUsersByPlaylistId(playlistId) {
   });
 }
 
+function adminInPlaylistDowngrade(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/admins/downgrade`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playlistId, userId,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
+function userInPlaylistUpgrade(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/users/upgrade`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playlistId, userId,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
+function userInPlaylistKick(playlistId, userId, isItAdmin) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/users/kick`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playlistId, userId, isItAdmin,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -474,4 +552,7 @@ export {
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,
+  adminInPlaylistDowngrade,
+  userInPlaylistUpgrade,
+  userInPlaylistKick,
 };

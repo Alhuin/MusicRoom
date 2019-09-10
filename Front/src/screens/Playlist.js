@@ -103,11 +103,12 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
     const name = navigation.getParam('name');
+    const authorId = navigation.getParam('authorId');
     const userId = global.user._id;
     let settingsIcon = (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin });
+          navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin, authorId });
         }}
       >
         <Icon name="musical-notes" />
@@ -117,7 +118,7 @@ class Playlist extends React.Component {
       settingsIcon = (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin });
+            navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin, authorId });
           }}
         >
           <Icon name="settings" />

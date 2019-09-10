@@ -25,7 +25,7 @@ class Playlists extends React.Component {
     getPlaylists()
       .then((response) => {
         // alert(global.user._id);
-        console.log('setState');
+        //console.log('setState');
         this.setState({ playlists: response.data });
       })
       .catch((error) => {

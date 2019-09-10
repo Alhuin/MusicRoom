@@ -21,8 +21,9 @@ export default class PlaylistInPlaylists extends React.Component {
       playlistId,
       roomType,
       name,
+      authorId,
     } = this.props;
-    navigation.push('Playlist', { playlistId, roomType, name });
+    navigation.push('Playlist', { playlistId, roomType, name, authorId });
   };
 
   render() {

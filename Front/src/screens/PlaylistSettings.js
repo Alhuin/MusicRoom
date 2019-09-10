@@ -60,7 +60,7 @@ class PlaylistSettings extends React.Component {
           resolve();
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error + ' in updateAdmins');
           reject();
         });
     }
@@ -85,11 +85,11 @@ class PlaylistSettings extends React.Component {
               }
             }
           }
-          this.setState({ users: response, admins });
+          this.setState({ users: response });
           resolve();
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error + ' in updateUsers');
           reject();
         });
     }
@@ -101,10 +101,13 @@ class PlaylistSettings extends React.Component {
   };
 
   render() {
-    const { refreshing, users, admins } = this.state;
+    const {
+      refreshing, users, admins,
+    } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
+    const authorId = navigation.getParam('authorId');
     let adminOptions = (null);
 
     if (isAdmin) {
@@ -112,24 +115,25 @@ class PlaylistSettings extends React.Component {
         <View>
           <CollapsibleList
             title="Liste des Administrateurs"
-            playlistId={playlistId}
             isAdmin={isAdmin}
           >
             <AdminListInSettings
               refreshing={refreshing}
               admins={admins}
               onRefresh={this._onRefreshAdmins}
+              authorId={authorId}
+              playlistId={playlistId}
             />
           </CollapsibleList>
           <CollapsibleList
             title="Liste des Utilisateurs"
-            playlistId={playlistId}
             isAdmin={isAdmin}
           >
             <UserListInSettings
               refreshing={refreshing}
               users={users}
               onRefresh={this._onRefreshUsers}
+              playlistId={playlistId}
             />
           </CollapsibleList>
         </View>
