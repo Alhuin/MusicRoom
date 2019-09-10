@@ -37,7 +37,6 @@ class UserListInSettings extends React.Component {
                       userInPlaylistUpgrade(playlistId, userId)
                         .then((response) => {
                           onRefresh();
-                          console.log(response + ' in admin userInPlaylistUpgrade');
                         })
                         .catch((error) => {
                           console.error(error);
@@ -53,7 +52,6 @@ class UserListInSettings extends React.Component {
                       userInPlaylistKick(playlistId, userId, false)
                         .then((response) => {
                           onRefresh();
-                          console.log(response + ' in admin userInPlaylistKick');
                         })
                         .catch((error) => {
                           console.error(error);

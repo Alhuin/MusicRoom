@@ -31,7 +31,6 @@ class AdminListInSettings extends React.Component {
                     adminInPlaylistDowngrade(playlistId, userId)
                       .then((response) => {
                         onRefresh();
-                        console.log(response + ' in admin adminInPlaylistDowngrade');
                       })
                       .catch((error) => {
                         console.error(error);
@@ -43,11 +42,9 @@ class AdminListInSettings extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    console.log('userId : ' + userId);
                     userInPlaylistKick(playlistId, userId, true)
                       .then((response) => {
                         onRefresh();
-                        console.log(response + ' in admin userInPlaylistKick');
                       })
                       .catch((error) => {
                         console.error(error);

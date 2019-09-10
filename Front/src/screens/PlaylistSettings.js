@@ -135,7 +135,6 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');
     let adminOptions = (null);
-    console.log('authorId : ' + authorId);
     if (isAdmin) {
       adminOptions = (
         <View>
