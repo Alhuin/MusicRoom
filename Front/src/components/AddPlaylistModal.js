@@ -16,26 +16,27 @@ import { addPlaylist } from '../../API/BackApi';
 export default class AddPlaylistModal extends React.Component {
   state = {
     switchValue: false,
-    nameP: '',
+    namePlaylist: '',
     location: null, // unused afficher car on n'envoie pas encore la location quelquepart.
     type: null,
     date: new Date(),
+    dateTwo: new Date(),
   };
 
   _updatePlaylistName = (text) => {
-    this.setState({ nameP: text });
+    this.setState({ namePlaylist: text });
   };
 
   toggleSwitch = (value) => {
     // onValueChange of the switch this function will be called
     // this.state.location = info conplete de geoloc
     navigator.geolocation.getCurrentPosition(
-      position => {
-        const MyLocation = JSON.stringify(position);
-        this.setState({ location: MyLocation });
-      },
-      error => Alert.alert(error.message),
-      { enableHighAccuracy: false, timeout: 10000 },
+        position => {
+          const MyLocation = JSON.stringify(position);
+          this.setState({ location: MyLocation });
+        },
+        error => Alert.alert(error.message),
+        { enableHighAccuracy: false, timeout: 10000 },
     );
     this.setState({ switchValue: value });
     if (this.state.type === null) {
@@ -44,6 +45,21 @@ export default class AddPlaylistModal extends React.Component {
       this.setState({ type: null });
     }
   };
+
+  generateRandomNumber = () => {
+    const randomNumber = Math.floor(Math.random() * 1000) + 1;
+    return randomNumber;
+  }
+
+  generatePrivateId() {
+    let i = 0;
+    let MyId = '';
+    while (i < 4) {
+      MyId = MyId + '' + this.generateRandomNumber();
+      i += 1;
+    }
+    return MyId;
+  }
 
   render() {
     const {
@@ -59,65 +75,74 @@ export default class AddPlaylistModal extends React.Component {
 
     if (this.state.type === 'GeolocOK') {
       dateP = <DatePicker
-        date={this.state.date}
-        onDateChange={date => this.setState({ date })}
+          date={this.state.date}
+          onDateChange={date => this.setState({ date })}
       />;
       datePTwo = <DatePicker
-        date={this.state.date}
-        onDateChange={date => this.setState({ date })}
+          dateTwo={this.state.date}
+          onDateChange={dateTwo => this.setState({ dateTwo })}
       />;
     } else {
       dateP = <Text></Text>;
     }
 
     return (
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible();
-          updatePlaylist();
-          // Alert.alert('Modal has been closed.');
-        }}
-      >
-        <View style={styles.container}>
-          <View style={styles.Name}>
-            <TextInput
-              onChangeText={this._updatePlaylistName}
-              autoCorrect={false}
-              autoCapitalize="none"
-              underlineColorAndroid="grey"
-              style={styles.inputBox}
-              placeholder="Playlist name"
-            />
-            <Text>{switchValue ? 'Public' : 'Private'}</Text>
-            <Switch
-              style={styles.switch}
-              onValueChange={this.toggleSwitch}
-              value={switchValue}
-            />
-            <Text> { switchValue ? 'Geolocation is ON for public party' : '' }</Text>
-            {dateP}
-            {datePTwo}
-            <Button
-              style={styles.create}
-              title="Create playlist"
-              onPress={() => {
-                addPlaylist(nameP, switchValue, userId, userId, roomType)
-                  .then(() => {
-                    setModalVisible();
-                    updatePlaylist();
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    Alert.alert('An error occured on create playlist, please try again later.');
-                  });
-              }}
-            />
+        <Modal
+            animationType="slide"
+            transparent={false}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible();
+              updatePlaylist();
+              // Alert.alert('Modal has been closed.');
+            }}
+        >
+          <View style={styles.container}>
+            <View style={styles.Name}>
+              <TextInput
+                  onChangeText={this._updatePlaylistName}
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  underlineColorAndroid="grey"
+                  style={styles.inputBox}
+                  placeholder="Playlist name"
+              />
+              <Text>{switchValue ? 'Public' : 'Private'}</Text>
+              <Switch
+                  style={styles.switch}
+                  onValueChange={this.toggleSwitch}
+                  value={switchValue}
+              />
+              <Text> { switchValue ? 'Geolocation is ON for public party' : '' }</Text>
+              {dateP}
+              {datePTwo}
+              <Button
+                  style={styles.create}
+                  title="Create playlist"
+                  onPress={() => {
+                    /*
+                        console.log(this.generatePrivateId());
+                        console.log(this.state.date);
+                        console.log(this.state.dateTwo);
+                        console.log(this.state.switchValue);
+                        console.log(this.state.namePlaylist);
+                       // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN DESDOUS
+                     */
+                    this.generatePrivateId();
+                    addPlaylist(this.state.namePlaylist, switchValue, userId, userId, roomType)
+                        .then(() => {
+                          setModalVisible();
+                          updatePlaylist();
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                          Alert.alert('An error occured on create playlist, please try again later.');
+                        });
+                  }}
+              />
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
     );
   }
 }
