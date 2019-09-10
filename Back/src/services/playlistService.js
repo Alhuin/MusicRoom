@@ -252,21 +252,32 @@ function userInPlaylistUpgrade(playlistId, userId) {
       } else if (!playlist) {
         reject(new CustomError('No playlist with this id in database', 400));
       } else {
-        for (let i = 0; i < playlist.users.length; i++) {
-          if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
-            playlist.admins.push(userId);
-            playlist.save((saveError, savedPlaylist) => {
-              if (saveError) {
-                reject(new CustomError(saveError, 500));
-              } else {
-                resolve({
-                  status: 200,
-                  data: true,
-                });
-              }
-            });
+        let isItAdmin = false;
+        for (let j = 0; j < playlist.admins.length; j++) {
+          if (String(playlist.admins[j]._id) === String(userId)) {
+            isItAdmin = true;
           }
         }
+        if (!isItAdmin) {
+          for (let i = 0; i < playlist.users.length; i++) {
+            if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
+              playlist.admins.push(userId);
+              playlist.save((saveError, savedPlaylist) => {
+                if (saveError) {
+                  reject(new CustomError(saveError, 500));
+                } else {
+                  resolve({
+                    status: 200,
+                    data: true,
+                  });
+                }
+              });
+            }
+          }
+        } else {
+          reject(new CustomError('Already admin', 400));
+        }
+
       }
     });
   });
@@ -285,7 +296,10 @@ function userInPlaylistKick(playlistId, userId, isItAdmin) {
             playlist.users.splice(i, 1);
             if (isItAdmin) {
               for (let j = 0; j < playlist.admins.length; j++) {
-                playlist.admins.splice(j, 1);
+                if (String(playlist.admins[j]._id) === String(userId) && String(playlist.admins[j]._id) !== String(playlist.author)) {
+                  playlist.admins.splice(j, 1);
+                  break;
+                }
               }
             }
             playlist.save((saveError, savedPlaylist) => {

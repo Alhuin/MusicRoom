@@ -49,6 +49,7 @@ class UserListInSettings extends React.Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
+                      console.log(userId);
                       userInPlaylistKick(playlistId, userId, false)
                         .then((response) => {
                           onRefresh();

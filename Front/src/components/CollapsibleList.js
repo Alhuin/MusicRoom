@@ -24,7 +24,10 @@ class CollapsibleList extends React.Component {
             <Text style={styles.headerText}>{title}</Text>
           </View>
         </TouchableOpacity>
-        <Collapsible collapsed={collapsed} align="center">
+        <Collapsible
+          collapsed={collapsed}
+          align="center"
+        >
           {children}
         </Collapsible>
       </View>

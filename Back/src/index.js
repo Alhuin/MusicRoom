@@ -36,7 +36,7 @@ app.use(async (req, res, next) => {
     } else if (res.statusCode >= 400) {
       color = '\x1b[33m';
     } else {
-      color = '\x1b[31m';
+      color = '\x1b[32m';
     }
     console.info(`--------------------------------------------------------------------------------------------------\n
     ${today.toLocaleTimeString("fr-FR", dateOptions)}:${today.getMilliseconds()}\n
@@ -107,7 +107,7 @@ const seedDatas = async () => {
       playlist = new models.Playlist({
         name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
         users: [user1, admin, user2],
-        author: admin,
+        author: admin._id,
         authorName: admin.name,
         roomType,
         publicFlag: true,
@@ -117,7 +117,7 @@ const seedDatas = async () => {
       playlist = new models.Playlist({
         name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
         users: [admin],
-        author: admin,
+        author: admin._id,
         authorName: admin.name,
         roomType,
         admins: [admin],

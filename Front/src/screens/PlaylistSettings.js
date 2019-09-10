@@ -18,24 +18,49 @@ class PlaylistSettings extends React.Component {
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
-      this.updateAdmins().then(() => {
-        this.updateUsers();
-      });
+      this.updateAdmins()
+        .then(() => {
+          this.updateUsers();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }
 
+  // finally, it is the two same refresh functions
   _onRefreshAdmins = () => {
     this.setState({ refreshing: true });
-    this.updateAdmins().then(() => {
-      this.setState({ refreshing: false });
-    });
+    this.updateAdmins()
+      .then(() => {
+        this.updateUsers()
+          .then(() => {
+            this.setState({ refreshing: false });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   _onRefreshUsers = () => {
     this.setState({ refreshing: true });
-    this.updateUsers().then(() => {
-      this.setState({ refreshing: false });
-    });
+    this.updateAdmins()
+      .then(() => {
+        this.updateUsers()
+          .then(() => {
+            this.setState({ refreshing: false });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   updateAdmins = () => new Promise((resolve, reject) => {
@@ -52,6 +77,7 @@ class PlaylistSettings extends React.Component {
                 if (String(users[i]._id) === String(response[j]._id)) {
                   users.splice(i, 1);
                   i--;
+                  break;
                 }
               }
             }
@@ -109,33 +135,26 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');
     let adminOptions = (null);
-
+    console.log('authorId : ' + authorId);
     if (isAdmin) {
       adminOptions = (
         <View>
-          <CollapsibleList
-            title="Liste des Administrateurs"
-            isAdmin={isAdmin}
-          >
-            <AdminListInSettings
-              refreshing={refreshing}
-              admins={admins}
-              onRefresh={this._onRefreshAdmins}
-              authorId={authorId}
-              playlistId={playlistId}
-            />
-          </CollapsibleList>
-          <CollapsibleList
-            title="Liste des Utilisateurs"
-            isAdmin={isAdmin}
-          >
-            <UserListInSettings
-              refreshing={refreshing}
-              users={users}
-              onRefresh={this._onRefreshUsers}
-              playlistId={playlistId}
-            />
-          </CollapsibleList>
+          <Text> Administrateurs </Text>
+
+          <AdminListInSettings
+            refreshing={refreshing}
+            admins={admins}
+            onRefresh={this._onRefreshAdmins}
+            authorId={authorId}
+            playlistId={playlistId}
+          />
+          <Text> Utilisateurs </Text>
+          <UserListInSettings
+            refreshing={refreshing}
+            users={users}
+            onRefresh={this._onRefreshUsers}
+            playlistId={playlistId}
+          />
         </View>
       );
     }
