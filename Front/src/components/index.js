@@ -20,6 +20,7 @@ import SearchTrack from './SearchTrack';
 import CollapsibleList from './CollapsibleList';
 import AdminListInSettings from './AdminListInSettings';
 import UserListInSettings from './UserListInSettings';
+import DatePickerModal from './DatePickerModal';
 
 export default {
   SignInForm,
@@ -44,4 +45,5 @@ export default {
   CollapsibleList,
   AdminListInSettings,
   UserListInSettings,
+  DatePickerModal,
 };

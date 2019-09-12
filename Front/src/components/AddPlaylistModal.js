@@ -1,5 +1,4 @@
 import React from 'react';
-import DatePicker from 'react-native-date-picker';
 import {
   Modal,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { addPlaylist } from '../../API/BackApi';
+import Components from './index';
 
 
 export default class AddPlaylistModal extends React.Component {
@@ -19,24 +19,31 @@ export default class AddPlaylistModal extends React.Component {
     namePlaylist: '',
     location: null, // unused afficher car on n'envoie pas encore la location quelquepart.
     type: null,
-    date: new Date(),
-    dateTwo: new Date(),
+    /* date: new Date(),
+    dateTwo: new Date(), */
+    DateModalVisible: false,
   };
 
   _updatePlaylistName = (text) => {
     this.setState({ namePlaylist: text });
   };
 
+  setModalVisible = () => {
+    const { DateModalVisible } = this.state;
+    const visible = !DateModalVisible;
+    this.setState({ DateModalVisible: visible });
+  };
+
   toggleSwitch = (value) => {
     // onValueChange of the switch this function will be called
-    // this.state.location = info conplete de geoloc
+    // eslint-disable-next-line no-undef
     navigator.geolocation.getCurrentPosition(
-        position => {
-          const MyLocation = JSON.stringify(position);
-          this.setState({ location: MyLocation });
-        },
-        error => Alert.alert(error.message),
-        { enableHighAccuracy: false, timeout: 10000 },
+      (position) => {
+        const MyLocation = JSON.stringify(position);
+        this.setState({ location: MyLocation });
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: false, timeout: 10000 },
     );
     this.setState({ switchValue: value });
     if (this.state.type === null) {
@@ -55,7 +62,7 @@ export default class AddPlaylistModal extends React.Component {
     let i = 0;
     let MyId = '';
     while (i < 4) {
-      MyId = MyId + '' + this.generateRandomNumber();
+      MyId = `${MyId}${this.generateRandomNumber()}`;
       i += 1;
     }
     return MyId;
@@ -69,80 +76,92 @@ export default class AddPlaylistModal extends React.Component {
       roomType,
       updatePlaylist,
     } = this.props;
-    const { switchValue, nameP } = this.state;
+    const { switchValue } = this.state;
     let dateP;
     let datePTwo;
-
     if (this.state.type === 'GeolocOK') {
-      dateP = <DatePicker
-          date={this.state.date}
-          onDateChange={date => this.setState({ date })}
-      />;
-      datePTwo = <DatePicker
-          dateTwo={this.state.date}
-          onDateChange={dateTwo => this.setState({ dateTwo })}
-      />;
+      dateP = (
+        <Button
+          style={styles.dates}
+          title="Start time"
+          onPress={this.setModalVisible}
+        />
+      );
+      datePTwo = (
+        <Button
+          style={styles.dates}
+          title="End time"
+          onPress={this.setModalVisible}
+        />
+      );
     } else {
-      dateP = <Text></Text>;
+      dateP = <Text />;
     }
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={false}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible();
-              updatePlaylist();
-              // Alert.alert('Modal has been closed.');
-            }}
-        >
-          <View style={styles.container}>
-            <View style={styles.Name}>
-              <TextInput
-                  onChangeText={this._updatePlaylistName}
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  underlineColorAndroid="grey"
-                  style={styles.inputBox}
-                  placeholder="Playlist name"
-              />
-              <Text>{switchValue ? 'Public' : 'Private'}</Text>
-              <Switch
-                  style={styles.switch}
-                  onValueChange={this.toggleSwitch}
-                  value={switchValue}
-              />
-              <Text> { switchValue ? 'Geolocation is ON for public party' : '' }</Text>
-              {dateP}
-              {datePTwo}
-              <Button
-                  style={styles.create}
-                  title="Create playlist"
-                  onPress={() => {
-                    /*
-                        console.log(this.generatePrivateId());
-                        console.log(this.state.date);
-                        console.log(this.state.dateTwo);
-                        console.log(this.state.switchValue);
-                        console.log(this.state.namePlaylist);
-                       // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN DESDOUS
-                     */
-                    this.generatePrivateId();
-                    addPlaylist(this.state.namePlaylist, switchValue, userId, userId, roomType)
-                        .then(() => {
-                          setModalVisible();
-                          updatePlaylist();
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                          Alert.alert('An error occured on create playlist, please try again later.');
-                        });
-                  }}
-              />
-            </View>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible();
+          updatePlaylist();
+        }}
+      >
+        <View style={styles.container}>
+          <Components.DatePickerModal
+            setModalVisible={this.setModalVisible}
+            DateModalVisible={this.state.DateModalVisible}
+          />
+          <View style={styles.Name}>
+            <TextInput
+              onChangeText={this._updatePlaylistName}
+              autoCorrect={false}
+              autoCapitalize="none"
+              underlineColorAndroid="grey"
+              style={styles.inputBox}
+              placeholder="Playlist name"
+            />
+            <Text>{switchValue ? 'Public' : 'Private'}</Text>
+            <Switch
+              style={styles.switch}
+              onValueChange={this.toggleSwitch}
+              value={switchValue}
+            />
+            <Text>
+              {' '}
+              { switchValue ? 'Geolocation is ON for public party' : '' }
+            </Text>
+            {dateP}
+            {datePTwo}
+            <Button
+              style={styles.create}
+              title="Create playlist"
+              onPress={() => {
+                /* console.log(this.generatePrivateId());
+                console.log(this.state.date);
+                console.log(this.state.dateTwo);
+                console.log(this.state.switchValue);
+                console.log(this.state.namePlaylist);
+                console.log(this.state.location);
+                // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN
+                // DESDOUS ET DE RECUP SUR LES MODAL LES DATE
+*/
+                this.generatePrivateId();
+                addPlaylist(this.state.namePlaylist, switchValue, userId, userId, roomType)
+                  .then(() => {
+                    setModalVisible();
+                    updatePlaylist();
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    Alert.alert('An error occured on create playlist, please try again later.');
+                  });
+              }}
+            />
           </View>
-        </Modal>
+        </View>
+      </Modal>
     );
   }
 }
@@ -152,16 +171,21 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    margin: '1%',
   },
   Name: {
-    flexDirection: 'column',
     alignItems: 'center',
+    margin: '1%',
   },
   switch: {
     alignItems: 'center',
+    margin: '1%',
   },
   create: {
     alignItems: 'center',
+    margin: '1%',
+  },
+  dates: {
+    margin: '1%',
   },
 });
