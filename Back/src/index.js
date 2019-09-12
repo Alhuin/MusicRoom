@@ -5,7 +5,6 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
-// import morgan from 'morgan';
 import models, { connectDb } from './models';
 import API from './routes';
 
@@ -27,23 +26,9 @@ const dateOptions = {
   year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric',
 };
 
-app.use(async (req, res, next) => {
-  res.on('finish', () => {
-    const today = new Date();
-    let color;
-    if (res.statusCode >= 500) {
-      color = '\x1b[31m';
-    } else if (res.statusCode >= 400) {
-      color = '\x1b[33m';
-    } else {
-      color = '\x1b[32m';
-    }
-    console.info(`--------------------------------------------------------------------------------------------------\n
-    ${today.toLocaleTimeString("fr-FR", dateOptions)}:${today.getMilliseconds()}\n
-    ${color}${req.method}\t${req.originalUrl.toString().padEnd(80)}${res.statusCode} ${res.statusMessage}\x1b[0m\n`);
-  });
-  next();
-});
+const requestLogger = require('./middlewares/requestLogger')(dateOptions);
+
+app.use(requestLogger);
 
 app.use('/api', API);
 

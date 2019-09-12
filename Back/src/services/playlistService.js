@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import PlaylistModel from '../models/playlistModel';
 import CustomError from './errorHandler';
 import models from '../models';
@@ -6,11 +5,9 @@ import UserModel from '../models/userModel';
 
 function getPlaylists() {
   return new Promise((resolve, reject) => {
-    PlaylistModel.find({}, (error, playlists) => {
-      if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!playlists.length) {
-        reject(new CustomError('No playlists in database', 400));
+    PlaylistModel.find({}, (findError, playlists) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
       } else {
         resolve({
           status: 200,
@@ -23,11 +20,11 @@ function getPlaylists() {
 
 function getPlaylistById(playlistId) {
   return new Promise((resolve, reject) => {
-    PlaylistModel.findById(playlistId, (error, playlist) => {
-      if (error) {
-        reject(new CustomError(error, 500));
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('No playlist with this id in database', 400));
+        reject(new CustomError('GetPlaylist', 'No playlist with this id found in database', 404));
       } else {
         resolve({
           status: 200,
@@ -42,9 +39,7 @@ function getPlaylistsFilteredByRoom(roomType) {
   return new Promise((resolve, reject) => {
     PlaylistModel.find({ roomType }, (error, playlists) => {
       if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!playlists) {
-        reject(new CustomError('No available playlist in database', 400));
+        reject(new CustomError('MongoError', error.message, 500));
       } else {
         resolve({
           status: 200,
@@ -55,7 +50,7 @@ function getPlaylistsFilteredByRoom(roomType) {
   });
 }
 
-function getPlaylistsFiltered(roomType, userId) {
+function getPlaylistsFiltered(roomType, userId) {   // stp name bien les fonctions
   return new Promise((resolve, reject) => {
     PlaylistModel.find({ roomType }, (error, playlists) => {
       if (error) {
@@ -63,17 +58,17 @@ function getPlaylistsFiltered(roomType, userId) {
       } else if (!playlists) {
         reject(new CustomError('No available playlist in database', 400));
       } else {
-        for (let i = 0; i < playlists.length; i++) {
+        for (let i = 0; i < playlists.length; i += 1) {
           if (!playlists.publicFlag) {
             let flag = false;
-            for (let j = 0; j < playlists[i].users.length; j++) {
+            for (let j = 0; j < playlists[i].users.length; j += 1) {
               if (String(playlists[i].users[j]._id) === userId) {
                 flag = true;
               }
             }
             if (flag === false) {
               playlists.splice(i, 1);
-              --i;
+              i -= 1;
             }
           }
         }

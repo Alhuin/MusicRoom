@@ -18,12 +18,13 @@ function login(userName, password) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
+        } else if (response.status === 422) {
+          reject(new CustomError('ValidationError', response.msg, 422));
         } else {
           reject(new CustomError(data.msg, data.status));
         }
       })
       .catch((error) => {
-        console.error(error);
         reject(new CustomError(error.msg, error.status));
       });
   });

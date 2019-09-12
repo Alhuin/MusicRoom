@@ -3,6 +3,8 @@ import MusicModel from './musicModel';
 import PlaylistModel from './playlistModel';
 import VoteModel from './voteModel';
 
+const uniqueValidator = require('mongoose-unique-validator');
+
 const userSchema = new mongoose.Schema({
   login: {
     type: String,
@@ -42,6 +44,7 @@ userSchema.statics.findByLoginOrEmail = async function (login) {
   }
   return user;
 };
+userSchema.plugin(uniqueValidator);
 
 /*
     Remove the user from all playlists.users and remove all musics

@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import MusicModel from './musicModel';
 
+const uniqueValidator = require('mongoose-unique-validator');
+
 const playlistSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -35,6 +37,7 @@ const playlistSchema = new mongoose.Schema({
     default: 'radio',
   },
 });
+playlistSchema.plugin(uniqueValidator);
 
 /*
     Erase all musics associated with the playlist before removing it.

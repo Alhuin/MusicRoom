@@ -5,9 +5,7 @@ function getVotes() {
   return new Promise((resolve, reject) => {
     VoteModel.find({}, (error, votes) => {
       if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!votes.length) {
-        reject(new CustomError('No votes in database', 400));
+        reject(new CustomError('MongoError', error.message, 500));
       } else {
         resolve({
           status: 200,
@@ -22,9 +20,9 @@ function getVoteById(voteId) {
   return new Promise((resolve, reject) => {
     VoteModel.findById(voteId, (error, vote) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!vote) {
-        reject(new CustomError('No vote with this id in database', 400));
+        reject(new CustomError('GetVote', 'No vote with this id found in database', 404));
       } else {
         resolve({
           status: 200,
@@ -39,13 +37,13 @@ function deleteVoteById(voteId) {
   return new Promise((resolve, reject) => {
     VoteModel.findById(voteId, (error, vote) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!vote) {
-        reject(new CustomError('[No vote with this id in database', 400));
+        reject(new CustomError('DeleteVote', 'No vote with this id found in database', 404));
       } else {
         vote.remove((removeError, removedVote) => {
           if (removeError) {
-            reject(removeError, 500);
+            reject(new CustomError('MongoError', removeError.message, 500));
           } else {
             resolve({
               status: 200,

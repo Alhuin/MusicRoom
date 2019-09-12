@@ -31,7 +31,7 @@ function getMusicById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -50,7 +50,7 @@ function getMusicsByVote(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -69,7 +69,7 @@ function deleteMusicById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -107,7 +107,7 @@ function downloadMusic(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send('Wrong Parameters');
+    res.status(422).send('Wrong Parameters');
   }
 }
 
@@ -129,7 +129,7 @@ function addMusicToPlaylist(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 

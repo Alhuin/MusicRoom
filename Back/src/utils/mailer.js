@@ -30,7 +30,7 @@ function sendMail(mailOptions, resolve, reject) {
     } else {
       console.log('Message sent: %s', info.messageId);
       resolve({
-        status: 200,
+        status: 202,
         data: { msg: `An email has been sent to ${mailOptions.to}` },
       });
     }

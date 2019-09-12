@@ -4,17 +4,13 @@ import MusicModel from './musicModel';
 import PlaylistModel from './playlistModel';
 import VoteModel from './voteModel';
 import TokenModel from './tokenModel';
-import PartyModel from './partyModel';
-import RadioModel from './radioModel';
 
 const models = {
-  User: UserModel,
-  Music: MusicModel,
-  Playlist: PlaylistModel,
-  Vote: VoteModel,
-  Token: TokenModel,
-  Party: PartyModel,
-  Radio: RadioModel,
+  UserModel,
+  MusicModel,
+  PlaylistModel,
+  VoteModel,
+  TokenModel,
 };
 
 const connectDb = () => mongoose.connect(

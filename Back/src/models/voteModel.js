@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+const uniqueValidator = require('mongoose-unique-validator');
+
 const voteSchema = new mongoose.Schema({
   value: {
     type: Number,
@@ -17,6 +19,7 @@ const voteSchema = new mongoose.Schema({
     ref: 'PlaylistModel',
   },
 });
+voteSchema.plugin(uniqueValidator);
 
 const VoteModel = mongoose.model('VoteModel', voteSchema);
 

@@ -31,7 +31,7 @@ function getVoteById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -50,7 +50,7 @@ function deleteVoteById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 

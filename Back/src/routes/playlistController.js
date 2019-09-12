@@ -31,7 +31,7 @@ function getPlaylistById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -50,7 +50,7 @@ function getPlaylistsFilteredByRoom(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -69,7 +69,7 @@ function getPlaylistsFiltered(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -92,7 +92,7 @@ function addPlaylist(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -111,7 +111,7 @@ function deletePlaylistById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -152,7 +152,7 @@ function getAdminsByPlaylistId(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+const uniqueValidator = require('mongoose-unique-validator');
+
 const partySchema = new mongoose.Schema({
   playlist: {
     type: mongoose.Schema.Types.ObjectId,
@@ -17,6 +19,7 @@ const partySchema = new mongoose.Schema({
     // We could.
   },
 });
+partySchema.plugin(uniqueValidator);
 
 const PartyModel = mongoose.model('PartyModel', partySchema);
 

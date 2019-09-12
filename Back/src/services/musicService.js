@@ -7,9 +7,7 @@ function getMusics() {
   return new Promise((resolve, reject) => {
     MusicModel.find({}, (error, musics) => {
       if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!musics.length) {
-        reject(new CustomError('No musics in database', 400));
+        reject(new CustomError('MongoError', error.message, 500));
       } else {
         resolve({
           status: 200,
@@ -26,7 +24,7 @@ function getMusicById(musicId) {
       if (error) {
         reject(new CustomError(error, 500));
       } else if (!music) {
-        reject(new CustomError('No music with this id in databse', 400));
+        reject(new CustomError('GetMusic', 'No music with this id found in database', 404));
       } else {
         resolve({
           status: 200,
@@ -43,9 +41,7 @@ function getMusicsByVote(playlistId) {
       .sort({ votes: -1 })
       .exec((error, musics) => {
         if (error) {
-          reject(new CustomError(error, 500));
-        } else if (!musics) {
-          reject(new CustomError('No musics for this Playlist database', 400));
+          reject(new CustomError('MongoError', error.message, 500));
         } else {
           resolve({
             status: 200,
@@ -60,13 +56,13 @@ function deleteMusicById(musicId) {
   return new Promise((resolve, reject) => {
     MusicModel.findById(musicId, (error, music) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!music) {
-        reject(new CustomError('No music with this id in database', 400));
+        reject(new CustomError('DeleteMusic', 'No music with this id found in database', 404));
       } else {
         music.remove((removeError, musicRemoved) => {
           if (removeError) {
-            reject(new CustomError(removeError, 500));
+            reject(new CustomError('MongoError', removeError.message, 500));
           } else {
             resolve({
               status: 200,
@@ -83,11 +79,11 @@ function voteMusic(userId, musicId, playlistId, value) {
   return new Promise((resolve, reject) => {
     VoteModel.find({ user: userId, music: musicId, playlist: playlistId }, (voteError, votes) => {
       if (voteError) {
-        reject(new CustomError(voteError, 500));
+        reject(new CustomError('MongoError', voteError.message, 500));
       } else {
-        MusicModel.find({ _id: musicId, playlist: playlistId }, (error, music) => {
-          if (error) {
-            reject(new CustomError(error, 500));
+        MusicModel.find({ _id: musicId, playlist: playlistId }, (findError, music) => {
+          if (findError) {
+            reject(new CustomError('MongoError', findError.message, 500));
           } else if (!music[0]) {
             reject(new CustomError('No music with this id in database', 400));
           } else if (votes[0]) {
@@ -96,14 +92,15 @@ function voteMusic(userId, musicId, playlistId, value) {
               updatedMusic.votes += -value;
               updatedMusic.save((saveError, savedMusic) => {
                 if (saveError) {
-                  reject(new CustomError(saveError, 500));
+                  reject(new CustomError('MongoError', saveError.message, 500));
                 } else {
-                  voteService.deleteVoteById(votes[0]._id).then((response) => {
-                    resolve({
-                      status: response.status,
-                      data: savedMusic,
-                    });
-                  })
+                  voteService.deleteVoteById(votes[0]._id)
+                    .then((response) => {
+                      resolve({
+                        status: response.status,
+                        data: savedMusic,
+                      });
+                    })
                     .catch((error) => {
                       console.error(error.msg);
                       resolve({
@@ -114,18 +111,18 @@ function voteMusic(userId, musicId, playlistId, value) {
                 }
               });
             } else {
-              // si votes = 1 et que je upvote -> votes = 2. Je downvote (cas présent) -> votes = 0.
+              // si votes = 1 et que je upvote -> votes = 2. Je downvote (cas présent) -> votes = 0.    0w0'
               const updatedMusic = music[0];
-              updatedMusic.votes += value * 2;
+              updatedMusic.votes += value * 2; // explain pourquoi x2 ?
               updatedMusic.save((saveError, savedMusic) => {
                 if (saveError) {
-                  reject(new CustomError(saveError, 500));
+                  reject(new CustomError('MongoError', saveError.message, 500));
                 } else {
                   const updatedVote = votes[0];
                   updatedVote.value = value;
                   updatedVote.save((voteSaveError) => {
                     if (voteSaveError) {
-                      reject(new CustomError(voteSaveError, 500));
+                      reject(new CustomError('MongoError', voteSaveError.message, 500));
                     } else {
                       resolve({
                         status: 200,
@@ -141,7 +138,7 @@ function voteMusic(userId, musicId, playlistId, value) {
             updatedMusic.votes += value;
             updatedMusic.save((saveError, savedMusic) => {
               if (saveError) {
-                reject(new CustomError(saveError, 500));
+                reject(new CustomError('MongoError', saveError.message, 500));
               } else {
                 const newVote = new VoteModel({
                   playlist: playlistId,
@@ -151,7 +148,7 @@ function voteMusic(userId, musicId, playlistId, value) {
                 });
                 newVote.save((voteSaveError) => {
                   if (voteSaveError) {
-                    reject(new CustomError(voteSaveError, 500));
+                    reject(new CustomError('MongoError', voteSaveError.message, 500));
                   } else {
                     resolve({
                       status: 200,
@@ -184,7 +181,7 @@ function downloadMusic(musicUrl) {
 
     deezpy.on('close', (code) => {
       if (code !== 0) {
-        reject(new CustomError(stderr, 500));
+        reject(new CustomError('DeezPy', stderr, 500));
       } else {
         let path = stdout.replace('\n', '').match(/^Downloading: (.*)\.\.\.Done!$/);
         if (path === null) {
@@ -284,22 +281,9 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
 
 function isMusicInPlaylist(playlistId, artist, title, album, albumCover, preview, link) {
   return new Promise((resolve, reject) => {
-    MusicModel.find({
-      playlist: playlistId,
-      artist,
-      title,
-      album,
-      albumCover,
-      preview,
-      link,
-    }, (error, musics) => {
-      if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!musics || !musics.length) {
-        resolve({
-          status: 200,
-          data: false,
-        });
+    MusicModel.find({ link, playlistId }, (findError, musics) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
       } else {
         resolve({
           status: 200,

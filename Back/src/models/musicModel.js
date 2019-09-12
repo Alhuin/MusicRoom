@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import VoteModel from './voteModel';
 
+const uniqueValidator = require('mongoose-unique-validator');
+
 const musicSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -43,6 +45,7 @@ const musicSchema = new mongoose.Schema({
     default: 0,
   },
 });
+musicSchema.plugin(uniqueValidator);
 
 /*
     Erase all votes associated with the musicController before removing it.
