@@ -67,7 +67,7 @@ function voteMusic(userId, musicId, playlistId, value) {
           if (findError) {
             reject(new CustomError('MongoError', findError.message, 500));
           } else if (!music[0]) {
-            reject(new CustomError('No music with this id in database', 400));
+            reject(new CustomError('VoteMusic', 'No music with this id in database', 400));
           } else if (votes[0]) {
             if (votes[0].value === value) {
               const updatedMusic = music[0];

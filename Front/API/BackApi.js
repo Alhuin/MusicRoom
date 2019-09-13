@@ -41,14 +41,15 @@ function getUserById(userId) {
     })
       .then(async (response) => {
         const data = await response.json();
+        console.log(response);
         if (response.status === 200) {
           resolve(data);
-        } else if (response.status === 400) {
-          resolve(undefined); // afin de renvoyer quelque chose meme si on ne trouve pas de user.
+        } else if (response.status === 404) {
+          reject(new CustomError('GetUser', data.msg, 404));
         }
       })
       .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
+        reject(new CustomError('GetUser', error.msg, error.status));
       });
   });
 }
@@ -534,6 +535,29 @@ function userInPlaylistKick(playlistId, userId, isItAdmin) {
   });
 }
 
+function getPublicityOfPlaylistById(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/publicity/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
 export {
   login,
   addUser,
@@ -556,4 +580,5 @@ export {
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
   userInPlaylistKick,
+  getPublicityOfPlaylistById,
 };

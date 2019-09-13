@@ -79,4 +79,5 @@ export default {
   getVoteById,
   getVotes,
   deleteVoteById,
+  voteMusic,
 };

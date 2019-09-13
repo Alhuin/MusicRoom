@@ -24,6 +24,7 @@ const playlistSchema = new mongoose.Schema({
   },
   publicFlag: {
     type: Boolean,
+    default: false,
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,

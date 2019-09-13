@@ -22,7 +22,7 @@ function getMusicById(musicId) {
   return new Promise((resolve, reject) => {
     MusicModel.findById(musicId, (error, music) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!music) {
         reject(new CustomError('GetMusic', 'No music with this id found in database', 404));
       } else {
@@ -167,7 +167,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
               });
               music.save((saveError, savedMusic) => {
                 if (saveError) {
-                  reject(new CustomError(saveError, 500));
+                  reject(new CustomError('MongoError', saveError.message, 500));
                 } else {
                   resolve({
                     status: 200,
@@ -209,7 +209,6 @@ export default {
   getMusicById,
   getMusicsByVote,
   deleteMusicById,
-  voteMusic,
   downloadMusic,
   addMusicToPlaylist,
 };

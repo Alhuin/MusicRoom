@@ -105,8 +105,8 @@ const seedDatas = async () => {
         author: admin._id,
         authorName: admin.name,
         roomType,
+        publicFlag: false,
         admins: [admin],
-
       });
     }
     playlist.save();

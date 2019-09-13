@@ -18,7 +18,7 @@ function sendMail(mailOptions, resolve, reject) {
     });
     transporter.verify((error) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('Mailer', error.message, 500));
       } else {
         console.log('Server is ready to take our messages');
       }
@@ -26,7 +26,7 @@ function sendMail(mailOptions, resolve, reject) {
   }
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      reject(new CustomError(error, 500));
+      reject(new CustomError('Mailer', error.message, 500));
     } else {
       console.log('Message sent: %s', info.messageId);
       resolve({

@@ -26,7 +26,7 @@ function getUserById(userId) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('GetUser', error.message, 500));
       } else if (!user) {
         reject(new CustomError('GetUser', 'No user with this id found in database', 404));
       } else {
@@ -43,7 +43,7 @@ function deleteUserById(userId) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!user) {
         reject(new CustomError('DeleteUser', 'No user with this id found in database', 404));
       } else {
@@ -251,7 +251,7 @@ function confirmEmailToken(tokenString) {
       } else {
         UserModel.findById(token.user, (findError, user) => {
           if (findError) {
-            reject(new CustomError(findError, 500));
+            reject(new CustomError('MongoError', findError.message, 500));
           } else if (!user) {
             reject(new CustomError('MailToken', 'No user with this token found in database', 404));
           } else if (user.isVerified) {
@@ -261,7 +261,7 @@ function confirmEmailToken(tokenString) {
             verifiedUser.isVerified = true;
             verifiedUser.save((saveError, savedUser) => {
               if (saveError) {
-                reject(new CustomError(error, 500));
+                reject(new CustomError('MongoError', error.message, 500));
               } else {
                 resolve({
                   status: 200,
