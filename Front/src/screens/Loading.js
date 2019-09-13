@@ -14,16 +14,18 @@ export default class Loading extends React.Component {
     isSignedIn()
       .then((user) => {
         // console.log(user);
-        global.user = user;
-        navigation.navigate('app');
+        if (user) {
+          global.user = user;
+          navigation.navigate('app');
+        } else {
+          navigation.navigate('auth');
+        }
         // alert(global.user._id);
       })
       .catch((error) => {
-        console.log(error);
         if (error.status === 404) {
           navigation.navigate('auth');
         }
-        console.log(error + ' [Loading]');
       });
   }
 
