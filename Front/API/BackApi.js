@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.2.4:3000/api';
+const server = 'http://10.4.2.6:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -18,13 +18,12 @@ function login(userName, password) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
-        } else if (response.status === 422) {
-          reject(new CustomError('ValidationError', response.msg, 422));
         } else {
           reject(new CustomError(data.msg, data.status));
         }
       })
       .catch((error) => {
+        console.error(error);
         reject(new CustomError(error.msg, error.status));
       });
   });
@@ -41,15 +40,14 @@ function getUserById(userId) {
     })
       .then(async (response) => {
         const data = await response.json();
-        console.log(response);
         if (response.status === 200) {
           resolve(data);
-        } else if (response.status === 404) {
-          reject(new CustomError('GetUser', data.msg, 404));
+        } else if (response.status === 400) {
+          resolve(undefined); // afin de renvoyer quelque chose meme si on ne trouve pas de user.
         }
       })
       .catch((error) => {
-        reject(new CustomError('GetUser', error.msg, error.status));
+        reject(new CustomError(error.msg, error.status));
       });
   });
 }
@@ -535,29 +533,6 @@ function userInPlaylistKick(playlistId, userId, isItAdmin) {
   });
 }
 
-function getPublicityOfPlaylistById(playlistId) {
-  return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/publicity/${playlistId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          console.log(data.msg);
-        }
-      })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
-  });
-}
-
 export {
   login,
   addUser,
@@ -580,5 +555,4 @@ export {
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
   userInPlaylistKick,
-  getPublicityOfPlaylistById,
 };
