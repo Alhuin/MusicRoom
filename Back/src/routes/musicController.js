@@ -118,7 +118,6 @@ export default {
   getMusics,
   getMusicsByVote,
   deleteMusicById,
-  voteMusic,
   downloadMusic,
   addMusicToPlaylist,
 };

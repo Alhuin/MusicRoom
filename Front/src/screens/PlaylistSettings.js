@@ -1,8 +1,7 @@
 import {
-  View, StyleSheet, Text, Button,
+  View, StyleSheet, Text, Button, Switch, Alert,
 } from 'react-native';
 import React from 'react';
-import CollapsibleList from '../components/CollapsibleList';
 import AdminListInSettings from '../components/AdminListInSettings';
 import UserListInSettings from '../components/UserListInSettings';
 import { getAdminsByPlaylistId, getUsersByPlaylistId } from '../../API/BackApi';
@@ -12,6 +11,7 @@ class PlaylistSettings extends React.Component {
     refreshing: false,
     admins: [],
     users: [],
+    switchValue: false,
   };
 
   componentDidMount(): void {
@@ -121,6 +121,10 @@ class PlaylistSettings extends React.Component {
     }
   });
 
+  toggleSwitch = (value) => {
+    this.setState({ switchValue: value });
+  };
+
   leavingPlaylist = () => {
     const { navigation } = this.props;
     alert('Leaving playlist');
@@ -128,7 +132,7 @@ class PlaylistSettings extends React.Component {
 
   render() {
     const {
-      refreshing, users, admins,
+      refreshing, users, admins, switchValue,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -138,8 +142,13 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       adminOptions = (
         <View>
+          <Text>{switchValue ? 'Public' : 'Private'}</Text>
+          <Switch
+            style={styles.switch}
+            onValueChange={this.toggleSwitch}
+            value={switchValue}
+          />
           <Text> Administrateurs </Text>
-
           <AdminListInSettings
             refreshing={refreshing}
             admins={admins}
@@ -185,6 +194,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   leavingButton: {
+
+  },
+  switch: {
 
   },
 });
