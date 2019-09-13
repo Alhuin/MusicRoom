@@ -9,31 +9,17 @@ export const isSignedIn = () => new Promise((resolve, reject) => {
   AsyncStorage.getItem('loggedUser')
     .then((res) => {
       if (res) {
-        // console.log(JSON.parse(res));
         const user = JSON.parse(res);
         getUserById(user._id)
-          .then((response) => {
-            // console.log("isValidId telling its : " + response);
-            if (response) {
-              resolve(user);
-            } else {
-              resolve(false);
-            }
+          .then((foundUser) => {
+            resolve(foundUser);
           })
           .catch((error) => {
-            // console.log('error in auth + ' + error.msg);
             reject(error);
           });
       } else {
-        // console.log('no logged user');
-        resolve(false);
+        resolve(false); // a revoir
       }
     })
     .catch(err => reject(err));
-
-/*  AsyncStorage.getItem('loggedUser')
-    .then((res) => {
-      resolve(res);
-    })
-    .catch(err => reject(err));*/
 });

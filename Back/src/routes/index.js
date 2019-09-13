@@ -4,8 +4,8 @@ import musicController from './musicController';
 import playlistController from './playlistController';
 import voteController from './voteController';
 import loginController from './loginController';
-/*import partyController from './partyController';
-import radioController from './radioController';*/
+/* import partyController from './partyController';
+import radioController from './radioController'; */
 
 const router = Router();
 
@@ -40,7 +40,6 @@ router.get('/musics/:musicId', musicController.getMusicById);
 router.get('/musicsByVote/:playlistId', musicController.getMusicsByVote);
 router.delete('/musics/:musicId', musicController.deleteMusicById);
 router.post('/musics/add', musicController.addMusicToPlaylist);
-router.post('/voteMusic', musicController.voteMusic);
 router.post('/deezPy', musicController.downloadMusic);
 
 
@@ -53,6 +52,7 @@ router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 router.get('/playlists/admins/:playlistId', playlistController.getAdminsByPlaylistId);
 router.post('/playlists/admins/downgrade', playlistController.adminInPlaylistDowngrade);
 router.get('/playlists/users/:playlistId', playlistController.getUsersByPlaylistId);
+router.get('/playlists/publicity/:playlistId', playlistController.getPublicityOfPlaylistById);
 router.post('/playlists/users/upgrade', playlistController.userInPlaylistUpgrade);
 router.post('/playlists/users/kick', playlistController.userInPlaylistKick);
 router.post('/playlists/add', playlistController.addPlaylist);
@@ -60,27 +60,11 @@ router.post('/playlists/isAdmin', playlistController.isAdmin);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 
 
-
-/*/!*             Partys                *!/
-
-router.get('/partys', partyController.getPartys);
-router.get('/partys/:partyId', partyController.getPartyById);
-router.post('/partys/add', partyController.addParty);
-router.delete('/partys/:partyId', partyController.deletePartyById);
-
-
-/!*             Radios                *!/
-
-router.get('/radios', radioController.getRadios);
-router.get('/radios/:radioId', radioController.getRadioById);
-router.post('/radios/add', radioController.addRadio);
-router.delete('/radios/:radioId', radioController.deleteRadioById);*/
-
-
 /*             Votes                 */
 
 router.get('/votes', voteController.getVotes);
 router.get('/votes/:voteId', voteController.getVoteById);
 router.delete('/votes/:voteId', voteController.deleteVoteById);
+router.post('/voteMusic', voteController.voteMusic);
 
 export default router;

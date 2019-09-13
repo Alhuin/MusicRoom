@@ -11,9 +11,7 @@ function getUsers() {
   return new Promise((resolve, reject) => {
     UserModel.find({}, (error, users) => {
       if (error) {
-        reject(new CustomError(error, 500));
-      } else if (!users.length) {
-        reject(new CustomError('[Get Users] No users in database', 400));
+        reject(new CustomError('MongoError', error.message, 500));
       } else {
         resolve({
           status: 200,
@@ -28,9 +26,9 @@ function getUserById(userId) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('GetUser', error.message, 500));
       } else if (!user) {
-        reject(new CustomError('[Get User] No user with this id in database', 400));
+        reject(new CustomError('GetUser', 'No user with this id found in database', 404));
       } else {
         resolve({
           status: 200,
@@ -45,13 +43,13 @@ function deleteUserById(userId) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!user) {
-        reject(new CustomError('[Delete User] No user with this id in database', 400));
+        reject(new CustomError('DeleteUser', 'No user with this id found in database', 404));
       } else {
         user.remove((removeError, removedUser) => {
           if (removeError) {
-            reject(new CustomError(removeError, 500));
+            reject(new CustomError('MongoError', removeError.message, 500));
           } else {
             resolve({
               status: 200,
@@ -74,10 +72,15 @@ function addUser(login, password, name, familyName, email) {
       name,
       familyName,
       email,
+      isVerified: false,
     });
     user.save((error, savedUser) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        if (error.name === 'ValidationError') {
+          reject(new CustomError(error.name, error.message.split(':')[1], 422));
+        } else {
+          reject(new CustomError('MongoError', error.message, 500));
+        }
       } else {
         _sendEmailToken(savedUser, resolve, reject);
       }
@@ -89,13 +92,13 @@ function _getUserByLoginOrEmail(loginOrEmail) {
   return new Promise((resolve, reject) => {
     UserModel.findOne({ login: loginOrEmail }, (error, userByLogin) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!userByLogin) {
         UserModel.findOne({ email: loginOrEmail }, (findError, userByEmail) => {
           if (findError) {
-            reject(new CustomError(findError, 500));
+            reject(new CustomError('MongoError', findError.message, 500));
           } else if (!userByEmail) {
-            reject(new CustomError('No user with this login or email'), 400);
+            reject(new CustomError('UserByLoginOrEmail', 'No user with this login or email found in database'), 404);
           } else {
             resolve({
               status: 200,
@@ -119,17 +122,16 @@ function updatePassword(userId, newPassword) {
   return new Promise((resolve, reject) => {
     UserModel.findOne({ _id: userId }, async (error, user) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!user) {
-        reject(new CustomError('[Update Password] No user with this id', 400));
+        reject(new CustomError('UpdatePassword', 'No user with this id found in database', 404));
       } else {
         const updateUser = user;
         const salt = await bcrypt.genSaltSync(10);
         updateUser.password = await bcrypt.hashSync(newPassword, salt);
         updateUser.save((saveError, newUser) => {
           if (saveError) {
-            console.error(saveError);
-            reject(new CustomError(saveError, 500));
+            reject(new CustomError('MongoError', saveError.message, 500));
           } else {
             resolve({
               status: 200,
@@ -158,7 +160,7 @@ function sendPasswordToken(loginOrEmail) {
         });
         token.save((tokenSaveError, savedToken) => {
           if (tokenSaveError) {
-            reject(new CustomError(tokenSaveError, 500));
+            reject(new CustomError('MongoError', tokenSaveError.message, 500));
           } else {
             const mailOptions = {
               from: '"MusicRoom Team" <team@musicroom.com>',
@@ -172,7 +174,7 @@ function sendPasswordToken(loginOrEmail) {
         });
       })
       .catch((error) => {
-        reject(new CustomError(error, 500));
+        reject(new CustomError(error.name, error.message, error.status));
       });
   });
 }
@@ -181,15 +183,15 @@ function confirmPasswordToken(tokenString) {
   return new Promise((resolve, reject) => {
     TokenModel.findOne({ token: tokenString }, (error, token) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!token) {
-        reject(new CustomError('[Confirm Password Token] Invalid token, it may have expired', 400));
+        reject(new CustomError('ConfirmPasswordToken', 'Token not found in database', 404));
       } else {
         UserModel.findById(token.user, (findError, user) => {
           if (findError) {
-            reject(new CustomError(findError, 500));
+            reject(new CustomError('MongoError', findError.message, 500));
           } else if (!user) {
-            reject(new CustomError('[Confirm Password Token] No user with this token in database', 400));
+            reject(new CustomError('ConfirmPasswordToken', 'No user with this token found in database', 404));
           } else {
             resolve({
               status: 200,
@@ -212,7 +214,7 @@ function askEmailToken(loginOrEmail) {
         _sendEmailToken(user, resolve, reject);
       })
       .catch((findError) => {
-        reject(new CustomError(findError, 500));
+        reject(new CustomError('MongoError', findError.message, 500));
       });
   });
 }
@@ -225,7 +227,7 @@ function _sendEmailToken(user, resolve, reject) {
   });
   token.save((tokenSaveError, savedToken) => {
     if (tokenSaveError) {
-      reject(new CustomError(tokenSaveError, 500));
+      reject(new CustomError('MongoError', tokenSaveError.message, 500));
     } else {
       const mailOptions = {
         from: '"MusicRoom Team" <team@musicroom.com>',
@@ -243,29 +245,28 @@ function confirmEmailToken(tokenString) {
   return new Promise((resolve, reject) => {
     TokenModel.findOne({ token: tokenString }, (error, token) => {
       if (error) {
-        reject(new CustomError(error, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!token) {
-        reject(new CustomError('[Confirm Email Token] Invalid token, it may have expired', 400));
+        reject(new CustomError('MailToken', 'Invalid token, it may have expired', 404));
       } else {
         UserModel.findById(token.user, (findError, user) => {
           if (findError) {
-            reject(new CustomError(findError, 500));
+            reject(new CustomError('MongoError', findError.message, 500));
           } else if (!user) {
-            reject(new CustomError('[Confirm Email Token] No user with this token in database', 400));
+            reject(new CustomError('MailToken', 'No user with this token found in database', 404));
           } else if (user.isVerified) {
-            reject(new CustomError('[Confirm Email Token] User is already verified', 400));
+            reject(new CustomError('MailToken', 'User is already verified', 400));
           } else {
             const verifiedUser = user;
             verifiedUser.isVerified = true;
             verifiedUser.save((saveError, savedUser) => {
               if (saveError) {
-                reject(new CustomError(error, 500));
+                reject(new CustomError('MongoError', error.message, 500));
               } else {
                 resolve({
                   status: 200,
                   data: savedUser,
                 });
-                // OUVRIR APP POUR LOGIN
               }
             });
           }

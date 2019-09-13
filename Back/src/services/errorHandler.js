@@ -1,8 +1,8 @@
 export default class CustomError extends Error {
-  constructor(message, status) {
+  constructor(name, message, status) {
     super();
     Error.captureStackTrace(this, this.constructor);
-    this.name = 'CustomError';
+    this.name = name;
     this.msg = message;
     this.status = status;
     console.log(this);

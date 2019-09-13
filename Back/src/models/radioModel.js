@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+const uniqueValidator = require('mongoose-unique-validator');
+
 const radioSchema = new mongoose.Schema({
   playlist: {
     type: mongoose.Schema.Types.ObjectId,
@@ -17,6 +19,7 @@ const radioSchema = new mongoose.Schema({
     // We could.
   },
 });
+radioSchema.plugin(uniqueValidator);
 
 const RadioModel = mongoose.model('RadioModel', radioSchema);
 

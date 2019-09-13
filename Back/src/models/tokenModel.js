@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+const uniqueValidator = require('mongoose-unique-validator');
 
 const tokenSchema = new mongoose.Schema({
   type: {
@@ -22,6 +23,7 @@ const tokenSchema = new mongoose.Schema({
     expires: 43200,
   },
 });
+tokenSchema.plugin(uniqueValidator);
 
 const TokenModel = mongoose.model('TokenModel', tokenSchema);
 

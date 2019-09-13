@@ -1,21 +1,22 @@
 import {
-  View, StyleSheet, Text, Button,
+  View, StyleSheet, Text, Button, Switch,
 } from 'react-native';
 import React from 'react';
-import CollapsibleList from '../components/CollapsibleList';
 import AdminListInSettings from '../components/AdminListInSettings';
 import UserListInSettings from '../components/UserListInSettings';
-import { getAdminsByPlaylistId, getUsersByPlaylistId } from '../../API/BackApi';
+import { getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById } from '../../API/BackApi';
 
 class PlaylistSettings extends React.Component {
   state = {
     refreshing: false,
     admins: [],
     users: [],
+    switchValue: false,
   };
 
   componentDidMount(): void {
     const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
       this.updateAdmins()
@@ -25,8 +26,19 @@ class PlaylistSettings extends React.Component {
         .catch((error) => {
           console.error(error);
         });
+      this.getPublicity(playlistId);
     }
   }
+
+  getPublicity = (playlistId) => {
+    getPublicityOfPlaylistById(playlistId)
+      .then((val) => {
+        this.setState({ switchValue: val });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   // finally, it is the two same refresh functions
   _onRefreshAdmins = () => {
@@ -121,6 +133,10 @@ class PlaylistSettings extends React.Component {
     }
   });
 
+  toggleSwitch = (value) => {
+    this.setState({ switchValue: value });
+  };
+
   leavingPlaylist = () => {
     const { navigation } = this.props;
     alert('Leaving playlist');
@@ -128,7 +144,7 @@ class PlaylistSettings extends React.Component {
 
   render() {
     const {
-      refreshing, users, admins,
+      refreshing, users, admins, switchValue,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -138,8 +154,13 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       adminOptions = (
         <View>
+          <Text>{switchValue ? 'Public' : 'Private'}</Text>
+          <Switch
+            style={styles.switch}
+            onValueChange={this.toggleSwitch}
+            value={switchValue}
+          />
           <Text> Administrateurs </Text>
-
           <AdminListInSettings
             refreshing={refreshing}
             admins={admins}
@@ -185,6 +206,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   leavingButton: {
+
+  },
+  switch: {
 
   },
 });

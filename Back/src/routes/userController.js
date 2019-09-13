@@ -33,7 +33,7 @@ function getUserById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong parameters' });
   }
 }
 
@@ -52,7 +52,7 @@ function deleteUserById(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong parameters' });
   }
 }
 
@@ -74,7 +74,7 @@ function addUser(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -95,7 +95,7 @@ function updatePassword(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong parameters' });
+    res.status(422).send({ msg: 'Wrong parameters' });
   }
 }
 
@@ -118,7 +118,7 @@ function sendEmailToken(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -137,7 +137,7 @@ function confirmEmailToken(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -158,7 +158,7 @@ function sendPasswordToken(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -178,7 +178,7 @@ function confirmPasswordToken(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 

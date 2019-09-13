@@ -9,7 +9,6 @@ function login(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error);
         res
           .status(error.status)
           .send(error);

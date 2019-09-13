@@ -22,7 +22,7 @@ function getTracks(text) {
       })
       .catch((error) => {
         console.error(error);
-        reject(new CustomError(error.msg, error.status));
+        reject(new CustomError('GetTracks', error.msg, error.status));
       });
   });
 }
