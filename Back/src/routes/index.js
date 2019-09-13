@@ -40,7 +40,6 @@ router.get('/musics/:musicId', musicController.getMusicById);
 router.get('/musicsByVote/:playlistId', musicController.getMusicsByVote);
 router.delete('/musics/:musicId', musicController.deleteMusicById);
 router.post('/musics/add', musicController.addMusicToPlaylist);
-router.post('/voteMusic', musicController.voteMusic);
 router.post('/deezPy', musicController.downloadMusic);
 
 
@@ -65,5 +64,6 @@ router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 router.get('/votes', voteController.getVotes);
 router.get('/votes/:voteId', voteController.getVoteById);
 router.delete('/votes/:voteId', voteController.deleteVoteById);
+router.post('/voteMusic', voteController.voteMusic);
 
 export default router;

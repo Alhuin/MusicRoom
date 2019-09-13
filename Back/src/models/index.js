@@ -6,11 +6,11 @@ import VoteModel from './voteModel';
 import TokenModel from './tokenModel';
 
 const models = {
-  UserModel,
-  MusicModel,
-  PlaylistModel,
-  VoteModel,
-  TokenModel,
+  User: UserModel,
+  Music: MusicModel,
+  Playlist: PlaylistModel,
+  Vote: VoteModel,
+  Token: TokenModel,
 };
 
 const connectDb = () => mongoose.connect(

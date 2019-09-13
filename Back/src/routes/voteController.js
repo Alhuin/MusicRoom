@@ -1,5 +1,6 @@
 import voteService from '../services/voteService';
 import utils from '../utils';
+import musicService from "../services/musicService";
 
 function getVotes(req, res) {
   voteService.getVotes()
@@ -54,8 +55,29 @@ function deleteVoteById(req, res) {
   }
 }
 
+function voteMusic(req, res) {
+  if (req.body.userId && req.body.musicId && req.body.playlistId && req.body.value
+    && utils.isValidId(req.body.musicId) && utils.isValidId(req.body.playlistId)
+    && (req.body.value === 1 || req.body.value === -1) && utils.isValidId(req.body.userId)) {
+    voteService.voteMusic(req.body.userId, req.body.musicId, req.body.playlistId, req.body.value)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getVoteById,
   getVotes,
   deleteVoteById,
+  voteMusic,
 };
