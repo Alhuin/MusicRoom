@@ -24,12 +24,12 @@ export default class AddMusicModal extends React.Component {
         }}
       >
         <DatePicker
-
           date={this.state.date}
           onDateChange={date => this.setState({ date })}
         />
         <TouchableHighlight
           onPress={() => {
+            this.props.onStartDateChanged(this.state.date);
             setModalVisible();
           }}
         >

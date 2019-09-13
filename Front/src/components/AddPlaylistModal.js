@@ -19,10 +19,23 @@ export default class AddPlaylistModal extends React.Component {
     namePlaylist: '',
     location: null, // unused afficher car on n'envoie pas encore la location quelquepart.
     type: null,
-    /* date: new Date(),
-    dateTwo: new Date(), */
+    date: new Date(),
+    dateTwo: new Date(),
+    dateMarkeur: 0,
     DateModalVisible: false,
   };
+
+  onStartDateChanged = (changedDate) => {
+    if (this.state.dateMarkeur === 1) {
+      this.setState({ date: changedDate });
+    } else {
+      this.setState({ dateTwo: changedDate });
+    }
+  }
+
+  /* onEndDateChanged = (changedText) => {
+    console.log('This is the changed text: ', changedText);
+  } */
 
   _updatePlaylistName = (text) => {
     this.setState({ namePlaylist: text });
@@ -84,14 +97,20 @@ export default class AddPlaylistModal extends React.Component {
         <Button
           style={styles.dates}
           title="Start time"
-          onPress={this.setModalVisible}
+          onPress={() => {
+            this.setState({ dateMarkeur: 1 });
+            this.setModalVisible();
+          }}
         />
       );
       datePTwo = (
         <Button
           style={styles.dates}
           title="End time"
-          onPress={this.setModalVisible}
+          onPress={() => {
+            this.setState({ dateMarkeur: 2 });
+            this.setModalVisible();
+          }}
         />
       );
     } else {
@@ -112,6 +131,8 @@ export default class AddPlaylistModal extends React.Component {
           <Components.DatePickerModal
             setModalVisible={this.setModalVisible}
             DateModalVisible={this.state.DateModalVisible}
+            dateMarkeur={this.state.dateMarkeur}
+            onStartDateChanged={this.onStartDateChanged}
           />
           <View style={styles.Name}>
             <TextInput
