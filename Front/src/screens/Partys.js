@@ -17,8 +17,8 @@ class Partys extends React.Component {
 
   componentDidMount(): void {
     getPlaylistsFiltered('party', global.user._id)
-      .then((response) => {
-        this.setState({ playlists: response.data });
+      .then((playlists) => {
+        this.setState({ playlists });
       })
       .catch((error) => {
         console.error(error);
