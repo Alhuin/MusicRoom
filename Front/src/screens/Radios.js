@@ -34,8 +34,8 @@ class Radios extends React.Component {
 
   updatePlaylist = () => new Promise((resolve, reject) => {
     getPlaylistsFiltered('radio', global.user._id)
-      .then((response) => {
-        this.setState({ playlists: response.data });
+      .then((playlists) => {
+        this.setState({ playlists });
         resolve();
       })
       .catch((error) => {
