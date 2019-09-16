@@ -96,9 +96,15 @@ function addPlaylist(req, res) {
   if (req.body.name && req.body.publicFlag !== undefined
     && utils.isValidId(req.body.userId)
     && utils.isValidId(req.body.author)
-    && req.body.roomType) {
+    && req.body.authorName
+    && req.body.roomType
+    && req.body.date !== undefined
+    && req.body.dateTwo !== undefined
+    && req.body.location !== undefined
+    && req.body.privateId !== undefined) {
     playlistService.addPlaylist(req.body.name, req.body.publicFlag,
-      req.body.userId, req.body.author, req.body.roomType)
+      req.body.userId, req.body.author, req.body.authorName, req.body.roomType,
+      req.body.date, req.body.dateTwo, req.body.location, req.body.privateId)
       .then((response) => {
         res
           .status(response.status)

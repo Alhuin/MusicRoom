@@ -37,6 +37,20 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     default: 'radio',
   },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  dateTwo: {
+    type: Date,
+    default: Date.now,
+  },
+  location: {
+    type: String,
+  },
+  privateId: {
+    type: String,
+  },
 });
 playlistSchema.plugin(uniqueValidator);
 

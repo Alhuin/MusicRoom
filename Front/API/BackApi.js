@@ -322,8 +322,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, roomType) {
-  // alert(`A new playlist named [${name}] is born and she is ${publicFlag} with this userId : ${userId}`);
+function addPlaylist(name, publicFlag, userId, author, authorName, roomType, date, dateTwo, location, privateId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/add`, {
       method: 'POST',
@@ -332,7 +331,7 @@ function addPlaylist(name, publicFlag, userId, author, roomType) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name, publicFlag, userId, author, roomType,
+        name, publicFlag, userId, author, authorName, roomType, date, dateTwo, location, privateId,
       }),
     })
       .then(async (response) => {
