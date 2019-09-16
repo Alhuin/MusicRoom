@@ -149,7 +149,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
   return new Promise((resolve, reject) => {
     isMusicInPlaylist(playlistId, artist, title, album, albumCover, preview, link)
       .then((data) => {
-        if (!data.data) {
+        if (!data.data.length) {
           downloadMusic(link)
             .then((path) => {
               const music = new MusicModel({
@@ -180,7 +180,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
               reject(error);
             });
         } else {
-          reject(new CustomError(`Strange, but it appears that a music exist in this playlist ${data.data}`), 500);
+          reject(new CustomError('MusicService', `Strange, but it appears that a music exist in this playlist ${data.data}`, 500));
         }
       })
       .catch((error) => {

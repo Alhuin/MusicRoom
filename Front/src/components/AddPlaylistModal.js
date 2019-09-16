@@ -95,7 +95,7 @@ export default class AddPlaylistModal extends React.Component {
     if (this.state.type === 'GeolocOK') {
       dateP = (
         <Button
-          style={styles.dates}
+          style={styles.create}
           title="Start time"
           onPress={() => {
             this.setState({ dateMarkeur: 1 });
@@ -105,7 +105,7 @@ export default class AddPlaylistModal extends React.Component {
       );
       datePTwo = (
         <Button
-          style={styles.dates}
+          style={styles.create}
           title="End time"
           onPress={() => {
             this.setState({ dateMarkeur: 2 });
@@ -189,24 +189,23 @@ export default class AddPlaylistModal extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
     flexDirection: 'column',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    margin: '1%',
+    flex: 1,
   },
   Name: {
     alignItems: 'center',
-    margin: '1%',
+    justifyContent: 'space-around',
+    height: '40%',
+
   },
   switch: {
     alignItems: 'center',
-    margin: '1%',
+    justifyContent: 'space-around',
   },
   create: {
-    alignItems: 'center',
-    margin: '1%',
-  },
-  dates: {
-    margin: '1%',
+    justifyContent: 'space-around',
   },
 });
