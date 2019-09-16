@@ -16,18 +16,18 @@ function login(userName, password) {
     })
       .then(async (response) => {
         const data = await response.json();
+        // console.log('login response from fetch');
+        // console.log(response);
         if (response.status === 200) {
-          console.log('resolved 200');
           resolve(data);
         } else {
-          console.log('resolved not 200');
-          reject(new CustomError('loginError', data.msg, data.status));
+          reject(new CustomError('LoginError', data.msg, response.status));
         }
       })
       .catch((error) => {
-        console.log('rejected');
-        console.error(error);
-        reject(new CustomError('loginError', error.msg, error.status));
+        // console.log('login error from fetch');
+        // console.error(error);
+        reject(new CustomError('LoginError', error.msg, error.status));
       });
   });
 }
@@ -42,15 +42,18 @@ function getUserById(userId) {
       },
     })
       .then(async (response) => {
+        // console.log('GetUserById reponse from fetch');
+        // console.log(response);
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
         } else if (response.status === 404) {
-          reject(new CustomError('GetUser', response.message, response.status));
+          reject(new CustomError('GetUser', data.msg, 404));
         }
       })
       .catch((error) => {
-        console.log('reject');
+        // console.log('GetUserById error from fetch');
+        // console.log(error);
         reject(new CustomError(error.msg, error.status));
       });
   });
