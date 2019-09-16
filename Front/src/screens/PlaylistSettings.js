@@ -7,6 +7,7 @@ import UserListInSettings from '../components/UserListInSettings';
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist
 } from '../../API/BackApi';
+import NavigationUtils from "../navigation/NavigationUtils";
 
 class PlaylistSettings extends React.Component {
   state = {
@@ -47,7 +48,8 @@ class PlaylistSettings extends React.Component {
     if (String(authorId) !== String(global.user._id)) {
       DeleteUserInPlaylist(playlistId, global.user._id, isAdmin)
         .then(() => {
-          navigation.navigate('app');
+          NavigationUtils.resetStack(this, navigation.state.routeName, null);
+          navigation.navigate('Home');
         })
         .catch((error) => {
           console.log(error);
