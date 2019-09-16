@@ -26,7 +26,6 @@ import AppSettings from '../screens/AppSettings';
 import PlaylistSettings from '../screens/PlaylistSettings';
 import Loading from '../screens/Loading';
 import SearchTrack from '../components/SearchTrack';
-import Playlists from '../screens/Playlists';
 import Playlist from '../screens/Playlist';
 import Radios from '../screens/Radios';
 import Partys from '../screens/Partys';
@@ -190,7 +189,6 @@ const MainNavigator = Platform.select({
       path: 'main',
     },
     Settings: AppSettings,
-    // Playlists: PlaylistNavigator,
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
   },

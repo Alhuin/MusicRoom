@@ -34,8 +34,8 @@ class Partys extends React.Component {
 
   updatePlaylist = () => new Promise((resolve, reject) => {
     getPlaylistsFiltered('party', global.user._id)
-      .then((response) => {
-        this.setState({ playlists: response.data });
+      .then((playlists) => {
+        this.setState({ playlists });
         resolve();
       })
       .catch((error) => {
