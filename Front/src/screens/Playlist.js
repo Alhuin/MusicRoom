@@ -11,6 +11,7 @@ class Playlist extends React.Component {
     super(props);
     this.state = {
       admin: false,
+      stockedTracks: [],
       tracks: [],
       searchedText: '',
       playing: null,
@@ -55,7 +56,7 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     getMusicsByVoteInPlaylist(playlistId)
       .then((response) => {
-        this.setState({ tracks: response });
+        this.setState({ tracks: response, stockedTracks: response });
         resolve();
       })
       .catch((error) => {
@@ -88,11 +89,15 @@ class Playlist extends React.Component {
   };
 
   searchTracks = () => {
-    const { tracks, searchedText } = this.state;
-    this.setState({ tracks: [] }, () => {
-      tracks.filter(track => searchedText.indexOf(track.name) > -1
-        || searchedText.indexOf(track.artist) > -1);
-    });
+    let { tracks } = this.state;
+    const { searchedText, stockedTracks } = this.state;
+    if (searchedText !== '') {
+      tracks = stockedTracks.filter(track => track.title.search(searchedText) > -1
+        || track.artist.search(searchedText) > -1);
+    } else {
+      tracks = stockedTracks;
+    }
+    this.setState({ tracks });
   };
 
   render() {
