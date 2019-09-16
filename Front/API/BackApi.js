@@ -21,13 +21,13 @@ function login(userName, password) {
           resolve(data);
         } else {
           console.log('resolved not 200');
-          reject(new CustomError(data.msg, data.status));
+          reject(new CustomError('loginError', data.msg, data.status));
         }
       })
       .catch((error) => {
         console.log('rejected');
         console.error(error);
-        reject(new CustomError(error.msg, error.status));
+        reject(new CustomError('loginError', error.msg, error.status));
       });
   });
 }
