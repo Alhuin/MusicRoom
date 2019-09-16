@@ -1,10 +1,10 @@
 import React from 'react';
 
 import {
-  Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text,
+  Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text, Alert,
 } from 'react-native';
 import { login } from '../../API/BackApi';
-import { isSignedIn, onSignIn } from '../services/auth';
+import { onSignIn } from '../services/auth';
 
 export default class SignInForm extends React.Component {
   state = {
@@ -26,7 +26,7 @@ export default class SignInForm extends React.Component {
     } = this.state;
     const { navigation } = this.props;
     if (!(userName.length && password.length)) {
-      alert('error, empty field.');
+      Alert.alert('Error, empty field.');
       console.log('error, empty field');
     } else {
       login(userName, password)
@@ -34,24 +34,16 @@ export default class SignInForm extends React.Component {
           // console.log(user);
           onSignIn(JSON.stringify(user))
             .then(() => {
-              isSignedIn()
-                .then((userSignedIn) => {
-                  if (userSignedIn) {
-                    global.user = userSignedIn;
-                    navigation.navigate('app');
-                    // alert(global.user._id);
-                  } else {
-                    navigation.navigate('auth');
-                  }
-                })
-                .catch(error => alert(error + ' [isSignedIn]'));
+              global.user = user;
+              navigation.navigate('app');
             })
-            .catch(error => alert(error + ' [onSignIn]'));
-          // navigation.navigate('HomePage', { user });
+            .catch(error => console.log(error));
         })
         .catch((error) => {
+          // console.log('error');
+          // console.log(error);
           if (error.status === 401) {
-            alert(error.msg);
+            Alert.alert('Error, wrong username or password');
           }
         });
     }

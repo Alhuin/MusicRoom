@@ -10,17 +10,16 @@ export const isSignedIn = () => new Promise((resolve, reject) => {
   AsyncStorage.getItem('loggedUser')
     .then((res) => {
       if (res) {
-        console.log(res);
         const user = JSON.parse(res);
         getUserById(user._id)
           .then((foundUser) => {
             resolve(foundUser);
           })
           .catch((error) => {
-            reject(error);
+            reject(error); // On renvoie la CustomError de GetUserById
           });
       } else {
-        resolve(false); // a revoir
+        resolve(false); // pas de user dans asyncstorage
       }
     })
     .catch((err) => {
