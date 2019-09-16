@@ -22,12 +22,15 @@ function getUserById(req, res) {
   if ((req.params.userId && utils.isValidId(req.params.userId))) {
     userService.getUserById(req.params.userId)
       .then((response) => {
+        // console.log('GetUserById response from service');
+        // console.log(response);
         res
           .status(response.status)
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
+        // console.log('GetUserById error from service');
+        // console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });

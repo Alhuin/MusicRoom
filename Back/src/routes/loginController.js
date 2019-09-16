@@ -9,9 +9,11 @@ function login(req, res) {
           .send(response.data);
       })
       .catch((error) => {
+        // console.log('login error from service');
+        // console.log(error);
         res
           .status(error.status)
-          .send(error);
+          .send({ msg: error.msg });
       });
   } else {
     res.status(400).send({ msg: 'Wrong Parameters' });
