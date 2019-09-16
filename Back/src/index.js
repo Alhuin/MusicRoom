@@ -129,7 +129,7 @@ const seedDatas = async () => {
       album: 'Kingdom of Hardcore',
       albumCover: 'https://api.deezer.com/album/84599082/image',
       preview: 'https://cdns-preview-5.dzcdn.net/stream/c-594da52b1f185e066c91662de81c734b-2.mp3',
-      votes: 0,
+      votes: 1,
     });
     music2.save();
     const vote1 = new models.Vote({
