@@ -17,8 +17,8 @@ class Radios extends React.Component {
 
   componentDidMount(): void {
     getPlaylistsFiltered('radio', global.user._id)
-      .then((response) => {
-        this.setState({ playlists: response.data });
+      .then((playlists) => {
+        this.setState({ playlists });
       })
       .catch((error) => {
         console.error(error);
