@@ -6,9 +6,11 @@ export const onSignIn = user => AsyncStorage.setItem('loggedUser', user);
 export const onSignOut = () => AsyncStorage.removeItem('loggedUser');
 
 export const isSignedIn = () => new Promise((resolve, reject) => {
+  // alert('IsSignedIn Func');
   AsyncStorage.getItem('loggedUser')
     .then((res) => {
       if (res) {
+        console.log(res);
         const user = JSON.parse(res);
         getUserById(user._id)
           .then((foundUser) => {
@@ -21,5 +23,7 @@ export const isSignedIn = () => new Promise((resolve, reject) => {
         resolve(false); // a revoir
       }
     })
-    .catch(err => reject(err));
+    .catch((err) => {
+      reject(err);
+    });
 });

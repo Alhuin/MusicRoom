@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.2.6:3000/api';
+const server = 'http://10.3.1.3:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -17,12 +17,15 @@ function login(userName, password) {
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
+          console.log('resolved 200');
           resolve(data);
         } else {
+          console.log('resolved not 200');
           reject(new CustomError(data.msg, data.status));
         }
       })
       .catch((error) => {
+        console.log('rejected');
         console.error(error);
         reject(new CustomError(error.msg, error.status));
       });
@@ -42,11 +45,12 @@ function getUserById(userId) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
-        } else if (response.status === 400) {
-          resolve(undefined); // afin de renvoyer quelque chose meme si on ne trouve pas de user.
+        } else if (response.status === 404) {
+          reject(new CustomError('GetUser', response.message, response.status));
         }
       })
       .catch((error) => {
+        console.log('reject');
         reject(new CustomError(error.msg, error.status));
       });
   });
