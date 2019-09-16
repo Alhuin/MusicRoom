@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { addPlaylist } from '../../API/BackApi';
-import Components from './index';
+import DatePickerModal from './DatePickerModal';
 
 
 export default class AddPlaylistModal extends React.Component {
@@ -128,7 +128,7 @@ export default class AddPlaylistModal extends React.Component {
         }}
       >
         <View style={styles.container}>
-          <Components.DatePickerModal
+          <DatePickerModal
             setModalVisible={this.setModalVisible}
             DateModalVisible={this.state.DateModalVisible}
             dateMarkeur={this.state.dateMarkeur}
