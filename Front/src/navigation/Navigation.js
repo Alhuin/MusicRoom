@@ -189,7 +189,6 @@ const MainNavigator = Platform.select({
       path: 'main',
     },
     Settings: AppSettings,
-    // Playlists: PlaylistNavigator,
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
   },
