@@ -3,7 +3,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
-import { userInPlaylistUpgrade, userInPlaylistKick } from '../../API/BackApi';
+import { userInPlaylistUpgrade, KickUserInPlaylist } from '../../API/BackApi';
 
 class UserListInSettings extends React.Component {
   render() {
@@ -49,7 +49,7 @@ class UserListInSettings extends React.Component {
                   <TouchableOpacity
                     onPress={() => {
                       console.log(userId);
-                      userInPlaylistKick(playlistId, userId, false)
+                      KickUserInPlaylist(playlistId, userId, false)
                         .then((response) => {
                           onRefresh();
                         })

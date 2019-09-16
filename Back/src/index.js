@@ -73,7 +73,7 @@ const seedDatas = async () => {
     isVerified: true,
   });
   const user2 = new models.User({
-    login: 'bouh',
+    login: 'b',
     password: hashy,
     name: 'Leo',
     familyName: 'Renoi',

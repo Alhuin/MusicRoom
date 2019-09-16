@@ -4,7 +4,9 @@ import {
 import React from 'react';
 import AdminListInSettings from '../components/AdminListInSettings';
 import UserListInSettings from '../components/UserListInSettings';
-import { getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById } from '../../API/BackApi';
+import {
+  getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist
+} from '../../API/BackApi';
 
 class PlaylistSettings extends React.Component {
   state = {
@@ -29,6 +31,32 @@ class PlaylistSettings extends React.Component {
       this.getPublicity(playlistId);
     }
   }
+
+
+  toggleSwitch = (value) => {
+    // connect to back and change publicFlag, and generate a code
+    this.setState({ switchValue: value });
+  };
+
+  leavingPlaylist = () => {
+    const { navigation } = this.props;
+    const isAdmin = navigation.getParam('isAdmin');
+    const playlistId = navigation.getParam('playlistId');
+    const authorId = navigation.getParam('authorId');
+
+    if (String(authorId) !== String(global.user._id)) {
+      DeleteUserInPlaylist(playlistId, global.user._id, isAdmin)
+        .then(() => {
+          navigation.navigate('app');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      alert('Cannnot leave playlist yet, because you are the author.');
+      navigation.goBack();
+    }
+  };
 
   getPublicity = (playlistId) => {
     getPublicityOfPlaylistById(playlistId)
@@ -133,15 +161,6 @@ class PlaylistSettings extends React.Component {
     }
   });
 
-  toggleSwitch = (value) => {
-    this.setState({ switchValue: value });
-  };
-
-  leavingPlaylist = () => {
-    const { navigation } = this.props;
-    alert('Leaving playlist');
-  };
-
   render() {
     const {
       refreshing, users, admins, switchValue,
@@ -206,7 +225,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   leavingButton: {
-
+    margin: 10,
   },
   switch: {
 

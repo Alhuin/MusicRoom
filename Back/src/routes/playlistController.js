@@ -234,11 +234,32 @@ function userInPlaylistUpgrade(req, res) {
   }
 }
 
-function userInPlaylistKick(req, res) {
+function KickUserInPlaylist(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
   && req.body.isItAdmin !== undefined) {
-    playlistService.userInPlaylistKick(req.body.playlistId, req.body.userId, req.body.isItAdmin)
+    playlistService.KickUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(400).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function DeleteUserInPlaylist(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)
+  && req.body.isItAdmin !== undefined) {
+    playlistService.DeleteUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin)
       .then((response) => {
         res
           .status(response.status)
@@ -268,5 +289,6 @@ export default {
   getUsersByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  userInPlaylistKick,
+  KickUserInPlaylist,
+  DeleteUserInPlaylist,
 };

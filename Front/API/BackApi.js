@@ -507,7 +507,7 @@ function userInPlaylistUpgrade(playlistId, userId) {
   });
 }
 
-function userInPlaylistKick(playlistId, userId, isItAdmin) {
+function KickUserInPlaylist(playlistId, userId, isItAdmin) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/users/kick`, {
       method: 'POST',
@@ -518,6 +518,55 @@ function userInPlaylistKick(playlistId, userId, isItAdmin) {
       body: JSON.stringify({
         playlistId, userId, isItAdmin,
       }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
+function DeleteUserInPlaylist(playlistId, userId, isItAdmin) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/users/delete`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playlistId, userId, isItAdmin,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          console.log(data.msg);
+        }
+      })
+      .catch((error) => {
+        reject(new CustomError(error.msg, error.status));
+      });
+  });
+}
+
+function getPublicityOfPlaylistById(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/publicity/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
     })
       .then(async (response) => {
         const data = await response.json();
@@ -554,5 +603,7 @@ export {
   getUsersByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  userInPlaylistKick,
+  KickUserInPlaylist,
+  DeleteUserInPlaylist,
+  getPublicityOfPlaylistById,
 };

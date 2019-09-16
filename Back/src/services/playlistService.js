@@ -288,13 +288,51 @@ function userInPlaylistUpgrade(playlistId, userId) {
   });
 }
 
-function userInPlaylistKick(playlistId, userId, isItAdmin) {
+function DeleteUserInPlaylist(playlistId, userId, isItAdmin) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('UserInPlaylistKick', 'No playlist with this id in database', 400));
+        reject(new CustomError('DeleteUserInPlaylist', 'No playlist with this id in database', 400));
+      } else {
+        for (let i = 0; i < playlist.users.length; i++) {
+          if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
+            playlist.users.splice(i, 1);
+            if (isItAdmin) {
+              for (let j = 0; j < playlist.admins.length; j++) {
+                if (String(playlist.admins[j]._id) === String(userId) && String(playlist.admins[j]._id) !== String(playlist.author)) {
+                  playlist.admins.splice(j, 1);
+                  break;
+                }
+              }
+            }
+            playlist.save((saveError, savedPlaylist) => {
+              if (saveError) {
+                reject(new CustomError('MongoError', saveError.message, 500));
+              } else {
+                resolve({
+                  status: 200,
+                  data: true,
+                });
+              }
+            });
+            break;
+          }
+        }
+      }
+    });
+  });
+}
+
+// this function shall additionnally keep these users kicked in a list, for no possible future joining
+function KickUserInPlaylist(playlistId, userId, isItAdmin) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('KickUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
         for (let i = 0; i < playlist.users.length; i++) {
           if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
@@ -338,5 +376,6 @@ export default {
   getUsersByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  userInPlaylistKick,
+  KickUserInPlaylist,
+  DeleteUserInPlaylist,
 };
