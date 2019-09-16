@@ -2,6 +2,13 @@ import CustomError from './errorHandler';
 
 const server = 'http://10.3.1.3:3000/api';
 
+
+/*
+                    Users & Login
+ */
+
+// Dans le catch du fetch on reject(error) car on connait pas son objet d'erreur => a tester
+
 function login(userName, password) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/login`, {
@@ -24,11 +31,7 @@ function login(userName, password) {
           reject(new CustomError('LoginError', data.msg, response.status));
         }
       })
-      .catch((error) => {
-        // console.log('login error from fetch');
-        // console.error(error);
-        reject(new CustomError('LoginError', error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -51,80 +54,85 @@ function getUserById(userId) {
           reject(new CustomError('GetUser', data.msg, 404));
         }
       })
-      .catch((error) => {
-        // console.log('GetUserById error from fetch');
-        // console.log(error);
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
 function addUser(userName, password, name, familyName, email) {
-  fetch(`${server}/users`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      login: userName, password, name, familyName, email,
-    }),
-  })
-    .then(async (response) => {
-      const data = await response.json();
-      if (response.status === 200) {
-        alert(data.msg);
-      } else {
-        alert(`error ${data.status}: ${data.msg}`);
-      }
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/users`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login: userName, password, name, familyName, email,
+      }),
     })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+          // alert(data.msg);
+        } else {
+          reject(new CustomError('AddUser', data.msg, response.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch(error => reject(error));
+  });
 }
-
-function sendEmailToken(loginOrEmail) {
-  fetch(`${server}/users/emailToken/`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ loginOrEmail }),
-  })
-    .then(async (response) => {
-      const data = await response.json();
-      if (response.status === 200) {
-        alert('An email has been sent');
-      } else {
-        alert(`error ${data.status}: ${data.msg}`);
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+//
+// function sendEmailToken(loginOrEmail) {
+//   return new Promise((resolve, reject) => {
+//     fetch(`${server}/users/emailToken/`, {
+//       method: 'POST',
+//       headers: {
+//         Accept: 'application/json, text/plain, */*',
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ loginOrEmail }),
+//     })
+//       .then(async (response) => {
+//         const data = await response.json();
+//         if (response.status === 200) {
+//           resolve(data);
+//           // alert('An email has been sent');
+//         } else {
+//           reject(new CustomError('EmailToken', data.msg, response.status));
+//           // alert(`error ${data.status}: ${data.msg}`);
+//         }
+//       })
+//       .catch((error) => {
+//         reject(error);
+//         // console.error(error);
+//       });
+//   });
+// }
 
 function sendPasswordToken(loginOrEmail) {
-  fetch(`${server}/users/passToken/`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ loginOrEmail }),
-  })
-    .then(async (response) => {
-      const data = await response.json();
-      if (response.status === 200) {
-        alert('An email has been sent');
-      } else {
-        alert(`error ${data.status}: ${data.msg}`);
-      }
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/users/passToken/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ loginOrEmail }),
     })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+          // alert('An email has been sent');
+        } else {
+          reject(new CustomError('PasswordToken', data.msg, response.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch(error => reject(error));
+  });
 }
 
 function updatePassword(userId, password) {
@@ -137,18 +145,23 @@ function updatePassword(userId, password) {
       },
       body: JSON.stringify({ userId, password }),
     })
-      .then(
-        resolve({
-          status: 200,
-          data: { msg: 'Password Updated' },
-        }),
-      )
-      .catch((error) => {
-        console.error(error);
-        reject(new CustomError(error.msg, error.status));
-      });
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('UpdatePassword', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
   });
 }
+
+
+/*
+                      Musics, Playlists & Votes
+ */
+
 
 function getPlaylists() {
   return new Promise((resolve, reject) => {
@@ -163,22 +176,13 @@ function getPlaylists() {
         const data = await response.json();
         if (response.status === 200) {
           // alert('GetAllPlaylists is success');
-          resolve({
-            status: 200,
-            data,
-          });
-        } else if (response.status === 404) {
-          reject(new CustomError('Page Not Found', 404));
+          resolve(data);
         } else {
-          reject(new CustomError(data.msg, data.status));
+          reject(new CustomError('GetPlaylists', data.msg, response.status));
           // alert(`error ${data.status}: ${data.msg}`);
         }
       })
-      .catch((error) => {
-        console.error(error);
-        reject(new CustomError(error.msg, error.status));
-        // console.error(error);
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -194,20 +198,12 @@ function getPlaylistsFilteredByRoom(roomType) {
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
-          resolve({
-            status: 200,
-            data,
-          });
-        } else if (response.status === 404) {
-          reject(new CustomError('Page Not Found', 404));
+          resolve(data);
         } else {
-          reject(new CustomError(data.msg, data.status));
+          reject(new CustomError('PlaylistsFilteredByRoom', data.msg, response.status));
         }
       })
-      .catch((error) => {
-        console.error(error);
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -226,20 +222,12 @@ function getPlaylistsFiltered(roomType, userId) {
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
-          resolve({
-            status: 200,
-            data,
-          });
-        } else if (response.status === 404) {
-          reject(new CustomError('Page Not Found', 404));
+          resolve(data);
         } else {
-          reject(new CustomError(data.msg, data.status));
+          reject(new CustomError('PlaylistsFiltered', data.msg, response.status));
         }
       })
-      .catch((error) => {
-        console.error(error);
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -256,11 +244,11 @@ function getPlaylistById(playlistId) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
+        } else {
+          reject(new CustomError('PlaylistsById', data.msg, response.status));
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -277,11 +265,11 @@ function getMusicsByVoteInPlaylist(playlistId) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
+        } else {
+          reject(new CustomError('MusicsByVote', data.msg, response.status));
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -302,12 +290,10 @@ function voteMusic(userId, musicId, playlistId, value) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError(data.msg, response.status));
+          reject(new CustomError('VoteMusic', data.msg, response.status));
         }
       })
-      .catch((error) => {
-        reject(error);
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -328,12 +314,11 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('addMusic', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -355,12 +340,11 @@ function addPlaylist(name, publicFlag, userId, author, roomType) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('AddPlaylist', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -381,12 +365,11 @@ function joinRoom(userId, playlistCode) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('JoinRoom', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -407,12 +390,11 @@ function isAdmin(userId, playlistId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('isAdmin', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -430,12 +412,11 @@ function getAdminsByPlaylistId(playlistId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('getAdmins', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -453,12 +434,11 @@ function getUsersByPlaylistId(playlistId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('UsersByPlaylist', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -479,12 +459,11 @@ function adminInPlaylistDowngrade(playlistId, userId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('AdminDowngrade', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -505,12 +484,11 @@ function userInPlaylistUpgrade(playlistId, userId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('UserUpgrade', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -531,12 +509,11 @@ function KickUserInPlaylist(playlistId, userId, isItAdmin) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('KickUser', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -557,12 +534,11 @@ function DeleteUserInPlaylist(playlistId, userId, isItAdmin) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('DeleteUserInPlaylist', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
@@ -580,26 +556,25 @@ function getPublicityOfPlaylistById(playlistId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          console.log(data.msg);
+          reject(new CustomError('PlaylistIsPlublic', data.msg, response.status));
+          // console.log(data.msg);
         }
       })
-      .catch((error) => {
-        reject(new CustomError(error.msg, error.status));
-      });
+      .catch(error => reject(error));
   });
 }
 
 export {
   login,
   addUser,
-  sendEmailToken,
+  // sendEmailToken,
   sendPasswordToken,
   updatePassword,
   getPlaylists,
   getPlaylistsFilteredByRoom,
   getPlaylistsFiltered,
   getMusicsByVoteInPlaylist,
-  getPlaylistById,
+  // getPlaylistById,
   getUserById,
   voteMusic,
   addMusicToPlaylist,

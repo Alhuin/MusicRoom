@@ -9,7 +9,7 @@ function getMusics(req, res) {
         .send(response.data);
     })
     .catch((error) => {
-      console.error(error);
+      // console.error(error);
       res
         .status(error.status)
         .send({ msg: error.msg });
@@ -25,7 +25,7 @@ function getMusicById(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
+        // console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });
@@ -44,7 +44,7 @@ function getMusicsByVote(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
+        // console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });
@@ -63,7 +63,7 @@ function deleteMusicById(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
+        // console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });
@@ -103,7 +103,7 @@ function addMusicToPlaylist(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
         res
           .status(error.status)
           .send({ msg: error.msg });
