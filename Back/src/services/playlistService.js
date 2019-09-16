@@ -102,7 +102,7 @@ function getPlaylistsFiltered(roomType, userId) {
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, roomType) {
+function addPlaylist(name, publicFlag, userId, author, authorName, roomType, date, dateTwo, location, privateId) {
   return new Promise((resolve, reject) => {
     const playlist = new models.Playlist({
       name,
@@ -111,7 +111,12 @@ function addPlaylist(name, publicFlag, userId, author, roomType) {
       users: [userId],
       allowVotes: true,
       roomType,
-      authorName: author.name,
+      authorName,
+      admins: [author],
+      date,
+      dateTwo,
+      location,
+      privateId,
     });
     playlist.save((saveError, savedPlaylist) => {
       if (saveError) {

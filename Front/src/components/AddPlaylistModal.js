@@ -89,10 +89,12 @@ export default class AddPlaylistModal extends React.Component {
       roomType,
       updatePlaylist,
     } = this.props;
-    const { switchValue } = this.state;
+    const {
+      switchValue, type, date, dateTwo, location, namePlaylist,
+    } = this.state;
     let dateP;
     let datePTwo;
-    if (this.state.type === 'GeolocOK') {
+    if (type === 'GeolocOK') {
       dateP = (
         <Button
           style={styles.create}
@@ -168,8 +170,7 @@ export default class AddPlaylistModal extends React.Component {
                 // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN
                 // DESDOUS ET DE RECUP SUR LES MODAL LES DATE
 */
-                this.generatePrivateId();
-                addPlaylist(this.state.namePlaylist, switchValue, userId, userId, roomType)
+                addPlaylist(namePlaylist, switchValue, userId, userId, global.user.name, roomType, date, dateTwo, location, this.generatePrivateId())
                   .then(() => {
                     setModalVisible();
                     updatePlaylist();
