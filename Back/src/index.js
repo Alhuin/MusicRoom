@@ -18,6 +18,8 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/tracks', express.static(`${__dirname}/deezpy/downloads`));
+
 /**
  *      Request logger Middleware
  */

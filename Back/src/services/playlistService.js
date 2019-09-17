@@ -2,6 +2,7 @@ import PlaylistModel from '../models/playlistModel';
 import CustomError from './errorHandler';
 import models from '../models';
 import UserModel from '../models/userModel';
+import MusicModel from '../models/musicModel';
 
 function getPlaylists() {
   return new Promise((resolve, reject) => {
@@ -368,6 +369,24 @@ function KickUserInPlaylist(playlistId, userId, isItAdmin) {
   });
 }
 
+function getNextTrack(playlistId) {
+  return new Promise((resolve, reject) => {
+    MusicModel.find({ playlist: playlistId })
+      .sort({ votes: -1 })
+      .limit(1)
+      .exec((error, track) => {
+        if (error) {
+          reject(new CustomError('MongoError', error.message, 500));
+        } else {
+          resolve({
+            status: 200,
+            data: track,
+          });
+        }
+      });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -383,4 +402,5 @@ export default {
   userInPlaylistUpgrade,
   KickUserInPlaylist,
   DeleteUserInPlaylist,
+  getNextTrack,
 };

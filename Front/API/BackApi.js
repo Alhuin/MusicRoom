@@ -563,6 +563,31 @@ function getPublicityOfPlaylistById(playlistId) {
   });
 }
 
+/*
+                    Track Player
+ */
+
+function getNextTrack(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/nextTrack/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('GetNextTrack', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
 export {
   login,
   addUser,
@@ -587,4 +612,5 @@ export {
   KickUserInPlaylist,
   DeleteUserInPlaylist,
   getPublicityOfPlaylistById,
+  getNextTrack,
 };

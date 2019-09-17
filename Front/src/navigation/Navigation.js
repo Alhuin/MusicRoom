@@ -29,6 +29,7 @@ import SearchTrack from '../components/SearchTrack';
 import Playlist from '../screens/Playlist';
 import Radios from '../screens/Radios';
 import Partys from '../screens/Partys';
+import TrackPlayer from '../screens/TrackPlayer';
 
 const createBurgerMenu = navigation => Platform.select({
   ios: null,
@@ -187,6 +188,9 @@ const MainNavigator = Platform.select({
     Home: {
       screen: HomeNavigator,
       path: 'main',
+    },
+    TrackPlayer: {
+      screen: TrackPlayer,
     },
     Settings: AppSettings,
     Parties: PartysNavigator,

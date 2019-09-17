@@ -158,7 +158,7 @@ function isAdmin(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -196,7 +196,7 @@ function getUsersByPlaylistId(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -236,7 +236,7 @@ function userInPlaylistUpgrade(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -257,7 +257,7 @@ function KickUserInPlaylist(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -278,7 +278,26 @@ function DeleteUserInPlaylist(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(400).send({ msg: 'Wrong Parameters' });
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function getNextTrack(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getNextTrack(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
 
@@ -297,4 +316,5 @@ export default {
   userInPlaylistUpgrade,
   KickUserInPlaylist,
   DeleteUserInPlaylist,
+  getNextTrack,
 };

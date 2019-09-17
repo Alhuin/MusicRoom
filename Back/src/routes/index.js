@@ -53,6 +53,7 @@ router.get('/playlists/admins/:playlistId', playlistController.getAdminsByPlayli
 router.post('/playlists/admins/downgrade', playlistController.adminInPlaylistDowngrade);
 router.get('/playlists/users/:playlistId', playlistController.getUsersByPlaylistId);
 router.get('/playlists/publicity/:playlistId', playlistController.getPublicityOfPlaylistById);
+router.get('/playlists/nextTrack/:playlistId', playlistController.getNextTrack);
 router.post('/playlists/users/upgrade', playlistController.userInPlaylistUpgrade);
 router.post('/playlists/users/kick', playlistController.KickUserInPlaylist);
 router.post('/playlists/users/delete', playlistController.DeleteUserInPlaylist);
