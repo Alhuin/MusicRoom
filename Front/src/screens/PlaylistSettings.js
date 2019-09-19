@@ -4,8 +4,10 @@ import {
 import React from 'react';
 import AdminListInSettings from '../components/AdminListInSettings';
 import UserListInSettings from '../components/UserListInSettings';
+import BansListInSettings from '../components/BansListInSettings';
 import {
-  getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist
+  getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist,
+  getBansByPlaylistId,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 
@@ -14,6 +16,7 @@ class PlaylistSettings extends React.Component {
     refreshing: false,
     admins: [],
     users: [],
+    bans: [],
     switchValue: false,
   };
 
@@ -24,7 +27,13 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       this.updateAdmins()
         .then(() => {
-          this.updateUsers();
+          this.updateUsers()
+            .then(() => {
+              this.updateBans();
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         })
         .catch((error) => {
           console.error(error);
@@ -71,7 +80,30 @@ class PlaylistSettings extends React.Component {
   };
 
   // finally, it is the two same refresh functions
-  _onRefreshAdmins = () => {
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.updateAdmins()
+      .then(() => {
+        this.updateUsers()
+          .then(() => {
+            this.updateBans()
+              .then(() => {
+                this.setState({ refreshing: false });
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+/*  _onRefreshAdmins = () => {
     this.setState({ refreshing: true });
     this.updateAdmins()
       .then(() => {
@@ -94,7 +126,13 @@ class PlaylistSettings extends React.Component {
       .then(() => {
         this.updateUsers()
           .then(() => {
-            this.setState({ refreshing: false });
+            this.updateBans()
+              .then(() => {
+                this.setState({ refreshing: false });
+              })
+              .catch((error) => {
+                console.error(error);
+              });
           })
           .catch((error) => {
             console.error(error);
@@ -104,6 +142,23 @@ class PlaylistSettings extends React.Component {
         console.error(error);
       });
   };
+
+  _onRefreshBans = () => {
+    this.setState({ refreshing: true });
+    this.updateAdmins()
+      .then(() => {
+        this.updateUsers()
+          .then(() => {
+            this.setState({ refreshing: false });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };*/
 
   updateAdmins = () => new Promise((resolve, reject) => {
     const { navigation } = this.props;
@@ -163,9 +218,38 @@ class PlaylistSettings extends React.Component {
     }
   });
 
+  updateBans = () => new Promise((resolve, reject) => {
+    const { navigation } = this.props;
+    // const { admins } = this.state;
+
+    const isAdmin = navigation.getParam('isAdmin');
+    const playlistId = navigation.getParam('playlistId');
+    if (isAdmin) {
+      getBansByPlaylistId(playlistId)
+        .then((response) => {
+          // if (admins) {
+          //   for (let i = 0; i < admins.length; i++) {
+          //     for (let j = 0; j < response.length; j++) {
+          //       if (String(admins[i]._id) === String(response[j]._id)) {
+          //         response.splice(j, 1);
+          //         j--;
+          //       }
+          //     }
+          //   }
+          // }
+          this.setState({ bans: response });
+          resolve();
+        })
+        .catch((error) => {
+          console.error(error + ' in updateUsers');
+          reject();
+        });
+    }
+  });
+
   render() {
     const {
-      refreshing, users, admins, switchValue,
+      refreshing, users, admins, bans, switchValue,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -185,7 +269,7 @@ class PlaylistSettings extends React.Component {
           <AdminListInSettings
             refreshing={refreshing}
             admins={admins}
-            onRefresh={this._onRefreshAdmins}
+            onRefresh={this._onRefresh}
             authorId={authorId}
             playlistId={playlistId}
           />
@@ -193,7 +277,14 @@ class PlaylistSettings extends React.Component {
           <UserListInSettings
             refreshing={refreshing}
             users={users}
-            onRefresh={this._onRefreshUsers}
+            onRefresh={this._onRefresh}
+            playlistId={playlistId}
+          />
+          <Text> Bannis </Text>
+          <BansListInSettings
+            refreshing={refreshing}
+            bans={bans}
+            onRefresh={this._onRefresh}
             playlistId={playlistId}
           />
         </View>

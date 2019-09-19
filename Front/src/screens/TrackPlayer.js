@@ -4,7 +4,6 @@ import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 
 import Player from '../components/TrackPlayer';
 import playlistData from '../assets/testPlaylist.json';
-import localTrack from '../assets/pure.m4a';
 
 export default function LandingScreen() {
   const playbackState = usePlaybackState();
@@ -34,7 +33,6 @@ export default function LandingScreen() {
       await TrackPlayer.add(playlistData);
       await TrackPlayer.add({
         id: 'local-track',
-        url: localTrack,
         title: 'Pure (Demo)',
         artist: 'David Chavez',
         artwork: 'https://picsum.photos/200',

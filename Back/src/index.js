@@ -93,12 +93,13 @@ const seedDatas = async () => {
     if (i === 0) {
       playlist = new models.Playlist({
         name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
-        users: [user1, admin, user2],
+        users: [user1, admin],
         author: admin._id,
         authorName: admin.name,
         roomType,
         publicFlag: true,
         admins: [admin],
+        bans: [user2],
       });
     } else {
       playlist = new models.Playlist({

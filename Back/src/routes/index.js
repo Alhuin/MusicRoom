@@ -50,12 +50,13 @@ router.get('/playlists/:roomType', playlistController.getPlaylistsFilteredByRoom
 router.post('/playlists/filtered', playlistController.getPlaylistsFiltered);
 router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 router.get('/playlists/admins/:playlistId', playlistController.getAdminsByPlaylistId);
+router.get('/playlists/bans/:playlistId', playlistController.getBansByPlaylistId);
 router.post('/playlists/admins/downgrade', playlistController.adminInPlaylistDowngrade);
 router.get('/playlists/users/:playlistId', playlistController.getUsersByPlaylistId);
 router.get('/playlists/publicity/:playlistId', playlistController.getPublicityOfPlaylistById);
 router.get('/playlists/nextTrack/:playlistId', playlistController.getNextTrack);
 router.post('/playlists/users/upgrade', playlistController.userInPlaylistUpgrade);
-router.post('/playlists/users/kick', playlistController.KickUserInPlaylist);
+router.post('/playlists/users/ban', playlistController.BanUserInPlaylist);
 router.post('/playlists/users/delete', playlistController.DeleteUserInPlaylist);
 router.post('/playlists/add', playlistController.addPlaylist);
 router.post('/playlists/isAdmin', playlistController.isAdmin);

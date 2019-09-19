@@ -228,6 +228,31 @@ function getUsersByPlaylistId(playlistId) {
   });
 }
 
+function getBansByPlaylistId(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else {
+        UserModel.find({
+          _id: {
+            $in: playlist.bans,
+          },
+        }, (err, bans) => {
+          if (error) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: bans,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 function adminInPlaylistDowngrade(playlistId, userId) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
@@ -332,14 +357,15 @@ function DeleteUserInPlaylist(playlistId, userId, isItAdmin) {
 }
 
 // this function shall additionnally keep these users kicked in a list, for no possible future joining
-function KickUserInPlaylist(playlistId, userId, isItAdmin) {
+function BanUserInPlaylist(playlistId, userId, isItAdmin) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('KickUserInPlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('BanUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
+        playlist.bans.push(userId);
         for (let i = 0; i < playlist.users.length; i++) {
           if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
             playlist.users.splice(i, 1);
@@ -398,9 +424,10 @@ export default {
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,
+  getBansByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  KickUserInPlaylist,
+  BanUserInPlaylist,
   DeleteUserInPlaylist,
   getNextTrack,
 };

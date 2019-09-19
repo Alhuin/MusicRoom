@@ -1,7 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
-
+const server = 'http://10.4.1.6:3000/api';
 
 /*
                     Users & Login
@@ -441,6 +440,28 @@ function getUsersByPlaylistId(playlistId) {
   });
 }
 
+function getBansByPlaylistId(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/bans/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getBans', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function adminInPlaylistDowngrade(playlistId, userId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/admins/downgrade`, {
@@ -491,9 +512,9 @@ function userInPlaylistUpgrade(playlistId, userId) {
   });
 }
 
-function KickUserInPlaylist(playlistId, userId, isItAdmin) {
+function BanUserInPlaylist(playlistId, userId, isItAdmin) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/users/kick`, {
+    fetch(`${server}/playlists/users/ban`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -508,7 +529,7 @@ function KickUserInPlaylist(playlistId, userId, isItAdmin) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('KickUser', data.msg, response.status));
+          reject(new CustomError('BanUser', data.msg, response.status));
           // console.log(data.msg);
         }
       })
@@ -607,9 +628,10 @@ export {
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,
+  getBansByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  KickUserInPlaylist,
+  BanUserInPlaylist,
   DeleteUserInPlaylist,
   getPublicityOfPlaylistById,
   getNextTrack,
