@@ -13,15 +13,15 @@ const models = {
   Token: TokenModel,
 };
 
-const connectDb = () => mongoose.connect(
-  process.env.DATABASE_URL,
-  { useNewUrlParser: true },
-  (err) => {
-    if (err) {
-      throw (err);
-    }
-  },
-);
+const connectDb = () => mongoose
+  .connect(process.env.DATABASE_URL, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
+  .then(() => console.log('DB Connected!'))
+  .catch((err) => console.log(`DB Connection Error: ${err.message}`));
+
+mongoose.set('useCreateIndex', true);
 
 export { connectDb };
 
