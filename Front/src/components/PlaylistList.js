@@ -24,6 +24,7 @@ class PlaylistList extends React.Component {
               authorId={item.author}
               authorName={item.authorName}
               playlistId={item._id}
+              users={item.users}
               navigation={navigation}
               userId={userId}
               roomType={roomType}

@@ -29,31 +29,37 @@ export default class PlaylistInPlaylists extends React.Component {
   };
 
   render() {
-    const { name, roomType, authorName } = this.props;
+    const { name, roomType, authorName, users } = this.props;
 
     if (roomType === 'radio') {
       return (
-        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
-          <Text>{ name }</Text>
-          <View style={styles.Author}>
-            <Text>
-              Author : { authorName }
-            </Text>
-            <Icon name="people" />
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
+            <Text>{ name }</Text>
+            <View style={styles.Author}>
+              <Text>
+                Author : { authorName }
+              </Text>
+              <Icon name="people" />
+              <Text>
+                { users.length }
+              </Text>
+            </View>
+          </TouchableOpacity>
       );
     } else if (roomType === 'party') {
       return (
-        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
-          <Text>{ name }</Text>
-          <View style={styles.Author}>
-            <Text>
-              Author : { authorName }
-            </Text>
-            <Icon name="people" />
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
+            <Text>{ name }</Text>
+            <View style={styles.Author}>
+              <Text>
+                Author : { authorName }
+              </Text>
+              <Icon name="people" />
+              <Text>
+                { users.length }
+              </Text>
+            </View>
+          </TouchableOpacity>
       );
     } else {
       return (null);
