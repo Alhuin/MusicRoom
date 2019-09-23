@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
-import { getMusicsByVoteInPlaylist, isAdmin } from '../../API/BackApi';
+import { getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist } from '../../API/BackApi';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -17,12 +17,15 @@ class Playlist extends React.Component {
       playing: null,
       refreshing: false,
       modalVisible: false,
+      myVotes: [],
     };
   }
 
   componentDidMount(): void {
     this._isAdmin();
-    this.updateTracks();
+    this.updateMyVotes().then(() => {
+      this.updateTracks();
+    });
   }
 
   componentWillUnmount(): void {
@@ -39,8 +42,10 @@ class Playlist extends React.Component {
 
   _onRefresh = () => {
     this.setState({ refreshing: true });
-    this.updateTracks().then(() => {
-      this.setState({ refreshing: false });
+    this.updateMyVotes().then(() => {
+      this.updateTracks().then(() => {
+        this.setState({ refreshing: false });
+      });
     });
   };
 
@@ -57,6 +62,21 @@ class Playlist extends React.Component {
     getMusicsByVoteInPlaylist(playlistId)
       .then((response) => {
         this.setState({ tracks: response, stockedTracks: response });
+        resolve();
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
+
+  updateMyVotes = () => new Promise((resolve, reject) => {
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    const userId = global.user._id;
+    getMyVotesInPlaylist(userId, playlistId)
+      .then((votes) => {
+        this.setState({ myVotes : votes });
         resolve();
       })
       .catch((error) => {
@@ -102,7 +122,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin,
+      tracks, playing, refreshing, modalVisible, admin, myVotes,
     } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
@@ -130,6 +150,8 @@ class Playlist extends React.Component {
         </TouchableOpacity>
       );
     }
+    // console.log(this.state.myVotes);
+
     return (
       <View style={{ height: '100%' }}>
         <View
@@ -161,10 +183,12 @@ class Playlist extends React.Component {
             playing={playing}
             playlistId={playlistId}
             updateTracks={this.updateTracks}
+            updateMyVotes={this.updateMyVotes}
             refreshing={refreshing}
             onRefresh={this._onRefresh}
             userId={userId}
             roomType={roomType}
+            myVotes={myVotes}
           />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addMusic" />

@@ -70,5 +70,7 @@ router.get('/votes', voteController.getVotes);
 router.get('/votes/:voteId', voteController.getVoteById);
 router.delete('/votes/:voteId', voteController.deleteVoteById);
 router.post('/voteMusic', voteController.voteMusic);
+router.post('/votes/playlist', voteController.getMyVotesInPlaylist);
+
 
 export default router;

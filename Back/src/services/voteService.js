@@ -1,6 +1,6 @@
 import VoteModel from '../models/voteModel';
 import CustomError from './errorHandler';
-import MusicModel from "../models/musicModel";
+import MusicModel from '../models/musicModel';
 
 function getVotes() {
   return new Promise((resolve, reject) => {
@@ -28,6 +28,21 @@ function getVoteById(voteId) {
         resolve({
           status: 200,
           data: vote,
+        });
+      }
+    });
+  });
+}
+
+function getMyVotesInPlaylist(userId, playlistId) {
+  return new Promise((resolve, reject) => {
+    VoteModel.find({ playlist: playlistId, user: userId }, (error, votes) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else {
+        resolve({
+          status: 200,
+          data: votes,
         });
       }
     });
@@ -152,4 +167,5 @@ export default {
   getVoteById,
   deleteVoteById,
   voteMusic,
+  getMyVotesInPlaylist,
 };

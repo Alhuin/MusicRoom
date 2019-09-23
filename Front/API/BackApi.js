@@ -295,6 +295,30 @@ function voteMusic(userId, musicId, playlistId, value) {
   });
 }
 
+function getMyVotesInPlaylist(userId, playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/votes/playlist`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, playlistId,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('GetMyVoteInPlaylist', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover, preview, link) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/musics/add`, {
@@ -657,4 +681,5 @@ export {
   getPublicityOfPlaylistById,
   getNextTrack,
   addUserToPlaylistAndUnbanned,
+  getMyVotesInPlaylist,
 };
