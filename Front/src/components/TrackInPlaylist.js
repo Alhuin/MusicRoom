@@ -11,11 +11,14 @@ import { voteMusic } from '../../API/BackApi';
 class TrackInPlaylist extends React.Component {
   _vote = (value) => {
     const {
-      track, playlistId, updateTracks, userId,
+      track, playlistId, updateTracks, userId, updateMyVotes,
     } = this.props;
     voteMusic(userId, track._id, playlistId, value)
       .then(() => {
-        updateTracks();
+        updateMyVotes()
+          .then(() => {
+            updateTracks();
+          });
       })
       .catch((error) => {
         if (error.status === 400) {
@@ -29,6 +32,7 @@ class TrackInPlaylist extends React.Component {
       track,
       handlePress,
       roomType,
+      myVoteValue,
     } = this.props;
     if (roomType === 'radio') {
       return (
@@ -69,6 +73,10 @@ class TrackInPlaylist extends React.Component {
         </TouchableOpacity>
       );
     } else if (roomType === 'party') {
+      let arrowUpStyle = { color: 'grey' };
+      let arrowDownStyle = { color: 'grey' };
+      if (myVoteValue > 0) arrowUpStyle = { color: 'green' };
+      else if (myVoteValue < 0) arrowDownStyle = { color: 'red' };
       return (
         <TouchableOpacity
           activeOpacity={1}
@@ -114,8 +122,8 @@ class TrackInPlaylist extends React.Component {
                 onPress={() => this._vote(1)}
               >
                 <Icon
-                  name="arrow-round-up"
-                  style={{ color: 'green' }}
+                  name="ios-arrow-dropup"
+                  style={arrowUpStyle}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -123,8 +131,8 @@ class TrackInPlaylist extends React.Component {
                 onPress={() => this._vote(-1)}
               >
                 <Icon
-                  name="arrow-round-down"
-                  style={{ color: 'red' }}
+                  name="ios-arrow-dropdown"
+                  style={arrowDownStyle}
                 />
               </TouchableOpacity>
             </View>
@@ -137,7 +145,7 @@ class TrackInPlaylist extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+let styles = StyleSheet.create({
   main_container: {
     height: 120,
     flexDirection: 'row',
