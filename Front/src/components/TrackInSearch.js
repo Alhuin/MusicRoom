@@ -5,17 +5,10 @@ import {
 import { addMusicToPlaylist } from '../../API/BackApi';
 
 class TrackInSearch extends React.Component {
-  state = {
-    pressed: 1,
-  };
-
-  _handleAdd = () => {
-    this.setState({ pressed: 0 });
-  }
 
   render() {
     const {
-      track, handlePress, playlistId, updateTracks, userId, setModalVisible,
+      track, handlePress, playlistId, updateTracks, userId, setModalVisible, displayLoader,
     } = this.props;
 
     // console.log(track);
@@ -61,19 +54,18 @@ class TrackInSearch extends React.Component {
                 color="#666666"
                 title="Add music"
                 onPress={() => {
-                  if (this.state.pressed === 1) {
-                    this._handleAdd();
-                    addMusicToPlaylist(playlistId, userId, track.title, track.artist.name,
-                      track.album.title, track.album.cover, track.preview, track.link)
-                      .then((data) => {
-                        setModalVisible();
-                        updateTracks();
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                        alert('An error occured, please try again later.');
-                      });
-                  }
+                  displayLoader();
+                  addMusicToPlaylist(playlistId, userId, track.title, track.artist.name,
+                    track.album.title, track.album.cover, track.preview, track.link)
+                    .then(() => {
+                      setModalVisible();
+                      // this.setState({ loading: 0 });
+                      updateTracks();
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      alert('An error occured, please try again later.');
+                    });
                 }}
               />
             </View>

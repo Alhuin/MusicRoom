@@ -6,7 +6,6 @@ const uniqueValidator = require('mongoose-unique-validator');
 const playlistSchema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true,
     required: true,
   },
   allowVotes: {
