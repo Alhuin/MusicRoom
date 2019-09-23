@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.1.6:3000/api';
+const server = 'http://10.3.1.4:3000/api';
 
 /*
                     Users & Login
@@ -155,7 +155,6 @@ function updatePassword(userId, password) {
       .catch(error => reject(error));
   });
 }
-
 
 /*
                       Musics, Playlists & Votes
@@ -584,6 +583,28 @@ function getPublicityOfPlaylistById(playlistId) {
   });
 }
 
+function addUserToPlaylistAndUnbanned(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/user/unbanned`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, playlistId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('UpdatePassword', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                     Track Player
  */
@@ -635,4 +656,5 @@ export {
   DeleteUserInPlaylist,
   getPublicityOfPlaylistById,
   getNextTrack,
+  addUserToPlaylistAndUnbanned,
 };

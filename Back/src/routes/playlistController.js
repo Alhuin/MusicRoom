@@ -259,6 +259,26 @@ function userInPlaylistUpgrade(req, res) {
   }
 }
 
+function addUserToPlaylistAndUnbanned(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)) {
+    playlistService.addUserToPlaylistAndUnbanned(req.body.playlistId, req.body.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function BanUserInPlaylist(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
@@ -337,4 +357,5 @@ export default {
   BanUserInPlaylist,
   DeleteUserInPlaylist,
   getNextTrack,
+  addUserToPlaylistAndUnbanned,
 };

@@ -312,7 +312,7 @@ function userInPlaylistUpgrade(playlistId, userId) {
             }
           }
         } else {
-          reject(new CustomError('UserInPlaylistUpgrade', 'Already admin', 422));
+          reject(new CustomError('UserInPlaylistUpgrade', 'Already admin', 401));
         }
       }
     });
@@ -356,7 +356,6 @@ function DeleteUserInPlaylist(playlistId, userId, isItAdmin) {
   });
 }
 
-// this function shall additionnally keep these users kicked in a list, for no possible future joining
 function BanUserInPlaylist(playlistId, userId, isItAdmin) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
@@ -365,7 +364,6 @@ function BanUserInPlaylist(playlistId, userId, isItAdmin) {
       } else if (!playlist) {
         reject(new CustomError('BanUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
-        playlist.bans.push(userId);
         for (let i = 0; i < playlist.users.length; i++) {
           if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
             playlist.users.splice(i, 1);
@@ -376,6 +374,16 @@ function BanUserInPlaylist(playlistId, userId, isItAdmin) {
                   break;
                 }
               }
+            }
+            let flag = false;
+            for (let j = 0; j < playlist.bans.length; j++) {
+              if (String(playlist.bans[j]) === String(userId)) {
+                flag = true;
+                break;
+              }
+            }
+            if (!flag) {
+              playlist.bans.push(userId);
             }
             playlist.save((saveError, savedPlaylist) => {
               if (saveError) {
@@ -390,6 +398,45 @@ function BanUserInPlaylist(playlistId, userId, isItAdmin) {
             break;
           }
         }
+      }
+    });
+  });
+}
+
+function addUserToPlaylistAndUnbanned(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('addUserToPlaylistAndUnbanned', 'No playlist with this id in database', 400));
+      } else {
+        for (let i = 0; i < playlist.bans.length; i++) {
+          if (String(playlist.bans[i]) === String(userId)) {
+            playlist.bans.splice(i, 1);
+            break;
+          }
+        }
+        let flag = false;
+        for (let i = 0; i < playlist.users.length; i++) {
+          if (String(playlist.users[i]) === String(userId)) {
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) {
+          playlist.users.push(userId);
+        }
+        playlist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: true,
+            });
+          }
+        });
       }
     });
   });
@@ -430,4 +477,5 @@ export default {
   BanUserInPlaylist,
   DeleteUserInPlaylist,
   getNextTrack,
+  addUserToPlaylistAndUnbanned,
 };

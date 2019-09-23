@@ -61,7 +61,7 @@ class PlaylistSettings extends React.Component {
           navigation.navigate('Home');
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     } else {
       alert('Cannnot leave playlist yet, because you are the author.');
@@ -102,63 +102,6 @@ class PlaylistSettings extends React.Component {
         console.error(error);
       });
   };
-
-/*  _onRefreshAdmins = () => {
-    this.setState({ refreshing: true });
-    this.updateAdmins()
-      .then(() => {
-        this.updateUsers()
-          .then(() => {
-            this.setState({ refreshing: false });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  _onRefreshUsers = () => {
-    this.setState({ refreshing: true });
-    this.updateAdmins()
-      .then(() => {
-        this.updateUsers()
-          .then(() => {
-            this.updateBans()
-              .then(() => {
-                this.setState({ refreshing: false });
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  _onRefreshBans = () => {
-    this.setState({ refreshing: true });
-    this.updateAdmins()
-      .then(() => {
-        this.updateUsers()
-          .then(() => {
-            this.setState({ refreshing: false });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };*/
 
   updateAdmins = () => new Promise((resolve, reject) => {
     const { navigation } = this.props;

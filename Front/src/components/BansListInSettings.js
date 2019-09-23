@@ -3,7 +3,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
-import { } from '../../API/BackApi';
+import { addUserToPlaylistAndUnbanned } from '../../API/BackApi';
 
 class BansListInSettings extends React.Component {
   render() {
@@ -32,35 +32,20 @@ class BansListInSettings extends React.Component {
                 <View
                   style={styles.iconsWrapper}
                 >
-                  {/*<TouchableOpacity*/}
-                  {/*  onPress={() => {*/}
-                  {/*    userInPlaylistUpgrade(playlistId, userId)*/}
-                  {/*      .then((response) => {*/}
-                  {/*        onRefresh();*/}
-                  {/*      })*/}
-                  {/*      .catch((error) => {*/}
-                  {/*        console.error(error);*/}
-                  {/*      });*/}
-                  {/*  }}*/}
-                  {/*  style={styles.iconTouchable}*/}
-                  {/*>*/}
-                  {/*  <Icon name="arrow-up" style={styles.iconsStyle} />*/}
-                  {/*</TouchableOpacity>*/}
-                  {/*<TouchableOpacity*/}
-                  {/*  onPress={() => {*/}
-                  {/*    console.log(userId);*/}
-                  {/*    BanUserInPlaylist(playlistId, userId, false)*/}
-                  {/*      .then((response) => {*/}
-                  {/*        onRefresh();*/}
-                  {/*      })*/}
-                  {/*      .catch((error) => {*/}
-                  {/*        console.error(error);*/}
-                  {/*      });*/}
-                  {/*  }}*/}
-                  {/*  style={styles.iconTouchable}*/}
-                  {/*>*/}
-                  {/*  <Icon name="md-walk" style={styles.iconsStyle} />*/}
-                  {/*</TouchableOpacity>*/}
+                  <TouchableOpacity
+                    onPress={() => {
+                      addUserToPlaylistAndUnbanned(playlistId, userId)
+                        .then((response) => {
+                          onRefresh();
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }}
+                    style={styles.iconTouchable}
+                  >
+                    <Icon name="arrow-up" style={styles.iconsStyle} />
+                  </TouchableOpacity>
                 </View>
               </View>
             );

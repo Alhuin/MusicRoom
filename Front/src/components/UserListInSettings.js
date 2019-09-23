@@ -3,7 +3,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
-import { userInPlaylistUpgrade, BanUserInPlaylist } from '../../API/BackApi';
+import { userInPlaylistUpgrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
 
 class UserListInSettings extends React.Component {
   render() {
@@ -39,7 +39,7 @@ class UserListInSettings extends React.Component {
                           onRefresh();
                         })
                         .catch((error) => {
-                          console.error(error);
+                          if (error.status !== 401) console.error(error);
                         });
                     }}
                     style={styles.iconTouchable}
@@ -48,8 +48,7 @@ class UserListInSettings extends React.Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
-                      console.log(userId);
-                      BanUserInPlaylist(playlistId, userId, false)
+                      DeleteUserInPlaylist(playlistId, userId, false)
                         .then((response) => {
                           onRefresh();
                         })
@@ -60,6 +59,20 @@ class UserListInSettings extends React.Component {
                     style={styles.iconTouchable}
                   >
                     <Icon name="md-walk" style={styles.iconsStyle} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      BanUserInPlaylist(playlistId, userId, false)
+                        .then((response) => {
+                          onRefresh();
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }}
+                    style={styles.iconTouchable}
+                  >
+                    <Icon name="md-trash" style={styles.iconsStyle} />
                   </TouchableOpacity>
                 </View>
               </View>

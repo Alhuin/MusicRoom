@@ -12,7 +12,7 @@ class PlaylistList extends React.Component {
       userId,
       roomType,
     } = this.props;
-    console.log(playlists);
+    // console.log(playlists);
     return (
       <FlatList
         data={playlists}
