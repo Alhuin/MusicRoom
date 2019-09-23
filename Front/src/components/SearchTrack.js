@@ -19,14 +19,14 @@ export default class SearchTrack extends React.Component {
   }
 
   componentWillUnmount(): void {
-    this._onChangedPage();
+    this._stopPlaying();
   }
 
   displayLoader = () => {
     this.setState({ loading: true });
   };
 
-  _onChangedPage = () => {
+  _stopPlaying = () => {
     const { playing } = this.state;
     if (playing !== null) {
       playing.stop();

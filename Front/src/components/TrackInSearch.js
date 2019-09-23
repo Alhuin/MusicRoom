@@ -5,13 +5,11 @@ import {
 import { addMusicToPlaylist } from '../../API/BackApi';
 
 class TrackInSearch extends React.Component {
-
   render() {
     const {
       track, handlePress, playlistId, updateTracks, userId, setModalVisible, displayLoader,
     } = this.props;
 
-    // console.log(track);
     return (
       <TouchableOpacity
         activeOpacity={1}
