@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  ActivityIndicator,
   StyleSheet, View,
 } from 'react-native';
 import SearchBar from './SearchBar';
+import Loader from './Loader';
 import TracklistInSearch from './TracklistInSearch';
 import { getTracks } from '../../API/DeezerApi';
 
@@ -69,14 +69,6 @@ export default class SearchTrack extends React.Component {
       setModalVisible,
     } = this.props;
 
-    if (loading) {
-      let loader = (
-        <View style={styles.loading_container}>
-          <ActivityIndicator size="large" color="grey" />
-        </View>
-      );
-    }
-
     return (
       <View style={styles.container}>
         <SearchBar
@@ -93,12 +85,7 @@ export default class SearchTrack extends React.Component {
           updateTracks={updateTracks}
           setModalVisible={setModalVisible}
         />
-        {loading
-        && (
-        <View style={styles.loading_container}>
-          <ActivityIndicator size="large" style={styles.loading}/>
-        </View>
-        )}
+        <Loader loading={loading} />
       </View>
     );
   }
@@ -118,6 +105,7 @@ const styles = StyleSheet.create({
   },
   loading: {
     opacity: 1,
+    color: 'white',
   },
   container: {
     backgroundColor: 'black',
