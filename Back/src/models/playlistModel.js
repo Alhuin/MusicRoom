@@ -21,6 +21,11 @@ const playlistSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'UserModel',
   },
+  bans: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'UserModel',
+    default: [],
+  },
   publicFlag: {
     type: Boolean,
     default: false,

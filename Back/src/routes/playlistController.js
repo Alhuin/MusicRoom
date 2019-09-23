@@ -200,6 +200,25 @@ function getUsersByPlaylistId(req, res) {
   }
 }
 
+function getBansByPlaylistId(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getBansByPlaylistId(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function adminInPlaylistDowngrade(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)) {
@@ -240,11 +259,31 @@ function userInPlaylistUpgrade(req, res) {
   }
 }
 
-function KickUserInPlaylist(req, res) {
+function addUserToPlaylistAndUnbanned(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)) {
+    playlistService.addUserToPlaylistAndUnbanned(req.body.playlistId, req.body.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function BanUserInPlaylist(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
   && req.body.isItAdmin !== undefined) {
-    playlistService.KickUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin)
+    playlistService.BanUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin)
       .then((response) => {
         res
           .status(response.status)
@@ -312,9 +351,11 @@ export default {
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,
+  getBansByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  KickUserInPlaylist,
+  BanUserInPlaylist,
   DeleteUserInPlaylist,
   getNextTrack,
+  addUserToPlaylistAndUnbanned,
 };

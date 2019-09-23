@@ -20,6 +20,7 @@ import SearchTrack from './SearchTrack';
 import CollapsibleList from './CollapsibleList';
 import AdminListInSettings from './AdminListInSettings';
 import UserListInSettings from './UserListInSettings';
+import BansListInSettings from './BansListInSettings';
 import DatePickerModal from './DatePickerModal';
 
 export default {
@@ -46,4 +47,5 @@ export default {
   AdminListInSettings,
   UserListInSettings,
   DatePickerModal,
+  BansListInSettings,
 };

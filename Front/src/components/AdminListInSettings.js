@@ -3,7 +3,7 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import React from 'react';
-import { adminInPlaylistDowngrade, KickUserInPlaylist } from '../../API/BackApi';
+import { adminInPlaylistDowngrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
 
 
 class AdminListInSettings extends React.Component {
@@ -42,7 +42,7 @@ class AdminListInSettings extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    KickUserInPlaylist(playlistId, userId, true)
+                    DeleteUserInPlaylist(playlistId, userId, true)
                       .then((response) => {
                         onRefresh();
                       })
@@ -53,6 +53,20 @@ class AdminListInSettings extends React.Component {
                   style={styles.iconTouchable}
                 >
                   <Icon name="md-walk" style={styles.iconsStyle} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    BanUserInPlaylist(playlistId, userId, true)
+                      .then((response) => {
+                        onRefresh();
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      });
+                  }}
+                  style={styles.iconTouchable}
+                >
+                  <Icon name="md-trash" style={styles.iconsStyle} />
                 </TouchableOpacity>
               </View>
             );

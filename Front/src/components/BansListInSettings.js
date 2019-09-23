@@ -3,19 +3,19 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
-import { userInPlaylistUpgrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
+import { addUserToPlaylistAndUnbanned } from '../../API/BackApi';
 
-class UserListInSettings extends React.Component {
+class BansListInSettings extends React.Component {
   render() {
     const {
-      users,
+      bans,
       refreshing,
       onRefresh,
       playlistId,
     } = this.props;
     return (
       <FlatList
-        data={users}
+        data={bans}
         keyExtractor={item => item._id.toString()}
         renderItem={
           ({ item }) => {
@@ -34,45 +34,17 @@ class UserListInSettings extends React.Component {
                 >
                   <TouchableOpacity
                     onPress={() => {
-                      userInPlaylistUpgrade(playlistId, userId)
+                      addUserToPlaylistAndUnbanned(playlistId, userId)
                         .then((response) => {
                           onRefresh();
                         })
                         .catch((error) => {
-                          if (error.status !== 401) console.error(error);
+                          console.error(error);
                         });
                     }}
                     style={styles.iconTouchable}
                   >
                     <Icon name="arrow-up" style={styles.iconsStyle} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      DeleteUserInPlaylist(playlistId, userId, false)
-                        .then((response) => {
-                          onRefresh();
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
-                    }}
-                    style={styles.iconTouchable}
-                  >
-                    <Icon name="md-walk" style={styles.iconsStyle} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      BanUserInPlaylist(playlistId, userId, false)
-                        .then((response) => {
-                          onRefresh();
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
-                    }}
-                    style={styles.iconTouchable}
-                  >
-                    <Icon name="md-trash" style={styles.iconsStyle} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -84,7 +56,7 @@ class UserListInSettings extends React.Component {
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
-          )}
+        )}
         style={styles.list}
       />
     );
@@ -118,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserListInSettings;
+export default BansListInSettings;

@@ -1,7 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
-
+const server = 'http://10.3.1.4:3000/api';
 
 /*
                     Users & Login
@@ -156,7 +155,6 @@ function updatePassword(userId, password) {
       .catch(error => reject(error));
   });
 }
-
 
 /*
                       Musics, Playlists & Votes
@@ -441,6 +439,28 @@ function getUsersByPlaylistId(playlistId) {
   });
 }
 
+function getBansByPlaylistId(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/bans/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getBans', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function adminInPlaylistDowngrade(playlistId, userId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/admins/downgrade`, {
@@ -491,9 +511,9 @@ function userInPlaylistUpgrade(playlistId, userId) {
   });
 }
 
-function KickUserInPlaylist(playlistId, userId, isItAdmin) {
+function BanUserInPlaylist(playlistId, userId, isItAdmin) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/users/kick`, {
+    fetch(`${server}/playlists/users/ban`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -508,7 +528,7 @@ function KickUserInPlaylist(playlistId, userId, isItAdmin) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('KickUser', data.msg, response.status));
+          reject(new CustomError('BanUser', data.msg, response.status));
           // console.log(data.msg);
         }
       })
@@ -563,6 +583,28 @@ function getPublicityOfPlaylistById(playlistId) {
   });
 }
 
+function addUserToPlaylistAndUnbanned(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/user/unbanned`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, playlistId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('UpdatePassword', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                     Track Player
  */
@@ -607,10 +649,12 @@ export {
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,
+  getBansByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  KickUserInPlaylist,
+  BanUserInPlaylist,
   DeleteUserInPlaylist,
   getPublicityOfPlaylistById,
   getNextTrack,
+  addUserToPlaylistAndUnbanned,
 };
