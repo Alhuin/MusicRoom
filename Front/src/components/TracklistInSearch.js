@@ -21,7 +21,7 @@ class TrackListInSearch extends React.Component {
 
   render() {
     const {
-      tracks, playlistId, updateTracks, userId, setModalVisible,
+      tracks, playlistId, updateTracks, userId, setModalVisible, displayLoader
     } = this.props;
     return (
       <FlatList
@@ -29,6 +29,7 @@ class TrackListInSearch extends React.Component {
         keyExtractor={item => item.id.toString()}
         renderItem={item => (
           <TrackInSearch
+            displayLoader={displayLoader}
             track={item.item}
             handlePress={this.handlePress}
             playlistId={playlistId}
@@ -36,8 +37,7 @@ class TrackListInSearch extends React.Component {
             userId={userId}
             setModalVisible={setModalVisible}
           />
-        )
-        }
+        )}
         // onEndReachThreashold={0.5}
         // onEndReached={() => {
         //   this._loadTracks();

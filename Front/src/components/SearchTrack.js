@@ -3,6 +3,7 @@ import {
   StyleSheet, View,
 } from 'react-native';
 import SearchBar from './SearchBar';
+import Loader from './Loader';
 import TracklistInSearch from './TracklistInSearch';
 import { getTracks } from '../../API/DeezerApi';
 
@@ -13,12 +14,17 @@ export default class SearchTrack extends React.Component {
       tracks: [],
       searchedText: '',
       playing: null,
+      loading: false,
     };
   }
 
   componentWillUnmount(): void {
     this._onChangedPage();
   }
+
+  displayLoader = () => {
+    this.setState({ loading: true });
+  };
 
   _onChangedPage = () => {
     const { playing } = this.state;
@@ -55,13 +61,14 @@ export default class SearchTrack extends React.Component {
   }
 
   render() {
-    const { tracks, playing } = this.state;
+    const { tracks, playing, loading } = this.state;
     const {
       playlistId,
       userId,
       updateTracks,
       setModalVisible,
     } = this.props;
+
     return (
       <View style={styles.container}>
         <SearchBar
@@ -70,6 +77,7 @@ export default class SearchTrack extends React.Component {
         />
         <TracklistInSearch
           tracks={tracks}
+          displayLoader={this.displayLoader}
           updatePlaying={this.updatePlaying}
           playing={playing}
           playlistId={playlistId}
@@ -77,12 +85,28 @@ export default class SearchTrack extends React.Component {
           updateTracks={updateTracks}
           setModalVisible={setModalVisible}
         />
+        <Loader loading={loading} />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  loading_container: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: 0.5,
+    backgroundColor: 'grey',
+  },
+  loading: {
+    opacity: 1,
+    color: 'white',
+  },
   container: {
     backgroundColor: 'black',
     color: 'white',
