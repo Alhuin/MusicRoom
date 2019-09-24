@@ -9,9 +9,11 @@ class BansListInSettings extends React.Component {
   render() {
     const {
       bans,
-      refreshing,
       onRefresh,
       playlistId,
+      loading,
+      displayLoader,
+      isLoading,
     } = this.props;
     return (
       <FlatList
@@ -34,13 +36,16 @@ class BansListInSettings extends React.Component {
                 >
                   <TouchableOpacity
                     onPress={() => {
-                      addUserToPlaylistAndUnbanned(playlistId, userId)
-                        .then((response) => {
-                          onRefresh();
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
+                      if (!isLoading()) {
+                        displayLoader();
+                        addUserToPlaylistAndUnbanned(playlistId, userId)
+                          .then((response) => {
+                            onRefresh();
+                          })
+                          .catch((error) => {
+                            console.error(error);
+                          });
+                      }
                     }}
                     style={styles.iconTouchable}
                   >
@@ -51,12 +56,6 @@ class BansListInSettings extends React.Component {
             );
           }
         }
-        refreshControl={(
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        )}
         style={styles.list}
       />
     );

@@ -6,7 +6,6 @@ import {
 
 
 export default class Loader extends React.Component {
-
   render() {
     const { loading } = this.props;
 

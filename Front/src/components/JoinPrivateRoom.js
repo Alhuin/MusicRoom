@@ -5,9 +5,12 @@ import {
 import { joinRoom } from '../../API/BackApi';
 
 export default class JoinPrivateRoom extends React.Component {
-  state = {
-    text: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: '',
+    };
+  }
 
   _joinRoom = () => {
     const { userId, setModalVisible } = this.props;
