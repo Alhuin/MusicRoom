@@ -34,114 +34,79 @@ class TrackInPlaylist extends React.Component {
       roomType,
       myVoteValue,
     } = this.props;
-    if (roomType === 'radio') {
-      return (
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.main_container}
-        >
-          <TouchableOpacity
-            style={styles.previewCover}
-            onPress={() => {
-              handlePress(track.preview);
-            }}
-          >
-            <Image
-              style={styles.image}
-              source={{ uri: track.albumCover }}
-            />
-            <Image
-              source={require('../assets/images/play.png')}
-              style={{ height: 80, width: 80, position: 'absolute' }}
-            />
-          </TouchableOpacity>
-          <View style={styles.content_container}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>{track.title}</Text>
-            </View>
-            <View style={styles.artist_container}>
-              <Text style={styles.artist_name}>
-                {track.artist}
-              </Text>
-            </View>
-            <View style={styles.album_container}>
-              <Text style={styles.album_title}>
-                {track.album}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      );
-    } else if (roomType === 'party') {
+    let renderForParty = (null);
+    if (roomType === 'party') {
       let arrowUpStyle = { color: 'grey' };
       let arrowDownStyle = { color: 'grey' };
       if (myVoteValue > 0) arrowUpStyle = { color: 'green' };
       else if (myVoteValue < 0) arrowDownStyle = { color: 'red' };
-      return (
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.main_container}
-        >
-          <TouchableOpacity
-            style={styles.previewCover}
-            onPress={() => {
-              handlePress(track.preview);
-            }}
-          >
-            <Image
-              style={styles.image}
-              source={{ uri: track.albumCover }}
-            />
-            <Image
-              source={require('../assets/images/play.png')}
-              style={{ height: 80, width: 80, position: 'absolute' }}
-            />
-          </TouchableOpacity>
-          <View style={styles.content_container}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>{track.title}</Text>
-            </View>
-            <View style={styles.artist_container}>
-              <Text style={styles.artist_name}>
-                {track.artist}
-              </Text>
-            </View>
-            <View style={styles.album_container}>
-              <Text style={styles.album_title}>
-                {track.album}
-              </Text>
-            </View>
+      renderForParty = (
+        <View style={styles.voting_container}>
+          <View style={styles.note_container}>
+            <Text style={{ color: 'white' }}>{track.votes}</Text>
           </View>
-          <View style={styles.voting_container}>
-            <View style={styles.note_container}>
-              <Text style={{ color: 'white' }}>{track.votes}</Text>
-            </View>
-            <View style={styles.votes_container}>
-              <TouchableOpacity
-                style={styles.vote_container}
-                onPress={() => this._vote(1)}
-              >
-                <Icon
-                  name="ios-arrow-dropup"
-                  style={arrowUpStyle}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.vote_container}
-                onPress={() => this._vote(-1)}
-              >
-                <Icon
-                  name="ios-arrow-dropdown"
-                  style={arrowDownStyle}
-                />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.votes_container}>
+            <TouchableOpacity
+              style={styles.vote_container}
+              onPress={() => this._vote(1)}
+            >
+              <Icon
+                name="ios-arrow-dropup"
+                style={arrowUpStyle}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.vote_container}
+              onPress={() => this._vote(-1)}
+            >
+              <Icon
+                name="ios-arrow-dropdown"
+                style={arrowDownStyle}
+              />
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
       );
-    } else {
-      return (null);
     }
+    const rendering = (
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.main_container}
+      >
+        <TouchableOpacity
+          style={styles.previewCover}
+          onPress={() => {
+            handlePress(track.preview);
+          }}
+        >
+          <Image
+            style={styles.image}
+            source={{ uri: track.albumCover }}
+          />
+          <Image
+            source={require('../assets/images/play.png')}
+            style={{ height: 80, width: 80, position: 'absolute' }}
+          />
+        </TouchableOpacity>
+        <View style={styles.content_container}>
+          <View style={styles.title_container}>
+            <Text style={styles.title_text}>{track.title}</Text>
+          </View>
+          <View style={styles.artist_container}>
+            <Text style={styles.artist_name}>
+              {track.artist}
+            </Text>
+          </View>
+          <View style={styles.album_container}>
+            <Text style={styles.album_title}>
+              {track.album}
+            </Text>
+          </View>
+        </View>
+        {renderForParty}
+      </TouchableOpacity>
+    );
+    return (rendering);
   }
 }
 
