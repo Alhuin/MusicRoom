@@ -194,10 +194,6 @@ class PlaylistSettings extends React.Component {
     }
   });
 
-  printLoader = () => {
-    console.log(this.state.loading);
-  };
-
   isLoading = () => {
     const { loading } = this.state;
     return loading;
@@ -207,7 +203,6 @@ class PlaylistSettings extends React.Component {
     const {
       users, admins, bans, switchValue, loading,
     } = this.state;
-    console.log('loading' + loading);
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
