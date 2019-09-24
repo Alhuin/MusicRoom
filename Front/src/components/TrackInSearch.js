@@ -26,7 +26,7 @@ class TrackInSearch extends React.Component {
             source={{ uri: track.album.cover }}
           />
           <Image
-            source={require('../assets/images/play.png')}
+            source={require('../assets/images/sound.png')}
             style={{ height: 80, width: 80, position: 'absolute' }}
           />
         </TouchableOpacity>

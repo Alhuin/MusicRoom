@@ -3,15 +3,19 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
+import { Loader } from './Loader';
 import { userInPlaylistUpgrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
 
 class UserListInSettings extends React.Component {
   render() {
     const {
       users,
-      refreshing,
-      onRefresh,
       playlistId,
+      onRefresh,
+      loading,
+      displayLoader,
+      printLoader,
+      isLoading,
     } = this.props;
     return (
       <FlatList
@@ -34,13 +38,16 @@ class UserListInSettings extends React.Component {
                 >
                   <TouchableOpacity
                     onPress={() => {
-                      userInPlaylistUpgrade(playlistId, userId)
-                        .then((response) => {
-                          onRefresh();
-                        })
-                        .catch((error) => {
-                          if (error.status !== 401) console.error(error);
-                        });
+                      if (!isLoading()) {
+                        displayLoader();
+                        userInPlaylistUpgrade(playlistId, userId)
+                          .then((response) => {
+                            onRefresh();
+                          })
+                          .catch((error) => {
+                            if (error.status !== 401) console.error(error);
+                          });
+                      }
                     }}
                     style={styles.iconTouchable}
                   >
@@ -48,13 +55,16 @@ class UserListInSettings extends React.Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
-                      DeleteUserInPlaylist(playlistId, userId, false)
-                        .then((response) => {
-                          onRefresh();
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
+                      if (!isLoading()) {
+                        displayLoader();
+                        DeleteUserInPlaylist(playlistId, userId, false)
+                          .then((response) => {
+                            onRefresh();
+                          })
+                          .catch((error) => {
+                            console.error(error);
+                          });
+                      }
                     }}
                     style={styles.iconTouchable}
                   >
@@ -62,13 +72,16 @@ class UserListInSettings extends React.Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
-                      BanUserInPlaylist(playlistId, userId, false)
-                        .then((response) => {
-                          onRefresh();
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
+                      if (!isLoading()) {
+                        displayLoader();
+                        BanUserInPlaylist(playlistId, userId, false)
+                          .then((response) => {
+                            onRefresh();
+                          })
+                          .catch((error) => {
+                            console.error(error);
+                          });
+                      }
                     }}
                     style={styles.iconTouchable}
                   >
@@ -79,12 +92,6 @@ class UserListInSettings extends React.Component {
             );
           }
         }
-        refreshControl={(
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-          )}
         style={styles.list}
       />
     );

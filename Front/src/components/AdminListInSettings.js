@@ -10,10 +10,11 @@ class AdminListInSettings extends React.Component {
   render() {
     const {
       admins,
-      refreshing,
       onRefresh,
       authorId,
       playlistId,
+      displayLoader,
+      isLoading,
     } = this.props;
     return (
       <FlatList
@@ -28,13 +29,16 @@ class AdminListInSettings extends React.Component {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    adminInPlaylistDowngrade(playlistId, userId)
-                      .then((response) => {
-                        onRefresh();
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                      });
+                    if (!isLoading()) {
+                      displayLoader();
+                      adminInPlaylistDowngrade(playlistId, userId)
+                        .then((response) => {
+                          onRefresh();
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }
                   }}
                   style={styles.iconTouchable}
                 >
@@ -42,13 +46,16 @@ class AdminListInSettings extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    DeleteUserInPlaylist(playlistId, userId, true)
-                      .then((response) => {
-                        onRefresh();
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                      });
+                    if (!isLoading()) {
+                      displayLoader();
+                      DeleteUserInPlaylist(playlistId, userId, true)
+                        .then((response) => {
+                          onRefresh();
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }
                   }}
                   style={styles.iconTouchable}
                 >
@@ -56,13 +63,16 @@ class AdminListInSettings extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    BanUserInPlaylist(playlistId, userId, true)
-                      .then((response) => {
-                        onRefresh();
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                      });
+                    if (!isLoading()) {
+                      displayLoader();
+                      BanUserInPlaylist(playlistId, userId, true)
+                        .then((response) => {
+                          onRefresh();
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }
                   }}
                   style={styles.iconTouchable}
                 >
@@ -91,12 +101,6 @@ class AdminListInSettings extends React.Component {
             );
           }
         }
-        refreshControl={(
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-          )}
         style={styles.list}
       />
     );

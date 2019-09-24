@@ -5,6 +5,8 @@ import React from 'react';
 import AdminListInSettings from '../components/AdminListInSettings';
 import UserListInSettings from '../components/UserListInSettings';
 import BansListInSettings from '../components/BansListInSettings';
+import Loader from '../components/Loader';
+
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist,
   getBansByPlaylistId,
@@ -12,13 +14,17 @@ import {
 import NavigationUtils from '../navigation/NavigationUtils';
 
 class PlaylistSettings extends React.Component {
-  state = {
-    refreshing: false,
-    admins: [],
-    users: [],
-    bans: [],
-    switchValue: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      admins: [],
+      users: [],
+      bans: [],
+      switchValue: false,
+      loading: false,
+    };
+  }
+
 
   componentDidMount(): void {
     const { navigation } = this.props;
@@ -42,6 +48,13 @@ class PlaylistSettings extends React.Component {
     }
   }
 
+  displayLoader = () => {
+    this.setState({ loading: true });
+  };
+
+  hideLoader = () => {
+    this.setState({ loading: false });
+  };
 
   toggleSwitch = (value) => {
     // connect to back and change publicFlag, and generate a code
@@ -81,14 +94,15 @@ class PlaylistSettings extends React.Component {
 
   // finally, it is the two same refresh functions
   _onRefresh = () => {
-    this.setState({ refreshing: true });
+    console.log('loading is true');
     this.updateAdmins()
       .then(() => {
         this.updateUsers()
           .then(() => {
             this.updateBans()
               .then(() => {
-                this.setState({ refreshing: false });
+                console.log('loading is false');
+                this.hideLoader();
               })
               .catch((error) => {
                 console.error(error);
@@ -126,7 +140,7 @@ class PlaylistSettings extends React.Component {
           resolve();
         })
         .catch((error) => {
-          console.error(error + ' in updateAdmins');
+          console.error(`${error} in updateAdmins`);
           reject();
         });
     }
@@ -155,7 +169,7 @@ class PlaylistSettings extends React.Component {
           resolve();
         })
         .catch((error) => {
-          console.error(error + ' in updateUsers');
+          console.error(`${error} in updateUsers`);
           reject();
         });
     }
@@ -170,30 +184,30 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       getBansByPlaylistId(playlistId)
         .then((response) => {
-          // if (admins) {
-          //   for (let i = 0; i < admins.length; i++) {
-          //     for (let j = 0; j < response.length; j++) {
-          //       if (String(admins[i]._id) === String(response[j]._id)) {
-          //         response.splice(j, 1);
-          //         j--;
-          //       }
-          //     }
-          //   }
-          // }
           this.setState({ bans: response });
           resolve();
         })
         .catch((error) => {
-          console.error(error + ' in updateUsers');
+          console.error(`${error} in updateUsers`);
           reject();
         });
     }
   });
 
+  printLoader = () => {
+    console.log(this.state.loading);
+  };
+
+  isLoading = () => {
+    const { loading } = this.state;
+    return loading;
+  };
+
   render() {
     const {
-      refreshing, users, admins, bans, switchValue,
+      users, admins, bans, switchValue, loading,
     } = this.state;
+    console.log('loading' + loading);
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
@@ -210,32 +224,34 @@ class PlaylistSettings extends React.Component {
           />
           <Text> Administrateurs </Text>
           <AdminListInSettings
-            refreshing={refreshing}
+            displayLoader={this.displayLoader}
             admins={admins}
             onRefresh={this._onRefresh}
             authorId={authorId}
             playlistId={playlistId}
+            isLoading={this.isLoading}
           />
           <Text> Utilisateurs </Text>
           <UserListInSettings
-            refreshing={refreshing}
+            displayLoader={this.displayLoader}
             users={users}
             onRefresh={this._onRefresh}
             playlistId={playlistId}
+            isLoading={this.isLoading}
           />
           <Text> Bannis </Text>
           <BansListInSettings
-            refreshing={refreshing}
+            displayLoader={this.displayLoader}
             bans={bans}
             onRefresh={this._onRefresh}
             playlistId={playlistId}
+            isLoading={this.isLoading}
           />
         </View>
       );
     }
-
     const rendering = (
-      <View>
+      <View style={{ flex: 1 }}>
         <Text
           style={styles.title}
         >
@@ -249,6 +265,7 @@ class PlaylistSettings extends React.Component {
           style={styles.leavingButton}
         />
         {adminOptions}
+        <Loader loading={loading} />
       </View>
     );
     return (rendering);
