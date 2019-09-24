@@ -100,20 +100,16 @@ class Playlist extends React.Component {
       });
   };
 
-  updateSearchedText = (text) => {
-    this.setState({ searchedText: text });
-  };
-
   updatePlaying = (playing) => {
     this.setState({ playing });
   };
 
-  searchTracks = () => {
+  searchTracks = (text) => {
     let { tracks } = this.state;
-    const { searchedText, stockedTracks } = this.state;
-    if (searchedText !== '') {
-      tracks = stockedTracks.filter(track => track.title.search(searchedText) > -1
-        || track.artist.search(searchedText) > -1);
+    const { stockedTracks } = this.state;
+    if (text !== '') {
+      tracks = stockedTracks.filter((track) => track.title.search(new RegExp(text, 'i')) > -1
+        || track.artist.search(new RegExp(text, 'i')) > -1);
     } else {
       tracks = stockedTracks;
     }
@@ -175,8 +171,9 @@ class Playlist extends React.Component {
         />
         <View style={styles.container}>
           <Components.SearchBar
-            updateSearchedText={this.updateSearchedText}
+            updateSearchedText={null}
             searchTracks={this.searchTracks}
+            autoSearch
           />
           <Components.TracklistInPlaylist
             tracks={tracks}

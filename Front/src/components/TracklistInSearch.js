@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FlatList,
+  StyleSheet,
 } from 'react-native';
 import TrackInSearch from './TrackInSearch';
 import Player from '../services/Player';
@@ -32,6 +33,7 @@ class TrackListInSearch extends React.Component {
     } = this.props;
     return (
       <FlatList
+        style={styles.container}
         data={tracks}
         keyExtractor={item => item.id.toString()}
         renderItem={item => (
@@ -57,3 +59,9 @@ class TrackListInSearch extends React.Component {
 }
 
 export default TrackListInSearch;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'black',
+  },
+});

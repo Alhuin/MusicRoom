@@ -12,7 +12,7 @@ export default class SearchTrack extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      searchedText: '',
+      searchText: '',
       playing: null,
       loading: false,
     };
@@ -33,32 +33,26 @@ export default class SearchTrack extends React.Component {
     }
   };
 
-  updateSearchedText = (text) => {
-    this.setState({ searchedText: text });
-  };
-
   updatePlaying = (playing) => {
     this.setState({ playing });
   };
 
-  searchTracks = () => {
-    this.setState({ tracks: [] }, () => {
-      this._loadTracks();
-    });
+  updateSearchedText = (text) => {
+    this.setState({ searchedText: text });
   };
 
-  _loadTracks() {
-    const { tracks, searchedText } = this.state;
-    if (searchedText.length > 0) {
-      // this.setState({loading: true});
-      getTracks(searchedText).then((data) => {
-        this.setState({
-          tracks: [...tracks, ...data],
-          // loading: false
-        });
+  searchTracks = () => {
+    const { searchedText } = this.state;
+    // if (text.length > 0) {
+    this.setState({ loading: true });
+    getTracks(searchedText).then((data) => {
+      this.setState({
+        tracks: data,
+        loading: false,
       });
-    }
-  }
+    });
+    // }
+  };
 
   render() {
     const { tracks, playing, loading } = this.state;
@@ -74,6 +68,7 @@ export default class SearchTrack extends React.Component {
         <SearchBar
           updateSearchedText={this.updateSearchedText}
           searchTracks={this.searchTracks}
+          autoSearch={false}
         />
         <TracklistInSearch
           tracks={tracks}
@@ -97,6 +92,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   container: {
+    flex: 1,
     backgroundColor: 'black',
     color: 'white',
   },

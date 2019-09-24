@@ -3,12 +3,21 @@ import { TextInput, StyleSheet } from 'react-native';
 
 export default class SearchBar extends React.Component {
   render() {
-    const { updateSearchedText, searchTracks } = this.props;
-    return (
+    const { updateSearchedText, searchTracks, autoSearch } = this.props;
+    if (autoSearch) { // Automatic search upon typing ( used in playlist searchBar )
+      return (
+        <TextInput
+          style={styles.textInput}
+          placeholder="Cliquer ici pour rechercher une musique"
+          onChangeText={(text) => searchTracks(text)}
+        />
+      );
+    }
+    return ( // search on submit ( used in addMusicModal )
       <TextInput
         style={styles.textInput}
         placeholder="Cliquer ici pour rechercher une musique"
-        onChangeText={text => updateSearchedText(text)}
+        onChangeText={(text) => updateSearchedText(text)}
         onSubmitEditing={() => {
           searchTracks();
         }}
