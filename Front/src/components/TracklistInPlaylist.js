@@ -52,15 +52,13 @@ class TracklistInPlaylist extends React.Component {
               myVoteValue={myVoteValue}
             />
           );
-        }
-        }
+        }}
         refreshControl={(
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
-        )
-        }
+        )}
         // onEndReachThreashold={0.5}
         // onEndReached={() => {
         //   if (this.page < this.totalPages) {

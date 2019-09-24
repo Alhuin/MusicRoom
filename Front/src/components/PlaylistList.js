@@ -36,8 +36,7 @@ class PlaylistList extends React.Component {
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
-        )
-        }
+          )}
         contentContainerStyle={{ paddingBottom: 80 }}
       />
     );

@@ -171,6 +171,7 @@ class Playlist extends React.Component {
           playlistId={playlistId}
           updateTracks={this.updateTracks}
           userId={userId}
+          roomType={roomType}
         />
         <View style={styles.container}>
           <Components.SearchBar
