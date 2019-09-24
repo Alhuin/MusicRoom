@@ -4,13 +4,20 @@ import TrackInPlaylist from './TrackInPlaylist';
 import Player from '../services/Player';
 
 class TracklistInPlaylist extends React.Component {
+
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
-      playing.stop(() => {
-        const toPlay = Player.play(preview);
-        updatePlaying(toPlay);
-      });
+      if (playing._filename !== preview) {
+        playing.stop(() => {
+          const toPlay = Player.play(preview);
+          updatePlaying(toPlay);
+        });
+      } else {
+        playing.stop(() => {
+          updatePlaying(null);
+        });
+      }
     } else {
       const toPlay = Player.play(preview);
       updatePlaying(toPlay);
