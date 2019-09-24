@@ -112,8 +112,8 @@ class Playlist extends React.Component {
     let { tracks } = this.state;
     const { searchedText, stockedTracks } = this.state;
     if (searchedText !== '') {
-      tracks = stockedTracks.filter(track => track.title.search(searchedText) > -1
-        || track.artist.search(searchedText) > -1);
+      tracks = stockedTracks.filter((track) => track.title.search(new RegExp(searchedText, 'i')) > -1
+        || track.artist.search(new RegExp(searchedText, 'i')) > -1);
     } else {
       tracks = stockedTracks;
     }
