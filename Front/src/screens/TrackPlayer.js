@@ -4,7 +4,7 @@ import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 
 import Player from '../components/TrackPlayer';
 import playlistData from '../assets/testPlaylist.json';
-// import localTrack from '../assets/pure.m4a';
+import localTrack from '../assets/pure.m4a';
 
 export default function LandingScreen() {
   const playbackState = usePlaybackState();
@@ -32,13 +32,13 @@ export default function LandingScreen() {
     if (currentTrack == null) {
       await TrackPlayer.reset();
       await TrackPlayer.add(playlistData);
-      // await TrackPlayer.add({
-      //   id: 'local-track',
-      //   url: localTrack,
-      //   title: 'Pure (Demo)',
-      //   artist: 'David Chavez',
-      //   artwork: 'https://picsum.photos/200',
-      // });
+      await TrackPlayer.add({
+        id: 'local-track',
+        url: localTrack,
+        title: 'Pure (Demo)',
+        artist: 'David Chavez',
+        artwork: 'https://picsum.photos/200',
+      });
       await TrackPlayer.play();
     } else if (playbackState === TrackPlayer.STATE_PAUSED) {
       await TrackPlayer.play();
