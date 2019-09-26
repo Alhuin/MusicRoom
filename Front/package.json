@@ -17,6 +17,8 @@
     "react-native-date-picker": "^2.7.0",
     "react-native-gesture-handler": "^1.3.0",
     "react-native-sound": "^0.11.0",
+    "react-native-swift": "^1.2.2",
+    "react-native-track-player": "^1.1.8",
     "react-navigation": "^3.11.0",
     "rtg-rn-social-buttons": "^0.1.0"
   },
@@ -39,5 +41,6 @@
     "assets": [
       "./assets/fonts"
     ]
-  }
+  },
+  "isSwift": true
 }

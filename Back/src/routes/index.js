@@ -4,8 +4,6 @@ import musicController from './musicController';
 import playlistController from './playlistController';
 import voteController from './voteController';
 import loginController from './loginController';
-/* import partyController from './partyController';
-import radioController from './radioController'; */
 
 const router = Router();
 

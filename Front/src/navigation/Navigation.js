@@ -29,8 +29,9 @@ import SearchTrack from '../components/SearchTrack';
 import Playlist from '../screens/Playlist';
 import Radios from '../screens/Radios';
 import Partys from '../screens/Partys';
+import TrackPlayer from '../screens/TrackPlayer';
 
-const createBurgerMenu = navigation => Platform.select({
+const createBurgerMenu = (navigation) => Platform.select({
   ios: null,
   android: (
     <Icon
@@ -191,6 +192,7 @@ const MainNavigator = Platform.select({
     Settings: AppSettings,
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
+    TrackPlayer,
   },
   {
     contentComponent: props => (
