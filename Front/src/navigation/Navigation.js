@@ -29,7 +29,7 @@ import SearchTrack from '../components/SearchTrack';
 import Playlist from '../screens/Playlist';
 import Radios from '../screens/Radios';
 import Partys from '../screens/Partys';
-import TrackPlayer from '../screens/TrackPlayer';
+import AdminPlayer from '../screens/Player';
 
 const createBurgerMenu = (navigation) => Platform.select({
   ios: null,
@@ -192,10 +192,10 @@ const MainNavigator = Platform.select({
     Settings: AppSettings,
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
-    TrackPlayer,
+    Player: AdminPlayer,
   },
   {
-    contentComponent: props => (
+    contentComponent: (props) => (
       <View style={{ flex: 1 }}>
         <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItems {...props} />

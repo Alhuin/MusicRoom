@@ -63,7 +63,7 @@
 		A99F0B6D17914F139D505A97 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A789D9219974BAEB215D6B1 /* libRNSound.a */; };
 		70E11FF4108A4B309DA195D6 /* libRNDatePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6145AD43603449EDA7AD60DC /* libRNDatePicker.a */; };
 		2D886CC4144744A4BFCB1442 /* RNPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015E0FC123D64FA8B0D0D3FE /* RNPlaceholder.swift */; };
-		36AF6BA6B4A24D7E8121E01C /* libRNTrackPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 253428695ACC47EBBA6933D0 /* libRNTrackPlayer.a */; };
+		276E199E9F1E43C29F38BC08 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4098D1E5874A2589FE1BB6 /* libRCTVideo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -399,8 +399,8 @@
 		88A25E20A21D423998FF4AAF /* RNDatePicker.xcodeproj */ = {isa = PBXFileReference; name = "RNDatePicker.xcodeproj"; path = "../node_modules/react-native-date-picker/ios/RNDatePicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		6145AD43603449EDA7AD60DC /* libRNDatePicker.a */ = {isa = PBXFileReference; name = "libRNDatePicker.a"; path = "libRNDatePicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		015E0FC123D64FA8B0D0D3FE /* RNPlaceholder.swift */ = {isa = PBXFileReference; name = "RNPlaceholder.swift"; path = "RNPlaceholder.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		1E932A5B71E346C38B40F895 /* RNTrackPlayer.xcodeproj */ = {isa = PBXFileReference; name = "RNTrackPlayer.xcodeproj"; path = "../node_modules/react-native-track-player/ios/RNTrackPlayer.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		253428695ACC47EBBA6933D0 /* libRNTrackPlayer.a */ = {isa = PBXFileReference; name = "libRNTrackPlayer.a"; path = "libRNTrackPlayer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		5B0CC09BCA804BD0B9CD30FC /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; name = "RCTVideo.xcodeproj"; path = "../node_modules/react-native-video/ios/RCTVideo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		1E4098D1E5874A2589FE1BB6 /* libRCTVideo.a */ = {isa = PBXFileReference; name = "libRCTVideo.a"; path = "libRCTVideo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -433,7 +433,7 @@
 				9FB51512432E47C4AB34C1FE /* libRNCAsyncStorage.a in Frameworks */,
 				A99F0B6D17914F139D505A97 /* libRNSound.a in Frameworks */,
 				70E11FF4108A4B309DA195D6 /* libRNDatePicker.a in Frameworks */,
-				36AF6BA6B4A24D7E8121E01C /* libRNTrackPlayer.a in Frameworks */,
+				276E199E9F1E43C29F38BC08 /* libRCTVideo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,6 +452,7 @@
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
 				19BC08F88EF247A8ABD9E1E9 /* libRNGestureHandler-tvOS.a in Frameworks */,
 				C3D5717C99D5499B8999E1BA /* libRNGestureHandler-tvOS.a in Frameworks */,
+				678A62BFBAA5482689405CDF /* libMusicControl-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,7 +630,7 @@
 				8DBE75AA967D4387B549DEF4 /* RNCAsyncStorage.xcodeproj */,
 				BDC217548D5B4FE9A10EA451 /* RNSound.xcodeproj */,
 				88A25E20A21D423998FF4AAF /* RNDatePicker.xcodeproj */,
-				1E932A5B71E346C38B40F895 /* RNTrackPlayer.xcodeproj */,
+				5B0CC09BCA804BD0B9CD30FC /* RCTVideo.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1306,7 +1307,6 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MusicRoom.app/MusicRoom";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1314,7 +1314,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};
@@ -1337,7 +1337,6 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MusicRoom.app/MusicRoom";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1345,7 +1344,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};
@@ -1373,7 +1372,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};
@@ -1400,7 +1399,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};
@@ -1431,7 +1430,6 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1439,7 +1437,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};
@@ -1470,7 +1468,6 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1478,7 +1475,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};
@@ -1508,7 +1505,6 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1516,7 +1512,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};
@@ -1546,7 +1542,6 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1554,7 +1549,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-date-picker/ios/RNDatePicker",
-					"$(SRCROOT)/../node_modules/react-native-track-player/ios/RNTrackPlayer/**",
+					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 				);
 				SWIFT_VERSION = 4.0;
 			};

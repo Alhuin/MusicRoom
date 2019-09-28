@@ -1,4 +1,4 @@
-#!/Users/dguelpa/.brew/bin/python3
+#!/Users/jjanin-r/.brew/bin/python3
 
 # Copyright (C) 2019  Deezpy contributors
 
