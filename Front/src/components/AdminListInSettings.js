@@ -4,6 +4,7 @@ import {
 import { Icon } from 'native-base';
 import React from 'react';
 import { adminInPlaylistDowngrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
+import NavigationUtils from '../navigation/NavigationUtils';
 
 
 class AdminListInSettings extends React.Component {
@@ -15,6 +16,8 @@ class AdminListInSettings extends React.Component {
       playlistId,
       displayLoader,
       isLoading,
+      roomType,
+      parent,
     } = this.props;
     return (
       <FlatList
@@ -50,7 +53,15 @@ class AdminListInSettings extends React.Component {
                       displayLoader();
                       DeleteUserInPlaylist(playlistId, userId, true)
                         .then((response) => {
-                          onRefresh();
+                          if (String(item._id) === String(global.user._id)) {
+                            if (roomType === 'party') {
+                              NavigationUtils.resetStack(parent, 'PartysList', null);
+                            } else if (roomType === 'radio') {
+                              NavigationUtils.resetStack(parent, 'RadiosList', null);
+                            }
+                          } else {
+                            onRefresh();
+                          }
                         })
                         .catch((error) => {
                           console.error(error);
@@ -67,8 +78,15 @@ class AdminListInSettings extends React.Component {
                       displayLoader();
                       BanUserInPlaylist(playlistId, userId, true)
                         .then((response) => {
-                          onRefresh();
-                        })
+                          if (String(item._id) === String(global.user._id)) {
+                            if (roomType === 'party') {
+                              NavigationUtils.resetStack(parent, 'PartysList', null);
+                            } else if (roomType === 'radio') {
+                              NavigationUtils.resetStack(parent, 'RadiosList', null);
+                            }
+                          } else {
+                            onRefresh();
+                          }                        })
                         .catch((error) => {
                           console.error(error);
                         });

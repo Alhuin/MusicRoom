@@ -5,6 +5,7 @@ import React from 'react';
 import { Icon } from 'native-base';
 import { Loader } from './Loader';
 import { userInPlaylistUpgrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
+import NavigationUtils from '../navigation/NavigationUtils';
 
 class UserListInSettings extends React.Component {
   render() {
@@ -16,6 +17,8 @@ class UserListInSettings extends React.Component {
       displayLoader,
       printLoader,
       isLoading,
+      roomType,
+      parent,
     } = this.props;
     return (
       <FlatList
@@ -59,8 +62,15 @@ class UserListInSettings extends React.Component {
                         displayLoader();
                         DeleteUserInPlaylist(playlistId, userId, false)
                           .then((response) => {
-                            onRefresh();
-                          })
+                            if (String(item._id) === String(global.user._id)) {
+                              if (roomType === 'party') {
+                                NavigationUtils.resetStack(parent, 'PartysList', null);
+                              } else if (roomType === 'radio') {
+                                NavigationUtils.resetStack(parent, 'RadiosList', null);
+                              }
+                            } else {
+                              onRefresh();
+                            }                          })
                           .catch((error) => {
                             console.error(error);
                           });
@@ -76,8 +86,15 @@ class UserListInSettings extends React.Component {
                         displayLoader();
                         BanUserInPlaylist(playlistId, userId, false)
                           .then((response) => {
-                            onRefresh();
-                          })
+                            if (String(item._id) === String(global.user._id)) {
+                              if (roomType === 'party') {
+                                NavigationUtils.resetStack(parent, 'PartysList', null);
+                              } else if (roomType === 'radio') {
+                                NavigationUtils.resetStack(parent, 'RadiosList', null);
+                              }
+                            } else {
+                              onRefresh();
+                            }                          })
                           .catch((error) => {
                             console.error(error);
                           });

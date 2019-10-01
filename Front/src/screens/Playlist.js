@@ -152,7 +152,9 @@ class Playlist extends React.Component {
     let settingsIcon = (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin, authorId });
+          navigation.navigate('PlaylistSettings', {
+            playlistId, isAdmin: admin, authorId, roomType
+          });
         }}
       >
         <Icon name="musical-notes" />
@@ -162,7 +164,9 @@ class Playlist extends React.Component {
       settingsIcon = (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('PlaylistSettings', { playlistId, isAdmin: admin, authorId });
+            navigation.navigate('PlaylistSettings', {
+              playlistId, isAdmin: admin, authorId, roomType
+            });
           }}
         >
           <Icon name="settings" />
