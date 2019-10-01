@@ -34,7 +34,7 @@ class AdminListInSettings extends React.Component {
                   onPress={() => {
                     if (!isLoading()) {
                       displayLoader();
-                      adminInPlaylistDowngrade(playlistId, userId)
+                      adminInPlaylistDowngrade(playlistId, userId, global.user._id)
                         .then((response) => {
                           onRefresh();
                         })
@@ -51,7 +51,7 @@ class AdminListInSettings extends React.Component {
                   onPress={() => {
                     if (!isLoading()) {
                       displayLoader();
-                      DeleteUserInPlaylist(playlistId, userId, true)
+                      DeleteUserInPlaylist(playlistId, userId, true, global.user._id)
                         .then((response) => {
                           if (String(item._id) === String(global.user._id)) {
                             if (roomType === 'party') {
@@ -76,7 +76,7 @@ class AdminListInSettings extends React.Component {
                   onPress={() => {
                     if (!isLoading()) {
                       displayLoader();
-                      BanUserInPlaylist(playlistId, userId, true)
+                      BanUserInPlaylist(playlistId, userId, true, global.user._id)
                         .then((response) => {
                           if (String(item._id) === String(global.user._id)) {
                             if (roomType === 'party') {

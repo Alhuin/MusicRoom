@@ -43,7 +43,7 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        userInPlaylistUpgrade(playlistId, userId)
+                        userInPlaylistUpgrade(playlistId, userId, global.user._id)
                           .then((response) => {
                             onRefresh();
                           })
@@ -60,7 +60,7 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        DeleteUserInPlaylist(playlistId, userId, false)
+                        DeleteUserInPlaylist(playlistId, userId, false, global.user._id)
                           .then((response) => {
                             if (String(item._id) === String(global.user._id)) {
                               if (roomType === 'party') {
@@ -84,7 +84,7 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        BanUserInPlaylist(playlistId, userId, false)
+                        BanUserInPlaylist(playlistId, userId, false, global.user._id)
                           .then((response) => {
                             if (String(item._id) === String(global.user._id)) {
                               if (roomType === 'party') {

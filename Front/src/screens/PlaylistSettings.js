@@ -69,7 +69,7 @@ class PlaylistSettings extends React.Component {
     const roomType = navigation.getParam('roomType');
 
     if (String(authorId) !== String(global.user._id)) {
-      DeleteUserInPlaylist(playlistId, global.user._id, isAdmin)
+      DeleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
         .then(() => {
           if (roomType === 'party') {
             NavigationUtils.resetStack(this, 'PartysList', null);
