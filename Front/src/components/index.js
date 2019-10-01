@@ -22,6 +22,7 @@ import AdminListInSettings from './AdminListInSettings';
 import UserListInSettings from './UserListInSettings';
 import BansListInSettings from './BansListInSettings';
 import DatePickerModal from './DatePickerModal';
+import MiniPlayer from './MiniPlayer';
 
 export default {
   SignInForm,
@@ -48,4 +49,5 @@ export default {
   UserListInSettings,
   DatePickerModal,
   BansListInSettings,
+  MiniPlayer,
 };

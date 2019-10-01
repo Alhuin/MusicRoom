@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   View,
-  StatusBar,
 } from 'react-native';
 import Video from 'react-native-video';
 import Header from './Header';
@@ -112,7 +111,6 @@ export default class Player extends Component {
 
     return (
       <View style={styles.container}>
-        <StatusBar hidden />
         <Header message="Playing From Charts" />
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails title={track.title} artist={track.artist} />

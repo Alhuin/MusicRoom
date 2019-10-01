@@ -1,10 +1,13 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity,
+  StyleSheet, View, Text, TouchableOpacity, Image, Button, StatusBar, KeyboardAvoidingView
 } from 'react-native';
+import Modal from 'react-native-modalbox';
 import { Icon } from 'native-base';
 import Components from '../components';
 import { getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist } from '../../API/BackApi';
+import Player from '../components/player/Player';
+import { TRACKS } from './Player';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -13,7 +16,7 @@ class Playlist extends React.Component {
       admin: false,
       stockedTracks: [],
       tracks: [],
-      searchedText: '',
+      playerVisible: false,
       playing: null,
       refreshing: false,
       modalVisible: false,
@@ -32,6 +35,7 @@ class Playlist extends React.Component {
     this._onChangedPage();
     // this._navListener.remove();
   }
+
 
   _onChangedPage = () => {
     const { playing } = this.state;
@@ -55,6 +59,12 @@ class Playlist extends React.Component {
     this.setState({ modalVisible: visible });
   };
 
+  setPlayerVisible = () => {
+    const { playerVisible } = this.state;
+    const visible = !playerVisible;
+    this.setState({ playerVisible: visible });
+  };
+
   updateTracks = () => new Promise((resolve, reject) => {
     const { navigation } = this.props;
     // console.log( this.props );
@@ -76,7 +86,7 @@ class Playlist extends React.Component {
     const userId = global.user._id;
     getMyVotesInPlaylist(userId, playlistId)
       .then((votes) => {
-        this.setState({ myVotes : votes });
+        this.setState({ myVotes: votes });
         resolve();
       })
       .catch((error) => {
@@ -118,7 +128,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes,
+      tracks, playing, refreshing, modalVisible, admin, myVotes, playerVisible,
     } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
@@ -126,6 +136,19 @@ class Playlist extends React.Component {
     const name = navigation.getParam('name');
     const authorId = navigation.getParam('authorId');
     const userId = global.user._id;
+    // const nowPlaying = this._getNowPlaying();
+
+    const nowPlayingCover = (
+      <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 100, width: 100 }} />
+    );
+    const nowPlayingDetails = {
+      title: 'Harder Better Faster Stronger',
+      artist: 'Daft Punk',
+      album: 'Discovery',
+    };
+    /*
+          Double fonction ? '-'
+     */
     let settingsIcon = (
       <TouchableOpacity
         onPress={() => {
@@ -149,10 +172,8 @@ class Playlist extends React.Component {
     // console.log(this.state.myVotes);
 
     return (
-      <View style={{ height: '100%' }}>
-        <View
-          style={styles.titleContainer}
-        >
+      <View style={{ flex: 1 }}>
+        <View style={styles.titleContainer}>
           {settingsIcon}
           <Text
             style={styles.title}
@@ -189,7 +210,27 @@ class Playlist extends React.Component {
             myVotes={myVotes}
           />
         </View>
-        <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="addMusic" />
+        <Components.AddFloatingButton
+          handlePress={() => this.setModalVisible(true)}
+          icon="addMusic"
+        />
+        {/*<Button title="Basic modal" onPress={() => this.refs.player.open()} />*/}
+
+        <Components.MiniPlayer
+          handlePress={() => this.refs.player.open()}
+          isAdmin={admin}
+          cover={nowPlayingCover}
+          details={nowPlayingDetails}
+        />
+        <Modal
+          style={styles.playerModal}
+          ref={'player'}
+          swipeToClose
+          backButtonClose
+          coverScreen={false}
+        >
+          <Player tracks={TRACKS} />
+        </Modal>
       </View>
     );
   }
@@ -199,7 +240,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'black',
     color: 'white',
-    height: '100%',
+    flex: 1,
   },
   titleContainer: {
     width: '90%',
@@ -213,10 +254,12 @@ const styles = StyleSheet.create({
   },
   playlistContainer: {
     // backgroundColor: '#999966',
-    width: '100%',
+    // width: '100%',
   },
-  playlist: {
-    margin: 0,
+  playerModal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
 });
 

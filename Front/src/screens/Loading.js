@@ -11,6 +11,10 @@ export default class Loading extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
     // alert("WAOUH")
+    // const timer = setTimeout(() => {
+    //   alert('An error occured');
+    // }, 5000); // catcher infinite loading
+    // clearTimeout(timer);
     isSignedIn()
       .then((user) => {
         if (user) {

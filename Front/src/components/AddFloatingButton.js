@@ -9,7 +9,7 @@ import {
 
 export default class AddFloatingButton extends React.Component {
   render() {
-    const { icon, handlePress } = this.props;
+    const { icon, handlePress, bottom } = this.props;
     let image = '';
     if (icon === 'addPlaylist') {
       image = <Image source={require('../assets/images/addPlaylist.png')} style={{ height: 32, width: 32, transform: [{ translateX: +3 }, { translateY: +2 }] }} />;
@@ -21,7 +21,7 @@ export default class AddFloatingButton extends React.Component {
       image = <Text style={styles.fabIcon}>+</Text>;
     }
     return (
-      <TouchableOpacity onPress={handlePress} style={styles.fab}>
+      <TouchableOpacity onPress={handlePress} style={[styles.fab, { bottom: icon === 'addMusic' ? 150 : 70 }]}>
         {image}
       </TouchableOpacity>
     );
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     right: 20,
-    bottom: 20,
+    // bottom: this.props.icon === 'addMusic' ? 150 : 70,
     backgroundColor: '#03A9F4',
     borderRadius: 30,
-    elevation: 8,
+    // elevation: 8,
   },
   fabIcon: {
     transform: [{ translateX: +2 }],
