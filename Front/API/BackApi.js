@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
+const server = 'http://10.3.1.4:3000/api';
 
 /*
                     Users & Login
@@ -485,7 +485,7 @@ function getBansByPlaylistId(playlistId) {
   });
 }
 
-function adminInPlaylistDowngrade(playlistId, userId) {
+function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/admins/downgrade`, {
       method: 'POST',
@@ -494,7 +494,7 @@ function adminInPlaylistDowngrade(playlistId, userId) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        playlistId, userId,
+        playlistId, userId, requesterId,
       }),
     })
       .then(async (response) => {
@@ -510,7 +510,7 @@ function adminInPlaylistDowngrade(playlistId, userId) {
   });
 }
 
-function userInPlaylistUpgrade(playlistId, userId) {
+function userInPlaylistUpgrade(playlistId, userId, requesterId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/users/upgrade`, {
       method: 'POST',
@@ -519,7 +519,7 @@ function userInPlaylistUpgrade(playlistId, userId) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        playlistId, userId,
+        playlistId, userId, requesterId,
       }),
     })
       .then(async (response) => {
@@ -535,7 +535,7 @@ function userInPlaylistUpgrade(playlistId, userId) {
   });
 }
 
-function BanUserInPlaylist(playlistId, userId, isItAdmin) {
+function BanUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/users/ban`, {
       method: 'POST',
@@ -544,7 +544,7 @@ function BanUserInPlaylist(playlistId, userId, isItAdmin) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        playlistId, userId, isItAdmin,
+        playlistId, userId, isItAdmin, requesterId,
       }),
     })
       .then(async (response) => {
@@ -560,7 +560,7 @@ function BanUserInPlaylist(playlistId, userId, isItAdmin) {
   });
 }
 
-function DeleteUserInPlaylist(playlistId, userId, isItAdmin) {
+function DeleteUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/users/delete`, {
       method: 'POST',
@@ -569,7 +569,7 @@ function DeleteUserInPlaylist(playlistId, userId, isItAdmin) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        playlistId, userId, isItAdmin,
+        playlistId, userId, isItAdmin, requesterId,
       }),
     })
       .then(async (response) => {

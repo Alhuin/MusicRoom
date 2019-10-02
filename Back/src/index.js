@@ -82,10 +82,19 @@ const seedDatas = async () => {
     email: 'a.b@protonmail.com',
     isVerified: true,
   });
+  const user3 = new models.User({
+    login: 'c',
+    password: hashy,
+    name: 'Leo',
+    familyName: 'Renoi',
+    email: 'a.c@protonmail.com',
+    isVerified: true,
+  });
 
   await admin.save();
   await user1.save();
   await user2.save();
+  await user3.save();
 
   for (let i = 0; i < 5; i += 1) {
     if (i > 2) { roomType = 'radio'; }
@@ -93,23 +102,23 @@ const seedDatas = async () => {
     if (i === 0) {
       playlist = new models.Playlist({
         name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
-        users: [user1, admin],
+        users: [user1, admin, user2],
         author: admin._id,
         authorName: admin.name,
         roomType,
         publicFlag: true,
-        admins: [admin],
+        admins: [admin, user2],
         bans: [user2],
       });
     } else {
       playlist = new models.Playlist({
         name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
-        users: [admin],
+        users: [admin, user3],
         author: admin._id,
         authorName: admin.name,
         roomType,
         publicFlag: false,
-        admins: [admin],
+        admins: [admin, user3],
       });
     }
     playlist.save();

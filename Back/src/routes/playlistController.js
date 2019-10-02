@@ -221,8 +221,9 @@ function getBansByPlaylistId(req, res) {
 
 function adminInPlaylistDowngrade(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.userId && utils.isValidId(req.body.userId)) {
-    playlistService.adminInPlaylistDowngrade(req.body.playlistId, req.body.userId)
+    && req.body.userId && utils.isValidId(req.body.userId)
+    && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
+    playlistService.adminInPlaylistDowngrade(req.body.playlistId, req.body.userId, req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)
@@ -241,8 +242,53 @@ function adminInPlaylistDowngrade(req, res) {
 
 function userInPlaylistUpgrade(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.userId && utils.isValidId(req.body.userId)) {
-    playlistService.userInPlaylistUpgrade(req.body.playlistId, req.body.userId)
+    && req.body.userId && utils.isValidId(req.body.userId)
+    && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
+    playlistService.userInPlaylistUpgrade(req.body.playlistId, req.body.userId, req.body.requesterId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function BanUserInPlaylist(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)
+    && req.body.isItAdmin !== undefined
+    && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
+    playlistService.BanUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin, req.body.requesterId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function DeleteUserInPlaylist(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)
+    && req.body.isItAdmin !== undefined
+    && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
+    playlistService.DeleteUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin, req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)
@@ -263,48 +309,6 @@ function addUserToPlaylistAndUnbanned(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)) {
     playlistService.addUserToPlaylistAndUnbanned(req.body.playlistId, req.body.userId)
-      .then((response) => {
-        res
-          .status(response.status)
-          .send(response.data);
-      })
-      .catch((error) => {
-        console.error(error.msg);
-        res
-          .status(error.status)
-          .send({ msg: error.msg });
-      });
-  } else {
-    res.status(422).send({ msg: 'Wrong Parameters' });
-  }
-}
-
-function BanUserInPlaylist(req, res) {
-  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.userId && utils.isValidId(req.body.userId)
-  && req.body.isItAdmin !== undefined) {
-    playlistService.BanUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin)
-      .then((response) => {
-        res
-          .status(response.status)
-          .send(response.data);
-      })
-      .catch((error) => {
-        console.error(error.msg);
-        res
-          .status(error.status)
-          .send({ msg: error.msg });
-      });
-  } else {
-    res.status(422).send({ msg: 'Wrong Parameters' });
-  }
-}
-
-function DeleteUserInPlaylist(req, res) {
-  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.userId && utils.isValidId(req.body.userId)
-  && req.body.isItAdmin !== undefined) {
-    playlistService.DeleteUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin)
       .then((response) => {
         res
           .status(response.status)

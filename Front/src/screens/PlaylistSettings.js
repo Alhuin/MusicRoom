@@ -66,12 +66,16 @@ class PlaylistSettings extends React.Component {
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');
+    const roomType = navigation.getParam('roomType');
 
     if (String(authorId) !== String(global.user._id)) {
-      DeleteUserInPlaylist(playlistId, global.user._id, isAdmin)
+      DeleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
         .then(() => {
-          NavigationUtils.resetStack(this, navigation.state.routeName, null);
-          navigation.navigate('Home');
+          if (roomType === 'party') {
+            NavigationUtils.resetStack(this, 'PartysList', null);
+          } else if (roomType === 'radio') {
+            NavigationUtils.resetStack(this, 'RadiosList', null);
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -207,6 +211,7 @@ class PlaylistSettings extends React.Component {
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');
+    const roomType = navigation.getParam('roomType');
     let adminOptions = (null);
     if (isAdmin) {
       adminOptions = (
@@ -225,6 +230,8 @@ class PlaylistSettings extends React.Component {
             authorId={authorId}
             playlistId={playlistId}
             isLoading={this.isLoading}
+            roomType={roomType}
+            parent={this}
           />
           <Text> Utilisateurs </Text>
           <UserListInSettings
@@ -233,6 +240,8 @@ class PlaylistSettings extends React.Component {
             onRefresh={this._onRefresh}
             playlistId={playlistId}
             isLoading={this.isLoading}
+            roomType={roomType}
+            parent={this}
           />
           <Text> Bannis </Text>
           <BansListInSettings
