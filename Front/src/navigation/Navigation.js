@@ -25,7 +25,7 @@ import UserSettings from '../screens/UserSettings';
 import AppSettings from '../screens/AppSettings';
 import PlaylistSettings from '../screens/PlaylistSettings';
 import Loading from '../screens/Loading';
-import SearchTrack from '../components/SearchTrack';
+import SearchTrack from '../components/SearchTrack/SearchTrack';
 import Playlist from '../screens/Playlist';
 import Radios from '../screens/Radios';
 import Partys from '../screens/Partys';

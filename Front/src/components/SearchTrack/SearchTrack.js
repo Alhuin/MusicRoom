@@ -2,10 +2,10 @@ import React from 'react';
 import {
   StyleSheet, View,
 } from 'react-native';
-import SearchBar from './SearchBar';
-import Loader from './Loader';
+import SearchBar from '../SearchBar';
+import Loader from '../Authentication/Loader';
 import TracklistInSearch from './TracklistInSearch';
-import { getTracks } from '../../API/DeezerApi';
+import { getTracks } from '../../../API/DeezerApi';
 
 export default class SearchTrack extends React.Component {
   constructor(props) {

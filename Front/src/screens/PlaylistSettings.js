@@ -2,10 +2,10 @@ import {
   View, StyleSheet, Text, Button, Switch,
 } from 'react-native';
 import React from 'react';
-import AdminListInSettings from '../components/AdminListInSettings';
-import UserListInSettings from '../components/UserListInSettings';
-import BansListInSettings from '../components/BansListInSettings';
-import Loader from '../components/Loader';
+import AdminListInSettings from '../components/Playlist/AdminListInSettings';
+import UserListInSettings from '../components/Playlist/UserListInSettings';
+import BansListInSettings from '../components/Playlist/BansListInSettings';
+import Loader from '../components/Authentication/Loader';
 
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist,

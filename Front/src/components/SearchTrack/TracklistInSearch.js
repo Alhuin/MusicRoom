@@ -4,7 +4,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import TrackInSearch from './TrackInSearch';
-import Player from '../services/Player';
+import Player from '../../services/Player';
 
 class TrackListInSearch extends React.Component {
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Modal,
 } from 'react-native';
-import SearchTrack from './SearchTrack';
+import SearchTrack from '../SearchTrack/SearchTrack';
 
 
 export default class AddMusicModal extends React.Component {

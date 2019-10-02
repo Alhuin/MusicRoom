@@ -1,28 +1,27 @@
-import SignInForm from './SignInForm';
-import SignUpForm from './SignUpForm';
-import LoginContext from './LoginContext';
-import Logo from './Logo';
-import SocialLogin from './SocialLogin';
-import SendToken from './SendToken';
-import PlaylistInPlaylists from './PlaylistInPlaylists';
-import UpdatePassForm from './UpdatePassForm';
-import TrackInSearch from './TrackInSearch';
+import SignInForm from './Authentication/SignInForm';
+import SignUpForm from './Authentication/SignUpForm';
+import LoginContext from './Authentication/LoginContext';
+import Logo from './Authentication/Logo';
+import SocialLogin from './Authentication/SocialLogin';
+import SendToken from './Authentication/SendToken';
+import PlaylistInPlaylists from './Playlists/PlaylistInPlaylists';
+import UpdatePassForm from './Authentication/UpdatePassForm';
+import TrackInSearch from './SearchTrack/TrackInSearch';
 import SearchBar from './SearchBar';
-import TracklistInSearch from './TracklistInSearch';
-import TracklistInPlaylist from './TracklistInPlaylist';
-import TrackInPlaylist from './TrackInPlaylist';
+import TracklistInSearch from './SearchTrack/TracklistInSearch';
+import TracklistInPlaylist from './Playlist/TracklistInPlaylist';
+import TrackInPlaylist from './Playlist/TrackInPlaylist';
 import AddFloatingButton from './AddFloatingButton';
-import PlaylistList from './PlaylistList';
-import AddPlaylistModal from './AddPlaylistModal';
-import AddMusicModal from './AddMusicModal';
-import JoinPrivateRoom from './JoinPrivateRoom';
-import SearchTrack from './SearchTrack';
-import CollapsibleList from './CollapsibleList';
-import AdminListInSettings from './AdminListInSettings';
-import UserListInSettings from './UserListInSettings';
-import BansListInSettings from './BansListInSettings';
-import DatePickerModal from './DatePickerModal';
-import MiniPlayer from './MiniPlayer';
+import PlaylistList from './Playlists/PlaylistList';
+import AddPlaylistModal from './Playlists/AddPlaylistModal';
+import AddMusicModal from './Playlist/AddMusicModal';
+import JoinPrivateRoom from './Home/JoinPrivateRoom';
+import SearchTrack from './SearchTrack/SearchTrack';
+import AdminListInSettings from './Playlist/AdminListInSettings';
+import UserListInSettings from './Playlist/UserListInSettings';
+import BansListInSettings from './Playlist/BansListInSettings';
+import DatePickerModal from './Playlists/DatePickerModal';
+import MiniPlayer from './Playlist/MiniPlayer';
 
 export default {
   SignInForm,
@@ -44,7 +43,6 @@ export default {
   AddMusicModal,
   SearchTrack,
   JoinPrivateRoom,
-  CollapsibleList,
   AdminListInSettings,
   UserListInSettings,
   DatePickerModal,

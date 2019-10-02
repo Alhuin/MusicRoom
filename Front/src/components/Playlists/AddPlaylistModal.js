@@ -9,7 +9,7 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import { addPlaylist } from '../../API/BackApi';
+import { addPlaylist } from '../../../API/BackApi';
 import DatePickerModal from './DatePickerModal';
 
 

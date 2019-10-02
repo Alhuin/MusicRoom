@@ -3,7 +3,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
-import { addUserToPlaylistAndUnbanned } from '../../API/BackApi';
+import { addUserToPlaylistAndUnbanned } from '../../../API/BackApi';
 
 class BansListInSettings extends React.Component {
   render() {

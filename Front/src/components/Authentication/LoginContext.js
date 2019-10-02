@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Text } from 'native-base';
 import React, { Component } from 'react';
-import NavigationUtils from '../navigation/NavigationUtils';
+import NavigationUtils from '../../navigation/NavigationUtils';
 
 
 export default class LoginContext extends Component {

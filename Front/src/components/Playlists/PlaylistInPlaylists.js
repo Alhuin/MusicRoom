@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon } from 'native-base';
-import { getUserById } from '../../API/BackApi';
+import { getUserById } from '../../../API/BackApi';
 
 // must create two components PlaylistInParty and PlaylistInRadio or this one need to be modified
 

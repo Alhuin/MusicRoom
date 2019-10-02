@@ -3,8 +3,8 @@ import React from 'react';
 import {
   Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text, Alert,
 } from 'react-native';
-import { login } from '../../API/BackApi';
-import { onSignIn } from '../services/auth';
+import { login } from '../../../API/BackApi';
+import { onSignIn } from '../../services/auth';
 
 export default class SignInForm extends React.Component {
   state = {

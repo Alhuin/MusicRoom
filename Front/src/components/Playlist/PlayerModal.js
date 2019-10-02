@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Modal from 'react-native-modalbox';
-import Player from './player/Player';
+import Player from '../Player/Player';
 
 export const TRACKS = [
   {

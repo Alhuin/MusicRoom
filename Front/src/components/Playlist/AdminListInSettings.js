@@ -3,8 +3,8 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import React from 'react';
-import { adminInPlaylistDowngrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
-import NavigationUtils from '../navigation/NavigationUtils';
+import { adminInPlaylistDowngrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../../API/BackApi';
+import NavigationUtils from '../../navigation/NavigationUtils';
 
 
 class AdminListInSettings extends React.Component {

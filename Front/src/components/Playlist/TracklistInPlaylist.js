@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import TrackInPlaylist from './TrackInPlaylist';
-import Player from '../services/Player';
+import Player from '../../services/Player';
 
 class TracklistInPlaylist extends React.Component {
   handlePress = (preview) => {

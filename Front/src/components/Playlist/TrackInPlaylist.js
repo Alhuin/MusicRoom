@@ -3,7 +3,7 @@ import {
   TouchableOpacity, Image, View, Text, StyleSheet, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
-import { voteMusic } from '../../API/BackApi';
+import { voteMusic } from '../../../API/BackApi';
 
 // must create two components TrackInRadio and TrackInParty or this one need to be modified
 
@@ -85,7 +85,7 @@ class TrackInPlaylist extends React.Component {
               source={{ uri: track.albumCover }}
             />
             <Image
-              source={require('../assets/images/play.png')}
+              source={require('../../assets/images/play.png')}
               style={{ height: 80, width: 80, position: 'absolute' }}
             />
           </TouchableOpacity>

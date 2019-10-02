@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Player from '../components/player/Player';
+import Player from '../components/Player/Player';
 
 export const TRACKS = [
   {

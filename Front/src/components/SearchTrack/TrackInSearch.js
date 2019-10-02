@@ -2,7 +2,7 @@ import React from 'react';
 import {
   TouchableOpacity, Image, View, Text, StyleSheet, Button,
 } from 'react-native';
-import { addMusicToPlaylist } from '../../API/BackApi';
+import { addMusicToPlaylist } from '../../../API/BackApi';
 
 class TrackInSearch extends React.Component {
 
@@ -43,7 +43,7 @@ class TrackInSearch extends React.Component {
               source={{uri: track.album.cover}}
             />
             <Image
-              source={require('../assets/images/play.png')}
+              source={require('../../assets/images/play.png')}
               style={{height: 80, width: 80, position: 'absolute'}}
             />
           </TouchableOpacity>
@@ -67,7 +67,7 @@ class TrackInSearch extends React.Component {
             onPress={this.addMusic}
           >
             <Image
-              source={require('../assets/images/ic_add_circle_outline_white.png')}
+              source={require('../../assets/images/ic_add_circle_outline_white.png')}
             />
           </TouchableOpacity>
         </TouchableOpacity>

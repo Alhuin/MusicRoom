@@ -6,7 +6,7 @@ import Modal from 'react-native-modalbox';
 import { Icon } from 'native-base';
 import Components from '../components';
 import { getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist } from '../../API/BackApi';
-import Player from '../components/player/Player';
+import Player from '../components/Player/Player';
 import { TRACKS } from './Player';
 
 class Playlist extends React.Component {

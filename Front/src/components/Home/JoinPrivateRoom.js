@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Modal, StyleSheet, TextInput, View, Text,
 } from 'react-native';
-import { joinRoom } from '../../API/BackApi';
+import { joinRoom } from '../../../API/BackApi';
 
 export default class JoinPrivateRoom extends React.Component {
   constructor(props) {

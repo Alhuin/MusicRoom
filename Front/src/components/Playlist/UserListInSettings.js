@@ -3,9 +3,9 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
-import { Loader } from './Loader';
-import { userInPlaylistUpgrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../API/BackApi';
-import NavigationUtils from '../navigation/NavigationUtils';
+import { Loader } from '../Authentication/Loader';
+import { userInPlaylistUpgrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../../API/BackApi';
+import NavigationUtils from '../../navigation/NavigationUtils';
 
 class UserListInSettings extends React.Component {
   render() {
