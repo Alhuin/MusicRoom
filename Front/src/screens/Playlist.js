@@ -16,7 +16,6 @@ class Playlist extends React.Component {
       admin: false,
       stockedTracks: [],
       tracks: [],
-      playerVisible: false,
       playing: null,
       refreshing: false,
       modalVisible: false,
@@ -57,12 +56,6 @@ class Playlist extends React.Component {
     const { modalVisible } = this.state;
     const visible = !modalVisible;
     this.setState({ modalVisible: visible });
-  };
-
-  setPlayerVisible = () => {
-    const { playerVisible } = this.state;
-    const visible = !playerVisible;
-    this.setState({ playerVisible: visible });
   };
 
   updateTracks = () => new Promise((resolve, reject) => {
@@ -128,7 +121,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes, playerVisible,
+      tracks, playing, refreshing, modalVisible, admin, myVotes,
     } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
@@ -214,7 +207,6 @@ class Playlist extends React.Component {
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
         />
-        {/*<Button title="Basic modal" onPress={() => this.refs.player.open()} />*/}
 
         <Components.MiniPlayer
           handlePress={() => this.refs.player.open()}

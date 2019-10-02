@@ -69,72 +69,80 @@ class TrackInPlaylist extends React.Component {
       );
     }
     const rendering = (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.main_container}
-      >
+      <View style={styles.card}>
         <TouchableOpacity
-          style={styles.previewCover}
-          onPress={() => {
-            handlePress(track.preview);
-          }}
+          activeOpacity={1}
+          style={styles.main_container}
         >
-          <Image
-            style={styles.image}
-            source={{ uri: track.albumCover }}
-          />
-          <Image
-            source={require('../assets/images/play.png')}
-            style={{ height: 80, width: 80, position: 'absolute' }}
-          />
+          <TouchableOpacity
+            style={styles.previewCover}
+            onPress={() => {
+              handlePress(track.preview);
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={{ uri: track.albumCover }}
+            />
+            <Image
+              source={require('../assets/images/play.png')}
+              style={{ height: 80, width: 80, position: 'absolute' }}
+            />
+          </TouchableOpacity>
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>{track.title}</Text>
+            </View>
+            <View style={styles.artist_container}>
+              <Text style={styles.artist_name}>
+                {track.artist}
+              </Text>
+            </View>
+            <View style={styles.album_container}>
+              <Text style={styles.album_title} numberOfLines={1}>
+                {track.album}
+              </Text>
+            </View>
+          </View>
+          {renderForParty}
         </TouchableOpacity>
-        <View style={styles.content_container}>
-          <View style={styles.title_container}>
-            <Text style={styles.title_text}>{track.title}</Text>
-          </View>
-          <View style={styles.artist_container}>
-            <Text style={styles.artist_name}>
-              {track.artist}
-            </Text>
-          </View>
-          <View style={styles.album_container}>
-            <Text style={styles.album_title}>
-              {track.album}
-            </Text>
-          </View>
-        </View>
-        {renderForParty}
-      </TouchableOpacity>
+      </View>
     );
     return (rendering);
   }
 }
 
 let styles = StyleSheet.create({
-  main_container: {
+  card: {
+    padding: 5,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 120,
+  },
+  main_container: {
+    height: 110,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    // borderWidth: 1,
-    // borderColor: 'green',
+    alignItems: 'center',
+    backgroundColor: '#404040',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   previewCover: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: 110,
-    height: 110,
-    marginTop: 5,
-    marginLeft: 5,
+    width: 100,
+    height: 100,
+    marginLeft: 10,
   },
   content_container: {
     flexDirection: 'column',
     flex: 3,
     margin: 5,
     justifyContent: 'center',
-    // borderWidth: 1,
-    // borderColor: 'yellow',
   },
   title_container: {
     flex: 2,

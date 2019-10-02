@@ -15,7 +15,6 @@ export default class MiniPlayer extends React.Component {
     } = this.props;
     return (
       <TouchableOpacity style={styles.mainContainer} disabled={!isAdmin} onPress={handlePress}>
-
         <View style={styles.coverContainer}>
           {cover}
         </View>
