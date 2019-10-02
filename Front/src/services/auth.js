@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { getUserById } from '../../API/BackApi';
 
-export const onSignIn = user => AsyncStorage.setItem('loggedUser', user);
+export const onSignIn = (user) => AsyncStorage.setItem('loggedUser', user);
 
 export const onSignOut = () => AsyncStorage.removeItem('loggedUser');
 
