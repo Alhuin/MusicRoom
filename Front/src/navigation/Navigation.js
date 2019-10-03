@@ -30,6 +30,7 @@ import Playlist from '../screens/Playlist';
 import Radios from '../screens/Radios';
 import Partys from '../screens/Partys';
 import AdminPlayer from '../screens/Player';
+import TextScroller from '../components/Playlist/TextScroller';
 
 const createBurgerMenu = (navigation) => Platform.select({
   ios: null,
@@ -189,6 +190,7 @@ const MainNavigator = Platform.select({
       screen: HomeNavigator,
       path: 'main',
     },
+    TextScroller,
     Settings: AppSettings,
     Parties: PartysNavigator,
     Radios: RadiosNavigator,

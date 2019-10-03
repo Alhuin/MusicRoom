@@ -1,37 +1,35 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
-  Image,
 } from 'react-native';
+import TextTicker from 'react-native-text-ticker';
 
 
 export default class MiniPlayer extends React.Component {
+
   render() {
     const {
-      handlePress, isAdmin, cover, details
+      handlePress, isAdmin, cover, details,
     } = this.props;
+
     return (
       <TouchableOpacity style={styles.mainContainer} disabled={!isAdmin} onPress={handlePress}>
         <View style={styles.coverContainer}>
           {cover}
         </View>
         <View style={styles.detailsContainer}>
-          <View style={styles.header}>
-            <Text>Now Playing</Text>
-          </View>
-          <View style={styles.details}>
-            <Text>
-              {details.artist}
-              {' - '}
-              {details.album}
-            </Text>
-            <Text>
-              {details.title}
-            </Text>
-          </View>
+          <TextTicker
+            style={{ fontSize: 20, color: 'white' }}
+            duration={5000}
+            loop
+            repeatSpacer={50}
+          >
+            {details.artist}
+            {' ● '}
+            {details.title}
+          </TextTicker>
         </View>
       </TouchableOpacity>
     );
@@ -41,14 +39,16 @@ export default class MiniPlayer extends React.Component {
 const styles = StyleSheet.create({
   mainContainer: {
     position: 'absolute',
-    height: 120,
+    height: 70,
     alignItems: 'center',
     justifyContent: 'center',
     bottom: 0,
+    backgroundColor: '#404040',
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     // elevation: 2,
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: 'white',
   },
   coverContainer: {
     flex: 1,
@@ -56,17 +56,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cover: {
-    height: 100,
-    width: 100,
+    height: 50,
+    width: 50,
   },
   detailsContainer: {
     flex: 2,
-    backgroundColor: 'yellow',
-    height: 120,
+    height: 70,
   },
   header: {
     flex: 1,
-    backgroundColor: 'green',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -74,6 +72,5 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'yellow',
   },
 });

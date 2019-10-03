@@ -364,6 +364,25 @@ function joinPlaylist(req, res) {
   }
 }
 
+function getPlaylistPrivateId(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getPlaylistPrivateId(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getPlaylistById,
   getPlaylists,
@@ -383,4 +402,5 @@ export default {
   getNextTrack,
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
+  getPlaylistPrivateId,
 };

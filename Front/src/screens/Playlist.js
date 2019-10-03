@@ -132,7 +132,7 @@ class Playlist extends React.Component {
     // const nowPlaying = this._getNowPlaying();
 
     const nowPlayingCover = (
-      <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 100, width: 100 }} />
+      <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 50, width: 50 }} />
     );
     const nowPlayingDetails = {
       title: 'Harder Better Faster Stronger',
@@ -146,7 +146,7 @@ class Playlist extends React.Component {
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('PlaylistSettings', {
-            playlistId, isAdmin: admin, authorId, roomType
+            playlistId, isAdmin: admin, authorId, roomType,
           });
         }}
       >
@@ -158,7 +158,7 @@ class Playlist extends React.Component {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('PlaylistSettings', {
-              playlistId, isAdmin: admin, authorId, roomType
+              playlistId, isAdmin: admin, authorId, roomType,
             });
           }}
         >

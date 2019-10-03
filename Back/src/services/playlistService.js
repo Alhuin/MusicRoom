@@ -529,6 +529,23 @@ function joinPlaylist(userId, playlistCode) {
 }
 
 
+
+function getPlaylistPrivateId(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else {
+        console.log(playlist.privateId);
+        resolve({
+          status: 200,
+          data: playlist.privateId,
+        });
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -548,4 +565,5 @@ export default {
   getNextTrack,
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
+  getPlaylistPrivateId,
 };
