@@ -60,6 +60,7 @@ router.post('/playlists/add', playlistController.addPlaylist);
 router.post('/playlists/user/unbanned', playlistController.addUserToPlaylistAndUnbanned);
 router.post('/playlists/isAdmin', playlistController.isAdmin);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
+router.post('/playlists/join', playlistController.joinPlaylist);
 
 
 /*             Votes                 */

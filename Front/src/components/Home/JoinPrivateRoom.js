@@ -16,17 +16,16 @@ export default class JoinPrivateRoom extends React.Component {
     const { userId, setModalVisible } = this.props;
     const { text } = this.state;
     setModalVisible();
-    alert('La demande a rencontrée une erreur.');
-/*    joinRoom(userId, text)
+    joinRoom(userId, text)
       .then(() => {
         setModalVisible();
-        alert(`Demande d'ajout à [${text}] prise en compte.`);
+        alert(`Vous avez maintenant accès a une nouvelle playlist`);
       })
       .catch((error) => {
         setModalVisible();
         alert('La demande a rencontrée une erreur.');
         console.error(error);
-      });*/
+      });
   };
 
   render() {

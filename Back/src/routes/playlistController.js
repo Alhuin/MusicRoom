@@ -344,6 +344,26 @@ function getNextTrack(req, res) {
   }
 }
 
+function joinPlaylist(req, res) {
+  console.log(req.body);
+  if (utils.isValidId(req.body.userId) && req.body.playlistCode) {
+    playlistService.joinPlaylist(req.body.userId, req.body.playlistCode)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getPlaylistById,
   getPlaylists,
@@ -362,4 +382,5 @@ export default {
   DeleteUserInPlaylist,
   getNextTrack,
   addUserToPlaylistAndUnbanned,
+  joinPlaylist,
 };

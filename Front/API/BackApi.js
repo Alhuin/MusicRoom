@@ -79,7 +79,7 @@ function addUser(userName, password, name, familyName, email) {
           // alert(`error ${data.status}: ${data.msg}`);
         }
       })
-      .catch((error) => reject(error));
+      .catch(error => reject(error));
   });
 }
 //

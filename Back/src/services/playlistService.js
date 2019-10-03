@@ -504,6 +504,31 @@ function getNextTrack(playlistId) {
   });
 }
 
+function joinPlaylist(userId, playlistCode) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.find({ privateId: playlistCode }, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else {
+        console.log(playlist[0].users);
+        const newPlaylist = playlist[0];
+        newPlaylist.users.push(userId);
+        newPlaylist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -522,4 +547,5 @@ export default {
   DeleteUserInPlaylist,
   getNextTrack,
   addUserToPlaylistAndUnbanned,
+  joinPlaylist,
 };
