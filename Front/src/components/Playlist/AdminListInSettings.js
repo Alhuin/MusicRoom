@@ -3,11 +3,89 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import React from 'react';
-import { adminInPlaylistDowngrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../../API/BackApi';
+import {
+  adminInPlaylistDowngrade, banUserInPlaylist, deleteUserInPlaylist, setDelegatedPlayerAdmin
+} from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
 
 
 class AdminListInSettings extends React.Component {
+  _pressSetDelegatedPlayerAdmin = (userId, playlistId, onRefresh, isLoading, displayLoader) => {
+    if (!isLoading()) {
+      displayLoader();
+      setDelegatedPlayerAdmin(playlistId, userId, global.user._id)
+        .then((response) => {
+          onRefresh();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  _pressAdminInPlaylistDowngrade = (userId, item, playlistId, parent, roomType, onRefresh, isLoading, displayLoader) => {
+    if (!isLoading()) {
+      displayLoader();
+      adminInPlaylistDowngrade(playlistId, userId, global.user._id)
+        .then((response) => {
+          if (String(userId) === String(global.user._id)) {
+            if (roomType === 'party') {
+              NavigationUtils.resetStack(parent, 'PartysList', null);
+            } else if (roomType === 'radio') {
+              NavigationUtils.resetStack(parent, 'RadiosList', null);
+            }
+          } else {
+            onRefresh();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  _pressDeleteUserInPlaylist = (userId, item, playlistId, parent, roomType, onRefresh, isLoading, displayLoader) => {
+    if (!isLoading()) {
+      displayLoader();
+      deleteUserInPlaylist(playlistId, userId, true, global.user._id)
+        .then((response) => {
+          if (String(userId) === String(global.user._id)) {
+            if (roomType === 'party') {
+              NavigationUtils.resetStack(parent, 'PartysList', null);
+            } else if (roomType === 'radio') {
+              NavigationUtils.resetStack(parent, 'RadiosList', null);
+            }
+          } else {
+            onRefresh();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  _pressBanUserInPlaylist = (userId, item, playlistId, parent, roomType, onRefresh, isLoading, displayLoader) => {
+    if (!isLoading()) {
+      displayLoader();
+      banUserInPlaylist(playlistId, userId, true, global.user._id)
+        .then((response) => {
+          if (String(userId) === String(global.user._id)) {
+            if (roomType === 'party') {
+              NavigationUtils.resetStack(parent, 'PartysList', null);
+            } else if (roomType === 'radio') {
+              NavigationUtils.resetStack(parent, 'RadiosList', null);
+            }
+          } else {
+            onRefresh();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
   render() {
     const {
       admins,
@@ -18,6 +96,7 @@ class AdminListInSettings extends React.Component {
       isLoading,
       roomType,
       parent,
+      delegatedPlayerAdmin,
     } = this.props;
     return (
       <FlatList
@@ -26,81 +105,61 @@ class AdminListInSettings extends React.Component {
         renderItem={
           ({ item }) => {
             const userId = item._id;
+            let playerUser = (null);
+            if (String(userId) === String(delegatedPlayerAdmin)) {
+              playerUser = (
+                <TouchableOpacity
+                  style={styles.iconWrapper}
+                  onPress={() => {
+                    this._pressSetDelegatedPlayerAdmin(userId, playlistId,
+                      onRefresh, isLoading, displayLoader);
+                  }}
+                >
+                  <Icon name="musical-notes" style={styles.iconsStyle} />
+                </TouchableOpacity>
+              );
+            } else {
+              playerUser = (
+                <TouchableOpacity
+                  style={styles.iconWrapper}
+                  onPress={() => {
+                    this._pressSetDelegatedPlayerAdmin(userId, playlistId,
+                      onRefresh, isLoading, displayLoader);
+                  }}
+                >
+                  <Icon name="musical-notes" style={styles.iconsStyleBlank} />
+                </TouchableOpacity>
+              );
+            }
             let doNotTouchTheAuthor = (
               <View
-                style={styles.iconsWrapper}
+                style={styles.touchableWrapper}
               >
+                {playerUser}
                 <TouchableOpacity
                   onPress={() => {
-                    if (!isLoading()) {
-                      displayLoader();
-                      adminInPlaylistDowngrade(playlistId, userId, global.user._id)
-                        .then((response) => {
-                          if (String(item._id) === String(global.user._id)) {
-                            if (roomType === 'party') {
-                              NavigationUtils.resetStack(parent, 'PartysList', null);
-                            } else if (roomType === 'radio') {
-                              NavigationUtils.resetStack(parent, 'RadiosList', null);
-                            }
-                          } else {
-                            onRefresh();
-                          }
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
-                    }
+                    this._pressAdminInPlaylistDowngrade(userId, item, playlistId, parent,
+                      roomType, onRefresh, isLoading, displayLoader);
                   }}
-                  style={styles.iconTouchable}
+                  style={styles.iconWrapper}
                 >
                   <Icon name="arrow-down" style={styles.iconsStyle} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    if (!isLoading()) {
-                      displayLoader();
-                      DeleteUserInPlaylist(playlistId, userId, true, global.user._id)
-                        .then((response) => {
-                          if (String(item._id) === String(global.user._id)) {
-                            if (roomType === 'party') {
-                              NavigationUtils.resetStack(parent, 'PartysList', null);
-                            } else if (roomType === 'radio') {
-                              NavigationUtils.resetStack(parent, 'RadiosList', null);
-                            }
-                          } else {
-                            onRefresh();
-                          }
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
-                    }
+                    this._pressDeleteUserInPlaylist(userId, item, playlistId, parent,
+                      roomType, onRefresh, isLoading, displayLoader);
                   }}
-                  style={styles.iconTouchable}
+                  style={styles.iconWrapper}
                 >
                   <Icon name="md-walk" style={styles.iconsStyle} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    if (!isLoading()) {
-                      displayLoader();
-                      BanUserInPlaylist(playlistId, userId, true, global.user._id)
-                        .then((response) => {
-                          if (String(item._id) === String(global.user._id)) {
-                            if (roomType === 'party') {
-                              NavigationUtils.resetStack(parent, 'PartysList', null);
-                            } else if (roomType === 'radio') {
-                              NavigationUtils.resetStack(parent, 'RadiosList', null);
-                            }
-                          } else {
-                            onRefresh();
-                          }                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
-                    }
+                    this._pressBanUserInPlaylist(userId, item, playlistId, parent,
+                      roomType, onRefresh, isLoading, displayLoader);
                   }}
-                  style={styles.iconTouchable}
+                  style={styles.iconWrapper}
                 >
                   <Icon name="md-trash" style={styles.iconsStyle} />
                 </TouchableOpacity>
@@ -108,8 +167,15 @@ class AdminListInSettings extends React.Component {
             );
             if (String(authorId) === String(item._id)) {
               doNotTouchTheAuthor = (
-                <View>
-                  <Icon name="md-school" style={styles.authorIconStyle} />
+                <View
+                  style={styles.touchableWrapper}
+                >
+                  {playerUser}
+                  <View
+                    style={styles.iconWrapper}
+                  >
+                    <Icon name="md-school" style={styles.authorIconStyle} />
+                  </View>
                 </View>
               );
             }
@@ -146,21 +212,23 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
   },
-  iconsWrapper: {
+  touchableWrapper: {
     height: '100%',
     flexDirection: 'row',
-    // justifyContent: 'space-between',
   },
-  iconTouchable: {
+  iconWrapper: {
     width: 80,
     alignItems: 'center',
   },
   iconsStyle: {
     fontSize: 45,
   },
+  iconsStyleBlank: {
+    fontSize: 45,
+    color: 'white',
+  },
   authorIconStyle: {
     fontSize: 45,
-    marginRight: 20,
   },
 });
 

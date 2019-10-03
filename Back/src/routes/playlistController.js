@@ -94,8 +94,10 @@ function getPlaylistsFiltered(req, res) {
 
 function addPlaylist(req, res) {
   if (req.body.name && req.body.publicFlag !== undefined
+    && req.body.userId && req.body.author && req.body.delegatedPlayerAdmin
     && utils.isValidId(req.body.userId)
     && utils.isValidId(req.body.author)
+    && utils.isValidId(req.body.delegatedPlayerAdmin)
     && req.body.authorName
     && req.body.roomType
     && req.body.date !== undefined
@@ -103,7 +105,8 @@ function addPlaylist(req, res) {
     && req.body.location !== undefined
     && req.body.privateId !== undefined) {
     playlistService.addPlaylist(req.body.name, req.body.publicFlag,
-      req.body.userId, req.body.author, req.body.authorName, req.body.roomType,
+      req.body.userId, req.body.author, req.body.authorName,
+      req.body.delegatedPlayerAdmin, req.body.roomType,
       req.body.date, req.body.dateTwo, req.body.location, req.body.privateId)
       .then((response) => {
         res
@@ -261,12 +264,15 @@ function userInPlaylistUpgrade(req, res) {
   }
 }
 
-function BanUserInPlaylist(req, res) {
+function banUserInPlaylist(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
     && req.body.isItAdmin !== undefined
     && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
-    playlistService.BanUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin, req.body.requesterId)
+    playlistService.banUserInPlaylist(
+      req.body.playlistId, req.body.userId,
+      req.body.isItAdmin, req.body.requesterId,
+    )
       .then((response) => {
         res
           .status(response.status)
@@ -283,12 +289,12 @@ function BanUserInPlaylist(req, res) {
   }
 }
 
-function DeleteUserInPlaylist(req, res) {
+function deleteUserInPlaylist(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
     && req.body.isItAdmin !== undefined
     && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
-    playlistService.DeleteUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin, req.body.requesterId)
+    playlistService.deleteUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin, req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)
@@ -383,10 +389,50 @@ function getPlaylistPrivateId(req, res) {
   }
 }
 
+function getDelegatedPlayerAdmin(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getDelegatedPlayerAdmin(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function setPublicityOfPlaylist(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.value !== undefined) {
     playlistService.setPublicityOfPlaylist(req.body.playlistId, req.body.value)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function setDelegatedPlayerAdmin(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)
+    && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
+    playlistService.setDelegatedPlayerAdmin(req.body.playlistId, req.body.userId, req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)
@@ -417,11 +463,13 @@ export default {
   getBansByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  BanUserInPlaylist,
-  DeleteUserInPlaylist,
+  banUserInPlaylist,
+  deleteUserInPlaylist,
   getNextTrack,
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
   getPlaylistPrivateId,
+  getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,
+  setDelegatedPlayerAdmin,
 };

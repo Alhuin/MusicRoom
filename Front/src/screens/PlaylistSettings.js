@@ -8,8 +8,8 @@ import BansListInSettings from '../components/Playlist/BansListInSettings';
 import Loader from '../components/Authentication/Loader';
 
 import {
-  getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist,
-  getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist,
+  getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
+  getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 
@@ -23,6 +23,7 @@ class PlaylistSettings extends React.Component {
       switchValue: false,
       loading: false,
       privateId: '',
+      delegatedPlayerAdmin: '',
     };
   }
 
@@ -32,12 +33,17 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
-      this._getPrivateId(playlistId);
-      this.updateAdmins()
+      this._getPrivateIdAndDelegatedPlayerAdminId(playlistId);
+      this.updateUsers()
         .then(() => {
-          this.updateUsers()
+          this.updateAdmins()
             .then(() => {
-              this.updateBans();
+              this.updateBans()
+                .then(() => {
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
             })
             .catch((error) => {
               console.error(error);
@@ -50,10 +56,16 @@ class PlaylistSettings extends React.Component {
     }
   }
 
-  _getPrivateId = (playlistId) => {
+  _getPrivateIdAndDelegatedPlayerAdminId = (playlistId) => {
     getPlaylistPrivateId(playlistId)
       .then((privateId) => {
-        this.setState({ privateId });
+        getDelegatedPlayerAdmin(playlistId)
+          .then((delegatedPlayerAdmin) => {
+            this.setState({ privateId, delegatedPlayerAdmin });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -89,7 +101,7 @@ class PlaylistSettings extends React.Component {
     const roomType = navigation.getParam('roomType');
 
     if (String(authorId) !== String(global.user._id)) {
-      DeleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
+      deleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
         .then(() => {
           if (roomType === 'party') {
             NavigationUtils.resetStack(this, 'PartysList', null);
@@ -225,7 +237,7 @@ class PlaylistSettings extends React.Component {
 
   render() {
     const {
-      users, admins, bans, switchValue, loading, privateId,
+      users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -252,6 +264,7 @@ class PlaylistSettings extends React.Component {
             isLoading={this.isLoading}
             roomType={roomType}
             parent={this}
+            delegatedPlayerAdmin={delegatedPlayerAdmin}
           />
           <Text> Utilisateurs </Text>
           <UserListInSettings

@@ -170,7 +170,7 @@ export default class AddPlaylistModal extends React.Component {
                 // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN
                 // DESDOUS ET DE RECUP SUR LES MODAL LES DATE
 */
-                addPlaylist(namePlaylist, switchValue, userId, userId, global.user.name, roomType, date, dateTwo, location, this.generatePrivateId())
+                addPlaylist(namePlaylist, switchValue, userId, userId, global.user.name, userId, roomType, date, dateTwo, location, this.generatePrivateId())
                   .then(() => {
                     setModalVisible();
                     updatePlaylist();

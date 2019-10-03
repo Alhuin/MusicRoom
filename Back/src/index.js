@@ -100,7 +100,7 @@ const seedDatas = async () => {
   const user3 = new models.User({
     login: 'c',
     password: hashy,
-    name: 'Leo',
+    name: 'Boris',
     familyName: 'Renoi',
     email: 'a.c@protonmail.com',
     isVerified: true,
@@ -108,7 +108,7 @@ const seedDatas = async () => {
   const user4 = new models.User({
     login: 'c',
     password: hashy,
-    name: 'Leo',
+    name: 'Billy',
     familyName: 'Renoi',
     email: 'a.c@protonmail.com',
     isVerified: true,
@@ -124,14 +124,15 @@ const seedDatas = async () => {
     if (i === 0) {
       playlist = new models.Playlist({
         name: `${i} - boz`,
-        users: [user1, admin, user2],
+        users: [user1, admin],
         author: admin._id,
         authorName: admin.name,
+        delegatedPlayerAdmin: admin._id,
         roomType,
         publicFlag: true,
         admins: [admin, user2],
         bans: [user2],
-        privateId: generatePrivateId(),
+        privateId: '1234',
       });
     } else {
       playlist = new models.Playlist({
@@ -139,6 +140,7 @@ const seedDatas = async () => {
         users: [admin, user3],
         author: admin._id,
         authorName: admin.name,
+        delegatedPlayerAdmin: admin._id,
         roomType,
         publicFlag: false,
         admins: [admin, user3],

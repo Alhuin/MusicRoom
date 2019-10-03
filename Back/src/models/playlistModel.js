@@ -37,6 +37,10 @@ const playlistSchema = new mongoose.Schema({
   authorName: {
     type: String,
   },
+  delegatedPlayerAdmin: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserModel',
+  },
   roomType: {
     type: String,
     default: 'radio',

@@ -344,7 +344,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, authorName, roomType, date, dateTwo, location, privateId) {
+function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, date, dateTwo, location, privateId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/add`, {
       method: 'POST',
@@ -353,7 +353,7 @@ function addPlaylist(name, publicFlag, userId, author, authorName, roomType, dat
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name, publicFlag, userId, author, authorName, roomType, date, dateTwo, location, privateId,
+        name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, date, dateTwo, location, privateId,
       }),
     })
       .then(async (response) => {
@@ -535,7 +535,7 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
   });
 }
 
-function BanUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
+function banUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/users/ban`, {
       method: 'POST',
@@ -560,7 +560,7 @@ function BanUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
   });
 }
 
-function DeleteUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
+function deleteUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/users/delete`, {
       method: 'POST',
@@ -577,7 +577,7 @@ function DeleteUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('DeleteUserInPlaylist', data.msg, response.status));
+          reject(new CustomError('deleteUserInPlaylist', data.msg, response.status));
           // console.log(data.msg);
         }
       })
@@ -618,11 +618,32 @@ function getPlaylistPrivateId(playlistId) {
     })
       .then(async (response) => {
         const data = await response.json();
-        console.log(data);
         if (response.status === 200) {
           resolve(data);
         } else {
           reject(new CustomError('getPlaylistPrivateId', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function getDelegatedPlayerAdmin(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/delegatedPlayerAdmin/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('delegatedPlayerAdmin', data.msg, response.status));
           // console.log(data.msg);
         }
       })
@@ -645,7 +666,7 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('UpdatePassword', data.msg, response.status));
+          reject(new CustomError('addUserToPlaylistAndUnbanned', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -667,7 +688,29 @@ function setPublicityOfPlaylist(playlistId, value) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('UpdatePassword', data.msg, response.status));
+          reject(new CustomError('setPublicityOfPlaylist', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/setDelegatedPlayerAdmin`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, userId, requesterId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('setPublicityOfPlaylist', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -723,12 +766,14 @@ export {
   getBansByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  BanUserInPlaylist,
-  DeleteUserInPlaylist,
+  banUserInPlaylist,
+  deleteUserInPlaylist,
   getPublicityOfPlaylistById,
   getNextTrack,
   addUserToPlaylistAndUnbanned,
   getMyVotesInPlaylist,
   getPlaylistPrivateId,
+  getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,
+  setDelegatedPlayerAdmin,
 };

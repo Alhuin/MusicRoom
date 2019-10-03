@@ -103,7 +103,7 @@ function getPlaylistsFiltered(roomType, userId) {
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, authorName, roomType, date, dateTwo, location, privateId) {
+function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, date, dateTwo, location, privateId) {
   return new Promise((resolve, reject) => {
     const playlist = new models.Playlist({
       name,
@@ -113,6 +113,7 @@ function addPlaylist(name, publicFlag, userId, author, authorName, roomType, dat
       allowVotes: true,
       roomType,
       authorName,
+      delegatedPlayerAdmin,
       admins: [author],
       date,
       dateTwo,
@@ -343,13 +344,13 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
   });
 }
 
-function DeleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
+function deleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('DeleteUserInPlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('deleteUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
         let isRequesterAdmin = false;
         if (String(requesterId) !== String(userId)) {
@@ -363,11 +364,13 @@ function DeleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
         }
         if (isRequesterAdmin) {
           for (let i = 0; i < playlist.users.length; i++) {
-            if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
+            if (String(playlist.users[i]._id) === String(userId)
+              && String(playlist.users[i]._id) !== String(playlist.author)) {
               playlist.users.splice(i, 1);
               if (isUserAdmin) {
                 for (let j = 0; j < playlist.admins.length; j++) {
-                  if (String(playlist.admins[j]._id) === String(userId) && String(playlist.admins[j]._id) !== String(playlist.author)) {
+                  if (String(playlist.admins[j]._id) === String(userId)
+                    && String(playlist.admins[j]._id) !== String(playlist.author)) {
                     playlist.admins.splice(j, 1);
                     break;
                   }
@@ -379,7 +382,7 @@ function DeleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
                 } else {
                   resolve({
                     status: 200,
-                    data: true,
+                    data: savedPlaylist,
                   });
                 }
               });
@@ -392,13 +395,13 @@ function DeleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
   });
 }
 
-function BanUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
+function banUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('BanUserInPlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('banUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
         let isRequesterAdmin = false;
         for (let j = 0; j < playlist.admins.length; j++) {
@@ -408,11 +411,13 @@ function BanUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
         }
         if (isRequesterAdmin) {
           for (let i = 0; i < playlist.users.length; i++) {
-            if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
+            if (String(playlist.users[i]._id) === String(userId)
+              && String(playlist.users[i]._id) !== String(playlist.author)) {
               playlist.users.splice(i, 1);
               if (isUserAdmin) {
                 for (let j = 0; j < playlist.admins.length; j++) {
-                  if (String(playlist.admins[j]._id) === String(userId) && String(playlist.admins[j]._id) !== String(playlist.author)) {
+                  if (String(playlist.admins[j]._id) === String(userId)
+                    && String(playlist.admins[j]._id) !== String(playlist.author)) {
                     playlist.admins.splice(j, 1);
                     break;
                   }
@@ -434,7 +439,7 @@ function BanUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
                 } else {
                   resolve({
                     status: 200,
-                    data: true,
+                    data: savedPlaylist,
                   });
                 }
               });
@@ -477,7 +482,7 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
           } else {
             resolve({
               status: 200,
-              data: true,
+              data: savedPlaylist,
             });
           }
         });
@@ -509,8 +514,6 @@ function joinPlaylist(userId, playlistCode) {
     PlaylistModel.find({ privateId: playlistCode }, (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
-      } else if (!playlists) {
-        reject(new CustomError('JoinPlaylist', 'No available playlist in database', 400));
       } else {
         const newPlaylist = playlists[0];
         newPlaylist.users.push(userId);
@@ -534,10 +537,29 @@ function getPlaylistPrivateId(playlistId) {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('getPlaylistPrivateId', 'No playlist with this id in database', 400));
       } else {
         resolve({
           status: 200,
           data: playlist.privateId,
+        });
+      }
+    });
+  });
+}
+
+function getDelegatedPlayerAdmin(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('getDelegatedPlayerAdmin', 'No playlist with this id in database', 400));
+      } else {
+        resolve({
+          status: 200,
+          data: playlist.delegatedPlayerAdmin,
         });
       }
     });
@@ -566,6 +588,47 @@ function setPublicityOfPlaylist(playlistId, value) {
   });
 }
 
+function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('SetDelegatedPlayerAdmin', 'No playlist with this id in database', 400));
+      } else {
+        let isRequesterAdmin = false;
+        if (String(requesterId) !== String(userId)) {
+          for (let j = 0; j < playlist.admins.length; j++) {
+            if (String(playlist.admins[j]._id) === String(requesterId)) {
+              isRequesterAdmin = true;
+            }
+          }
+        } else {
+          isRequesterAdmin = true;
+        }
+        if (isRequesterAdmin) {
+          for (let i = 0; i < playlist.admins.length; i++) {
+            if (String(playlist.admins[i]._id) === String(userId)) {
+              playlist.delegatedPlayerAdmin = userId;
+              break;
+            }
+          }
+          playlist.save((saveError, savedPlaylist) => {
+            if (saveError) {
+              reject(new CustomError('MongoError', saveError.message, 500));
+            } else {
+              resolve({
+                status: 200,
+                data: savedPlaylist,
+              });
+            }
+          });
+        }
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -580,11 +643,13 @@ export default {
   getBansByPlaylistId,
   adminInPlaylistDowngrade,
   userInPlaylistUpgrade,
-  BanUserInPlaylist,
-  DeleteUserInPlaylist,
+  banUserInPlaylist,
+  deleteUserInPlaylist,
   getNextTrack,
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
   getPlaylistPrivateId,
+  getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,
+  setDelegatedPlayerAdmin,
 };

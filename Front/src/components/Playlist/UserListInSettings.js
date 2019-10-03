@@ -4,7 +4,7 @@ import {
 import React from 'react';
 import { Icon } from 'native-base';
 import { Loader } from '../Authentication/Loader';
-import { userInPlaylistUpgrade, BanUserInPlaylist, DeleteUserInPlaylist } from '../../../API/BackApi';
+import { userInPlaylistUpgrade, banUserInPlaylist, deleteUserInPlaylist } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
 
 class UserListInSettings extends React.Component {
@@ -60,7 +60,7 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        DeleteUserInPlaylist(playlistId, userId, false, global.user._id)
+                        deleteUserInPlaylist(playlistId, userId, false, global.user._id)
                           .then((response) => {
                             if (String(item._id) === String(global.user._id)) {
                               if (roomType === 'party') {
@@ -84,7 +84,7 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        BanUserInPlaylist(playlistId, userId, false, global.user._id)
+                        banUserInPlaylist(playlistId, userId, false, global.user._id)
                           .then((response) => {
                             if (String(item._id) === String(global.user._id)) {
                               if (roomType === 'party') {
