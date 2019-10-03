@@ -506,12 +506,13 @@ function getNextTrack(playlistId) {
 
 function joinPlaylist(userId, playlistCode) {
   return new Promise((resolve, reject) => {
-    PlaylistModel.find({ privateId: playlistCode }, (error, playlist) => {
+    PlaylistModel.find({ privateId: playlistCode }, (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlists) {
+        reject(new CustomError('JoinPlaylist', 'No available playlist in database', 400));
       } else {
-        console.log(playlist[0].users);
-        const newPlaylist = playlist[0];
+        const newPlaylist = playlists[0];
         newPlaylist.users.push(userId);
         newPlaylist.save((saveError, savedPlaylist) => {
           if (saveError) {
@@ -528,18 +529,37 @@ function joinPlaylist(userId, playlistCode) {
   });
 }
 
-
-
 function getPlaylistPrivateId(playlistId) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else {
-        console.log(playlist.privateId);
         resolve({
           status: 200,
           data: playlist.privateId,
+        });
+      }
+    });
+  });
+}
+
+function setPublicityOfPlaylist(playlistId, value) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else {
+        playlist.publicFlag = value;
+        playlist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
         });
       }
     });
@@ -566,4 +586,5 @@ export default {
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
   getPlaylistPrivateId,
+  setPublicityOfPlaylist,
 };

@@ -9,7 +9,7 @@ import Loader from '../components/Authentication/Loader';
 
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist,
-  getBansByPlaylistId, getPlaylistPrivateId,
+  getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 
@@ -70,7 +70,15 @@ class PlaylistSettings extends React.Component {
 
   toggleSwitch = (value) => {
     // connect to back and change publicFlag, and generate a code
-    this.setState({ switchValue: value });
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    setPublicityOfPlaylist(playlistId, value)
+      .then(() => {
+        this.setState({ switchValue: value });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   leavingPlaylist = () => {

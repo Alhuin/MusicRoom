@@ -383,6 +383,26 @@ function getPlaylistPrivateId(req, res) {
   }
 }
 
+function setPublicityOfPlaylist(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.value !== undefined) {
+    playlistService.setPublicityOfPlaylist(req.body.playlistId, req.body.value)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getPlaylistById,
   getPlaylists,
@@ -403,4 +423,5 @@ export default {
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
   getPlaylistPrivateId,
+  setPublicityOfPlaylist,
 };

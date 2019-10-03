@@ -652,6 +652,28 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
   });
 }
 
+function setPublicityOfPlaylist(playlistId, value) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/setPublicity`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, value}),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('UpdatePassword', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                     Track Player
  */
@@ -677,6 +699,8 @@ function getNextTrack(playlistId) {
       .catch(error => reject(error));
   });
 }
+
+
 export {
   login,
   addUser,
@@ -706,4 +730,5 @@ export {
   addUserToPlaylistAndUnbanned,
   getMyVotesInPlaylist,
   getPlaylistPrivateId,
+  setPublicityOfPlaylist,
 };

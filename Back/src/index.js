@@ -56,7 +56,7 @@ connectDb().then(async () => {
 const generateRandomNumber = () => {
   const randomNumber = Math.floor(Math.random() * 1000) + 1;
   return randomNumber;
-}
+};
 
 const generatePrivateId = () => {
   let i = 0;
@@ -66,7 +66,7 @@ const generatePrivateId = () => {
     i += 1;
   }
   return MyId;
-}
+};
 
 const seedDatas = async () => {
   let roomType = 'party';
