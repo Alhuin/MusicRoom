@@ -9,7 +9,7 @@ import Loader from '../components/Authentication/Loader';
 
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, DeleteUserInPlaylist,
-  getBansByPlaylistId,
+  getBansByPlaylistId, getPlaylistPrivateId,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 
@@ -22,6 +22,7 @@ class PlaylistSettings extends React.Component {
       bans: [],
       switchValue: false,
       loading: false,
+      privateId: '',
     };
   }
 
@@ -31,6 +32,7 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
+      this._getPrivateId(playlistId);
       this.updateAdmins()
         .then(() => {
           this.updateUsers()
@@ -47,6 +49,16 @@ class PlaylistSettings extends React.Component {
       this.getPublicity(playlistId);
     }
   }
+
+  _getPrivateId = (playlistId) => {
+    getPlaylistPrivateId(playlistId)
+      .then((privateId) => {
+        this.setState({ privateId });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   displayLoader = () => {
     this.setState({ loading: true });
@@ -205,7 +217,7 @@ class PlaylistSettings extends React.Component {
 
   render() {
     const {
-      users, admins, bans, switchValue, loading,
+      users, admins, bans, switchValue, loading, privateId,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -260,6 +272,11 @@ class PlaylistSettings extends React.Component {
           style={styles.title}
         >
           Paramètres de la playlist
+        </Text>
+        <Text
+          selectable
+        >
+          Code privé : {privateId}
         </Text>
         <Button
           title="Quitter la playlist"

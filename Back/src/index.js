@@ -53,6 +53,21 @@ connectDb().then(async () => {
  *      Init the database with datas
  */
 
+const generateRandomNumber = () => {
+  const randomNumber = Math.floor(Math.random() * 1000) + 1;
+  return randomNumber;
+}
+
+const generatePrivateId = () => {
+  let i = 0;
+  let MyId = '';
+  while (i < 4) {
+    MyId = `${MyId}${generateRandomNumber()}`;
+    i += 1;
+  }
+  return MyId;
+}
+
 const seedDatas = async () => {
   let roomType = 'party';
   const salt = await bcrypt.genSaltSync(10);
@@ -109,6 +124,7 @@ const seedDatas = async () => {
         publicFlag: true,
         admins: [admin, user2],
         bans: [user2],
+        privateId: generatePrivateId(),
       });
     } else {
       playlist = new models.Playlist({
@@ -119,6 +135,7 @@ const seedDatas = async () => {
         roomType,
         publicFlag: false,
         admins: [admin, user3],
+        privateId: generatePrivateId(),
       });
     }
     playlist.save();

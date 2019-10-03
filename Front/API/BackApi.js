@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
+const server = 'http://10.3.1.4:3000/api';
 
 /*
                     Users & Login
@@ -607,6 +607,29 @@ function getPublicityOfPlaylistById(playlistId) {
   });
 }
 
+function getPlaylistPrivateId(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/privateId/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        console.log(data);
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getPlaylistPrivateId', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function addUserToPlaylistAndUnbanned(playlistId, userId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/user/unbanned`, {
@@ -682,4 +705,5 @@ export {
   getNextTrack,
   addUserToPlaylistAndUnbanned,
   getMyVotesInPlaylist,
+  getPlaylistPrivateId,
 };
