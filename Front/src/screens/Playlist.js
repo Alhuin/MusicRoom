@@ -1,11 +1,13 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Image, Button, StatusBar, KeyboardAvoidingView
+  StyleSheet, View, Text, TouchableOpacity, Image, Button, StatusBar, KeyboardAvoidingView,
 } from 'react-native';
 import Modal from 'react-native-modalbox';
 import { Icon } from 'native-base';
 import Components from '../components';
-import { getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist } from '../../API/BackApi';
+import {
+  getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist, getNextTrack,
+} from '../../API/BackApi';
 import Player from '../components/Player/Player';
 import { TRACKS } from './Player';
 
@@ -15,6 +17,7 @@ class Playlist extends React.Component {
     this.state = {
       admin: false,
       stockedTracks: [],
+      track: null,
       tracks: [],
       playing: null,
       refreshing: false,
@@ -24,10 +27,20 @@ class Playlist extends React.Component {
   }
 
   componentDidMount(): void {
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    console.log(playlistId);
     this._isAdmin();
     this.updateMyVotes().then(() => {
       this.updateTracks();
     });
+    getNextTrack(playlistId)
+      .then((track) => {
+        console.log('nextTrack');
+        console.log(track);
+        this.setState(track);
+      })
+      .catch(error => console.log(error));
   }
 
   componentWillUnmount(): void {
@@ -111,7 +124,7 @@ class Playlist extends React.Component {
     let { tracks } = this.state;
     const { stockedTracks } = this.state;
     if (text !== '') {
-      tracks = stockedTracks.filter((track) => track.title.search(new RegExp(text, 'i')) > -1
+      tracks = stockedTracks.filter(track => track.title.search(new RegExp(text, 'i')) > -1
         || track.artist.search(new RegExp(text, 'i')) > -1);
     } else {
       tracks = stockedTracks;
@@ -121,7 +134,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes,
+      tracks, playing, refreshing, modalVisible, admin, myVotes, track,
     } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
@@ -130,6 +143,7 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const userId = global.user._id;
     // const nowPlaying = this._getNowPlaying();
+    console.log(track);
 
     const nowPlayingCover = (
       <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 50, width: 50 }} />
@@ -153,6 +167,20 @@ class Playlist extends React.Component {
         <Icon name="musical-notes" />
       </TouchableOpacity>
     );
+    const playIcon = (
+      <TouchableOpacity
+        onPress={() => {
+          getNextTrack(playlistId)
+            .then((nextTrack) => {
+              this.setState({ track: nextTrack });
+              this.refs.player.open();
+            })
+            .catch(error => console.log(error));
+        }}
+      >
+        <Icon name="play" />
+      </TouchableOpacity>
+    );
     if (admin === true) {
       settingsIcon = (
         <TouchableOpacity
@@ -171,6 +199,7 @@ class Playlist extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.titleContainer}>
+          {playIcon}
           {settingsIcon}
           <Text
             style={styles.title}
@@ -211,21 +240,24 @@ class Playlist extends React.Component {
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
         />
-
-        <Components.MiniPlayer
-          handlePress={() => this.refs.player.open()}
-          isAdmin={admin}
-          cover={nowPlayingCover}
-          details={nowPlayingDetails}
-        />
+        { nowPlayingCover
+          && (
+          <Components.MiniPlayer
+            handlePress={() => this.refs.player.open()}
+            isAdmin={admin}
+            cover={nowPlayingCover}
+            details={nowPlayingDetails}
+          />
+          )
+        }
         <Modal
           style={styles.playerModal}
-          ref={'player'}
+          ref="player"
           swipeToClose
           backButtonClose
           coverScreen={false}
         >
-          <Player tracks={TRACKS} />
+          <Player track={track} playlistId={playlistId} />
         </Modal>
       </View>
     );

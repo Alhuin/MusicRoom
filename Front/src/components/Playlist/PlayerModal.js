@@ -26,10 +26,6 @@ export const TRACKS = [
 
 export default class PlayerModal extends React.Component {
   render() {
-    const { ref } = this.props;
-    // const {
-    //   setModalVisible, modalVisible,
-    // } = this.props;
     return (
       <Modal
         style={styles.playerModal}

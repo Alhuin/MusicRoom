@@ -496,13 +496,22 @@ function getNextTrack(playlistId) {
     MusicModel.find({ playlist: playlistId })
       .sort({ votes: -1 })
       .limit(1)
-      .exec((error, track) => {
+      .exec((error, tracks) => {
         if (error) {
           reject(new CustomError('MongoError', error.message, 500));
         } else {
+          let formatedTrack = null;
+          if (tracks[0]) {
+            formatedTrack = {
+              audioUrl: tracks[0].path,
+              albumArtUrl: tracks[0].albumCover,
+              artist: tracks[0].artist,
+              title: tracks[0].title,
+            };
+          }
           resolve({
             status: 200,
-            data: track,
+            data: formatedTrack,
           });
         }
       });

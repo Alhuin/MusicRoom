@@ -8,6 +8,7 @@ import AlbumArt from './AlbumArt';
 import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
+import { getNextTrack } from '../../../API/BackApi';
 
 export default class Player extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class Player extends Component {
       selectedTrack: 0,
       repeatOn: false,
       shuffleOn: false,
+      track: props.track,
     };
   }
 
@@ -46,21 +48,25 @@ export default class Player extends Component {
   }
 
   onForward() {
-    const { selectedTrack } = this.state;
-    const { tracks } = this.props;
+    // const { selectedTrack } = this.state;
+    // const { track } = this.props;
     const { audioElement } = this.refs;
+    const { playlistId } = this.props;
 
-    if (selectedTrack < tracks.length - 1) {
-      audioElement && audioElement.seek(0);
-      this.setState({ isChanging: true });
-      setTimeout(() => this.setState({
-        currentPosition: 0,
-        totalLength: 1,
-        paused: false,
-        isChanging: false,
-        selectedTrack: selectedTrack + 1,
-      }), 0);
-    }
+    getNextTrack(playlistId)
+      .then((track) => {
+        audioElement && audioElement.seek(0);
+        this.setState({ isChanging: true });
+        setTimeout(() => this.setState({
+          currentPosition: 0,
+          totalLength: 1,
+          paused: false,
+          isChanging: false,
+          track,
+        }), 0);
+        this.setState(track);
+      })
+      .catch(error => console.log(error));
   }
 
   setDuration(data) {
@@ -88,9 +94,8 @@ export default class Player extends Component {
     const {
       selectedTrack, paused, totalLength, currentPosition, repeatOn, shuffleOn, isChanging,
     } = this.state;
-    const { tracks } = this.props;
+    const { track } = this.state;
 
-    const track = tracks[selectedTrack];
     const video = isChanging ? null : (
       <Video
         source={{ uri: track.audioUrl }} // Can be a URL or a local file.
@@ -99,7 +104,7 @@ export default class Player extends Component {
         playInBackground
         paused={paused} // Pauses playback entirely.
         resizeMode="cover" // Fill the whole screen at aspect ratio.
-        repeat // Repeat forever.
+        // repeat // Repeat forever.
         onLoadStart={this.loadStart} // Callback when video starts to load
         onLoad={this.setDuration.bind(this)} // Callback when video loads
         onProgress={this.setTime.bind(this)} // Callback every ~250ms with currentTime
@@ -124,7 +129,7 @@ export default class Player extends Component {
           onPressRepeat={() => this.setState({ repeatOn: !repeatOn })}
           repeatOn={repeatOn}
           shuffleOn={shuffleOn}
-          forwardDisabled={selectedTrack === tracks.length - 1}
+          // forwardDisabled={selectedTrack === tracks.length - 1}
           backDisabled={!selectedTrack}
           onPressShuffle={() => this.setState({ shuffleOn: !shuffleOn })}
           onPressPlay={() => this.setState({ paused: false })}

@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.4:3000/api';
+const server = 'http://10.3.1.3:3000/api';
 
 /*
                     Users & Login
@@ -742,6 +742,28 @@ function getNextTrack(playlistId) {
       .catch(error => reject(error));
   });
 }
+
+// function removeTrackFromPlaylist(musicId, playlistId) {
+//   return new Promise((resolve, reject) => {
+//     fetch(`${server}/playlists/removeTrack`, {
+//       method: 'POST',
+//       headers: {
+//         Accept: 'application/json, text/plain, */*',
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ musicId, playlistId }),
+//     })
+//       .then(async (response) => {
+//         const data = await response.json();
+//         if (response.status === 200) {
+//           resolve(data)
+//         } else {
+//           reject(new CustomError('RemoveTrackFromPlaylist', data.msg, response.status));
+//         }
+//       })
+//       .catch(error => reject(error));
+//   });
+// }
 
 
 export {
