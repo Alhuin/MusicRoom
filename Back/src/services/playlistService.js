@@ -277,7 +277,7 @@ function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
           }
           if (isUserAdmin) {
             for (let i = 0; i < playlist.admins.length; i++) {
-              if (String(playlist.admins[i]._id) === String(userId) && String(playlist.admins[i]._id) !== String(playlist.author)) {
+              if (String(playlist.admins[i]._id) === String(userId) && String(playlist.admins[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
                 playlist.admins.splice(i, 1);
                 playlist.save((saveError, savedPlaylist) => {
                   if (saveError) {
@@ -321,7 +321,7 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
           }
           if (!isUserAdmin) {
             for (let i = 0; i < playlist.users.length; i++) {
-              if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.author)) {
+              if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
                 playlist.admins.push(userId);
                 playlist.save((saveError, savedPlaylist) => {
                   if (saveError) {
@@ -365,12 +365,12 @@ function deleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
         if (isRequesterAdmin) {
           for (let i = 0; i < playlist.users.length; i++) {
             if (String(playlist.users[i]._id) === String(userId)
-              && String(playlist.users[i]._id) !== String(playlist.author)) {
+              && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
               playlist.users.splice(i, 1);
               if (isUserAdmin) {
                 for (let j = 0; j < playlist.admins.length; j++) {
                   if (String(playlist.admins[j]._id) === String(userId)
-                    && String(playlist.admins[j]._id) !== String(playlist.author)) {
+                    && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
                     playlist.admins.splice(j, 1);
                     break;
                   }
@@ -412,12 +412,12 @@ function banUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
         if (isRequesterAdmin) {
           for (let i = 0; i < playlist.users.length; i++) {
             if (String(playlist.users[i]._id) === String(userId)
-              && String(playlist.users[i]._id) !== String(playlist.author)) {
+              && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
               playlist.users.splice(i, 1);
               if (isUserAdmin) {
                 for (let j = 0; j < playlist.admins.length; j++) {
                   if (String(playlist.admins[j]._id) === String(userId)
-                    && String(playlist.admins[j]._id) !== String(playlist.author)) {
+                    && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
                     playlist.admins.splice(j, 1);
                     break;
                   }

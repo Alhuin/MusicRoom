@@ -131,7 +131,7 @@ const seedDatas = async () => {
         roomType,
         publicFlag: true,
         admins: [admin, user2],
-        bans: [user2],
+        bans: [],
         privateId: '1234',
       });
     } else {
