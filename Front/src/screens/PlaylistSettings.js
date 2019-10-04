@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import AdminListInSettings from '../components/Playlist/AdminListInSettings';
@@ -12,6 +12,8 @@ import {
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
+import {Icon} from "native-base";
+import Collapsible from "react-native-collapsible";
 
 class PlaylistSettings extends React.Component {
   constructor(props) {
@@ -24,6 +26,7 @@ class PlaylistSettings extends React.Component {
       loading: false,
       privateId: '',
       delegatedPlayerAdmin: '',
+      collapsed: true,
     };
   }
 
@@ -33,35 +36,36 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
-      this._getPrivateIdAndDelegatedPlayerAdminId(playlistId);
-      this.updateUsers()
-        .then(() => {
-          this.updateAdmins()
-            .then(() => {
-              this.updateBans()
-                .then(() => {
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      this.getPublicity(playlistId);
+      this._updateState(playlistId);
     }
   }
 
-  _getPrivateIdAndDelegatedPlayerAdminId = (playlistId) => {
+  _updateState = (playlistId) => {
     getPlaylistPrivateId(playlistId)
       .then((privateId) => {
         getDelegatedPlayerAdmin(playlistId)
           .then((delegatedPlayerAdmin) => {
             this.setState({ privateId, delegatedPlayerAdmin });
+            this.updateAdmins()
+              .then(() => {
+                this.updateUsers()
+                  .then(() => {
+                    this.updateBans()
+                      .then(() => {
+                        this.hideLoader();
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      });
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+            this.getPublicity(playlistId);
           })
           .catch((error) => {
             console.error(error);
@@ -77,7 +81,8 @@ class PlaylistSettings extends React.Component {
   };
 
   hideLoader = () => {
-    this.setState({ loading: false });
+    const { loading } = this.state;
+    if (loading) this.setState({ loading: false });
   };
 
   toggleSwitch = (value) => {
@@ -128,29 +133,10 @@ class PlaylistSettings extends React.Component {
       });
   };
 
-  // finally, it is the two same refresh functions
   _onRefresh = () => {
-    console.log('loading is true');
-    this.updateAdmins()
-      .then(() => {
-        this.updateUsers()
-          .then(() => {
-            this.updateBans()
-              .then(() => {
-                console.log('loading is false');
-                this.hideLoader();
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    this._updateState(playlistId);
   };
 
   updateAdmins = () => new Promise((resolve, reject) => {
@@ -235,6 +221,10 @@ class PlaylistSettings extends React.Component {
     return loading;
   };
 
+  toggleExpanded = () => {
+    this.setState({ collapsed: !this.state.collapsed });
+  };
+
   render() {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
@@ -254,6 +244,37 @@ class PlaylistSettings extends React.Component {
             onValueChange={this.toggleSwitch}
             value={switchValue}
           />
+          <TouchableOpacity onPress={this.toggleExpanded}>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Icônes</Text>
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={this.state.collapsed} align="center">
+            <View style={styles.iconsDescriptionWrapper}>
+              <Icon name="md-school" style={styles.iconsStyle} />
+              <Text> Auteur </Text>
+            </View>
+            <View style={styles.iconsDescriptionWrapper}>
+              <Icon name="musical-notes" style={styles.iconsStyle} />
+              <Text> Délégué au Player</Text>
+            </View>
+            <View style={styles.iconsDescriptionWrapper}>
+              <Icon name="arrow-down" style={styles.iconsStyle} />
+              <Text> Admin. vers Utilisateur </Text>
+            </View>
+            <View style={styles.iconsDescriptionWrapper}>
+              <Icon name="arrow-up" style={styles.iconsStyle} />
+              <Text> Promotion Utilisateur vers Admin. | Unban</Text>
+            </View>
+            <View style={styles.iconsDescriptionWrapper}>
+              <Icon name="md-walk" style={styles.iconsStyle} />
+              <Text> Kick </Text>
+            </View>
+            <View style={styles.iconsDescriptionWrapper}>
+              <Icon name="md-trash" style={styles.iconsStyle} />
+              <Text> Bannissement </Text>
+            </View>
+          </Collapsible>
           <Text> Administrateurs </Text>
           <AdminListInSettings
             displayLoader={this.displayLoader}
@@ -324,6 +345,23 @@ const styles = StyleSheet.create({
   },
   switch: {
 
+  },
+  iconsStyle: {
+    fontSize: 45,
+  },
+  iconsDescriptionWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  header: {
+    backgroundColor: '#F5FCFF',
+    padding: 10,
+  },
+  headerText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 

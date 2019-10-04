@@ -108,15 +108,11 @@ class AdminListInSettings extends React.Component {
             let playerUser = (null);
             if (String(userId) === String(delegatedPlayerAdmin)) {
               playerUser = (
-                <TouchableOpacity
+                <View
                   style={styles.iconWrapper}
-                  onPress={() => {
-                    this._pressSetDelegatedPlayerAdmin(userId, playlistId,
-                      onRefresh, isLoading, displayLoader);
-                  }}
                 >
                   <Icon name="musical-notes" style={styles.iconsStyle} />
-                </TouchableOpacity>
+                </View>
               );
             } else {
               playerUser = (
