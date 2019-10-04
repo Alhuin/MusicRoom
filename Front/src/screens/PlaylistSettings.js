@@ -2,6 +2,8 @@ import {
   View, StyleSheet, Text, Button, Switch, TouchableOpacity,
 } from 'react-native';
 import React from 'react';
+import { Icon } from 'native-base';
+import Collapsible from 'react-native-collapsible';
 import AdminListInSettings from '../components/Playlist/AdminListInSettings';
 import UserListInSettings from '../components/Playlist/UserListInSettings';
 import BansListInSettings from '../components/Playlist/BansListInSettings';
@@ -12,8 +14,7 @@ import {
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
-import {Icon} from "native-base";
-import Collapsible from "react-native-collapsible";
+
 
 class PlaylistSettings extends React.Component {
   constructor(props) {
@@ -100,12 +101,29 @@ class PlaylistSettings extends React.Component {
 
   leavingPlaylist = () => {
     const { navigation } = this.props;
+    const { delegatedPlayerAdmin } = this.state;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
-    const authorId = navigation.getParam('authorId');
+    // const authorId = navigation.getParam('authorId');
     const roomType = navigation.getParam('roomType');
 
-    if (String(authorId) !== String(global.user._id)) {
+    if (String(delegatedPlayerAdmin) !== String(global.user._id)) {
+      deleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
+        .then(() => {
+          if (roomType === 'party') {
+            NavigationUtils.resetStack(this, 'PartysList', null);
+          } else if (roomType === 'radio') {
+            NavigationUtils.resetStack(this, 'RadiosList', null);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      alert('Impossible de quitter la playlist tant que vous êtes Délégué au contrôle du Player.');
+      // navigation.goBack();
+    }
+    /*if (String(authorId) !== String(global.user._id)) {
       deleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
         .then(() => {
           if (roomType === 'party') {
@@ -120,7 +138,7 @@ class PlaylistSettings extends React.Component {
     } else {
       alert('Cannnot leave playlist yet, because you are the author.');
       navigation.goBack();
-    }
+    }*/
   };
 
   getPublicity = (playlistId) => {

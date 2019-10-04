@@ -1,5 +1,5 @@
 import {
-  FlatList, RefreshControl, StyleSheet, Text, View, TouchableOpacity,
+  FlatList, StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import { Icon } from 'native-base';
 import React from 'react';
@@ -14,7 +14,7 @@ class AdminListInSettings extends React.Component {
     if (!isLoading()) {
       displayLoader();
       setDelegatedPlayerAdmin(playlistId, userId, global.user._id)
-        .then((response) => {
+        .then(() => {
           onRefresh();
         })
         .catch((error) => {
@@ -27,7 +27,7 @@ class AdminListInSettings extends React.Component {
     if (!isLoading()) {
       displayLoader();
       adminInPlaylistDowngrade(playlistId, userId, global.user._id)
-        .then((response) => {
+        .then(() => {
           if (String(userId) === String(global.user._id)) {
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
@@ -48,7 +48,7 @@ class AdminListInSettings extends React.Component {
     if (!isLoading()) {
       displayLoader();
       deleteUserInPlaylist(playlistId, userId, true, global.user._id)
-        .then((response) => {
+        .then(() => {
           if (String(userId) === String(global.user._id)) {
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
@@ -69,7 +69,7 @@ class AdminListInSettings extends React.Component {
     if (!isLoading()) {
       displayLoader();
       banUserInPlaylist(playlistId, userId, true, global.user._id)
-        .then((response) => {
+        .then(() => {
           if (String(userId) === String(global.user._id)) {
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
@@ -105,17 +105,27 @@ class AdminListInSettings extends React.Component {
         renderItem={
           ({ item }) => {
             const userId = item._id;
-            let playerUser = (null);
+            let playerUserIcon = (null);
+            let authorIcon = (null);
+            if (String(authorId) === String(item._id)) {
+              authorIcon = (
+                <View
+                  style={styles.iconWrapper}
+                >
+                  <Icon name="md-school" style={styles.authorIconStyle} />
+                </View>
+              );
+            }
             if (String(userId) === String(delegatedPlayerAdmin)) {
-              playerUser = (
+              playerUserIcon = (
                 <View
                   style={styles.iconWrapper}
                 >
                   <Icon name="musical-notes" style={styles.iconsStyle} />
                 </View>
               );
-            } else {
-              playerUser = (
+            } else if (String(global.user._id) === String(delegatedPlayerAdmin)) {
+              playerUserIcon = (
                 <TouchableOpacity
                   style={styles.iconWrapper}
                   onPress={() => {
@@ -127,11 +137,12 @@ class AdminListInSettings extends React.Component {
                 </TouchableOpacity>
               );
             }
-            let doNotTouchTheAuthor = (
+            let doNotTouchTheDelegated = (
               <View
                 style={styles.touchableWrapper}
               >
-                {playerUser}
+                {authorIcon}
+                {playerUserIcon}
                 <TouchableOpacity
                   onPress={() => {
                     this._pressAdminInPlaylistDowngrade(userId, item, playlistId, parent,
@@ -161,20 +172,17 @@ class AdminListInSettings extends React.Component {
                 </TouchableOpacity>
               </View>
             );
-            if (String(authorId) === String(item._id)) {
-              doNotTouchTheAuthor = (
+            if (String(delegatedPlayerAdmin) === String(item._id)) {
+              doNotTouchTheDelegated = (
                 <View
                   style={styles.touchableWrapper}
                 >
-                  {playerUser}
-                  <View
-                    style={styles.iconWrapper}
-                  >
-                    <Icon name="md-school" style={styles.authorIconStyle} />
-                  </View>
+                  {authorIcon}
+                  {playerUserIcon}
                 </View>
               );
             }
+
             return (
               <View
                 style={styles.row}
@@ -184,7 +192,7 @@ class AdminListInSettings extends React.Component {
                 >
                   {item.name}
                 </Text>
-                {doNotTouchTheAuthor}
+                {doNotTouchTheDelegated}
               </View>
             );
           }

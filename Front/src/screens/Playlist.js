@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Image, Button, StatusBar, KeyboardAvoidingView,
+  StyleSheet, View, Text, TouchableOpacity, Image,
 } from 'react-native';
 import Modal from 'react-native-modalbox';
 import { Icon } from 'native-base';
