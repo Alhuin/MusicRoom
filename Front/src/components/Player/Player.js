@@ -8,7 +8,7 @@ import AlbumArt from './AlbumArt';
 import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
-import { getNextTrack } from '../../../API/BackApi';
+import { getNextTrack, deleteTrackFromPlaylist } from '../../../API/BackApi';
 
 export default class Player extends Component {
   constructor(props) {
@@ -52,19 +52,23 @@ export default class Player extends Component {
     // const { track } = this.props;
     const { audioElement } = this.refs;
     const { playlistId } = this.props;
+    const { track } = this.state;
 
-    getNextTrack(playlistId)
-      .then((track) => {
-        audioElement && audioElement.seek(0);
-        this.setState({ isChanging: true });
-        setTimeout(() => this.setState({
-          currentPosition: 0,
-          totalLength: 1,
-          paused: false,
-          isChanging: false,
-          track,
-        }), 0);
-        this.setState(track);
+    deleteTrackFromPlaylist(track.id, playlistId)
+      .then(() => {
+        getNextTrack(playlistId)
+          .then((nextTrack) => {
+            audioElement && audioElement.seek(0);
+            this.setState({ isChanging: true });
+            setTimeout(() => this.setState({
+              currentPosition: 0,
+              totalLength: 1,
+              paused: false,
+              isChanging: false,
+              track: nextTrack,
+            }), 0);
+          })
+          .catch(error => console.log(error));
       })
       .catch(error => console.log(error));
   }
@@ -111,6 +115,8 @@ export default class Player extends Component {
         onEnd={this.onEnd} // Callback when playback finishes
         onError={this.videoError} // Callback when video cannot be loaded
         style={styles.audioElement}
+        playWhenInactive
+        muted={false}
       />
     );
 

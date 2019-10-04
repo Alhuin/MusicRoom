@@ -9,7 +9,6 @@ import {
   getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist, getNextTrack,
 } from '../../API/BackApi';
 import Player from '../components/Player/Player';
-import { TRACKS } from './Player';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -253,8 +252,8 @@ class Playlist extends React.Component {
         <Modal
           style={styles.playerModal}
           ref="player"
-          swipeToClose
-          backButtonClose
+          // swipeToClose
+          // backButtonClose
           coverScreen={false}
         >
           <Player track={track} playlistId={playlistId} />

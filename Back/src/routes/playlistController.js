@@ -449,6 +449,27 @@ function setDelegatedPlayerAdmin(req, res) {
   }
 }
 
+function deleteTrackFromPlaylist(req, res) {
+  console.log(req.body);
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+  && req.body.musicId && utils.isValidId(req.body.musicId)) {
+    playlistService.deleteTrackFromPlaylist(req.body.playlistId, req.body.musicId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getPlaylistById,
   getPlaylists,
@@ -472,4 +493,5 @@ export default {
   getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,
   setDelegatedPlayerAdmin,
+  deleteTrackFromPlaylist,
 };

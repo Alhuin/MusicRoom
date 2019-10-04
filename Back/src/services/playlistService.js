@@ -503,6 +503,7 @@ function getNextTrack(playlistId) {
           let formatedTrack = null;
           if (tracks[0]) {
             formatedTrack = {
+              id: tracks[0]._id,
               audioUrl: tracks[0].path,
               albumArtUrl: tracks[0].albumCover,
               artist: tracks[0].artist,
@@ -638,6 +639,30 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
   });
 }
 
+function deleteTrackFromPlaylist(playlistId, musicId) {
+  return new Promise((resolve, reject) => {
+    MusicModel.find({ playlist: playlistId, _id: musicId }, (error, musics) => {
+      console.log(musics);
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!musics[0]) {
+        reject(new CustomError('DeleteTrackFromPlaylist', 'No playlist with this id in database', 400));
+      } else {
+        musics[0].remove((removeError, removedMusic) => {
+          if (removeError) {
+            reject(new CustomError('MongoError', removeError, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: removedMusic,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -661,4 +686,5 @@ export default {
   getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,
   setDelegatedPlayerAdmin,
+  deleteTrackFromPlaylist,
 };

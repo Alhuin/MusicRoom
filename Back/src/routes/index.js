@@ -65,7 +65,7 @@ router.post('/playlists/isAdmin', playlistController.isAdmin);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 router.post('/playlists/join', playlistController.joinPlaylist);
 router.post('/playlists/setPublicity', playlistController.setPublicityOfPlaylist);
-
+router.post('/playlists/deleteTrack', playlistController.deleteTrackFromPlaylist);
 
 
 /*             Votes                 */

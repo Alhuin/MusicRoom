@@ -743,27 +743,27 @@ function getNextTrack(playlistId) {
   });
 }
 
-// function removeTrackFromPlaylist(musicId, playlistId) {
-//   return new Promise((resolve, reject) => {
-//     fetch(`${server}/playlists/removeTrack`, {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json, text/plain, */*',
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ musicId, playlistId }),
-//     })
-//       .then(async (response) => {
-//         const data = await response.json();
-//         if (response.status === 200) {
-//           resolve(data)
-//         } else {
-//           reject(new CustomError('RemoveTrackFromPlaylist', data.msg, response.status));
-//         }
-//       })
-//       .catch(error => reject(error));
-//   });
-// }
+function deleteTrackFromPlaylist(musicId, playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/deleteTrack`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ musicId, playlistId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data)
+        } else {
+          reject(new CustomError('RemoveTrackFromPlaylist', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
 
 
 export {
@@ -798,4 +798,5 @@ export {
   getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,
   setDelegatedPlayerAdmin,
+  deleteTrackFromPlaylist,
 };
