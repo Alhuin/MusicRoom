@@ -16,7 +16,6 @@ class Playlist extends React.Component {
     this.state = {
       admin: false,
       stockedTracks: [],
-      track: null,
       tracks: [],
       playing: null,
       refreshing: false,
@@ -28,7 +27,7 @@ class Playlist extends React.Component {
   componentDidMount(): void {
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
-    console.log(playlistId);
+    // console.log(playlistId);
     this._isAdmin();
     this.updateMyVotes().then(() => {
       this.updateTracks();
@@ -142,7 +141,7 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const userId = global.user._id;
     // const nowPlaying = this._getNowPlaying();
-    console.log(track);
+    // console.log(track);
 
     const nowPlayingCover = (
       <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 50, width: 50 }} />
@@ -172,7 +171,9 @@ class Playlist extends React.Component {
           getNextTrack(playlistId)
             .then((nextTrack) => {
               this.setState({ track: nextTrack });
-              this.refs.player.open();
+              if (nextTrack !== null) {
+                navigation.navigate('Player', { playlistId, track: nextTrack });
+              }
             })
             .catch(error => console.log(error));
         }}
@@ -239,25 +240,25 @@ class Playlist extends React.Component {
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
         />
-        { nowPlayingCover
-          && (
-          <Components.MiniPlayer
-            handlePress={() => this.refs.player.open()}
-            isAdmin={admin}
-            cover={nowPlayingCover}
-            details={nowPlayingDetails}
-          />
-          )
-        }
-        <Modal
-          style={styles.playerModal}
-          ref="player"
-          // swipeToClose
-          // backButtonClose
-          coverScreen={false}
-        >
-          <Player track={track} playlistId={playlistId} />
-        </Modal>
+        {/*{ nowPlayingCover*/}
+        {/*  && (*/}
+        {/*  <Components.MiniPlayer*/}
+        {/*    handlePress={() => this.refs.player.open()}*/}
+        {/*    isAdmin={admin}*/}
+        {/*    cover={nowPlayingCover}*/}
+        {/*    details={nowPlayingDetails}*/}
+        {/*  />*/}
+        {/*  )*/}
+        {/*}*/}
+        {/*<Modal*/}
+        {/*  style={styles.playerModal}*/}
+        {/*  ref="player"*/}
+        {/*  // swipeToClose*/}
+        {/*  // backButtonClose*/}
+        {/*  coverScreen={false}*/}
+        {/*>*/}
+        {/*  <Player track={track} playlistId={playlistId} />*/}
+        {/*</Modal>*/}
       </View>
     );
   }

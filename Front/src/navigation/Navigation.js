@@ -146,6 +146,7 @@ const PartysNavigator = createStackNavigator({
       header: null,
     },
   },
+  Player: AdminPlayer,
 });
 
 const RadiosNavigator = createStackNavigator({
@@ -175,6 +176,7 @@ const RadiosNavigator = createStackNavigator({
       header: null,
     },
   },
+  Player: AdminPlayer,
 });
 
 const MainNavigator = Platform.select({
@@ -194,7 +196,6 @@ const MainNavigator = Platform.select({
     Settings: AppSettings,
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
-    Player: AdminPlayer,
   },
   {
     contentComponent: (props) => (
