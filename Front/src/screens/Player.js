@@ -24,17 +24,18 @@ export default class AdminPlayer extends Component {
   // }
 
   render() {
-    // console.log(this.props.navigation.params.track);
-    console.log(this.props.navigation);
-    console.log('------------------------');
-    console.log('ICI');
-    console.log(this.props.navigation.getParam('track'));
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
     const { track } = this.state;
-    console.log(track);
-    const { playlistId } = this.props;
 
     return (
-      <Player track={track} playlistId={playlistId} />
+      <Player
+        track={track}
+        playlistId={playlistId}
+        onDownPress={() => {
+          navigation.navigate('Playlist', { playlistId });
+        }}
+      />
     );
   }
 }

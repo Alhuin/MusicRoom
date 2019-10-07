@@ -47,6 +47,12 @@ export default class Player extends Component {
     }
   }
 
+  // onDownPress() {
+  //   const { navigation, playlistId } = this.props;
+  //
+  //   navigation.navigate('Parties', { playlistId });
+  // }
+
   onForward() {
     // const { selectedTrack } = this.state;
     // const { track } = this.props;
@@ -96,9 +102,9 @@ export default class Player extends Component {
 
   render() {
     const {
-      selectedTrack, paused, totalLength, currentPosition, repeatOn, shuffleOn, isChanging,
+      selectedTrack, paused, totalLength, currentPosition, repeatOn, shuffleOn, isChanging, track,
     } = this.state;
-    const { track } = this.state;
+    const { onDownPress } = this.props;
 
     const video = isChanging ? null : (
       <Video
@@ -122,7 +128,7 @@ export default class Player extends Component {
 
     return (
       <View style={styles.container}>
-        <Header message="Playing From Charts" />
+        <Header message="Playing From Charts" onDownPress={onDownPress} />
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails title={track.title} artist={track.artist} />
         <SeekBar

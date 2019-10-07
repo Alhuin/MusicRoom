@@ -46,7 +46,6 @@ class Playlist extends React.Component {
     // this._navListener.remove();
   }
 
-
   _onChangedPage = () => {
     const { playing } = this.state;
     if (playing !== null) {
@@ -172,7 +171,7 @@ class Playlist extends React.Component {
             .then((nextTrack) => {
               this.setState({ track: nextTrack });
               if (nextTrack !== null) {
-                navigation.navigate('Player', { playlistId, track: nextTrack });
+                navigation.navigate('Player', { playlistId, track: nextTrack, onGoBack: this.onGoBack });
               }
             })
             .catch(error => console.log(error));
