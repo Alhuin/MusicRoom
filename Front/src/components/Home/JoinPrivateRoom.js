@@ -55,6 +55,7 @@ export default class JoinPrivateRoom extends React.Component {
             placeholder="Entrez le code ici"
             onChangeText={text => this.setState({ text })}
             onSubmitEditing={this._joinRoom}
+            keyboardType="numeric"
           />
         </View>
       </Modal>

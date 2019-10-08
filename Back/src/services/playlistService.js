@@ -3,6 +3,7 @@ import CustomError from './errorHandler';
 import models from '../models';
 import UserModel from '../models/userModel';
 import MusicModel from '../models/musicModel';
+import utils from '../utils';
 
 function getPlaylists() {
   return new Promise((resolve, reject) => {
@@ -262,34 +263,21 @@ function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
       } else if (!playlist) {
         reject(new CustomError('AdminInPlaylistDowngrade', 'No playlist with this id in database', 400));
       } else {
-        let isRequesterAdmin = false;
-        for (let j = 0; j < playlist.admins.length; j++) {
-          if (String(playlist.admins[j]._id) === String(requesterId)) {
-            isRequesterAdmin = true;
-          }
-        }
-        if (isRequesterAdmin) {
-          let isUserAdmin = false;
-          for (let j = 0; j < playlist.admins.length; j++) {
-            if (String(playlist.admins[j]._id) === String(userId)) {
-              isUserAdmin = true;
-            }
-          }
-          if (isUserAdmin) {
-            for (let i = 0; i < playlist.admins.length; i++) {
-              if (String(playlist.admins[i]._id) === String(userId) && String(playlist.admins[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
-                playlist.admins.splice(i, 1);
-                playlist.save((saveError, savedPlaylist) => {
-                  if (saveError) {
-                    reject(new CustomError('MongoError', saveError.message, 500));
-                  } else {
-                    resolve({
-                      status: 200,
-                      data: true,
-                    });
-                  }
-                });
-              }
+        // que renvoyer si le requester n'est pas admin ? Une 200 et false ? Rejection ?
+        if (utils.isAdminInPlaylist(playlist, requesterId) && utils.isAdminInPlaylist(playlist, userId)) {
+          for (let i = 0; i < playlist.admins.length; i++) {
+            if (String(playlist.admins[i]._id) === String(userId) && String(playlist.admins[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
+              playlist.admins.splice(i, 1);
+              playlist.save((saveError, savedPlaylist) => {
+                if (saveError) {
+                  reject(new CustomError('MongoError', saveError.message, 500));
+                } else {
+                  resolve({
+                    status: 200,
+                    data: true,
+                  });
+                }
+              });
             }
           }
         }
@@ -306,20 +294,9 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
       } else if (!playlist) {
         reject(new CustomError('UserInPlaylistUpgrade', 'No playlist with this id in database', 400));
       } else {
-        let isRequesterAdmin = false;
-        for (let j = 0; j < playlist.admins.length; j++) {
-          if (String(playlist.admins[j]._id) === String(requesterId)) {
-            isRequesterAdmin = true;
-          }
-        }
-        if (isRequesterAdmin) {
-          let isUserAdmin = false;
-          for (let j = 0; j < playlist.admins.length; j++) {
-            if (String(playlist.admins[j]._id) === String(userId)) {
-              isUserAdmin = true;
-            }
-          }
-          if (!isUserAdmin) {
+        // que renvoyer si le requester n'est pas admin ? Une 200 et false ? Rejection ?
+        if (utils.isAdminInPlaylist(playlist, requesterId)) {
+          if (!utils.isAdminInPlaylist(playlist, userId)) {
             for (let i = 0; i < playlist.users.length; i++) {
               if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
                 playlist.admins.push(userId);
@@ -352,22 +329,22 @@ function deleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
       } else if (!playlist) {
         reject(new CustomError('deleteUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
-        let isRequesterAdmin = false;
-        if (String(requesterId) !== String(userId)) {
-          for (let j = 0; j < playlist.admins.length; j++) {
-            if (String(playlist.admins[j]._id) === String(requesterId)) {
-              isRequesterAdmin = true;
-            }
-          }
-        } else {
-          isRequesterAdmin = true;
-        }
-        if (isRequesterAdmin) {
+        // let isRequesterAdmin = false;
+        // if (String(requesterId) !== String(userId)) {
+        //   for (let j = 0; j < playlist.admins.length; j++) {
+        //     if (String(playlist.admins[j]._id) === String(requesterId)) {
+        //       isRequesterAdmin = true;
+        //     }
+        //   }
+        // } else {
+        //   isRequesterAdmin = true;
+        // }
+        if ((String(requesterId) === String(userId)) || utils.isAdminInPlaylist(playlist, requesterId)) {
           for (let i = 0; i < playlist.users.length; i++) {
             if (String(playlist.users[i]._id) === String(userId)
               && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
               playlist.users.splice(i, 1);
-              if (isUserAdmin) {
+              if (utils.isAdminInPlaylist(playlist, userId) /* isUserAdmin */) {
                 for (let j = 0; j < playlist.admins.length; j++) {
                   if (String(playlist.admins[j]._id) === String(userId)
                     && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
@@ -403,18 +380,18 @@ function banUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
       } else if (!playlist) {
         reject(new CustomError('banUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
-        let isRequesterAdmin = false;
-        for (let j = 0; j < playlist.admins.length; j++) {
-          if (String(playlist.admins[j]._id) === String(requesterId)) {
-            isRequesterAdmin = true;
-          }
-        }
-        if (isRequesterAdmin) {
+        // let isRequesterAdmin = false;
+        // for (let j = 0; j < playlist.admins.length; j++) {
+        //   if (String(playlist.admins[j]._id) === String(requesterId)) {
+        //     isRequesterAdmin = true;
+        //   }
+        // }
+        if (utils.isAdminInPlaylist(playlist, requesterId)) {
           for (let i = 0; i < playlist.users.length; i++) {
             if (String(playlist.users[i]._id) === String(userId)
               && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
               playlist.users.splice(i, 1);
-              if (isUserAdmin) {
+              if (utils.isAdminInPlaylist(playlist, userId) /* isUserAdmin */) {
                 for (let j = 0; j < playlist.admins.length; j++) {
                   if (String(playlist.admins[j]._id) === String(userId)
                     && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
@@ -423,14 +400,7 @@ function banUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
                   }
                 }
               }
-              let flag = false;
-              for (let j = 0; j < playlist.bans.length; j++) {
-                if (String(playlist.bans[j]) === String(userId)) {
-                  flag = true;
-                  break;
-                }
-              }
-              if (!flag) {
+              if (!utils.isInBans(playlist, userId)) {
                 playlist.bans.push(userId);
               }
               playlist.save((saveError, savedPlaylist) => {
@@ -466,14 +436,7 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
             break;
           }
         }
-        let flag = false;
-        for (let i = 0; i < playlist.users.length; i++) {
-          if (String(playlist.users[i]) === String(userId)) {
-            flag = true;
-            break;
-          }
-        }
-        if (!flag) {
+        if (!utils.isInUsers(playlist, userId)) {
           playlist.users.push(userId);
         }
         playlist.save((saveError, savedPlaylist) => {

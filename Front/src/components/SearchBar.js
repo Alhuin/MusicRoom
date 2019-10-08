@@ -10,6 +10,7 @@ export default class SearchBar extends React.Component {
           style={styles.textInput}
           placeholder="Cliquer ici pour rechercher une musique"
           onChangeText={(text) => searchTracks(text)}
+          autoCorrect={false}
         />
       );
     }
