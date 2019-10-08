@@ -176,6 +176,7 @@ class Playlist extends React.Component {
             })
             .catch(error => console.log(error));
         }}
+        style={styles.headerIconWrapper}
       >
         <Icon name="play" />
       </TouchableOpacity>
@@ -188,6 +189,7 @@ class Playlist extends React.Component {
               playlistId, isAdmin: admin, authorId, roomType,
             });
           }}
+          style={styles.headerIconWrapper}
         >
           <Icon name="settings" />
         </TouchableOpacity>
@@ -197,7 +199,7 @@ class Playlist extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <View style={styles.titleContainer}>
+        <View style={styles.headerContainer}>
           {playIcon}
           {settingsIcon}
           <Text
@@ -269,10 +271,13 @@ const styles = StyleSheet.create({
     color: 'white',
     flex: 1,
   },
-  titleContainer: {
+  headerIconWrapper: {
+    marginLeft: 10,
+  },
+  headerContainer: {
     width: '90%',
     flexDirection: 'row',
-    padding: 10,
+    paddingRight: 10,
   },
   title: {
     fontSize: 22,

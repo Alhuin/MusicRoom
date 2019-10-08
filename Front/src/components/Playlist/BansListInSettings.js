@@ -32,7 +32,7 @@ class BansListInSettings extends React.Component {
                   {item.name}
                 </Text>
                 <View
-                  style={styles.iconsWrapper}
+                  style={styles.touchableWrapper}
                 >
                   <TouchableOpacity
                     onPress={() => {
@@ -47,7 +47,7 @@ class BansListInSettings extends React.Component {
                           });
                       }
                     }}
-                    style={styles.iconTouchable}
+                    style={styles.iconWrapper}
                   >
                     <Icon name="arrow-up" style={styles.iconsStyle} />
                   </TouchableOpacity>
@@ -64,27 +64,42 @@ class BansListInSettings extends React.Component {
 
 const styles = StyleSheet.create({
   list: {
-    backgroundColor: '#DDDDDD',
+    // backgroundColor: '#DDDDDD',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    margin: 5,
+    padding: 5,
+    flex: 1,
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '#CCCCCC',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   title: {
-    backgroundColor: '#888888',
+    // backgroundColor: '#888888',
     padding: 10,
     margin: 5,
   },
-  iconsWrapper: {
+  touchableWrapper: {
     height: '100%',
     flexDirection: 'row',
-    // justifyContent: 'space-between',
   },
-  iconTouchable: {
+  iconWrapper: {
     width: 80,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   iconsStyle: {
+    fontSize: 45,
+  },
+  iconsStyleBlank: {
+    fontSize: 45,
+    color: 'white',
+  },
+  authorIconStyle: {
     fontSize: 45,
   },
 });

@@ -329,16 +329,6 @@ function deleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
       } else if (!playlist) {
         reject(new CustomError('deleteUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
-        // let isRequesterAdmin = false;
-        // if (String(requesterId) !== String(userId)) {
-        //   for (let j = 0; j < playlist.admins.length; j++) {
-        //     if (String(playlist.admins[j]._id) === String(requesterId)) {
-        //       isRequesterAdmin = true;
-        //     }
-        //   }
-        // } else {
-        //   isRequesterAdmin = true;
-        // }
         if ((String(requesterId) === String(userId)) || utils.isAdminInPlaylist(playlist, requesterId)) {
           for (let i = 0; i < playlist.users.length; i++) {
             if (String(playlist.users[i]._id) === String(userId)
@@ -380,12 +370,6 @@ function banUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
       } else if (!playlist) {
         reject(new CustomError('banUserInPlaylist', 'No playlist with this id in database', 400));
       } else {
-        // let isRequesterAdmin = false;
-        // for (let j = 0; j < playlist.admins.length; j++) {
-        //   if (String(playlist.admins[j]._id) === String(requesterId)) {
-        //     isRequesterAdmin = true;
-        //   }
-        // }
         if (utils.isAdminInPlaylist(playlist, requesterId)) {
           for (let i = 0; i < playlist.users.length; i++) {
             if (String(playlist.users[i]._id) === String(userId)

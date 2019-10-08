@@ -205,14 +205,22 @@ class AdminListInSettings extends React.Component {
 
 const styles = StyleSheet.create({
   list: {
-    backgroundColor: '#DDDDDD',
+    // backgroundColor: '#DDDDDD',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    margin: 5,
+    padding: 5,
+    flex: 1,
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '#CCCCCC',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   title: {
-    backgroundColor: '#888888',
+    // backgroundColor: '#888888',
     padding: 10,
     margin: 5,
   },
@@ -223,6 +231,7 @@ const styles = StyleSheet.create({
   iconWrapper: {
     width: 80,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   iconsStyle: {
     fontSize: 45,

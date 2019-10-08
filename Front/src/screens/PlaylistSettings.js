@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -123,22 +123,6 @@ class PlaylistSettings extends React.Component {
       alert('Impossible de quitter la playlist tant que vous êtes Délégué au contrôle du Player.');
       // navigation.goBack();
     }
-    /*if (String(authorId) !== String(global.user._id)) {
-      deleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
-        .then(() => {
-          if (roomType === 'party') {
-            NavigationUtils.resetStack(this, 'PartysList', null);
-          } else if (roomType === 'radio') {
-            NavigationUtils.resetStack(this, 'RadiosList', null);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      alert('Cannnot leave playlist yet, because you are the author.');
-      navigation.goBack();
-    }*/
   };
 
   getPublicity = (playlistId) => {
@@ -256,13 +240,25 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       adminOptions = (
         <View>
-          <Text>{switchValue ? 'Public' : 'Private'}</Text>
-          <Switch
-            style={styles.switch}
-            onValueChange={this.toggleSwitch}
-            value={switchValue}
-          />
-          <TouchableOpacity onPress={this.toggleExpanded}>
+          <View
+            style={[styles.subContainer, { justifyContent: 'space-between' }]}
+          >
+            <Text
+              style={styles.subContainerFontStyle}
+              // style={styles.subContainerFontStyle}
+              // style={{styles.subContainerFontStyle, }}
+            >
+              {switchValue ? 'Public' : 'Private'}
+            </Text>
+            <Switch
+              style={styles.switch}
+              onValueChange={this.toggleSwitch}
+              value={switchValue}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={this.toggleExpanded}
+          >
             <View style={styles.header}>
               <Text style={styles.headerText}>Icônes</Text>
             </View>
@@ -293,7 +289,11 @@ class PlaylistSettings extends React.Component {
               <Text> Bannissement </Text>
             </View>
           </Collapsible>
-          <Text> Administrateurs </Text>
+          <Text
+            style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
+          >
+            Administrateurs
+          </Text>
           <AdminListInSettings
             displayLoader={this.displayLoader}
             admins={admins}
@@ -305,7 +305,11 @@ class PlaylistSettings extends React.Component {
             parent={this}
             delegatedPlayerAdmin={delegatedPlayerAdmin}
           />
-          <Text> Utilisateurs </Text>
+          <Text
+            style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
+          >
+            Utilisateurs
+          </Text>
           <UserListInSettings
             displayLoader={this.displayLoader}
             users={users}
@@ -315,7 +319,11 @@ class PlaylistSettings extends React.Component {
             roomType={roomType}
             parent={this}
           />
-          <Text> Bannis </Text>
+          <Text
+            style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
+          >
+            Bannis
+          </Text>
           <BansListInSettings
             displayLoader={this.displayLoader}
             bans={bans}
@@ -327,47 +335,67 @@ class PlaylistSettings extends React.Component {
       );
     }
     const rendering = (
-      <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
         <Text
           style={styles.title}
         >
           Paramètres de la playlist
         </Text>
-        <Text
-          selectable
+        <View
+          style={[styles.subContainer, { justifyContent: 'center' }]}
         >
-          Code privé : {privateId}
-        </Text>
-        <Button
-          title="Quitter la playlist"
-          onPress={() => {
-            this.leavingPlaylist();
-          }}
-          style={styles.leavingButton}
-        />
+          <Button
+            title="Quitter la playlist"
+            onPress={() => {
+              this.leavingPlaylist();
+            }}
+            style={styles.leavingButton}
+          />
+        </View>
+        <View
+          style={styles.subContainer}
+        >
+          <Text
+            selectable
+            style={styles.subContainerFontStyle}
+          >
+            Code privé : {privateId}
+          </Text>
+        </View>
+
         {adminOptions}
         <Loader loading={loading} />
-      </View>
+      </ScrollView>
     );
     return (rendering);
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#DDDDDD',
+  },
   title: {
-    fontSize: 22,
+    fontSize: 25,
     textAlign: 'center',
   },
   leavingButton: {
     margin: 10,
   },
-  switch: {
-
+  subContainer: {
+    height: 60,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   iconsStyle: {
     fontSize: 45,
   },
+  subContainerFontStyle: {
+    fontSize: 20,
+  },
   iconsDescriptionWrapper: {
+    margin: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -375,6 +403,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#F5FCFF',
     padding: 10,
+    margin: 5,
+    borderRadius: 20,
   },
   headerText: {
     textAlign: 'center',
