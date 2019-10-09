@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -14,6 +14,7 @@ import {
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
+import SimpleToast from 'react-native-simple-toast';
 
 
 class PlaylistSettings extends React.Component {
@@ -229,7 +230,7 @@ class PlaylistSettings extends React.Component {
 
   render() {
     const {
-      users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
+      users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin, collapsed,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -237,7 +238,17 @@ class PlaylistSettings extends React.Component {
     const authorId = navigation.getParam('authorId');
     const roomType = navigation.getParam('roomType');
     let adminOptions = (null);
+    let collapsibleIcon = (null);
     if (isAdmin) {
+      if (collapsed) {
+        collapsibleIcon = (
+          <Icon name="ios-arrow-up" style={{ marginRight: 5 }} />
+        );
+      } else {
+        collapsibleIcon = (
+          <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
+        );
+      }
       adminOptions = (
         <View>
           <View
@@ -245,8 +256,6 @@ class PlaylistSettings extends React.Component {
           >
             <Text
               style={styles.subContainerFontStyle}
-              // style={styles.subContainerFontStyle}
-              // style={{styles.subContainerFontStyle, }}
             >
               {switchValue ? 'Public' : 'Private'}
             </Text>
@@ -260,10 +269,15 @@ class PlaylistSettings extends React.Component {
             onPress={this.toggleExpanded}
           >
             <View style={styles.header}>
-              <Text style={styles.headerText}>Icônes</Text>
+              <Text
+                style={styles.header}
+              >
+                Légende
+              </Text>
+              {collapsibleIcon}
             </View>
           </TouchableOpacity>
-          <Collapsible collapsed={this.state.collapsed} align="center">
+          <Collapsible collapsed={collapsed} align="center">
             <View style={styles.iconsDescriptionWrapper}>
               <Icon name="md-school" style={styles.iconsStyle} />
               <Text> Auteur </Text>
@@ -353,7 +367,7 @@ class PlaylistSettings extends React.Component {
           />
         </View>
         <View
-          style={styles.subContainer}
+          style={[styles.subContainer, { justifyContent: 'space-between' }]}
         >
           <Text
             selectable
@@ -361,6 +375,14 @@ class PlaylistSettings extends React.Component {
           >
             Code privé : {privateId}
           </Text>
+          <TouchableOpacity
+            onPress={() => {
+              Clipboard.setString(String(privateId));
+              SimpleToast.show('Code copié dans le Presse-Papier.');
+            }}
+          >
+            <Icon name="ios-clipboard" style={{ marginRight: 10, fontSize: 35 }} />
+          </TouchableOpacity>
         </View>
 
         {adminOptions}
@@ -405,11 +427,16 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '500',
+    // textAlign: 'center',
+    fontSize: 22,
+  },
+  switch: {
+    marginRight: 10,
   },
 });
 
