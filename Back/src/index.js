@@ -118,6 +118,7 @@ const seedDatas = async () => {
   await user1.save();
   await user2.save();
   await user3.save();
+  await user4.save();
 
   for (let i = 0; i < 5; i += 1) {
     if (i > 2) { roomType = 'radio'; }
