@@ -107,11 +107,11 @@ const seedDatas = async () => {
     isVerified: true,
   });
   const user4 = new models.User({
-    login: 'c',
+    login: 'd',
     password: hashy,
     name: 'Billy',
     familyName: 'Renoi',
-    email: 'a.c@protonmail.com',
+    email: 'a.d@protonmail.com',
     isVerified: true,
   });
   await admin.save();
@@ -149,7 +149,6 @@ const seedDatas = async () => {
         privateId: generatePrivateId(),
       });
     }
-    playlist.save();
     const music1 = new models.Music({
       title: 'Hit The Road Jack',
       artist: 'Ray Charles',
@@ -178,6 +177,9 @@ const seedDatas = async () => {
       music: music1._id,
       playlist: playlist._id,
     });
+    playlist.musics.splice(0, 0, music1._id);
+    playlist.musics.splice(1, 0, music2._id);
+    playlist.save();
     vote1.save();
     const vote2 = new models.Vote({
       value: 1,

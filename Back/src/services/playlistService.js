@@ -438,7 +438,7 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
   });
 }
 
-function getNextTrack(playlistId) {
+function getNextTrackByVote(playlistId) {
   return new Promise((resolve, reject) => {
     MusicModel.find({ playlist: playlistId })
       .sort({ votes: -1 })
@@ -626,7 +626,7 @@ export default {
   userInPlaylistUpgrade,
   banUserInPlaylist,
   deleteUserInPlaylist,
-  getNextTrack,
+  getNextTrackByVote,
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
   getPlaylistPrivateId,

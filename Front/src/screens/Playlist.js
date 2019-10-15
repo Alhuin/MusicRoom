@@ -6,7 +6,7 @@ import Modal from 'react-native-modalbox';
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
-  getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist, getNextTrack,
+  getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
 } from '../../API/BackApi';
 import Player from '../components/Player/Player';
 
@@ -32,7 +32,7 @@ class Playlist extends React.Component {
     this.updateMyVotes().then(() => {
       this.updateTracks();
     });
-    getNextTrack(playlistId)
+    getNextTrackByVote(playlistId)
       .then((track) => {
         console.log('nextTrack');
         console.log(track);
@@ -141,7 +141,6 @@ class Playlist extends React.Component {
     const userId = global.user._id;
     // const nowPlaying = this._getNowPlaying();
     // console.log(track);
-
     const nowPlayingCover = (
       <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 50, width: 50 }} />
     );
@@ -167,7 +166,7 @@ class Playlist extends React.Component {
     const playIcon = (
       <TouchableOpacity
         onPress={() => {
-          getNextTrack(playlistId)
+          getNextTrackByVote(playlistId)
             .then((nextTrack) => {
               this.setState({ track: nextTrack });
               if (nextTrack !== null) {

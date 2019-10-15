@@ -55,7 +55,7 @@ router.post('/playlists/setDelegatedPlayerAdmin', playlistController.setDelegate
 router.post('/playlists/admins/downgrade', playlistController.adminInPlaylistDowngrade);
 router.get('/playlists/users/:playlistId', playlistController.getUsersByPlaylistId);
 router.get('/playlists/publicity/:playlistId', playlistController.getPublicityOfPlaylistById);
-router.get('/playlists/nextTrack/:playlistId', playlistController.getNextTrack);
+router.get('/playlists/nextTrack/:playlistId', playlistController.getNextTrackByVote);
 router.post('/playlists/users/upgrade', playlistController.userInPlaylistUpgrade);
 router.post('/playlists/users/ban', playlistController.banUserInPlaylist);
 router.post('/playlists/users/delete', playlistController.deleteUserInPlaylist);

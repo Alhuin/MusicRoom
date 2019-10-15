@@ -57,6 +57,7 @@ class Partys extends React.Component {
       refreshing,
     } = this.state;
     const { navigation } = this.props;
+    console.log(playlists);
     return (
       <View style={{ height: '100%' }}>
         <Components.AddPlaylistModal

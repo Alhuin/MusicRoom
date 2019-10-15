@@ -7,7 +7,9 @@ import { addMusicToPlaylist } from '../../../API/BackApi';
 class TrackInSearch extends React.Component {
 
   addMusic = () => {
-    const {track, playlistId, updateTracks, userId, setModalVisible, displayLoader} = this.props;
+    const {
+      track, playlistId, updateTracks, userId, setModalVisible, displayLoader,
+    } = this.props;
 
     displayLoader();
     addMusicToPlaylist(playlistId, userId, track.title, track.artist.name,
@@ -44,7 +46,7 @@ class TrackInSearch extends React.Component {
             />
             <Image
               source={require('../../assets/images/play.png')}
-              style={{height: 80, width: 80, position: 'absolute'}}
+              style={{ height: 80, width: 80, position: 'absolute' }}
             />
           </TouchableOpacity>
           <View style={styles.content_container}>

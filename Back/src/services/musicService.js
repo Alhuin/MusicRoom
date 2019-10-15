@@ -2,6 +2,7 @@ import MusicModel from '../models/musicModel';
 import VoteModel from '../models/voteModel';
 import CustomError from './errorHandler';
 import voteService from './voteService';
+import playlistService from './playlistService';
 
 function getMusics() {
   return new Promise((resolve, reject) => {
@@ -80,7 +81,7 @@ function downloadMusic(musicUrl) {
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';
-    const deezpy = spawn('python3', ['/Users/jjanin-r/Projects/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
+    const deezpy = spawn('python3', ['/Users/dguelpa/Projects/appBranch/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
     deezpy.stdout.on('data', (data) => {
       stdout += data;
     });
@@ -171,10 +172,23 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
                 if (saveError) {
                   reject(new CustomError('MongoError', saveError.message, 500));
                 } else {
-                  resolve({
-                    status: 200,
-                    data: savedMusic,
-                  });
+                  playlistService.getPlaylistById(playlistId)
+                    .then((response) => {
+                      response.data.musics.push(savedMusic._id);
+                      response.data.save((saveError2, savedPlaylist) => {
+                        if (saveError2) {
+                          reject(new CustomError('MongoError', saveError2.message, 500));
+                        } else {
+                          resolve({
+                            status: 200,
+                            data: [savedMusic, savedPlaylist],
+                          });
+                        }
+                      });
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
                 }
               });
             })

@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
+const server = 'http://10.4.5.5:3000/api';
 
 /*
                     Users & Login
@@ -721,7 +721,7 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
                     Track Player
  */
 
-function getNextTrack(playlistId) {
+function getNextTrackByVote(playlistId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/nextTrack/${playlistId}`, {
       method: 'GET',
@@ -735,7 +735,7 @@ function getNextTrack(playlistId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('GetNextTrack', data.msg, response.status));
+          reject(new CustomError('getNextTrackByVote', data.msg, response.status));
           // console.log(data.msg);
         }
       })
@@ -791,7 +791,7 @@ export {
   banUserInPlaylist,
   deleteUserInPlaylist,
   getPublicityOfPlaylistById,
-  getNextTrack,
+  getNextTrackByVote,
   addUserToPlaylistAndUnbanned,
   getMyVotesInPlaylist,
   getPlaylistPrivateId,

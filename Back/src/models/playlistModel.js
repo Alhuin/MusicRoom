@@ -59,6 +59,11 @@ const playlistSchema = new mongoose.Schema({
   privateId: {
     type: String,
   },
+  musics: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'MusicModel',
+    default: [],
+  },
 });
 playlistSchema.plugin(uniqueValidator);
 

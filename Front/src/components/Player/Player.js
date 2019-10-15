@@ -8,7 +8,7 @@ import AlbumArt from './AlbumArt';
 import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
-import { getNextTrack, deleteTrackFromPlaylist } from '../../../API/BackApi';
+import { getNextTrackByVote, deleteTrackFromPlaylist } from '../../../API/BackApi';
 
 export default class Player extends Component {
   constructor(props) {
@@ -62,7 +62,7 @@ export default class Player extends Component {
 
     deleteTrackFromPlaylist(track.id, playlistId)
       .then(() => {
-        getNextTrack(playlistId)
+        getNextTrackByVote(playlistId)
           .then((nextTrack) => {
             audioElement && audioElement.seek(0);
             this.setState({ isChanging: true });

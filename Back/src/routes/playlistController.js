@@ -331,9 +331,9 @@ function addUserToPlaylistAndUnbanned(req, res) {
   }
 }
 
-function getNextTrack(req, res) {
+function getNextTrackByVote(req, res) {
   if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
-    playlistService.getNextTrack(req.params.playlistId)
+    playlistService.getNextTrackByVote(req.params.playlistId)
       .then((response) => {
         res
           .status(response.status)
@@ -486,7 +486,7 @@ export default {
   userInPlaylistUpgrade,
   banUserInPlaylist,
   deleteUserInPlaylist,
-  getNextTrack,
+  getNextTrackByVote,
   addUserToPlaylistAndUnbanned,
   joinPlaylist,
   getPlaylistPrivateId,
