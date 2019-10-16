@@ -22,9 +22,10 @@ export default class PlaylistInPlaylists extends React.Component {
       roomType,
       name,
       authorId,
+      isUserInPlaylist,
     } = this.props;
     navigation.push('Playlist', {
-      playlistId, roomType, name, authorId,
+      playlistId, roomType, name, authorId, isUserInPlaylist,
     });
   };
 

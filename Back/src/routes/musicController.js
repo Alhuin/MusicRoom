@@ -36,8 +36,8 @@ function getMusicById(req, res) {
 }
 
 function getMusicsByVote(req, res) {
-  if ((req.params.playlistId && utils.isValidId(req.params.playlistId))) {
-    musicService.getMusicsByVote(req.params.playlistId)
+  if ((req.params.playlistId && req.params.roomType && utils.isValidId(req.params.playlistId))) {
+    musicService.getMusicsByVote(req.params.playlistId, req.params.roomType)
       .then((response) => {
         res
           .status(response.status)

@@ -3,6 +3,7 @@ import VoteModel from '../models/voteModel';
 import CustomError from './errorHandler';
 import voteService from './voteService';
 import playlistService from './playlistService';
+import PlaylistModel from "../models/playlistModel";
 
 function getMusics() {
   return new Promise((resolve, reject) => {
@@ -36,20 +37,59 @@ function getMusicById(musicId) {
   });
 }
 
-function getMusicsByVote(playlistId) {
+function getMusicsByVote(playlistId, roomType) {
   return new Promise((resolve, reject) => {
-    MusicModel.find({ playlist: playlistId })
-      .sort({ votes: -1 })
-      .exec((error, musics) => {
-        if (error) {
-          reject(new CustomError('MongoError', error.message, 500));
-        } else {
-          resolve({
-            status: 200,
-            data: musics,
-          });
-        }
-      });
+    if (roomType === 'party') {
+      MusicModel.find({ playlist: playlistId })
+        .sort({ votes: -1 })
+        .exec((error, musics) => {
+          if (error) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: musics,
+            });
+          }
+        });
+    } else if (roomType === 'radio') {
+      MusicModel.find({ playlist: playlistId })
+        .exec((error, musics) => {
+          if (error) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            PlaylistModel.findById(playlistId, (findError, playlist) => {
+              if (findError) {
+                reject(new CustomError('MongoError', findError.message, 500));
+              } else if (!playlist) {
+                reject(new CustomError('GetPlaylist', 'No playlist with this id found in database', 404));
+              } else {
+                const order = playlist.musics;
+                let res = [];
+                order.forEach((key) => {
+                  let found = false;
+                  musics = musics.filter((item) => {
+                    if (!found && String(item._id) === String(key)) {
+                      res.push(item);
+                      found = true;
+                      return false;
+                    } else {
+                      return true;
+                    }
+                  });
+                });
+                resolve({
+                  status: 200,
+                  data: res,
+                });
+              }
+            });
+          }
+        });
+    } else {
+      reject(new CustomError('getMusicsByVote', 'Wrong roomType', 500));
+
+    }
   });
 }
 

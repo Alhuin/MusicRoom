@@ -610,6 +610,38 @@ function deleteTrackFromPlaylist(playlistId, musicId) {
   });
 }
 
+function moveTrackOrder(playlistId, musicId, newIndex) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('moveTrackOrder', 'No playlist with this id in database', 400));
+      } else if (playlist.musics.length <= newIndex) {
+        reject(new CustomError('moveTrackOrder', 'Error on newIndex parameter', 400));
+      } else {
+        for (let i = 0; i < playlist.musics.length; i++) {
+          if (String(playlist.musics[i]._id) === String(musicId)) {
+            playlist.musics.splice(i, 1);
+            i--;
+          }
+        }
+        playlist.musics.splice(newIndex, 0, musicId);
+        playlist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -634,4 +666,5 @@ export default {
   setPublicityOfPlaylist,
   setDelegatedPlayerAdmin,
   deleteTrackFromPlaylist,
+  moveTrackOrder,
 };

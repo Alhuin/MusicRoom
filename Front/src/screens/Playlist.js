@@ -6,7 +6,7 @@ import Modal from 'react-native-modalbox';
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
-  getMusicsByVoteInPlaylist, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
+  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
 } from '../../API/BackApi';
 import Player from '../components/Player/Player';
 
@@ -34,8 +34,8 @@ class Playlist extends React.Component {
     });
     getNextTrackByVote(playlistId)
       .then((track) => {
-        console.log('nextTrack');
-        console.log(track);
+        // console.log('nextTrack');
+        // console.log(track);
         this.setState(track);
       })
       .catch(error => console.log(error));
@@ -72,7 +72,8 @@ class Playlist extends React.Component {
     const { navigation } = this.props;
     // console.log( this.props );
     const playlistId = navigation.getParam('playlistId');
-    getMusicsByVoteInPlaylist(playlistId)
+    const roomType = navigation.getParam('roomType');
+    getMusicsByVote(playlistId, roomType)
       .then((response) => {
         this.setState({ tracks: response, stockedTracks: response });
         resolve();
@@ -138,6 +139,7 @@ class Playlist extends React.Component {
     const roomType = navigation.getParam('roomType');
     const name = navigation.getParam('name');
     const authorId = navigation.getParam('authorId');
+    const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = global.user._id;
     // const nowPlaying = this._getNowPlaying();
     // console.log(track);
@@ -194,8 +196,6 @@ class Playlist extends React.Component {
         </TouchableOpacity>
       );
     }
-    // console.log(this.state.myVotes);
-
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
@@ -234,6 +234,7 @@ class Playlist extends React.Component {
             userId={userId}
             roomType={roomType}
             myVotes={myVotes}
+            isUserInPlaylist={isUserInPlaylist}
           />
         </View>
         <Components.AddFloatingButton

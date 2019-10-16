@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.5.5:3000/api';
+const server = 'http://10.3.1.4:3000/api';
 
 /*
                     Users & Login
@@ -250,9 +250,9 @@ function getPlaylistById(playlistId) {
   });
 }
 
-function getMusicsByVoteInPlaylist(playlistId) {
+function getMusicsByVote(playlistId, roomType) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/musicsByVote/${playlistId}`, {
+    fetch(`${server}/musicsByVote/${playlistId}&${roomType}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -717,6 +717,28 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
   });
 }
 
+function moveTrackOrder(playlistId, musicId, newIndex) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/moveTrackOrder`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, musicId, newIndex }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('moveTrackOrder', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                     Track Player
  */
@@ -775,7 +797,7 @@ export {
   getPlaylists,
   getPlaylistsFilteredByRoom,
   getPlaylistsFiltered,
-  getMusicsByVoteInPlaylist,
+  getMusicsByVote,
   // getPlaylistById,
   getUserById,
   voteMusic,
@@ -799,4 +821,5 @@ export {
   setPublicityOfPlaylist,
   setDelegatedPlayerAdmin,
   deleteTrackFromPlaylist,
+  moveTrackOrder,
 };

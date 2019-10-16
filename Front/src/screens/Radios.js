@@ -73,6 +73,7 @@ class Radios extends React.Component {
             refreshing={refreshing}
             onRefresh={this._onRefresh}
             roomType="radio"
+            userId={global.user._id}
           />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />

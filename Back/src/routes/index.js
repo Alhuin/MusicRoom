@@ -35,7 +35,7 @@ router.get('/users/passToken/:token', userController.confirmPasswordToken);
 
 router.get('/musics', musicController.getMusics);
 router.get('/musics/:musicId', musicController.getMusicById);
-router.get('/musicsByVote/:playlistId', musicController.getMusicsByVote);
+router.get('/musicsByVote/:playlistId&:roomType', musicController.getMusicsByVote);
 router.delete('/musics/:musicId', musicController.deleteMusicById);
 router.post('/musics/add', musicController.addMusicToPlaylist);
 router.post('/deezPy', musicController.downloadMusic);
@@ -66,6 +66,7 @@ router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 router.post('/playlists/join', playlistController.joinPlaylist);
 router.post('/playlists/setPublicity', playlistController.setPublicityOfPlaylist);
 router.post('/playlists/deleteTrack', playlistController.deleteTrackFromPlaylist);
+router.post('/playlists/moveTrackOrder', playlistController.moveTrackOrder);
 
 
 /*             Votes                 */
