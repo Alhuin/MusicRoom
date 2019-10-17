@@ -68,94 +68,55 @@ class TrackInPlaylist extends React.Component {
         </View>
       );
     }
-    let rendering = (null);
+    let moveDraggable = null;
+    let moveEndDraggable = null;
     if (roomType === 'radio') {
-      const { move, moveEnd, isActive } = this.props;
-      rendering = (
-        <View style={styles.card}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.main_container}
-            onLongPress={move}
-            onPressOut={moveEnd}
-          >
-            <TouchableOpacity
-              style={styles.previewCover}
-              onPress={() => {
-                handlePress(track.preview);
-              }}
-            >
-              <Image
-                style={styles.image}
-                source={{ uri: track.albumCover }}
-              />
-              <Image
-                source={require('../../assets/images/play.png')}
-                style={{ height: 80, width: 80, position: 'absolute' }}
-              />
-            </TouchableOpacity>
-            <View style={styles.content_container}>
-              <View style={styles.title_container}>
-                <Text style={styles.title_text}>{track.title}</Text>
-              </View>
-              <View style={styles.artist_container}>
-                <Text style={styles.artist_name}>
-                  {track.artist}
-                </Text>
-              </View>
-              <View style={styles.album_container}>
-                <Text style={styles.album_title} numberOfLines={1}>
-                  {track.album}
-                </Text>
-              </View>
-            </View>
-            {renderForParty}
-          </TouchableOpacity>
-        </View>
-      );
-    } else {
-      rendering = (
-        <View style={styles.card}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.main_container}
-          >
-            <TouchableOpacity
-              style={styles.previewCover}
-              onPress={() => {
-                handlePress(track.preview);
-              }}
-            >
-              <Image
-                style={styles.image}
-                source={{ uri: track.albumCover }}
-              />
-              <Image
-                source={require('../../assets/images/play.png')}
-                style={{ height: 80, width: 80, position: 'absolute' }}
-              />
-            </TouchableOpacity>
-            <View style={styles.content_container}>
-              <View style={styles.title_container}>
-                <Text style={styles.title_text}>{track.title}</Text>
-              </View>
-              <View style={styles.artist_container}>
-                <Text style={styles.artist_name}>
-                  {track.artist}
-                </Text>
-              </View>
-              <View style={styles.album_container}>
-                <Text style={styles.album_title} numberOfLines={1}>
-                  {track.album}
-                </Text>
-              </View>
-            </View>
-            {renderForParty}
-          </TouchableOpacity>
-        </View>
-      );
+      const { move, moveEnd } = this.props;
+      moveDraggable = move;
+      moveEndDraggable = moveEnd;
     }
-    return (rendering);
+    return (
+      <View style={styles.card}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.main_container}
+          onLongPress={moveDraggable}
+          onPressOut={moveEndDraggable}
+        >
+          <TouchableOpacity
+            style={styles.previewCover}
+            onPress={() => {
+              handlePress(track.preview);
+            }}
+          >
+            <Image
+              style={styles.image}
+              source={{ uri: track.albumCover }}
+            />
+            <Image
+              source={require('../../assets/images/play.png')}
+              style={{ height: 80, width: 80, position: 'absolute' }}
+            />
+          </TouchableOpacity>
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>{track.title}</Text>
+            </View>
+            <View style={styles.artist_container}>
+              <Text style={styles.artist_name}>
+                {track.artist}
+              </Text>
+            </View>
+            <View style={styles.album_container}>
+              <Text style={styles.album_title} numberOfLines={1}>
+                {track.album}
+              </Text>
+            </View>
+          </View>
+          {renderForParty}
+        </TouchableOpacity>
+      </View>
+    );
   }
 }
 

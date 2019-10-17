@@ -142,7 +142,6 @@ class Playlist extends React.Component {
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = global.user._id;
     // const nowPlaying = this._getNowPlaying();
-    // console.log(track);
     const nowPlayingCover = (
       <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 50, width: 50 }} />
     );
