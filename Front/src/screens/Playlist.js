@@ -54,12 +54,31 @@ class Playlist extends React.Component {
   };
 
   _onRefresh = () => {
-    this.setState({ refreshing: true });
-    this.updateMyVotes().then(() => {
-      this.updateTracks().then(() => {
-        this.setState({ refreshing: false });
-      });
-    });
+    const { navigation } = this.props;
+    const roomType = navigation.getParam('roomType');
+    if (roomType === 'party') {
+      this.setState({ refreshing: true });
+      this.updateMyVotes()
+        .then(() => {
+          this.updateTracks()
+            .then(() => {
+              this.setState({ refreshing: false });
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else if (roomType === 'radio') {
+      this.updateTracks()
+        .then(() => {
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   setModalVisible = () => {

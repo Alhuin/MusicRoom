@@ -7,39 +7,6 @@ import Player from '../../services/Player';
 
 class TracklistInPlaylist extends React.Component {
 
-  state = {
-    stateTracks: [],
-    firstPassage: true,
-  };
-
-  componentDidMount(): void {
-    const { tracks } = this.props;
-    this.setState({ stateTracks: tracks });
-  }
-
-  componentDidUpdate(): void {
-    // console.log('updateList');
-    const { tracks } = this.props;
-    const { stateTracks, firstPassage } = this.state;
-    if (JSON.stringify(stateTracks) !== JSON.stringify(tracks) && firstPassage === true) {
-      this.setState({ stateTracks: tracks, firstPassage: false });
-    }
-/*    if (JSON.stringify(stateTracks) !== JSON.stringify(tracks)) {
-      this.setState({ stateTracks: tracks });
-    }*/
-  }
-
-/*  shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-    const { tracks } = this.props;
-    const { stateTracks, firstPassage } = this.state;
-    /!*    if (JSON.stringify(stateTracks) !== JSON.stringify(tracks) && firstPassage === true) {
-          this.setState({ stateTracks: tracks, firstPassage: false });
-        }*!/
-    if (JSON.stringify(stateTracks) !== JSON.stringify(tracks)) {
-      this.setState({ stateTracks: tracks });
-    }
-  }*/
-
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
@@ -72,13 +39,12 @@ class TracklistInPlaylist extends React.Component {
       updateMyVotes,
       isUserInPlaylist,
     } = this.props;
-    const { stateTracks } = this.state;
     let render = (null);
     // console.log('renderList');
     if (isUserInPlaylist === true && roomType === 'radio') {
       render = (
         <DraggableFlatList
-          data={stateTracks}
+          data={tracks}
           keyExtractor={item => String(item._id)}
           renderItem={({ item, index, move, moveEnd, isActive }) => {
             let myVoteValue = 0;
@@ -111,9 +77,8 @@ class TracklistInPlaylist extends React.Component {
           // }}
           contentContainerStyle={{ paddingBottom: 200 }}
           onMoveEnd={(data) => {
-            this.setState({ stateTracks: data.data });
             moveTrackOrder(playlistId, data.row._id, data.to)
-              .then((response) => {
+              .then(() => {
                 onRefresh();
               })
               .catch((error) => {
