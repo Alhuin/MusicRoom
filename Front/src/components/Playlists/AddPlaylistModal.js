@@ -17,21 +17,22 @@ export default class AddPlaylistModal extends React.Component {
   state = {
     switchValue: false,
     namePlaylist: '',
-    location: null, // unused afficher car on n'envoie pas encore la location quelquepart.
+    location: null, // unused afficher car on n'envoie pas encore la location quelque part.
     type: null,
-    date: new Date(),
-    dateTwo: new Date(),
-    dateMarkeur: 0,
-    DateModalVisible: false,
+    startDate: new Date(),
+    endDate: new Date(Date.now() + 1000),
+    datePickerModalVisible: false,
+    dateType: '',
   };
 
-  onStartDateChanged = (changedDate) => {
-    if (this.state.dateMarkeur === 1) {
-      this.setState({ date: changedDate });
-    } else {
-      this.setState({ dateTwo: changedDate });
+  onDateChanged = (changedDate) => {
+    const { dateType } = this.state;
+    if (dateType === 'start') {
+      this.setState({ startDate: changedDate });
+    } else if (dateType === 'end') {
+      this.setState({ endDate: changedDate });
     }
-  }
+  };
 
   /* onEndDateChanged = (changedText) => {
     console.log('This is the changed text: ', changedText);
@@ -41,10 +42,15 @@ export default class AddPlaylistModal extends React.Component {
     this.setState({ namePlaylist: text });
   };
 
-  setModalVisible = () => {
-    const { DateModalVisible } = this.state;
-    const visible = !DateModalVisible;
-    this.setState({ DateModalVisible: visible });
+  setModalVisible = (dateType) => {
+    const { datePickerModalVisible } = this.state;
+    const visible = !datePickerModalVisible;
+    if (dateType !== undefined) {
+      console.log('AH')
+      this.setState({ dateType, datePickerModalVisible: visible });
+    } else {
+      this.setState({ datePickerModalVisible: visible });
+    }
   };
 
   toggleSwitch = (value) => {
@@ -69,7 +75,7 @@ export default class AddPlaylistModal extends React.Component {
   generateRandomNumber = () => {
     const randomNumber = Math.floor(Math.random() * 1000) + 1;
     return randomNumber;
-  }
+  };
 
   generatePrivateId() {
     let i = 0;
@@ -90,33 +96,59 @@ export default class AddPlaylistModal extends React.Component {
       updatePlaylist,
     } = this.props;
     const {
-      switchValue, type, date, dateTwo, location, namePlaylist,
+      switchValue, type, startDate, endDate, location, namePlaylist, datePickerModalVisible,
     } = this.state;
-    let dateP;
-    let datePTwo;
+    let dateP = (null);
+    let datePTwo = (null);
     if (type === 'GeolocOK') {
       dateP = (
-        <Button
-          style={styles.create}
-          title="Start time"
-          onPress={() => {
-            this.setState({ dateMarkeur: 1 });
-            this.setModalVisible();
-          }}
-        />
+        <View
+          style={{ alignItems: 'center' }}
+        >
+          <View>
+            <Text>
+              Date de début :
+            </Text>
+            <Text>
+              {String(startDate)}
+            </Text>
+          </View>
+          <View
+            style={{ width: '40%' }}
+          >
+            <Button
+              title="Date de début"
+              onPress={() => {
+                this.setModalVisible('start');
+              }}
+            />
+          </View>
+        </View>
       );
       datePTwo = (
-        <Button
-          style={styles.create}
-          title="End time"
-          onPress={() => {
-            this.setState({ dateMarkeur: 2 });
-            this.setModalVisible();
-          }}
-        />
+        <View
+          style={{ alignItems: 'center' }}
+        >
+          <View>
+            <Text>
+              Date de fin :
+            </Text>
+            <Text>
+              {String(endDate)}
+            </Text>
+          </View>
+          <View
+            style={{ width: '30%' }}
+          >
+            <Button
+              title="Date de fin"
+              onPress={() => {
+                this.setModalVisible('end');
+              }}
+            />
+          </View>
+        </View>
       );
-    } else {
-      dateP = <Text />;
     }
 
     return (
@@ -132,9 +164,8 @@ export default class AddPlaylistModal extends React.Component {
         <View style={styles.container}>
           <DatePickerModal
             setModalVisible={this.setModalVisible}
-            DateModalVisible={this.state.DateModalVisible}
-            dateMarkeur={this.state.dateMarkeur}
-            onStartDateChanged={this.onStartDateChanged}
+            DateModalVisible={datePickerModalVisible}
+            onDateChanged={this.onDateChanged}
           />
           <View style={styles.Name}>
             <TextInput
@@ -143,9 +174,9 @@ export default class AddPlaylistModal extends React.Component {
               autoCapitalize="none"
               underlineColorAndroid="grey"
               style={styles.inputBox}
-              placeholder="Playlist name"
+              placeholder="Nom"
             />
-            <Text>{switchValue ? 'Public' : 'Private'}</Text>
+            <Text>{switchValue ? 'Publique' : 'Privée'}</Text>
             <Switch
               style={styles.switch}
               onValueChange={this.toggleSwitch}
@@ -153,32 +184,37 @@ export default class AddPlaylistModal extends React.Component {
             />
             <Text>
               {' '}
-              { switchValue ? 'Geolocation is ON for public party' : '' }
+              { switchValue ? 'La géolocalisation est activée pour les Parties' : '' }
             </Text>
             {dateP}
             {datePTwo}
             <Button
               style={styles.create}
-              title="Create playlist"
+              title="Créer la playlist"
               onPress={() => {
                 /* console.log(this.generatePrivateId());
-                console.log(this.state.date);
-                console.log(this.state.dateTwo);
+                console.log(this.state.startDate);
+                console.log(this.state.endDate);
                 console.log(this.state.switchValue);
                 console.log(this.state.namePlaylist);
                 console.log(this.state.location);
                 // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN
                 // DESDOUS ET DE RECUP SUR LES MODAL LES DATE
 */
-                addPlaylist(namePlaylist, switchValue, userId, userId, global.user.name, userId, roomType, date, dateTwo, location, this.generatePrivateId())
-                  .then(() => {
-                    setModalVisible();
-                    updatePlaylist();
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    Alert.alert('An error occured on create playlist, please try again later.');
-                  });
+                if (startDate < endDate && namePlaylist) {
+                  addPlaylist(namePlaylist, switchValue, userId, userId, global.user.name, userId, roomType, startDate, endDate, location, this.generatePrivateId())
+                    .then(() => {
+                      setModalVisible();
+                      updatePlaylist();
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                } else if (startDate >= endDate) {
+                  Alert.alert('Veuillez choisir deux dates compatibles.');
+                } else if (!namePlaylist) {
+                  Alert.alert('Veuillez choisir un nom pour votre playlist.');
+                }
               }}
             />
           </View>
@@ -200,13 +236,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     height: '40%',
-
   },
   switch: {
     alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  create: {
     justifyContent: 'space-around',
   },
 });

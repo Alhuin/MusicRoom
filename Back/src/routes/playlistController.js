@@ -100,14 +100,14 @@ function addPlaylist(req, res) {
     && utils.isValidId(req.body.delegatedPlayerAdmin)
     && req.body.authorName
     && req.body.roomType
-    && req.body.date !== undefined
-    && req.body.dateTwo !== undefined
+    && req.body.startDate !== undefined
+    && req.body.endDate !== undefined
     && req.body.location !== undefined
     && req.body.privateId !== undefined) {
     playlistService.addPlaylist(req.body.name, req.body.publicFlag,
       req.body.userId, req.body.author, req.body.authorName,
       req.body.delegatedPlayerAdmin, req.body.roomType,
-      req.body.date, req.body.dateTwo, req.body.location, req.body.privateId)
+      req.body.startDate, req.body.endDate, req.body.location, req.body.privateId)
       .then((response) => {
         res
           .status(response.status)
@@ -491,7 +491,62 @@ function moveTrackOrder(req, res) {
   }
 }
 
+function getPlaylistDates(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getPlaylistDates(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
 
+function setStartDate(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId) && req.body.newDate) {
+    playlistService.setStartDate(req.body.playlistId, req.body.newDate)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function setEndDate(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId) && req.body.newDate) {
+    playlistService.setEndDate(req.body.playlistId, req.body.newDate)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
 
 export default {
   getPlaylistById,
@@ -518,4 +573,7 @@ export default {
   setDelegatedPlayerAdmin,
   deleteTrackFromPlaylist,
   moveTrackOrder,
+  getPlaylistDates,
+  setStartDate,
+  setEndDate,
 };

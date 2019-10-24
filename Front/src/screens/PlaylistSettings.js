@@ -1,9 +1,10 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
 import Collapsible from 'react-native-collapsible';
+import SimpleToast from 'react-native-simple-toast';
 import AdminListInSettings from '../components/Playlist/AdminListInSettings';
 import UserListInSettings from '../components/Playlist/UserListInSettings';
 import BansListInSettings from '../components/Playlist/BansListInSettings';
@@ -12,9 +13,10 @@ import Loader from '../components/Authentication/Loader';
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
+  getPlaylistDates, setStartDate, setEndDate,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
-import SimpleToast from 'react-native-simple-toast';
+import DatePickerModal from '../components/Playlists/DatePickerModal';
 
 
 class PlaylistSettings extends React.Component {
@@ -29,6 +31,11 @@ class PlaylistSettings extends React.Component {
       privateId: '',
       delegatedPlayerAdmin: '',
       collapsed: true,
+      collapsedSpec: true,
+      datePickerModalVisible: false,
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 1000),
+      dateType: 0,
     };
   }
 
@@ -68,6 +75,7 @@ class PlaylistSettings extends React.Component {
                 console.error(error);
               });
             this.getPublicity(playlistId);
+            this.getDates(playlistId);
           })
           .catch((error) => {
             console.error(error);
@@ -134,6 +142,20 @@ class PlaylistSettings extends React.Component {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  getDates = (playlistId) => {
+    const { navigation } = this.props;
+    const roomType = navigation.getParam('roomType');
+    if (roomType === 'party') {
+      getPlaylistDates(playlistId)
+        .then((dates) => {
+          this.setState({ startDate: new Date(Date.parse(dates[0])), endDate: new Date(Date.parse(dates[1])) });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   _onRefresh = () => {
@@ -213,7 +235,7 @@ class PlaylistSettings extends React.Component {
           resolve();
         })
         .catch((error) => {
-          console.error(`${error} in updateUsers`);
+          console.error(`${error} in updateBans`);
           reject();
         });
     }
@@ -228,9 +250,57 @@ class PlaylistSettings extends React.Component {
     this.setState({ collapsed: !this.state.collapsed });
   };
 
+  toggleExpandedSpec = () => {
+    this.setState({ collapsedSpec: !this.state.collapsedSpec });
+  };
+
+  setDatePickerModalVisible = (dateType) => {
+    const { datePickerModalVisible } = this.state;
+    const visible = !datePickerModalVisible;
+    if (dateType !== undefined) {
+      this.setState({ dateType, datePickerModalVisible: visible });
+    } else {
+      this.setState({ datePickerModalVisible: visible });
+    }
+  };
+
+  onDateChanged = (changedDate) => {
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    const { dateType, startDate, endDate } = this.state;
+    if (dateType === 'start') {
+      console.log(changedDate.getTime())
+      console.log(endDate.getTime())
+      if (changedDate < endDate) {
+        setStartDate(playlistId, changedDate)
+          .then((response) => {
+            this.setState({ startDate: changedDate });
+          })
+          .catch((error) => {
+            console.error(`${error} in setStartDate`);
+          });
+      } else {
+        Alert.alert('Veuillez choisir une date compatible.');
+      }
+    } else if (dateType === 'end') {
+      if (changedDate > startDate) {
+        setEndDate(playlistId, changedDate)
+          .then((response) => {
+            this.setState({ endDate: changedDate });
+          })
+          .catch((error) => {
+            console.error(`${error} in setEndDate`);
+          });
+      } else {
+        Alert.alert('Veuillez choisir une date compatible.');
+      }
+    }
+  };
+
   render() {
     const {
-      users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin, collapsed,
+      users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
+      collapsed, collapsedSpec, startDate, endDate, datePickerModalVisible,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -239,6 +309,8 @@ class PlaylistSettings extends React.Component {
     const roomType = navigation.getParam('roomType');
     let adminOptions = (null);
     let collapsibleIcon = (null);
+    let collapsibleIconSpec = (null);
+    let specificRoomSettings = (null);
     if (isAdmin) {
       if (collapsed) {
         collapsibleIcon = (
@@ -247,6 +319,73 @@ class PlaylistSettings extends React.Component {
       } else {
         collapsibleIcon = (
           <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
+        );
+      }
+      if (collapsedSpec) {
+        collapsibleIconSpec = (
+          <Icon name="ios-arrow-up" style={{ marginRight: 5 }} />
+        );
+      } else {
+        collapsibleIconSpec = (
+          <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
+        );
+      }
+      if (roomType === 'party') {
+        specificRoomSettings = (
+          <View>
+            <DatePickerModal
+              setModalVisible={this.setDatePickerModalVisible}
+              DateModalVisible={datePickerModalVisible}
+              onDateChanged={this.onDateChanged}
+            />
+            <TouchableOpacity
+              onPress={this.toggleExpandedSpec}
+            >
+              <View style={styles.header}>
+                <Text
+                  style={styles.header}
+                >
+                  Option de Party
+                </Text>
+                {collapsibleIconSpec}
+              </View>
+            </TouchableOpacity>
+            <Collapsible collapsed={collapsedSpec}>
+              <View>
+                <Text>
+                  Changer la localisation : (?)
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setDatePickerModalVisible('start');
+                }}
+              >
+                <Text>
+                  Changer la date de début :
+                </Text>
+                <Text>
+                  {String(startDate)}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setDatePickerModalVisible('end');
+                }}
+              >
+                <Text>
+                  Changer la date de fin :
+                </Text>
+                <Text>
+                  {String(endDate)}
+                </Text>
+              </TouchableOpacity>
+            </Collapsible>
+          </View>
+        );
+      } else {
+        specificRoomSettings = (
+          null
         );
       }
       adminOptions = (
@@ -265,6 +404,7 @@ class PlaylistSettings extends React.Component {
               value={switchValue}
             />
           </View>
+          {specificRoomSettings}
           <TouchableOpacity
             onPress={this.toggleExpanded}
           >

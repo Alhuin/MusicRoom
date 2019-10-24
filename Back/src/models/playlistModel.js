@@ -45,13 +45,13 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     default: 'radio',
   },
-  date: {
+  startDate: {
     type: Date,
-    default: Date.now,
+    default: new Date(Date.now()),
   },
-  dateTwo: {
+  endDate: {
     type: Date,
-    default: Date.now,
+    default: new Date(Date.now() + 1000),
   },
   location: {
     type: String,

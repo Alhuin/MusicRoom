@@ -50,6 +50,7 @@ router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 router.get('/playlists/admins/:playlistId', playlistController.getAdminsByPlaylistId);
 router.get('/playlists/bans/:playlistId', playlistController.getBansByPlaylistId);
 router.get('/playlists/privateId/:playlistId', playlistController.getPlaylistPrivateId);
+router.get('/playlists/dates/:playlistId', playlistController.getPlaylistDates);
 router.get('/playlists/delegatedPlayerAdmin/:playlistId', playlistController.getDelegatedPlayerAdmin);
 router.post('/playlists/setDelegatedPlayerAdmin', playlistController.setDelegatedPlayerAdmin);
 router.post('/playlists/admins/downgrade', playlistController.adminInPlaylistDowngrade);
@@ -67,6 +68,8 @@ router.post('/playlists/join', playlistController.joinPlaylist);
 router.post('/playlists/setPublicity', playlistController.setPublicityOfPlaylist);
 router.post('/playlists/deleteTrack', playlistController.deleteTrackFromPlaylist);
 router.post('/playlists/moveTrackOrder', playlistController.moveTrackOrder);
+router.post('/playlists/setStartDate', playlistController.setStartDate);
+router.post('/playlists/setEndDate', playlistController.setEndDate);
 
 
 /*             Votes                 */

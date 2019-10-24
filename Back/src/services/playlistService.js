@@ -104,7 +104,7 @@ function getPlaylistsFiltered(roomType, userId) {
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, date, dateTwo, location, privateId) {
+function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId) {
   return new Promise((resolve, reject) => {
     const playlist = new models.Playlist({
       name,
@@ -116,8 +116,8 @@ function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlay
       authorName,
       delegatedPlayerAdmin,
       admins: [author],
-      date,
-      dateTwo,
+      startDate,
+      endDate,
       location,
       privateId,
     });
@@ -528,6 +528,8 @@ function setPublicityOfPlaylist(playlistId, value) {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('setPublicityOfPlaylist', 'No playlist with this id found in database', 404));
       } else {
         playlist.publicFlag = value;
         playlist.save((saveError, savedPlaylist) => {
@@ -642,6 +644,85 @@ function moveTrackOrder(playlistId, musicId, newIndex) {
   });
 }
 
+function getPlaylistDates(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('GetPlaylistDates', 'No playlist with this id found in database', 404));
+      } else {
+        resolve({
+          status: 200,
+          data: [playlist.startDate, playlist.endDate],
+        });
+      }
+    });
+  });
+}
+
+function setStartDate(playlistId, newDate) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('setStartDate', 'No playlist with this id found in database', 404));
+      } else {
+        if (newDate < playlist.endDate) {
+          playlist.startDate = newDate;
+          playlist.save((saveError, savedPlaylist) => {
+            if (saveError) {
+              reject(new CustomError('MongoError', error.message, 500));
+            } else {
+              resolve({
+                status: 200,
+                data: savedPlaylist,
+              });
+            }
+          });
+        } else {
+          resolve({
+            status: 200,
+            data: playlist,
+          });
+        }
+      }
+    });
+  });
+}
+
+function setEndDate(playlistId, newDate) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('setEndDate', 'No playlist with this id found in database', 404));
+      } else {
+        if (newDate > playlist.startDate) {
+          playlist.endDate = newDate;
+          playlist.save((saveError, savedPlaylist) => {
+            if (saveError) {
+              reject(new CustomError('MongoError', error.message, 500));
+            } else {
+              resolve({
+                status: 200,
+                data: savedPlaylist,
+              });
+            }
+          });
+        } else {
+          resolve({
+            status: 200,
+            data: playlist,
+          });
+        }
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -667,4 +748,7 @@ export default {
   setDelegatedPlayerAdmin,
   deleteTrackFromPlaylist,
   moveTrackOrder,
+  getPlaylistDates,
+  setStartDate,
+  setEndDate,
 };

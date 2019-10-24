@@ -1,21 +1,25 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, TouchableHighlight, Text,
+  Modal, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
 
-export default class AddMusicModal extends React.Component {
-  state = { date: new Date() }
+export default class DatePickerModal extends React.Component {
+  state = {
+    date: new Date(),
+  };
 
   render() {
     const {
       setModalVisible,
       DateModalVisible,
+      onDateChanged,
     } = this.props;
+    const { date } = this.state;
     return (
       <Modal
-        style={styles.Date}
+        style={{ flex: 1 }}
         animationType="fade"
         transparent={false}
         visible={DateModalVisible}
@@ -23,18 +27,22 @@ export default class AddMusicModal extends React.Component {
           setModalVisible();
         }}
       >
-        <DatePicker
-          date={this.state.date}
-          onDateChange={date => this.setState({ date })}
-        />
-        <TouchableHighlight
-          onPress={() => {
-            this.props.onStartDateChanged(this.state.date);
-            setModalVisible();
-          }}
+        <View
+          style={styles.Date}
         >
-          <Text style={styles.hide}>Set date</Text>
-        </TouchableHighlight>
+          <DatePicker
+            date={date}
+            onDateChange={Date => this.setState({ date: Date })}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              onDateChanged(date);
+              setModalVisible();
+            }}
+          >
+            <Text style={styles.hide}>Confirmer</Text>
+          </TouchableOpacity>
+        </View>
       </Modal>
     );
   }
@@ -42,12 +50,13 @@ export default class AddMusicModal extends React.Component {
 
 const styles = StyleSheet.create({
   Date: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'column',
   },
   hide: {
-    alignItems: 'center',
     fontSize: 22,
     marginTop: '5%',
-    marginLeft: '35%',
   },
 });

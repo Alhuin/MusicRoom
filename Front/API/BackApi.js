@@ -344,7 +344,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, date, dateTwo, location, privateId) {
+function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/add`, {
       method: 'POST',
@@ -353,7 +353,7 @@ function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlay
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, date, dateTwo, location, privateId,
+        name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId,
       }),
     })
       .then(async (response) => {
@@ -681,7 +681,7 @@ function setPublicityOfPlaylist(playlistId, value) {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ playlistId, value}),
+      body: JSON.stringify({ playlistId, value }),
     })
       .then(async (response) => {
         const data = await response.json();
@@ -739,6 +739,72 @@ function moveTrackOrder(playlistId, musicId, newIndex) {
   });
 }
 
+function getPlaylistDates(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/dates/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getPlaylistDates', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function setStartDate(playlistId, newDate) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/setStartDate`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, newDate }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('setStartDate', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function setEndDate(playlistId, newDate) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/setEndDate`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, newDate }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('setEndDate', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                     Track Player
  */
@@ -778,7 +844,7 @@ function deleteTrackFromPlaylist(musicId, playlistId) {
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
-          resolve(data)
+          resolve(data);
         } else {
           reject(new CustomError('RemoveTrackFromPlaylist', data.msg, response.status));
         }
@@ -822,4 +888,7 @@ export {
   setDelegatedPlayerAdmin,
   deleteTrackFromPlaylist,
   moveTrackOrder,
+  getPlaylistDates,
+  setStartDate,
+  setEndDate,
 };
