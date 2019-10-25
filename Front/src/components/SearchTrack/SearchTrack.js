@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import SearchBar from '../SearchBar';
 import Loader from '../Authentication/Loader';
-import TracklistInSearch from './TracklistInSearch';
+import TrackListInSearch from './TrackListInSearch';
 import { getTracks } from '../../../API/DeezerApi';
 
 export default class SearchTrack extends React.Component {
@@ -70,7 +70,7 @@ export default class SearchTrack extends React.Component {
           searchTracks={this.searchTracks}
           autoSearch={false}
         />
-        <TracklistInSearch
+        <TrackListInSearch
           tracks={tracks}
           displayLoader={this.displayLoader}
           updatePlaying={this.updatePlaying}

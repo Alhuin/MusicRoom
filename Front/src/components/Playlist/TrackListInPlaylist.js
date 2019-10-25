@@ -5,7 +5,7 @@ import { moveTrackOrder } from '../../../API/BackApi';
 import TrackInPlaylist from './TrackInPlaylist';
 import Player from '../../services/Player';
 
-class TracklistInPlaylist extends React.Component {
+class TrackListInPlaylist extends React.Component {
 
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
@@ -132,4 +132,4 @@ class TracklistInPlaylist extends React.Component {
   }
 }
 
-export default TracklistInPlaylist;
+export default TrackListInPlaylist;

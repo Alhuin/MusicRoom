@@ -179,6 +179,7 @@ class Playlist extends React.Component {
             playlistId, isAdmin: admin, authorId, roomType,
           });
         }}
+        style={styles.headerIconWrapper}
       >
         <Icon name="musical-notes" />
       </TouchableOpacity>
@@ -240,7 +241,7 @@ class Playlist extends React.Component {
             searchTracks={this.searchTracks}
             autoSearch
           />
-          <Components.TracklistInPlaylist
+          <Components.TrackListInPlaylist
             tracks={tracks}
             updatePlaying={this.updatePlaying}
             playing={playing}

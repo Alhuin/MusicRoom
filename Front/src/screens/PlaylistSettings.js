@@ -46,6 +46,9 @@ class PlaylistSettings extends React.Component {
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
       this._updateState(playlistId);
+    } else {
+      this.getPublicity(playlistId);
+      this.getDates(playlistId);
     }
   }
 
@@ -99,13 +102,16 @@ class PlaylistSettings extends React.Component {
     // connect to back and change publicFlag, and generate a code
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
-    setPublicityOfPlaylist(playlistId, value)
-      .then(() => {
-        this.setState({ switchValue: value });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const isAdmin = navigation.getParam('isAdmin');
+    if (isAdmin) {
+      setPublicityOfPlaylist(playlistId, value)
+        .then(() => {
+          this.setState({ switchValue: value });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   leavingPlaylist = () => {
@@ -308,6 +314,7 @@ class PlaylistSettings extends React.Component {
     const authorId = navigation.getParam('authorId');
     const roomType = navigation.getParam('roomType');
     let adminOptions = (null);
+    let notAdminOptions = (null);
     let collapsibleIcon = (null);
     let collapsibleIconSpec = (null);
     let specificRoomSettings = (null);
@@ -396,7 +403,7 @@ class PlaylistSettings extends React.Component {
             <Text
               style={styles.subContainerFontStyle}
             >
-              {switchValue ? 'Public' : 'Private'}
+              {switchValue ? 'Publique' : 'Privée'}
             </Text>
             <Switch
               style={styles.switch}
@@ -487,6 +494,45 @@ class PlaylistSettings extends React.Component {
           />
         </View>
       );
+    } else {
+      if (roomType === 'party') {
+        notAdminOptions = (
+          <View>
+            <View>
+              <Text>
+                La playlist est {switchValue ? 'Publique' : 'Privée'}
+              </Text>
+            </View>
+            <View>
+              <Text>
+                Localisation : (?)
+              </Text>
+            </View>
+            <Text>
+              Date de début de l'évènement :
+            </Text>
+            <Text>
+              {String(startDate)}
+            </Text>
+            <Text>
+              Date de fin de l'évènement :
+            </Text>
+            <Text>
+              {String(endDate)}
+            </Text>
+          </View>
+        );
+      } else {
+        notAdminOptions = (
+          <View>
+            <View>
+              <Text>
+                La playlist est {switchValue ? 'Publique' : 'Privée'}
+              </Text>
+            </View>
+          </View>
+        );
+      }
     }
     const rendering = (
       <ScrollView style={styles.container}>
@@ -524,7 +570,7 @@ class PlaylistSettings extends React.Component {
             <Icon name="ios-clipboard" style={{ marginRight: 10, fontSize: 35 }} />
           </TouchableOpacity>
         </View>
-
+        {notAdminOptions}
         {adminOptions}
         <Loader loading={loading} />
       </ScrollView>

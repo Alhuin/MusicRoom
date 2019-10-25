@@ -8,8 +8,8 @@ import PlaylistInPlaylists from './Playlists/PlaylistInPlaylists';
 import UpdatePassForm from './Authentication/UpdatePassForm';
 import TrackInSearch from './SearchTrack/TrackInSearch';
 import SearchBar from './SearchBar';
-import TracklistInSearch from './SearchTrack/TracklistInSearch';
-import TracklistInPlaylist from './Playlist/TracklistInPlaylist';
+import TrackListInSearch from './SearchTrack/TrackListInSearch';
+import TrackListInPlaylist from './Playlist/TrackListInPlaylist';
 import TrackInPlaylist from './Playlist/TrackInPlaylist';
 import AddFloatingButton from './AddFloatingButton';
 import PlaylistList from './Playlists/PlaylistList';
@@ -33,9 +33,9 @@ export default {
   PlaylistCollapsed: PlaylistInPlaylists,
   UpdatePassForm,
   TrackInSearch,
-  TracklistInSearch,
+  TrackListInSearch,
   TrackInPlaylist,
-  TracklistInPlaylist,
+  TrackListInPlaylist,
   SearchBar,
   AddFloatingButton,
   PlaylistList,
