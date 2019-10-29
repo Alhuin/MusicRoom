@@ -510,6 +510,45 @@ function getPlaylistDates(req, res) {
   }
 }
 
+function getTags(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getTags(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function setTags(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.tags !== undefined) {
+    playlistService.setTags(req.params.playlistId, req.body.tags)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function setStartDate(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId) && req.body.newDate) {
     playlistService.setStartDate(req.body.playlistId, req.body.newDate)
@@ -576,4 +615,7 @@ export default {
   getPlaylistDates,
   setStartDate,
   setEndDate,
+  getTags,
+  setTags,
+
 };

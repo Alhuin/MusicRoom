@@ -534,7 +534,7 @@ function setPublicityOfPlaylist(playlistId, value) {
         playlist.publicFlag = value;
         playlist.save((saveError, savedPlaylist) => {
           if (saveError) {
-            reject(new CustomError('MongoError', error.message, 500));
+            reject(new CustomError('MongoError', saveError.message, 500));
           } else {
             resolve({
               status: 200,
@@ -661,6 +661,47 @@ function getPlaylistDates(playlistId) {
   });
 }
 
+function getTags(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('GetTags', 'No playlist with this id found in database', 404));
+      } else {
+        resolve({
+          status: 200,
+          data: [playlist.tags],
+        });
+      }
+    });
+  });
+}
+
+function setTags(playlistId, tags) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('SetTags', 'No playlist with this id found in database', 404));
+      } else {
+        playlist.tags = tags;
+        playlist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 function setStartDate(playlistId, newDate) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
@@ -751,4 +792,6 @@ export default {
   getPlaylistDates,
   setStartDate,
   setEndDate,
+  getTags,
+  setTags,
 };

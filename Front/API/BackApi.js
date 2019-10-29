@@ -761,6 +761,59 @@ function getPlaylistDates(playlistId) {
   });
 }
 
+function getTags(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/getTags/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        let data = await response.json();
+        data = formatTags(data);
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getPlaylistDates', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function formatTags(tags) {
+  const newTags = {};
+  for (let i = 0; i < tags.length; i++) {
+    newTags[tags[i]] = true;
+  }
+  return newTags;
+}
+
+function setTags(playlistId, newTags) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/setTags`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, newTags }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('setStartDate', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function setStartDate(playlistId, newDate) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/setStartDate`, {
@@ -891,4 +944,6 @@ export {
   getPlaylistDates,
   setStartDate,
   setEndDate,
+  getTags,
+  setTags,
 };

@@ -64,6 +64,10 @@ const playlistSchema = new mongoose.Schema({
     ref: 'MusicModel',
     default: [],
   },
+  tags: {
+    type: [String],
+    default: [],
+  },
 });
 playlistSchema.plugin(uniqueValidator);
 

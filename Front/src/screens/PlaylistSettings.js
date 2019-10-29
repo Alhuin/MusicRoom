@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert, CheckBox,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -13,7 +13,7 @@ import Loader from '../components/Authentication/Loader';
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
-  getPlaylistDates, setStartDate, setEndDate,
+  getPlaylistDates, setStartDate, setEndDate, getTags, setTags,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
@@ -32,10 +32,12 @@ class PlaylistSettings extends React.Component {
       delegatedPlayerAdmin: '',
       collapsed: true,
       collapsedSpec: true,
+      collapsedTags: true,
       datePickerModalVisible: false,
       startDate: new Date(),
       endDate: new Date(Date.now() + 1000),
       dateType: 0,
+      tags: {},
     };
   }
 
@@ -79,6 +81,7 @@ class PlaylistSettings extends React.Component {
               });
             this.getPublicity(playlistId);
             this.getDates(playlistId);
+            this.getTags(playlistId);
           })
           .catch((error) => {
             console.error(error);
@@ -142,6 +145,16 @@ class PlaylistSettings extends React.Component {
 
   getPublicity = (playlistId) => {
     getPublicityOfPlaylistById(playlistId)
+      .then((val) => {
+        this.setState({ switchValue: val });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  getTags = (playlistId) => {
+    getTags(playlistId)
       .then((val) => {
         this.setState({ switchValue: val });
       })
@@ -260,6 +273,10 @@ class PlaylistSettings extends React.Component {
     this.setState({ collapsedSpec: !this.state.collapsedSpec });
   };
 
+  toggleExpandedTags = () => {
+    this.setState({ collapsedTags: !this.state.collapsedTags });
+  };
+
   setDatePickerModalVisible = (dateType) => {
     const { datePickerModalVisible } = this.state;
     const visible = !datePickerModalVisible;
@@ -306,7 +323,7 @@ class PlaylistSettings extends React.Component {
   render() {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
-      collapsed, collapsedSpec, startDate, endDate, datePickerModalVisible,
+      collapsed, collapsedSpec, collapsedTags, startDate, endDate, datePickerModalVisible, tags,
     } = this.state;
     const { navigation } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -317,6 +334,7 @@ class PlaylistSettings extends React.Component {
     let notAdminOptions = (null);
     let collapsibleIcon = (null);
     let collapsibleIconSpec = (null);
+    let collapsibleIconTags = (null);
     let specificRoomSettings = (null);
     if (isAdmin) {
       if (collapsed) {
@@ -334,6 +352,15 @@ class PlaylistSettings extends React.Component {
         );
       } else {
         collapsibleIconSpec = (
+          <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
+        );
+      }
+      if (collapsedTags) {
+        collapsibleIconTags = (
+          <Icon name="ios-arrow-up" style={{ marginRight: 5 }} />
+        );
+      } else {
+        collapsibleIconTags = (
           <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
         );
       }
@@ -397,6 +424,13 @@ class PlaylistSettings extends React.Component {
       }
       adminOptions = (
         <View>
+          <Text
+            style={styles.subText}
+          >
+            Les paramètres sont rafraîchis à chaque modification, et peuvent être modifiés en même temps
+            {' '}
+            par d'autres utilisateurs ou administrateurs.
+          </Text>
           <View
             style={[styles.subContainer, { justifyContent: 'space-between' }]}
           >
@@ -412,6 +446,76 @@ class PlaylistSettings extends React.Component {
             />
           </View>
           {specificRoomSettings}
+          <TouchableOpacity
+            onPress={this.toggleExpandedTags}
+          >
+            <View style={styles.header}>
+              <Text
+                style={styles.header}
+              >
+                Tags
+              </Text>
+              {collapsibleIconTags}
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={collapsedTags} align="center">
+            <View>
+              <CheckBox
+                value={tags.Rock}
+              />
+              <Text>
+                Rock
+              </Text>
+            </View>
+            <View>
+              <CheckBox
+                value={tags.Classic}
+              />
+              <Text>
+                Classic
+              </Text>
+            </View>
+            <View>
+              <CheckBox
+                value={tags.Rap}
+              />
+              <Text>
+                Rap
+              </Text>
+            </View>
+            <View>
+              <CheckBox
+                value={tags.Pop}
+              />
+              <Text>
+                Pop
+              </Text>
+            </View>
+            <View>
+              <CheckBox
+                value={tags.Disco}
+              />
+              <Text>
+                Disco
+              </Text>
+            </View>
+            <View>
+              <CheckBox
+                value={tags.Reggae}
+              />
+              <Text>
+                Reggae
+              </Text>
+            </View>
+            <View>
+              <CheckBox
+                value={tags.Psychedelic}
+              />
+              <Text>
+                Psychedelic
+              </Text>
+            </View>
+          </Collapsible>
           <TouchableOpacity
             onPress={this.toggleExpanded}
           >
@@ -623,6 +727,10 @@ const styles = StyleSheet.create({
   },
   switch: {
     marginRight: 10,
+  },
+  subText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 
