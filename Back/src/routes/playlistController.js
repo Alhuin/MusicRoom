@@ -351,7 +351,6 @@ function getNextTrackByVote(req, res) {
 }
 
 function joinPlaylist(req, res) {
-  console.log(req.body);
   if (utils.isValidId(req.body.userId) && req.body.playlistCode) {
     playlistService.joinPlaylist(req.body.userId, req.body.playlistCode)
       .then((response) => {
@@ -450,7 +449,6 @@ function setDelegatedPlayerAdmin(req, res) {
 }
 
 function deleteTrackFromPlaylist(req, res) {
-  console.log(req.body);
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
   && req.body.musicId && utils.isValidId(req.body.musicId)) {
     playlistService.deleteTrackFromPlaylist(req.body.playlistId, req.body.musicId)
@@ -531,8 +529,8 @@ function getTags(req, res) {
 
 function setTags(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.tags !== undefined) {
-    playlistService.setTags(req.params.playlistId, req.body.tags)
+    && req.body.newTags !== undefined) {
+    playlistService.setTags(req.body.playlistId, req.body.newTags)
       .then((response) => {
         res
           .status(response.status)

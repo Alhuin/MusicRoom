@@ -8,6 +8,7 @@ import SimpleToast from 'react-native-simple-toast';
 import AdminListInSettings from '../components/Playlist/AdminListInSettings';
 import UserListInSettings from '../components/Playlist/UserListInSettings';
 import BansListInSettings from '../components/Playlist/BansListInSettings';
+import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
 import Loader from '../components/Authentication/Loader';
 
 import {
@@ -155,8 +156,8 @@ class PlaylistSettings extends React.Component {
 
   getTags = (playlistId) => {
     getTags(playlistId)
-      .then((val) => {
-        this.setState({ switchValue: val });
+      .then((data) => {
+        this.setState({ tags: data });
       })
       .catch((error) => {
         console.error(error);
@@ -292,8 +293,6 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const { dateType, startDate, endDate } = this.state;
     if (dateType === 'start') {
-      console.log(changedDate.getTime())
-      console.log(endDate.getTime())
       if (changedDate < endDate) {
         setStartDate(playlistId, changedDate)
           .then((response) => {
@@ -319,6 +318,28 @@ class PlaylistSettings extends React.Component {
       }
     }
   };
+
+  tagsChanged = (tag) => {
+    let { tags } = this.state;
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+
+    if (tags[tag]) {
+      delete tags[tag];
+    } else {
+      tags[tag] = true;
+    }
+    tags = this.formatTags(tags);
+    setTags(playlistId, tags)
+      .then((data) => {
+        this.setState({ tags: data });
+      })
+      .catch((error) => {
+        console.error(`${error} in tagsChanged`);
+      });
+  };
+
+  formatTags = tags => Object.keys(tags);
 
   render() {
     const {
@@ -459,61 +480,66 @@ class PlaylistSettings extends React.Component {
             </View>
           </TouchableOpacity>
           <Collapsible collapsed={collapsedTags} align="center">
-            <View>
-              <CheckBox
-                value={tags.Rock}
-              />
-              <Text>
-                Rock
-              </Text>
-            </View>
-            <View>
-              <CheckBox
-                value={tags.Classic}
-              />
-              <Text>
-                Classic
-              </Text>
-            </View>
-            <View>
-              <CheckBox
-                value={tags.Rap}
-              />
-              <Text>
-                Rap
-              </Text>
-            </View>
-            <View>
-              <CheckBox
-                value={tags.Pop}
-              />
-              <Text>
-                Pop
-              </Text>
-            </View>
-            <View>
-              <CheckBox
-                value={tags.Disco}
-              />
-              <Text>
-                Disco
-              </Text>
-            </View>
-            <View>
-              <CheckBox
-                value={tags.Reggae}
-              />
-              <Text>
-                Reggae
-              </Text>
-            </View>
-            <View>
-              <CheckBox
-                value={tags.Psychedelic}
-              />
-              <Text>
-                Psychedelic
-              </Text>
+            <View
+              style={styles.checkboxesWrapper}
+            >
+              <View
+                style={styles.checkboxRow}
+              >
+                <SettingsTagCheckbox
+                  checked={tags.Rock}
+                  tagsChanged={this.tagsChanged}
+                  tag="Rock"
+                />
+                <SettingsTagCheckbox
+                  checked={tags.Rap}
+                  tagsChanged={this.tagsChanged}
+                  tag="Rap"
+                />
+                <SettingsTagCheckbox
+                  checked={tags.Classic}
+                  tagsChanged={this.tagsChanged}
+                  tag="Classic"
+                />
+              </View>
+              <View
+                style={styles.checkboxRow}
+              >
+                <SettingsTagCheckbox
+                  checked={tags.Electro}
+                  tagsChanged={this.tagsChanged}
+                  tag="Electro"
+                />
+                <SettingsTagCheckbox
+                  checked={tags.Reggae}
+                  tagsChanged={this.tagsChanged}
+                  tag="Reggae"
+                />
+                <SettingsTagCheckbox
+                  checked={tags.Metal}
+                  tagsChanged={this.tagsChanged}
+                  tag="Metal"
+                />
+              </View>
+              <View
+                style={styles.checkboxRow}
+              >
+                <SettingsTagCheckbox
+                  checked={tags.Pop}
+                  tagsChanged={this.tagsChanged}
+                  tag="Pop"
+                />
+                <SettingsTagCheckbox
+                  checked={tags.Dub}
+                  tagsChanged={this.tagsChanged}
+                  tag="Dub"
+                />
+                <SettingsTagCheckbox
+                  checked={tags.Country}
+                  tagsChanged={this.tagsChanged}
+                  tag="Country"
+                />
+              </View>
             </View>
           </Collapsible>
           <TouchableOpacity
@@ -731,6 +757,15 @@ const styles = StyleSheet.create({
   subText: {
     fontSize: 16,
     textAlign: 'center',
+  },
+  checkboxRow: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+  },
+  checkboxesWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 

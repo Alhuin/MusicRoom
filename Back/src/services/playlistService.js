@@ -671,7 +671,7 @@ function getTags(playlistId) {
       } else {
         resolve({
           status: 200,
-          data: [playlist.tags],
+          data: playlist.tags,
         });
       }
     });

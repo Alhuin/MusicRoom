@@ -22,6 +22,7 @@ import UserListInSettings from './Playlist/UserListInSettings';
 import BansListInSettings from './Playlist/BansListInSettings';
 import DatePickerModal from './Playlists/DatePickerModal';
 import MiniPlayer from './Playlist/MiniPlayer';
+import SettingsTagCheckbox from './Playlist/SettingsTagCheckbox';
 
 export default {
   SignInForm,
@@ -48,4 +49,5 @@ export default {
   DatePickerModal,
   BansListInSettings,
   MiniPlayer,
+  SettingsTagCheckbox,
 };

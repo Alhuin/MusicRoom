@@ -776,7 +776,7 @@ function getTags(playlistId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('getPlaylistDates', data.msg, response.status));
+          reject(new CustomError('getTags', data.msg, response.status));
           // console.log(data.msg);
         }
       })
@@ -803,11 +803,14 @@ function setTags(playlistId, newTags) {
       body: JSON.stringify({ playlistId, newTags }),
     })
       .then(async (response) => {
-        const data = await response.json();
+        // savedPlaylist is the response
+        let data = await response.json();
+        data = data.tags;
+        data = formatTags(data);
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('setStartDate', data.msg, response.status));
+          reject(new CustomError('setTags', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
