@@ -88,6 +88,34 @@ function addUser(login, password, name, familyName, email) {
   });
 }
 
+function updateUser(userId, login, name, familyName, email) {
+  return new Promise((resolve, reject) => {
+    UserModel.findById(userId, (error, user) => {
+      if (error) {
+        reject(new CustomError('MongoError1', error.message, 500));
+      } else if (!user) {
+        reject(new CustomError('updateUser', 'No user with this id found in database', 404));
+      } else {
+        const updatedUser = user;
+        updatedUser.login = login;
+        updatedUser.name = name;
+        updatedUser.familyName = familyName;
+        updatedUser.email = email;
+        updatedUser.save((saveError, newUser) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: newUser,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 function _getUserByLoginOrEmail(loginOrEmail) {
   return new Promise((resolve, reject) => {
     UserModel.findOne({ login: loginOrEmail }, (error, userByLogin) => {
@@ -126,10 +154,10 @@ function updatePassword(userId, newPassword) {
       } else if (!user) {
         reject(new CustomError('UpdatePassword', 'No user with this id found in database', 404));
       } else {
-        const updateUser = user;
+        const updatedUser = user;
         const salt = await bcrypt.genSaltSync(10);
-        updateUser.password = await bcrypt.hashSync(newPassword, salt);
-        updateUser.save((saveError, newUser) => {
+        updatedUser.password = await bcrypt.hashSync(newPassword, salt);
+        updatedUser.save((saveError, newUser) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
           } else {
@@ -286,4 +314,5 @@ export default {
   sendPasswordToken,
   confirmPasswordToken,
   updatePassword,
+  updateUser,
 };

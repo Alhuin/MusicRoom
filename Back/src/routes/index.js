@@ -22,6 +22,7 @@ router.get('/users', userController.getUsers);
 router.get('/users/:userId', userController.getUserById);
 router.delete('/users/:userId', userController.deleteUserById);
 router.post('/users', userController.addUser);
+router.post('/users/update', userController.updateUser);
 router.post('/users/newPass/', userController.updatePassword);
 
 // Mail Tokens
