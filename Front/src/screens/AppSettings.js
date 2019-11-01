@@ -1,97 +1,129 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity,
+  StyleSheet, View, Text, TouchableOpacity, Button, TextInput,
 } from 'react-native';
+import { updateUser } from '../../API/BackApi';
 
 class AppSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: global.user,
+      email: global.user.email,
+      login: global.user.login,
+      name: global.user.name,
+      familyName: global.user.familyName,
     };
   }
 
-  render() {
-    const { user } = this.state;
-    return (
-    /* <View style={styles.contener}>
-        <Text style={styles.content}>
-Login :
-          { user.login }
-        </Text>
-        <Text style={styles.content}>
-Name :
-          { user.name }
-        </Text>
-        <Text style={styles.content}>
-Family Name :
-          { user.familyName }
-        </Text>
-        <Text style={styles.content}>
-Email :
-          { user.email }
-        </Text>
-      </View> */
+  updateLogin = (text) => {
+    this.setState({ login: text });
+  };
 
-      <View style={styles.card}>
-        <Text style={styles.title_set}>
+  updateName = (text) => {
+    this.setState({ name: text });
+  };
+
+  updateFamilyName = (text) => {
+    this.setState({ familyName: text });
+  };
+
+  updateEmail = (text) => {
+    this.setState({ email: text });
+  };
+
+    _onPressModify = () => {
+      const {
+        user, login, name, familyName, email,
+      } = this.state;
+      console.log('ici:' + user._id);
+      if (!(name.length && familyName.length && email.length
+          && login.length)) {
+        alert('error: empty field.');
+        console.log('error, empty field');
+      } else {
+        updateUser(user._id, login, name, familyName, email);// .then.catch?
+      }
+    };
+
+    render() {
+      const { user } = this.state;
+      return (
+        <View style={styles.card}>
+          <Text style={styles.title_set}>
               Settings
-        </Text>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.main_container}
-        >
-          <View style={styles.content_container}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>
-Login :
-                { user.login }
-              </Text>
+          </Text>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.main_container}
+          >
+            <View style={styles.content_container}>
+              <View style={styles.title_container}>
+                <Text style={styles.title_text}>Login :</Text>
+                <TextInput
+                  style={styles.title_text}
+                  onChangeText={this.updateLogin}
+                >
+                  { user.login }
+                </TextInput>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.main_container}
-        >
-          <View style={styles.content_container}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>
-Name :
-                { user.name }
-              </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.main_container}
+          >
+            <View style={styles.content_container}>
+              <View style={styles.title_container}>
+                <Text style={styles.title_text}>Name :</Text>
+                <TextInput
+                  style={styles.title_text}
+                  onChangeText={this.updateName}
+                >
+                  { user.name }
+                </TextInput>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.main_container}
-        >
-          <View style={styles.content_container}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>
-Family Name :
-                { user.familyName }
-              </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.main_container}
+          >
+            <View style={styles.content_container}>
+              <View style={styles.title_container}>
+                <Text style={styles.title_text}>Family Name :</Text>
+                <TextInput
+                  style={styles.title_text}
+                  onChangeText={this.updateFamilyName}
+                >
+                  { user.familyName }
+                </TextInput>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.main_container}
-        >
-          <View style={styles.content_container}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>
-Email :
-                { user.email }
-              </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.main_container}
+          >
+            <View style={styles.content_container}>
+              <View style={styles.title_container}>
+                <Text style={styles.title_text}>Email :</Text>
+                <TextInput
+                  style={styles.title_text}
+                  onChangeText={this.updateEmail}
+                >
+                  { user.email }
+                </TextInput>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+          </TouchableOpacity>
+          <Button
+            title="Modify"
+            onPress={this._onPressModify}
+          />
+        </View>
+      );
+    }
 }
 
 let styles = StyleSheet.create({
@@ -124,9 +156,9 @@ let styles = StyleSheet.create({
   },
   title_text: {
     flexWrap: 'wrap',
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
-    paddingRight: 5,
+    paddingLeft: 5,
     color: 'white',
   },
   title_set: {

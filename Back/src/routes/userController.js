@@ -81,6 +81,28 @@ function addUser(req, res) {
   }
 }
 
+function updateUser(req, res) {
+  // checker email valide et les champs uniques
+  if ((req.body.login && req.body.name
+      && req.body.familyName && req.body.email)) {
+    userService.updateUser(req.body.userId, req.body.login, req.body.name,
+      req.body.familyName, req.body.email)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 /*    User Interface    */
 
 function updatePassword(req, res) {
@@ -195,4 +217,5 @@ export default {
   confirmEmailToken,
   confirmPasswordToken,
   updatePassword,
+  updateUser,
 };

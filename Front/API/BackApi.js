@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
+const server = 'http://10.3.1.1:3000/api';
 
 /*
                     Users & Login
@@ -127,6 +127,33 @@ function sendPasswordToken(loginOrEmail) {
           // alert('An email has been sent');
         } else {
           reject(new CustomError('PasswordToken', data.msg, response.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+// eslint-disable-next-line no-shadow
+function updateUser(userId, login, name, familyName, email) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/users/update`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, login, name, familyName, email,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+          // alert(data.msg);
+        } else {
+          reject(new CustomError('updateUser', data.msg, response.status));
           // alert(`error ${data.status}: ${data.msg}`);
         }
       })
@@ -862,7 +889,7 @@ function setEndDate(playlistId, newDate) {
 }
 
 /*
-                    Track PlayerDetails
+                    Track Player
  */
 
 function getNextTrackByVote(playlistId) {
@@ -913,6 +940,7 @@ function deleteTrackFromPlaylist(musicId, playlistId) {
 export {
   login,
   addUser,
+  updateUser,
   // sendEmailToken,
   sendPasswordToken,
   updatePassword,
