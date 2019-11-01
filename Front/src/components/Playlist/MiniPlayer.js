@@ -3,33 +3,51 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native';
 import TextTicker from 'react-native-text-ticker';
+import SeekBar from '../Player/SeekBar';
+import TextScroller from "./TextScroller";
 
 
 export default class MiniPlayer extends React.Component {
 
+  seek(time) {
+    const { audioElement, setCurrentPosition, paused } = this.props;
+    const newTime = Math.round(time);
+
+    audioElement.seek(newTime);
+    setCurrentPosition(newTime);
+    paused(false);
+  }
+
   render() {
     const {
-      handlePress, isAdmin, cover, details,
+      handlePress, isAdmin, cover, details, totalLength, paused, currentPosition,
     } = this.props;
 
     return (
       <TouchableOpacity style={styles.mainContainer} disabled={!isAdmin} onPress={handlePress}>
-        <View style={styles.coverContainer}>
-          {cover}
+        <View style={styles.description}>
+          <View style={styles.coverContainer}>
+            {cover}
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text style={{ fontSize: 20, color: 'white' }}>
+              {details.artist.toUpperCase()}
+            </Text>
+            <Text style={{ fontSize: 18, color: 'white' }}>
+              {details.title}
+            </Text>
+          </View>
         </View>
-        <View style={styles.detailsContainer}>
-          <TextTicker
-            style={{ fontSize: 20, color: 'white' }}
-            duration={5000}
-            loop
-            repeatSpacer={50}
-          >
-            {details.artist}
-            {' ● '}
-            {details.title}
-          </TextTicker>
+        <View style={styles.controls}>
+          <SeekBar
+            onSeek={this.seek.bind(this)}
+            trackLength={totalLength}
+            onSlidingStart={() => paused(true)}
+            currentPosition={currentPosition}
+          />
         </View>
       </TouchableOpacity>
     );
@@ -39,7 +57,7 @@ export default class MiniPlayer extends React.Component {
 const styles = StyleSheet.create({
   mainContainer: {
     position: 'absolute',
-    height: 70,
+    height: 100,
     alignItems: 'center',
     justifyContent: 'center',
     bottom: 0,
@@ -72,5 +90,13 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  description: {
+    borderWidth: 1,
+    borderColor: 'blue',
+  },
+  controls: {
+    borderWidth: 1,
+    borderColor: 'red',
   },
 });

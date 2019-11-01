@@ -139,7 +139,7 @@ class PlaylistSettings extends React.Component {
           console.error(error);
         });
     } else {
-      alert('Impossible de quitter la playlist tant que vous êtes Délégué au contrôle du Player.');
+      alert('Impossible de quitter la playlist tant que vous êtes Délégué au contrôle du PlayerDetails.');
       // navigation.goBack();
     }
   };

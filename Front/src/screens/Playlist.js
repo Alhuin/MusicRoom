@@ -8,7 +8,7 @@ import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
 } from '../../API/BackApi';
-import Player from '../components/Player/Player';
+import PlayerDetails from '../components/Player/PlayerDetails';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -153,7 +153,7 @@ class Playlist extends React.Component {
     const {
       tracks, playing, refreshing, modalVisible, admin, myVotes, track,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, changeTrack, changePlaylist } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
     const name = navigation.getParam('name');
@@ -161,14 +161,7 @@ class Playlist extends React.Component {
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = global.user._id;
     // const nowPlaying = this._getNowPlaying();
-    const nowPlayingCover = (
-      <Image source={{ uri: 'https://api.deezer.com/album/302127/image' }} style={{ height: 50, width: 50 }} />
-    );
-    const nowPlayingDetails = {
-      title: 'Harder Better Faster Stronger',
-      artist: 'Daft Punk',
-      album: 'Discovery',
-    };
+
     /*
           Double fonction ? '-'
      */
@@ -189,10 +182,12 @@ class Playlist extends React.Component {
         onPress={() => {
           getNextTrackByVote(playlistId)
             .then((nextTrack) => {
-              this.setState({ track: nextTrack });
-              if (nextTrack !== null) {
-                navigation.navigate('Player', { playlistId, track: nextTrack, onGoBack: this.onGoBack });
-              }
+              changePlaylist(playlistId);
+              changeTrack(nextTrack);
+              // this.setState({ track: nextTrack });
+              // if (nextTrack !== null) {
+              //   navigation.navigate('Player', { playlistId, track: nextTrack, onGoBack: this.onGoBack });
+              // }
             })
             .catch(error => console.log(error));
         }}
@@ -260,25 +255,6 @@ class Playlist extends React.Component {
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
         />
-        {/*{ nowPlayingCover*/}
-        {/*  && (*/}
-        {/*  <Components.MiniPlayer*/}
-        {/*    handlePress={() => this.refs.player.open()}*/}
-        {/*    isAdmin={admin}*/}
-        {/*    cover={nowPlayingCover}*/}
-        {/*    details={nowPlayingDetails}*/}
-        {/*  />*/}
-        {/*  )*/}
-        {/*}*/}
-        {/*<Modal*/}
-        {/*  style={styles.playerModal}*/}
-        {/*  ref="player"*/}
-        {/*  // swipeToClose*/}
-        {/*  // backButtonClose*/}
-        {/*  coverScreen={false}*/}
-        {/*>*/}
-        {/*  <Player track={track} playlistId={playlistId} />*/}
-        {/*</Modal>*/}
       </View>
     );
   }

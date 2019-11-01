@@ -24,7 +24,7 @@ export default class SignInForm extends React.Component {
     const {
       userName, password,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, logged } = this.props;
     if (!(userName.length && password.length)) {
       Alert.alert('Error, empty field.');
       console.log('error, empty field');
@@ -35,6 +35,7 @@ export default class SignInForm extends React.Component {
           onSignIn(JSON.stringify(user))
             .then(() => {
               global.user = user;
+              logged(true);
               navigation.navigate('app');
             })
             .catch(error => console.log(error));

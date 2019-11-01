@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Modal from 'react-native-modalbox';
-import Player from '../Player/Player';
+import PlayerDetails from '../Player/PlayerDetails';
 
 export const TRACKS = [
   {
@@ -33,7 +33,7 @@ export default class PlayerModal extends React.Component {
         swipeToClose
         coverScreen
       >
-        <Player tracks={TRACKS} />
+        <PlayerDetails tracks={TRACKS} />
       </Modal>
     );
   }

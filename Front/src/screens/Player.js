@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Player from '../components/Player/Player';
+import PlayerDetails from '../components/Player/PlayerDetails';
 // import {getMyVotesInPlaylist} from "../../API/BackApi";
 
 export default class AdminPlayer extends Component {
@@ -29,7 +29,7 @@ export default class AdminPlayer extends Component {
     const { track } = this.state;
 
     return (
-      <Player
+      <PlayerDetails
         track={track}
         playlistId={playlistId}
         onDownPress={() => {

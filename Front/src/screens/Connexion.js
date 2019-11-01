@@ -8,6 +8,7 @@ class Connexion extends React.Component {
   render() {
     const { navigation } = this.props;
     const type = 'Sign In';
+    const { logged } = this.props;
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -22,7 +23,7 @@ class Connexion extends React.Component {
         >
           <View style={styles.content}>
             <Components.Logo />
-            <Components.SignInForm navigation={navigation} />
+            <Components.SignInForm navigation={navigation} logged={logged} />
             <Components.SocialLogin type={type} />
             <Components.LoginContext
               type={type}

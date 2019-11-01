@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import {
   View,
@@ -25,6 +25,12 @@ const SeekBar = ({
 }) => {
   const elapsed = minutesAndSeconds(currentPosition);
   const remaining = minutesAndSeconds(trackLength - currentPosition);
+
+  console.log('--------------------');
+  console.log(trackLength);
+  console.log(currentPosition);
+  console.log('--------------------');
+
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row' }}>

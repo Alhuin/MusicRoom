@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.4:3000/api';
+const server = 'http://10.3.1.3:3000/api';
 
 /*
                     Users & Login
@@ -862,7 +862,7 @@ function setEndDate(playlistId, newDate) {
 }
 
 /*
-                    Track Player
+                    Track PlayerDetails
  */
 
 function getNextTrackByVote(playlistId) {

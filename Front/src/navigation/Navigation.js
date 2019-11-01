@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import { onSignOut } from '../services/auth';
-import Connexion from '../screens/Connexion';
+import Connexion from '../containers/Connexion';
 import Home from '../screens/Home';
 import SendTokens from '../screens/SendTokens';
 import UpdatePass from '../screens/UpdatePass';
@@ -26,7 +26,7 @@ import AppSettings from '../screens/AppSettings';
 import PlaylistSettings from '../screens/PlaylistSettings';
 import Loading from '../screens/Loading';
 import SearchTrack from '../components/SearchTrack/SearchTrack';
-import Playlist from '../screens/Playlist';
+import Playlist from '../containers/Playlist';
 import Radios from '../screens/Radios';
 import Partys from '../screens/Partys';
 import AdminPlayer from '../screens/Player';
