@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import CustomError from './errorHandler';
 
 const server = 'http://10.3.1.1:3000/api';
@@ -134,8 +135,7 @@ function sendPasswordToken(loginOrEmail) {
   });
 }
 
-// eslint-disable-next-line no-shadow
-function updateUser(userId, login, name, familyName, email) {
+function updateUser(userId, newLogin, name, familyName, email) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/users/update`, {
       method: 'POST',
@@ -144,7 +144,7 @@ function updateUser(userId, login, name, familyName, email) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId, login, name, familyName, email,
+        userId, newLogin, name, familyName, email,
       }),
     })
       .then(async (response) => {

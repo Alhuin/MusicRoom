@@ -36,13 +36,17 @@ class AppSettings extends React.Component {
       const {
         user, login, name, familyName, email,
       } = this.state;
-      console.log('ici:' + user._id);
+      console.log(`ici:${user._id}`);
       if (!(name.length && familyName.length && email.length
           && login.length)) {
         alert('error: empty field.');
         console.log('error, empty field');
       } else {
-        updateUser(user._id, login, name, familyName, email);// .then.catch?
+        updateUser(user._id, login, name, familyName, email)
+          .then(() => {
+            alert('Settings have been modified');
+          })
+          .catch(error => console.log(error));
       }
     };
 
