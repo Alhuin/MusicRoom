@@ -4,13 +4,13 @@ import Modal from 'react-native-modalbox';
 import AudioPlayer from '../../containers/AudioPlayer';
 import PlayerDetails from '../../containers/PlayerDetails';
 import MiniPlayer from '../../containers/MiniPlayer';
-import Controls from "../Player/Controls";
 
 
 export default class AdminPlayer extends Component {
   render() {
-    const { track, playlistId, isLoggedIn, paused } = this.props;
-    console.log(this.props);
+    const {
+      track, playlistId, isLoggedIn, paused,
+    } = this.props;
 
     let nowPlayingCover = null;
     let nowPlayingDetails = null;
@@ -30,32 +30,33 @@ export default class AdminPlayer extends Component {
       <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
         <AudioPlayer />
         {isLoggedIn && track !== null && playlistId !== ''
-        && <>
-          <MiniPlayer
-            handlePress={() => this.refs.player.open()}
-            isAdmin
-            onPressPlay={() => {
-              paused(false);
-            }}
-            onPressPause={() => {
-              paused(true);
-            }}
-            cover={nowPlayingCover}
-            details={nowPlayingDetails}
-          />
-          <Modal
-            style={styles.playerModal}
-            ref={"player"}
-            isOpen={false}
-            // onOpened={Alert.alert('opened')}
-            // swipeToClose
-            // backButtonClose
-            // coverScreen={false}
-          >
-            <PlayerDetails track={track} playlistId={playlistId} />
-          </Modal>
-        </>}
-
+        && (
+          <>
+            <MiniPlayer
+              handlePress={() => this.refs.player.open()}
+              isAdmin
+              onPressPlay={() => {
+                paused(false);
+              }}
+              onPressPause={() => {
+                paused(true);
+              }}
+              cover={nowPlayingCover}
+              details={nowPlayingDetails}
+            />
+            <Modal
+              style={styles.playerModal}
+              ref={"player"}
+              isOpen={false}
+              // onOpened={Alert.alert('opened')}
+              // swipeToClose
+              // backButtonClose
+              // coverScreen={false}
+            >
+              <PlayerDetails track={track} playlistId={playlistId} />
+            </Modal>
+          </>
+        )}
       </View>
     );
   }

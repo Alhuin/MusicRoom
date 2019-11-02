@@ -1,16 +1,14 @@
 import { connect } from 'react-redux';
 import PlayerDetails from '../components/Player/PlayerDetails';
-import * as actions from '../actions';
+import * as actions from '../redux/actions';
 
-const mapStateToProps = ({
-  audioElement, currentPosition, isChanging, track, totalLength, isPaused,
-}) => ({
-  audioElement,
-  currentPosition,
-  isChanging,
-  track,
-  totalLength,
-  isPaused,
+const mapStateToProps = state => ({
+  audioElement: state.playerReducer.audioElement,
+  currentPosition: state.playerReducer.currentPosition,
+  isChanging: state.playerReducer.isChanging,
+  track: state.playerReducer.track,
+  totalLength: state.playerReducer.totalLength,
+  isPaused: state.playerReducer.isPaused,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,9 +1,7 @@
 import MusicModel from '../models/musicModel';
-import VoteModel from '../models/voteModel';
 import CustomError from './errorHandler';
-import voteService from './voteService';
 import playlistService from './playlistService';
-import PlaylistModel from "../models/playlistModel";
+import PlaylistModel from '../models/playlistModel';
 
 function getMusics() {
   return new Promise((resolve, reject) => {
@@ -73,9 +71,8 @@ function getMusicsByVote(playlistId, roomType) {
                       res.push(item);
                       found = true;
                       return false;
-                    } else {
-                      return true;
                     }
+                    return true;
                   });
                 });
                 resolve({
@@ -88,7 +85,6 @@ function getMusicsByVote(playlistId, roomType) {
         });
     } else {
       reject(new CustomError('getMusicsByVote', 'Wrong roomType', 500));
-
     }
   });
 }
@@ -121,7 +117,7 @@ function downloadMusic(musicUrl) {
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';
-    const deezpy = spawn('python3', ['/Users/jjanin-r/Projects/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
+    const deezpy = spawn('python3', ['/Users/julien/Projects/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
     deezpy.stdout.on('data', (data) => {
       stdout += data;
     });
@@ -193,7 +189,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
         if (!data.data.length) {
           downloadMusic(link)
             .then((path) => {
-              const staticMusicPath = path.data.replace('downloads', 'http://10.3.1.3:3000/tracks');
+              const staticMusicPath = path.data.replace('downloads', 'http://192.168.1.17:3000/tracks');
               const staticCoverPath = staticMusicPath.replace(staticMusicPath.split('/')[6], 'cover.png');
               const music = new MusicModel({
                 user: userId,

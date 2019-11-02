@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import AdminPlayer from '../components/AdminPlayer/AdminPlayer';
-import * as actions from '../actions';
+import * as actions from '../redux/actions';
 
-const mapStateToProps = ({ track, playlistId, isLoggedIn }) => ({
-  track,
-  playlistId,
-  isLoggedIn,
+const mapStateToProps = state => ({
+  track: state.playerReducer.track,
+  playlistId: state.playerReducer.playlistId,
+  isLoggedIn: state.authReducer.isLoggedIn,
 });
 
 const mapDispatchToProps = dispatch => ({

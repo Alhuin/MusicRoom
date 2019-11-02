@@ -8,3 +8,5 @@ export const SET_AUDIO_ELEMENT = 'SET_AUDIO_ELEMENT';
 export const IS_CHANGING = 'IS_CHANGING';
 export const SET_CURRENT_POSITION = 'SET_CURRENT_POSITION';
 export const SET_TOTAL_LENGTH = 'SET_TOTAL_LENGTH';
+export const USER_CHANGED = 'USER_CHANGED';
+export const ADMIN = 'ADMIN';

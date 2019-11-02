@@ -1,6 +1,6 @@
 import {
-  CHANGE_TRACK, CHANGE_PLAYLIST, LOGGED, SET_TIME, SET_TOTAL_LENGTH,
-  SET_DURATION, PAUSED, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION,
+  CHANGE_TRACK, CHANGE_PLAYLIST, LOGGED, SET_TIME, SET_TOTAL_LENGTH, ADMIN,
+  SET_DURATION, PAUSED, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION, USER_CHANGED,
 } from './types';
 
 export function changeTrack(payload) {
@@ -13,6 +13,14 @@ export function changePlaylist(payload) {
 
 export function logged(payload) {
   return ({ type: LOGGED, payload });
+}
+
+export function userChanged(payload) {
+  return ({ type: USER_CHANGED, payload });
+}
+
+export function admin(payload) {
+  return ({ type: ADMIN, payload });
 }
 
 export function setTime(payload) {

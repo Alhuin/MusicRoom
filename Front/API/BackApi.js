@@ -1,7 +1,6 @@
-import { Alert } from 'react-native';
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.1:3000/api';
+const server = 'http://192.168.1.17:3000/api';
 
 /*
                     Users & Login
@@ -256,26 +255,28 @@ function getPlaylistsFiltered(roomType, userId) {
   });
 }
 
-function getPlaylistById(playlistId) {
-  return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/${playlistId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          reject(new CustomError('PlaylistsById', data.msg, response.status));
-        }
-      })
-      .catch(error => reject(error));
-  });
-}
+// Fonction pas utilisée
+
+// function getPlaylistById(playlistId) {
+//   return new Promise((resolve, reject) => {
+//     fetch(`${server}/playlists/${playlistId}`, {
+//       method: 'GET',
+//       headers: {
+//         Accept: 'application/json, text/plain, */*',
+//         'Content-Type': 'application/json',
+//       },
+//     })
+//       .then(async (response) => {
+//         const data = await response.json();
+//         if (response.status === 200) {
+//           resolve(data);
+//         } else {
+//           reject(new CustomError('PlaylistsById', data.msg, response.status));
+//         }
+//       })
+//       .catch(error => reject(error));
+//   });
+// }
 
 function getMusicsByVote(playlistId, roomType) {
   return new Promise((resolve, reject) => {
@@ -371,7 +372,8 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId) {
+function addPlaylist(name, publicFlag, userId, author, authorName,
+  delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/add`, {
       method: 'POST',
@@ -380,7 +382,17 @@ function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlay
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId,
+        name,
+        publicFlag,
+        userId,
+        author,
+        authorName,
+        delegatedPlayerAdmin,
+        roomType,
+        startDate,
+        endDate,
+        location,
+        privateId,
       }),
     })
       .then(async (response) => {

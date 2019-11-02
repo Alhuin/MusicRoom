@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import Connexion from '../screens/Playlist';
-import * as actions from '../actions';
+import * as actions from '../redux/actions';
 
 const mapDispatchToProps = dispatch => ({
   changeTrack: payload => dispatch(actions.changeTrack(payload)),

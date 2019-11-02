@@ -1,16 +1,14 @@
 import { connect } from 'react-redux';
 import MiniPlayer from '../components/Playlist/MiniPlayer';
-import * as actions from '../actions';
+import * as actions from '../redux/actions';
 
-const mapStateToProps = ({
-  playlistId, totalLength, currentPosition,track, audioElement, isPaused,
-}) => ({
-  totalLength,
-  currentPosition,
-  track,
-  audioElement,
-  playlistId,
-  isPaused,
+const mapStateToProps = state => ({
+  totalLength: state.playerReducer.totalLength,
+  currentPosition: state.playerReducer.currentPosition,
+  track: state.playerReducer.track,
+  audioElement: state.playerReducer.audioElement,
+  playlistId: state.playerReducer.playlistId,
+  isPaused: state.playerReducer.isPaused,
 });
 
 const mapDispatchToProps = dispatch => ({

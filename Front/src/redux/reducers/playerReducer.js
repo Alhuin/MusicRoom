@@ -1,13 +1,11 @@
-import { createStore } from 'redux';
 import {
-  LOGGED, CHANGE_PLAYLIST, CHANGE_TRACK, SET_DURATION, SET_TOTAL_LENGTH,
+  CHANGE_PLAYLIST, CHANGE_TRACK, SET_DURATION, SET_TOTAL_LENGTH,
   PAUSED, SET_TIME, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION,
 } from '../actions/types';
 
 const initialState = {
   track: null,
   playlistId: '',
-  isLoggedIn: false,
   totalLength: 1,
   isPaused: true,
   audioElement: null,
@@ -15,7 +13,7 @@ const initialState = {
   isChanging: false,
 };
 
-const reduxStore = (state = initialState, action) => {
+const playerReducer = (state = initialState, action) => {
   // console.log(action.type, action.payload);
   switch (action.type) {
     case CHANGE_TRACK:
@@ -25,10 +23,6 @@ const reduxStore = (state = initialState, action) => {
     case CHANGE_PLAYLIST:
       return {
         ...state, playlistId: action.payload,
-      };
-    case LOGGED:
-      return {
-        ...state, isLoggedIn: action.payload,
       };
     case PAUSED:
       return {
@@ -63,5 +57,5 @@ const reduxStore = (state = initialState, action) => {
   }
 };
 
-const store = createStore(reduxStore);
-export default store;
+// const store = createStore(playerStore);
+export default playerReducer;

@@ -47,7 +47,7 @@ export default class MiniPlayer extends React.Component {
   render() {
     const {
       handlePress, isAdmin, cover, details, totalLength,
-      onPressPause, onPressPlay, currentPosition, isPaused,
+      onPressPause, onPressPlay, currentPosition, isPaused, paused,
     } = this.props;
 
     return (
