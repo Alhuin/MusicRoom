@@ -49,7 +49,7 @@ const reduxStore = (state = initialState, action) => {
     case SET_TOTAL_LENGTH:
       return {
         ...state, totalLength: action.payload,
-      }
+      };
     case SET_AUDIO_ELEMENT:
       return {
         ...state, audioElement: action.payload,

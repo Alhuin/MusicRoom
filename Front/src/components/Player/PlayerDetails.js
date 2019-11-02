@@ -39,7 +39,8 @@ export default class PlayerDetails extends Component {
 
   onForward() {
     const {
-      playlistId, audioElement, track, changing, setCurrentPosition, setTotalLength, paused, changeTrack,
+      playlistId, audioElement, track, changing, setCurrentPosition,
+      setTotalLength, paused, changeTrack,
     } = this.props;
 
     deleteTrackFromPlaylist(track.id, playlistId)

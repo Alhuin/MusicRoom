@@ -4,11 +4,12 @@ import Modal from 'react-native-modalbox';
 import AudioPlayer from '../../containers/AudioPlayer';
 import PlayerDetails from '../../containers/PlayerDetails';
 import MiniPlayer from '../../containers/MiniPlayer';
+import Controls from "../Player/Controls";
 
 
 export default class AdminPlayer extends Component {
   render() {
-    const { track, playlistId, isLoggedIn } = this.props;
+    const { track, playlistId, isLoggedIn, paused } = this.props;
     console.log(this.props);
 
     let nowPlayingCover = null;
@@ -33,6 +34,12 @@ export default class AdminPlayer extends Component {
           <MiniPlayer
             handlePress={() => this.refs.player.open()}
             isAdmin
+            onPressPlay={() => {
+              paused(false);
+            }}
+            onPressPause={() => {
+              paused(true);
+            }}
             cover={nowPlayingCover}
             details={nowPlayingDetails}
           />
