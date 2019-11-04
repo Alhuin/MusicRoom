@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PlayerDetails from '../components/Player/PlayerDetails';
+import PlayerDetails from '../components/AdminPlayer/PlayerDetails';
 // import {getMyVotesInPlaylist} from "../../API/BackApi";
 
 export default class AdminPlayer extends Component {

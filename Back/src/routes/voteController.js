@@ -1,7 +1,5 @@
 import voteService from '../services/voteService';
 import utils from '../utils';
-import musicService from "../services/musicService";
-import playlistService from "../services/playlistService";
 
 function getVotes(req, res) {
   voteService.getVotes()

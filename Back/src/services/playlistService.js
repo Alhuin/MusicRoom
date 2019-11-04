@@ -74,11 +74,11 @@ function getPlaylistsFiltered(roomType, userId) {
     PlaylistModel.find({ roomType }, (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
-      } else if (!playlists) {
+      } else if (!playlists[0]) {
         reject(new CustomError('PlaylistFiltered', 'No available playlist in database', 400));
       } else {
         for (let i = 0; i < playlists.length; i += 1) {
-          if (!playlists.publicFlag) {
+          if (!playlists[i].publicFlag) {
             let flag = false;
             for (let j = 0; j < playlists[i].users.length; j += 1) {
               if (String(playlists[i].users[j]._id) === userId) {
@@ -91,9 +91,10 @@ function getPlaylistsFiltered(roomType, userId) {
             }
           }
         }
-        if (!playlists) {
+        if (!playlists[0]) {
           reject(new CustomError('PlaylistFiltered', 'No available playlist in database', 400));
         } else {
+          console.log(playlists);
           resolve({
             status: 200,
             data: playlists,
@@ -104,7 +105,8 @@ function getPlaylistsFiltered(roomType, userId) {
   });
 }
 
-function addPlaylist(name, publicFlag, userId, author, authorName, delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId) {
+function addPlaylist(name, publicFlag, userId, author, authorName,
+  delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId) {
   return new Promise((resolve, reject) => {
     const playlist = new models.Playlist({
       name,
@@ -165,7 +167,7 @@ function isAdmin(userId, playlistId) {
       } else if (!playlist) {
         reject(new CustomError('IsAdmin', 'No playlist with this id in database', 400));
       } else {
-        for (let i = 0; i < playlist.admins.length; i++) {
+        for (let i = 0; i < playlist.admins.length; i += 1) {
           if (String(playlist.admins[i]._id) === userId) {
             resolve({
               status: 200,
@@ -262,23 +264,22 @@ function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
         reject(new CustomError('AdminInPlaylistDowngrade', 'No playlist with this id in database', 400));
-      } else {
-        // que renvoyer si le requester n'est pas admin ? Une 200 et false ? Rejection ?
-        if (utils.isAdminInPlaylist(playlist, requesterId) && utils.isAdminInPlaylist(playlist, userId)) {
-          for (let i = 0; i < playlist.admins.length; i++) {
-            if (String(playlist.admins[i]._id) === String(userId) && String(playlist.admins[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
-              playlist.admins.splice(i, 1);
-              playlist.save((saveError, savedPlaylist) => {
-                if (saveError) {
-                  reject(new CustomError('MongoError', saveError.message, 500));
-                } else {
-                  resolve({
-                    status: 200,
-                    data: true,
-                  });
-                }
-              });
-            }
+      } else if (utils.isAdminInPlaylist(playlist, requesterId)
+          && utils.isAdminInPlaylist(playlist, userId)) {
+        for (let i = 0; i < playlist.admins.length; i += 1) {
+          if (String(playlist.admins[i]._id) === String(userId)
+            && String(playlist.admins[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
+            playlist.admins.splice(i, 1);
+            playlist.save((saveError) => {
+              if (saveError) {
+                reject(new CustomError('MongoError', saveError.message, 500));
+              } else {
+                resolve({
+                  status: 200,
+                  data: true,
+                });
+              }
+            });
           }
         }
       }
@@ -293,28 +294,26 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
         reject(new CustomError('UserInPlaylistUpgrade', 'No playlist with this id in database', 400));
-      } else {
-        // que renvoyer si le requester n'est pas admin ? Une 200 et false ? Rejection ?
-        if (utils.isAdminInPlaylist(playlist, requesterId)) {
-          if (!utils.isAdminInPlaylist(playlist, userId)) {
-            for (let i = 0; i < playlist.users.length; i++) {
-              if (String(playlist.users[i]._id) === String(userId) && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
-                playlist.admins.push(userId);
-                playlist.save((saveError, savedPlaylist) => {
-                  if (saveError) {
-                    reject(new CustomError('MongodError', saveError.message, 500));
-                  } else {
-                    resolve({
-                      status: 200,
-                      data: true,
-                    });
-                  }
-                });
-              }
+      } else if (utils.isAdminInPlaylist(playlist, requesterId)) {
+        if (!utils.isAdminInPlaylist(playlist, userId)) {
+          for (let i = 0; i < playlist.users.length; i += 1) {
+            if (String(playlist.users[i]._id) === String(userId)
+              && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
+              playlist.admins.push(userId);
+              playlist.save((saveError) => {
+                if (saveError) {
+                  reject(new CustomError('MongodError', saveError.message, 500));
+                } else {
+                  resolve({
+                    status: 200,
+                    data: true,
+                  });
+                }
+              });
             }
-          } else {
-            reject(new CustomError('UserInPlaylistUpgrade', 'Already admin', 401));
           }
+        } else {
+          reject(new CustomError('UserInPlaylistUpgrade', 'Already admin', 401));
         }
       }
     });
@@ -328,33 +327,32 @@ function deleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
         reject(new CustomError('deleteUserInPlaylist', 'No playlist with this id in database', 400));
-      } else {
-        if ((String(requesterId) === String(userId)) || utils.isAdminInPlaylist(playlist, requesterId)) {
-          for (let i = 0; i < playlist.users.length; i++) {
-            if (String(playlist.users[i]._id) === String(userId)
-              && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
-              playlist.users.splice(i, 1);
-              if (utils.isAdminInPlaylist(playlist, userId) /* isUserAdmin */) {
-                for (let j = 0; j < playlist.admins.length; j++) {
-                  if (String(playlist.admins[j]._id) === String(userId)
-                    && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
-                    playlist.admins.splice(j, 1);
-                    break;
-                  }
+      } else if ((String(requesterId) === String(userId))
+        || utils.isAdminInPlaylist(playlist, requesterId)) {
+        for (let i = 0; i < playlist.users.length; i += 1) {
+          if (String(playlist.users[i]._id) === String(userId)
+            && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
+            playlist.users.splice(i, 1);
+            if (utils.isAdminInPlaylist(playlist, userId) /* isUserAdmin */) {
+              for (let j = 0; j < playlist.admins.length; j += 1) {
+                if (String(playlist.admins[j]._id) === String(userId)
+                  && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
+                  playlist.admins.splice(j, 1);
+                  break;
                 }
               }
-              playlist.save((saveError, savedPlaylist) => {
-                if (saveError) {
-                  reject(new CustomError('MongoError', saveError.message, 500));
-                } else {
-                  resolve({
-                    status: 200,
-                    data: savedPlaylist,
-                  });
-                }
-              });
-              break;
             }
+            playlist.save((saveError, savedPlaylist) => {
+              if (saveError) {
+                reject(new CustomError('MongoError', saveError.message, 500));
+              } else {
+                resolve({
+                  status: 200,
+                  data: savedPlaylist,
+                });
+              }
+            });
+            break;
           }
         }
       }
@@ -369,36 +367,34 @@ function banUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
         reject(new CustomError('banUserInPlaylist', 'No playlist with this id in database', 400));
-      } else {
-        if (utils.isAdminInPlaylist(playlist, requesterId)) {
-          for (let i = 0; i < playlist.users.length; i++) {
-            if (String(playlist.users[i]._id) === String(userId)
-              && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
-              playlist.users.splice(i, 1);
-              if (utils.isAdminInPlaylist(playlist, userId) /* isUserAdmin */) {
-                for (let j = 0; j < playlist.admins.length; j++) {
-                  if (String(playlist.admins[j]._id) === String(userId)
-                    && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
-                    playlist.admins.splice(j, 1);
-                    break;
-                  }
+      } else if (utils.isAdminInPlaylist(playlist, requesterId)) {
+        for (let i = 0; i < playlist.users.length; i += 1) {
+          if (String(playlist.users[i]._id) === String(userId)
+            && String(playlist.users[i]._id) !== String(playlist.delegatedPlayerAdmin)) {
+            playlist.users.splice(i, 1);
+            if (utils.isAdminInPlaylist(playlist, userId) /* isUserAdmin */) {
+              for (let j = 0; j < playlist.admins.length; j += 1) {
+                if (String(playlist.admins[j]._id) === String(userId)
+                  && String(playlist.admins[j]._id) !== String(playlist.delegatedPlayerAdmin)) {
+                  playlist.admins.splice(j, 1);
+                  break;
                 }
               }
-              if (!utils.isInBans(playlist, userId)) {
-                playlist.bans.push(userId);
-              }
-              playlist.save((saveError, savedPlaylist) => {
-                if (saveError) {
-                  reject(new CustomError('MongoError', saveError.message, 500));
-                } else {
-                  resolve({
-                    status: 200,
-                    data: savedPlaylist,
-                  });
-                }
-              });
-              break;
             }
+            if (!utils.isInBans(playlist, userId)) {
+              playlist.bans.push(userId);
+            }
+            playlist.save((saveError, savedPlaylist) => {
+              if (saveError) {
+                reject(new CustomError('MongoError', saveError.message, 500));
+              } else {
+                resolve({
+                  status: 200,
+                  data: savedPlaylist,
+                });
+              }
+            });
+            break;
           }
         }
       }
@@ -414,7 +410,7 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
       } else if (!playlist) {
         reject(new CustomError('addUserToPlaylistAndUnbanned', 'No playlist with this id in database', 400));
       } else {
-        for (let i = 0; i < playlist.bans.length; i++) {
+        for (let i = 0; i < playlist.bans.length; i += 1) {
           if (String(playlist.bans[i]) === String(userId)) {
             playlist.bans.splice(i, 1);
             break;
@@ -531,8 +527,9 @@ function setPublicityOfPlaylist(playlistId, value) {
       } else if (!playlist) {
         reject(new CustomError('setPublicityOfPlaylist', 'No playlist with this id found in database', 404));
       } else {
-        playlist.publicFlag = value;
-        playlist.save((saveError, savedPlaylist) => {
+        const newPlaylist = playlist;
+        newPlaylist.publicFlag = value;
+        newPlaylist.save((saveError, savedPlaylist) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
           } else {
@@ -557,7 +554,7 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
       } else {
         let isRequesterAdmin = false;
         if (String(requesterId) !== String(userId)) {
-          for (let j = 0; j < playlist.admins.length; j++) {
+          for (let j = 0; j < playlist.admins.length; j += 1) {
             if (String(playlist.admins[j]._id) === String(requesterId)) {
               isRequesterAdmin = true;
             }
@@ -566,13 +563,14 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
           isRequesterAdmin = true;
         }
         if (isRequesterAdmin) {
-          for (let i = 0; i < playlist.admins.length; i++) {
+          const newPlaylist = playlist;
+          for (let i = 0; i < playlist.admins.length; i += 1) {
             if (String(playlist.admins[i]._id) === String(userId)) {
-              playlist.delegatedPlayerAdmin = userId;
+              newPlaylist.delegatedPlayerAdmin = userId;
               break;
             }
           }
-          playlist.save((saveError, savedPlaylist) => {
+          newPlaylist.save((saveError, savedPlaylist) => {
             if (saveError) {
               reject(new CustomError('MongoError', saveError.message, 500));
             } else {
@@ -622,10 +620,10 @@ function moveTrackOrder(playlistId, musicId, newIndex) {
       } else if (playlist.musics.length <= newIndex) {
         reject(new CustomError('moveTrackOrder', 'Error on newIndex parameter', 400));
       } else {
-        for (let i = 0; i < playlist.musics.length; i++) {
+        for (let i = 0; i < playlist.musics.length; i += 1) {
           if (String(playlist.musics[i]._id) === String(musicId)) {
             playlist.musics.splice(i, 1);
-            i--;
+            i -= 1;
           }
         }
         playlist.musics.splice(newIndex, 0, musicId);
@@ -686,8 +684,9 @@ function setTags(playlistId, tags) {
       } else if (!playlist) {
         reject(new CustomError('SetTags', 'No playlist with this id found in database', 404));
       } else {
-        playlist.tags = tags;
-        playlist.save((saveError, savedPlaylist) => {
+        const newPlaylist = playlist;
+        newPlaylist.tags = tags;
+        newPlaylist.save((saveError, savedPlaylist) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
           } else {
@@ -709,25 +708,24 @@ function setStartDate(playlistId, newDate) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
         reject(new CustomError('setStartDate', 'No playlist with this id found in database', 404));
+      } else if (newDate < playlist.endDate) {
+        const newPlaylist = playlist;
+        newPlaylist.startDate = newDate;
+        newPlaylist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
       } else {
-        if (newDate < playlist.endDate) {
-          playlist.startDate = newDate;
-          playlist.save((saveError, savedPlaylist) => {
-            if (saveError) {
-              reject(new CustomError('MongoError', error.message, 500));
-            } else {
-              resolve({
-                status: 200,
-                data: savedPlaylist,
-              });
-            }
-          });
-        } else {
-          resolve({
-            status: 200,
-            data: playlist,
-          });
-        }
+        resolve({
+          status: 200,
+          data: playlist,
+        });
       }
     });
   });
@@ -740,25 +738,24 @@ function setEndDate(playlistId, newDate) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
         reject(new CustomError('setEndDate', 'No playlist with this id found in database', 404));
+      } else if (newDate > playlist.startDate) {
+        const newPlaylist = playlist;
+        newPlaylist.endDate = newDate;
+        newPlaylist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
       } else {
-        if (newDate > playlist.startDate) {
-          playlist.endDate = newDate;
-          playlist.save((saveError, savedPlaylist) => {
-            if (saveError) {
-              reject(new CustomError('MongoError', error.message, 500));
-            } else {
-              resolve({
-                status: 200,
-                data: savedPlaylist,
-              });
-            }
-          });
-        } else {
-          resolve({
-            status: 200,
-            data: playlist,
-          });
-        }
+        resolve({
+          status: 200,
+          data: playlist,
+        });
       }
     });
   });

@@ -15,24 +15,21 @@ import {
   View,
 } from 'react-native';
 import { Icon } from 'native-base';
-import { onSignOut } from '../services/auth';
-import Connexion from '../containers/Connexion';
-import Home from '../screens/Home';
+import Connexion from '../screens/Connexion';
+import Home from '../containers/Home';
 import SendTokens from '../screens/SendTokens';
 import UpdatePass from '../screens/UpdatePass';
-import Inscription from '../screens/Inscription';
+import Inscription from '../containers/Inscription';
 import UserSettings from '../screens/UserSettings';
-import AppSettings from '../screens/AppSettings';
-import PlaylistSettings from '../screens/PlaylistSettings';
-import Loading from '../screens/Loading';
+import AppSettings from '../containers/AppSettings';
+import PlaylistSettings from '../containers/PlaylistSettings';
+import Loading from '../containers/Loading';
 import SearchTrack from '../components/SearchTrack/SearchTrack';
 import Playlist from '../containers/Playlist';
-import Radios from '../screens/Radios';
-import Partys from '../screens/Partys';
-import AdminPlayer from '../screens/Player';
-import TextScroller from '../components/Playlist/TextScroller';
+import Radios from '../containers/Radios';
+import Partys from '../containers/Partys';
 
-const createBurgerMenu = (navigation) => Platform.select({
+const createBurgerMenu = navigation => Platform.select({
   ios: null,
   android: (
     <Icon
@@ -146,7 +143,6 @@ const PartysNavigator = createStackNavigator({
       header: null,
     },
   },
-  Player: AdminPlayer,
 });
 
 const RadiosNavigator = createStackNavigator({
@@ -176,7 +172,6 @@ const RadiosNavigator = createStackNavigator({
       header: null,
     },
   },
-  Player: AdminPlayer,
 });
 
 const MainNavigator = Platform.select({
@@ -192,13 +187,12 @@ const MainNavigator = Platform.select({
       screen: HomeNavigator,
       path: 'main',
     },
-    TextScroller,
     Settings: AppSettings,
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
   },
   {
-    contentComponent: (props) => (
+    contentComponent: props => (
       <View style={{ flex: 1 }}>
         <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItems {...props} />
@@ -206,7 +200,7 @@ const MainNavigator = Platform.select({
             title="Logout"
             onPress={() => {
               const { navigation } = props;
-              onSignOut();
+              // onSignOut();
               navigation.navigate('auth');
             }}
           />

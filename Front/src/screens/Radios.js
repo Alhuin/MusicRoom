@@ -16,7 +16,8 @@ class Radios extends React.Component {
   }
 
   componentDidMount(): void {
-    getPlaylistsFiltered('radio', global.user._id)
+    const { loggedUser } = this.props;
+    getPlaylistsFiltered('radio', loggedUser._id)
       .then((playlists) => {
         this.setState({ playlists });
       })
@@ -33,7 +34,8 @@ class Radios extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
-    getPlaylistsFiltered('radio', global.user._id)
+    const { loggedUser } = this.props;
+    getPlaylistsFiltered('radio', loggedUser._id)
       .then((playlists) => {
         this.setState({ playlists });
         resolve();
@@ -56,13 +58,13 @@ class Radios extends React.Component {
       modalVisible,
       refreshing,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, loggedUser } = this.props;
     return (
       <View style={{ height: '100%' }}>
         <Components.AddPlaylistModal
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
-          userId={global.user._id}
+          userId={loggedUser._id}
           roomType="radio"
           updatePlaylist={this.updatePlaylist}
         />
@@ -73,7 +75,7 @@ class Radios extends React.Component {
             refreshing={refreshing}
             onRefresh={this._onRefresh}
             roomType="radio"
-            userId={global.user._id}
+            userId={loggedUser._id}
           />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />

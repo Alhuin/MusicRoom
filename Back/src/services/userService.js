@@ -64,7 +64,7 @@ function deleteUserById(userId) {
 
 function addUser(login, password, name, familyName, email) {
   return new Promise(async (resolve, reject) => {
-    const salt = await bcrypt.genSaltSync(10);
+    const salt = await bcrypt.genSaltSync(10); // checker la doc si besoin de les laisser en async
     const hash = await bcrypt.hashSync(password, salt);
     const user = new UserModel({
       login,

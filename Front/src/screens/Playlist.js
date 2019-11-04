@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Image,
+  StyleSheet, View, Text, TouchableOpacity,
 } from 'react-native';
-import Modal from 'react-native-modalbox';
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
 } from '../../API/BackApi';
-import PlayerDetails from '../components/Player/PlayerDetails';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -104,9 +102,9 @@ class Playlist extends React.Component {
   });
 
   updateMyVotes = () => new Promise((resolve, reject) => {
-    const { navigation } = this.props;
+    const { navigation, loggedUser } = this.props;
     const playlistId = navigation.getParam('playlistId');
-    const userId = global.user._id;
+    const userId = loggedUser._id;
     getMyVotesInPlaylist(userId, playlistId)
       .then((votes) => {
         this.setState({ myVotes: votes });
@@ -119,8 +117,8 @@ class Playlist extends React.Component {
   });
 
   _isAdmin = () => {
-    const { navigation } = this.props;
-    const userId = global.user._id;
+    const { navigation, loggedUser } = this.props;
+    const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');
     isAdmin(userId, playlistId)
       .then((response) => {
@@ -151,15 +149,17 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes, track,
+      tracks, playing, refreshing, modalVisible, admin, myVotes,
     } = this.state;
-    const { navigation, changeTrack, changePlaylist } = this.props;
+    const {
+      navigation, changeTrack, changePlaylist, loggedUser,
+    } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
     const name = navigation.getParam('name');
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
-    const userId = global.user._id;
+    const userId = loggedUser._id;
     // const nowPlaying = this._getNowPlaying();
 
     /*
@@ -184,10 +184,6 @@ class Playlist extends React.Component {
             .then((nextTrack) => {
               changePlaylist(playlistId);
               changeTrack(nextTrack);
-              // this.setState({ track: nextTrack });
-              // if (nextTrack !== null) {
-              //   navigation.navigate('Player', { playlistId, track: nextTrack, onGoBack: this.onGoBack });
-              // }
             })
             .catch(error => console.log(error));
         }}

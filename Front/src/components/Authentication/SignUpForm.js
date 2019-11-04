@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Button, Keyboard, View, StyleSheet, TextInput,
+  Button, Keyboard, View, StyleSheet, TextInput, Alert,
 } from 'react-native';
 
 import { addUser } from '../../../API/BackApi';
@@ -46,10 +46,10 @@ export default class CustomForm extends React.Component {
     } = this.state;
     if (!(name.length && familyName.length && email.length && confirmPassword.length
       && userName.length && password.length)) {
-      alert('error: empty field.');
+      Alert.alert('error: empty field.');
       console.log('error, empty field');
     } else if (password !== confirmPassword) {
-      alert('error: passwords don\'t match');
+      Alert.alert('error: passwords don\'t match');
       console.log('error, passwords don\'t match');
     } else {
       addUser(userName, password, name, familyName, email);// .then.catch?

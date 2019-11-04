@@ -108,7 +108,6 @@ function voteMusic(userId, musicId, playlistId, value) {
                 }
               });
             } else {
-              // si votes = 1 et que je upvote -> votes = 2. Je downvote (cas présent) -> votes = 0.    0w0'
               const updatedMusic = music[0];
               updatedMusic.votes += value * 2; // explain pourquoi x2 ?
               updatedMusic.save((saveError, savedMusic) => {

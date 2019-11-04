@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  TouchableOpacity, Image, View, Text, StyleSheet, Button,
+  TouchableOpacity, Image, View, Text, StyleSheet, Alert,
 } from 'react-native';
 import { addMusicToPlaylist } from '../../../API/BackApi';
 
 class TrackInSearch extends React.Component {
-
   addMusic = () => {
     const {
       track, playlistId, updateTracks, userId, setModalVisible, displayLoader,
@@ -21,7 +20,7 @@ class TrackInSearch extends React.Component {
       })
       .catch((error) => {
         console.error(error);
-        alert('An error occured, please try again later.');
+        Alert.alert('An error occured, please try again later.');
       });
   };
 
@@ -42,7 +41,7 @@ class TrackInSearch extends React.Component {
           >
             <Image
               style={styles.image}
-              source={{uri: track.album.cover}}
+              source={{ uri: track.album.cover }}
             />
             <Image
               source={require('../../assets/images/play.png')}

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, TextInput, Button, Keyboard,
+  StyleSheet, View, TextInput, Button, Keyboard, Alert,
 } from 'react-native';
 import { sendPasswordToken } from '../../../API/BackApi';
 
@@ -19,7 +19,7 @@ export default class SendToken extends React.Component {
       const { loginOrEmail } = this.state;
 
       if (!loginOrEmail.length) {
-        alert('Please enter your email or login');
+        Alert.alert('Please enter your email or login');
       } else {
         sendPasswordToken(loginOrEmail);
       }

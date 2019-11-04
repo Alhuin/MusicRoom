@@ -16,7 +16,7 @@ const AlbumArt = ({
     <TouchableOpacity onPress={onPress}>
       <Image
         style={styles.image}
-        source={{uri: url}}
+        source={{ uri: url }}
       />
     </TouchableOpacity>
   </View>
@@ -24,7 +24,7 @@ const AlbumArt = ({
 
 export default AlbumArt;
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const imageSize = width - 48;
 
 const styles = StyleSheet.create({
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
     width: imageSize,
     height: imageSize,
   },
-})
+});

@@ -2,13 +2,15 @@ import React from 'react';
 import {
   StyleSheet, KeyboardAvoidingView, Platform, View, ScrollView,
 } from 'react-native';
-import Components from '../components';
+import Logo from '../components/Authentication/Logo';
+import SocialLogin from '../components/Authentication/SocialLogin';
+import LoginContext from '../components/Authentication/LoginContext';
+import SignInForm from '../containers/SignInForm';
 
 class Connexion extends React.Component {
   render() {
     const { navigation } = this.props;
     const type = 'Sign In';
-    const { logged } = this.props;
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -22,10 +24,10 @@ class Connexion extends React.Component {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
-            <Components.Logo />
-            <Components.SignInForm navigation={navigation} logged={logged} />
-            <Components.SocialLogin type={type} />
-            <Components.LoginContext
+            <Logo />
+            <SignInForm navigation={navigation} />
+            <SocialLogin type={type} />
+            <LoginContext
               type={type}
               navigation={navigation}
               style={styles.loginContext}

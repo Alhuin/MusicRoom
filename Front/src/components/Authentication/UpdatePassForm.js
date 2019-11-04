@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, TextInput, Button, Keyboard,
+  StyleSheet, View, TextInput, Button, Keyboard, Alert,
 } from 'react-native';
 import NavigationUtils from '../../navigation/NavigationUtils';
 import { updatePassword } from '../../../API/BackApi';
@@ -23,11 +23,11 @@ export default class UpdatePassForm extends React.Component {
     const { newPass, newPassConfirm } = this.state;
     const { userId } = this.props;
     if (!(newPass.length && newPassConfirm.length)) {
-      alert('error: Empty input');
+      Alert.alert('error: Empty input');
     } else if (newPass !== newPassConfirm) {
-      alert('error: Passwords don\'t match');
+      Alert.alert('error: Passwords don\'t match');
     } else if (userId === undefined) {
-      alert('Could not update your password, please ask for a new link.');
+      Alert.alert('Could not update your password, please ask for a new link.');
     } else {
       updatePassword(userId, newPass)
         .then(() => NavigationUtils.resetStack(this, 'Connexion', { toast: 'Password Updated' }))

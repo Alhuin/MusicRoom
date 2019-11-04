@@ -7,7 +7,6 @@ import TrackInSearch from './TrackInSearch';
 import Player from '../../services/Player';
 
 class TrackListInSearch extends React.Component {
-
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {

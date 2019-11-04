@@ -6,7 +6,6 @@ import TrackInPlaylist from './TrackInPlaylist';
 import Player from '../../services/Player';
 
 class TrackListInPlaylist extends React.Component {
-
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
@@ -46,9 +45,11 @@ class TrackListInPlaylist extends React.Component {
         <DraggableFlatList
           data={tracks}
           keyExtractor={item => String(item._id)}
-          renderItem={({ item, index, move, moveEnd, isActive }) => {
+          renderItem={({
+            item, index, move, moveEnd, isActive, // Index necessaire ?
+          }) => {
             let myVoteValue = 0;
-            for (let i = 0; i < myVotes.length; i++) {
+            for (let i = 0; i < myVotes.length; i += 1) {
               if (String(myVotes[i].music) === String(item._id)) {
                 myVoteValue = myVotes[i].value;
               }
@@ -94,7 +95,7 @@ class TrackListInPlaylist extends React.Component {
           keyExtractor={item => item._id.toString()}
           renderItem={({ item }) => {
             let myVoteValue = 0;
-            for (let i = 0; i < myVotes.length; i++) {
+            for (let i = 0; i < myVotes.length; i += 1) {
               if (String(myVotes[i].music) === String(item._id)) {
                 myVoteValue = myVotes[i].value;
               }

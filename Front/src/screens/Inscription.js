@@ -4,10 +4,12 @@ import {
 } from 'react-native';
 import Components from '../components';
 
-class Connexion extends React.Component {
+class Inscription extends React.Component {
   render() {
-    const { navigation } = this.props;
     const type = 'Sign Up';
+    const { navigation, userChanged, admin } = this.props;
+    userChanged(null);
+    admin(false);
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -55,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Connexion;
+export default Inscription;

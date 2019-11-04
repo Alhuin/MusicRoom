@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert, CheckBox,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -119,15 +119,15 @@ class PlaylistSettings extends React.Component {
   };
 
   leavingPlaylist = () => {
-    const { navigation } = this.props;
+    const { navigation, loggedUser } = this.props;
     const { delegatedPlayerAdmin } = this.state;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     // const authorId = navigation.getParam('authorId');
     const roomType = navigation.getParam('roomType');
 
-    if (String(delegatedPlayerAdmin) !== String(global.user._id)) {
-      deleteUserInPlaylist(playlistId, global.user._id, isAdmin, global.user._id)
+    if (String(delegatedPlayerAdmin) !== String(loggedUser._id)) {
+      deleteUserInPlaylist(playlistId, loggedUser._id, isAdmin, loggedUser._id)
         .then(() => {
           if (roomType === 'party') {
             NavigationUtils.resetStack(this, 'PartysList', null);
@@ -139,7 +139,7 @@ class PlaylistSettings extends React.Component {
           console.error(error);
         });
     } else {
-      alert('Impossible de quitter la playlist tant que vous êtes Délégué au contrôle du PlayerDetails.');
+      Alert.alert('Impossible de quitter la playlist tant que vous êtes Délégué au contrôle du PlayerDetails.');
       // navigation.goBack();
     }
   };
@@ -170,7 +170,10 @@ class PlaylistSettings extends React.Component {
     if (roomType === 'party') {
       getPlaylistDates(playlistId)
         .then((dates) => {
-          this.setState({ startDate: new Date(Date.parse(dates[0])), endDate: new Date(Date.parse(dates[1])) });
+          this.setState({
+            startDate: new Date(Date.parse(dates[0])),
+            endDate: new Date(Date.parse(dates[1])),
+          });
         })
         .catch((error) => {
           console.error(error);
@@ -193,11 +196,11 @@ class PlaylistSettings extends React.Component {
       getAdminsByPlaylistId(playlistId)
         .then((response) => {
           if (users) {
-            for (let i = 0; i < users.length; i++) {
-              for (let j = 0; j < response.length; j++) {
+            for (let i = 0; i < users.length; i += 1) {
+              for (let j = 0; j < response.length; j += 1) {
                 if (String(users[i]._id) === String(response[j]._id)) {
                   users.splice(i, 1);
-                  i--;
+                  i -= 1;
                   break;
                 }
               }
@@ -223,11 +226,11 @@ class PlaylistSettings extends React.Component {
       getUsersByPlaylistId(playlistId)
         .then((response) => {
           if (admins) {
-            for (let i = 0; i < admins.length; i++) {
-              for (let j = 0; j < response.length; j++) {
+            for (let i = 0; i < admins.length; i += 1) {
+              for (let j = 0; j < response.length; j += 1) {
                 if (String(admins[i]._id) === String(response[j]._id)) {
                   response.splice(j, 1);
-                  j--;
+                  j -= 1;
                 }
               }
             }
@@ -267,15 +270,18 @@ class PlaylistSettings extends React.Component {
   };
 
   toggleExpanded = () => {
-    this.setState({ collapsed: !this.state.collapsed });
+    const { collapsed } = this.state;
+    this.setState({ collapsed: !collapsed });
   };
 
   toggleExpandedSpec = () => {
-    this.setState({ collapsedSpec: !this.state.collapsedSpec });
+    const { collapsedSpec } = this.state;
+    this.setState({ collapsedSpec: !collapsedSpec });
   };
 
   toggleExpandedTags = () => {
-    this.setState({ collapsedTags: !this.state.collapsedTags });
+    const { collapsedTags } = this.state;
+    this.setState({ collapsedTags: !collapsedTags });
   };
 
   setDatePickerModalVisible = (dateType) => {
@@ -295,7 +301,7 @@ class PlaylistSettings extends React.Component {
     if (dateType === 'start') {
       if (changedDate < endDate) {
         setStartDate(playlistId, changedDate)
-          .then((response) => {
+          .then(() => {
             this.setState({ startDate: changedDate });
           })
           .catch((error) => {
@@ -307,7 +313,7 @@ class PlaylistSettings extends React.Component {
     } else if (dateType === 'end') {
       if (changedDate > startDate) {
         setEndDate(playlistId, changedDate)
-          .then((response) => {
+          .then(() => {
             this.setState({ endDate: changedDate });
           })
           .catch((error) => {
@@ -346,7 +352,7 @@ class PlaylistSettings extends React.Component {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, startDate, endDate, datePickerModalVisible, tags,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, loggedUser } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');
@@ -448,9 +454,11 @@ class PlaylistSettings extends React.Component {
           <Text
             style={styles.subText}
           >
-            Les paramètres sont rafraîchis à chaque modification, et peuvent être modifiés en même temps
+            Les paramètres sont rafraîchis à chaque modification,
             {' '}
-            par d'autres utilisateurs ou administrateurs.
+            et peuvent être modifiés en même temps
+            {' '}
+            par d&apos;autres utilisateurs ou administrateurs.
           </Text>
           <View
             style={[styles.subContainer, { justifyContent: 'space-between' }]}
@@ -586,6 +594,7 @@ class PlaylistSettings extends React.Component {
             Administrateurs
           </Text>
           <AdminListInSettings
+            loggedUser={loggedUser}
             displayLoader={this.displayLoader}
             admins={admins}
             onRefresh={this._onRefresh}
@@ -602,6 +611,7 @@ class PlaylistSettings extends React.Component {
             Utilisateurs
           </Text>
           <UserListInSettings
+            loggedUser={loggedUser}
             displayLoader={this.displayLoader}
             users={users}
             onRefresh={this._onRefresh}
@@ -624,45 +634,47 @@ class PlaylistSettings extends React.Component {
           />
         </View>
       );
+    } else if (roomType === 'party') {
+      notAdminOptions = (
+        <View>
+          <View>
+            <Text>
+              La playlist est
+              {' '}
+              { switchValue ? 'Publique' : 'Privée' }
+            </Text>
+          </View>
+          <View>
+            <Text>
+              Localisation : (?)
+            </Text>
+          </View>
+          <Text>
+            Date de début de l&apos;évènement :
+          </Text>
+          <Text>
+            {String(startDate)}
+          </Text>
+          <Text>
+            Date de fin de l&apos;évènement :
+          </Text>
+          <Text>
+            {String(endDate)}
+          </Text>
+        </View>
+      );
     } else {
-      if (roomType === 'party') {
-        notAdminOptions = (
+      notAdminOptions = (
+        <View>
           <View>
-            <View>
-              <Text>
-                La playlist est {switchValue ? 'Publique' : 'Privée'}
-              </Text>
-            </View>
-            <View>
-              <Text>
-                Localisation : (?)
-              </Text>
-            </View>
             <Text>
-              Date de début de l'évènement :
-            </Text>
-            <Text>
-              {String(startDate)}
-            </Text>
-            <Text>
-              Date de fin de l'évènement :
-            </Text>
-            <Text>
-              {String(endDate)}
+              La playlist est
+              {' '}
+              {switchValue ? 'Publique' : 'Privée'}
             </Text>
           </View>
-        );
-      } else {
-        notAdminOptions = (
-          <View>
-            <View>
-              <Text>
-                La playlist est {switchValue ? 'Publique' : 'Privée'}
-              </Text>
-            </View>
-          </View>
-        );
-      }
+        </View>
+      );
     }
     const rendering = (
       <ScrollView style={styles.container}>
@@ -689,7 +701,9 @@ class PlaylistSettings extends React.Component {
             selectable
             style={styles.subContainerFontStyle}
           >
-            Code privé : {privateId}
+            Code privé :
+            {' '}
+            {privateId}
           </Text>
           <TouchableOpacity
             onPress={() => {

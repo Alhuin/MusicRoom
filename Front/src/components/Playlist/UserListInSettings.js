@@ -1,9 +1,8 @@
 import {
-  FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View,
+  FlatList, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
-import { Loader } from '../Authentication/Loader';
 import { userInPlaylistUpgrade, banUserInPlaylist, deleteUserInPlaylist } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
 
@@ -13,12 +12,11 @@ class UserListInSettings extends React.Component {
       users,
       playlistId,
       onRefresh,
-      loading,
       displayLoader,
-      printLoader,
       isLoading,
       roomType,
       parent,
+      loggedUser,
     } = this.props;
     return (
       <FlatList
@@ -43,8 +41,8 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        userInPlaylistUpgrade(playlistId, userId, global.user._id)
-                          .then((response) => {
+                        userInPlaylistUpgrade(playlistId, userId, loggedUser._id)
+                          .then(() => {
                             onRefresh();
                           })
                           .catch((error) => {
@@ -60,9 +58,9 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        deleteUserInPlaylist(playlistId, userId, false, global.user._id)
-                          .then((response) => {
-                            if (String(item._id) === String(global.user._id)) {
+                        deleteUserInPlaylist(playlistId, userId, false, loggedUser._id)
+                          .then(() => {
+                            if (String(item._id) === String(loggedUser._id)) {
                               if (roomType === 'party') {
                                 NavigationUtils.resetStack(parent, 'PartysList', null);
                               } else if (roomType === 'radio') {
@@ -70,7 +68,8 @@ class UserListInSettings extends React.Component {
                               }
                             } else {
                               onRefresh();
-                            }                          })
+                            }
+                          })
                           .catch((error) => {
                             console.error(error);
                           });
@@ -84,9 +83,9 @@ class UserListInSettings extends React.Component {
                     onPress={() => {
                       if (!isLoading()) {
                         displayLoader();
-                        banUserInPlaylist(playlistId, userId, false, global.user._id)
-                          .then((response) => {
-                            if (String(item._id) === String(global.user._id)) {
+                        banUserInPlaylist(playlistId, userId, false, loggedUser._id)
+                          .then(() => {
+                            if (String(item._id) === String(loggedUser._id)) {
                               if (roomType === 'party') {
                                 NavigationUtils.resetStack(parent, 'PartysList', null);
                               } else if (roomType === 'radio') {
@@ -94,7 +93,8 @@ class UserListInSettings extends React.Component {
                               }
                             } else {
                               onRefresh();
-                            }                          })
+                            }
+                          })
                           .catch((error) => {
                             console.error(error);
                           });

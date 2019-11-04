@@ -1,11 +1,15 @@
 import { connect } from 'react-redux';
 
-import Connexion from '../screens/Playlist';
+import Playlist from '../screens/Playlist';
 import * as actions from '../redux/actions';
+
+const mapStateToProps = state => ({
+  loggedUser: state.authReducer.loggedUser,
+});
 
 const mapDispatchToProps = dispatch => ({
   changeTrack: payload => dispatch(actions.changeTrack(payload)),
   changePlaylist: payload => dispatch(actions.changePlaylist(payload)),
 });
 
-export default connect(null, mapDispatchToProps)(Connexion);
+export default connect(mapStateToProps, mapDispatchToProps)(Playlist);

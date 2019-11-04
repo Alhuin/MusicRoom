@@ -1,7 +1,6 @@
-import { LOGGED, ADMIN, USER_CHANGED } from '../actions/types';
+import { ADMIN, USER_CHANGED } from '../actions/types';
 
 const initialState = {
-  isLoggedIn: false,
   isAdmin: false,
   loggedUser: null,
 };
@@ -9,10 +8,6 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   // console.log(action.type, action.payload);
   switch (action.type) {
-    case LOGGED:
-      return {
-        ...state, isLoggedIn: action.payload,
-      };
     case ADMIN:
       return {
         ...state, isAdmin: action.payload,

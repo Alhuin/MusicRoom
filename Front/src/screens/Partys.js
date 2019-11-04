@@ -16,8 +16,11 @@ class Partys extends React.Component {
   }
 
   componentDidMount(): void {
-    getPlaylistsFiltered('party', global.user._id)
+    const { loggedUser } = this.props;
+    console.log(loggedUser);
+    getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
+        console.log(playlists);
         this.setState({ playlists });
       })
       .catch((error) => {
@@ -33,8 +36,11 @@ class Partys extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
-    getPlaylistsFiltered('party', global.user._id)
+    const { loggedUser } = this.props;
+    console.log(loggedUser);
+    getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
+        console.log(playlists);
         this.setState({ playlists });
         resolve();
       })
@@ -56,13 +62,14 @@ class Partys extends React.Component {
       modalVisible,
       refreshing,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, loggedUser } = this.props;
     return (
       <View style={{ height: '100%' }}>
         <Components.AddPlaylistModal
+          loggedUser={loggedUser}
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
-          userId={global.user._id}
+          userId={loggedUser._id}
           roomType="party"
           updatePlaylist={this.updatePlaylist}
         />

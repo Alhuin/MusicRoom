@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://192.168.1.17:3000/api';
+const server = 'http://10.3.1.3:3000/api';
 
 /*
                     Users & Login
@@ -825,7 +825,7 @@ function getTags(playlistId) {
 
 function formatTags(tags) {
   const newTags = {};
-  for (let i = 0; i < tags.length; i++) {
+  for (let i = 0; i < tags.length; i += 1) {
     newTags[tags[i]] = true;
   }
   return newTags;

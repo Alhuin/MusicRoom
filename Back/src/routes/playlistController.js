@@ -226,7 +226,8 @@ function adminInPlaylistDowngrade(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
     && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
-    playlistService.adminInPlaylistDowngrade(req.body.playlistId, req.body.userId, req.body.requesterId)
+    playlistService.adminInPlaylistDowngrade(req.body.playlistId, req.body.userId,
+      req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)
@@ -247,7 +248,8 @@ function userInPlaylistUpgrade(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
     && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
-    playlistService.userInPlaylistUpgrade(req.body.playlistId, req.body.userId, req.body.requesterId)
+    playlistService.userInPlaylistUpgrade(req.body.playlistId, req.body.userId,
+      req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)
@@ -294,7 +296,8 @@ function deleteUserInPlaylist(req, res) {
     && req.body.userId && utils.isValidId(req.body.userId)
     && req.body.isItAdmin !== undefined
     && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
-    playlistService.deleteUserInPlaylist(req.body.playlistId, req.body.userId, req.body.isItAdmin, req.body.requesterId)
+    playlistService.deleteUserInPlaylist(req.body.playlistId, req.body.userId,
+      req.body.isItAdmin, req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)
@@ -431,7 +434,8 @@ function setDelegatedPlayerAdmin(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
     && req.body.requesterId && utils.isValidId(req.body.requesterId)) {
-    playlistService.setDelegatedPlayerAdmin(req.body.playlistId, req.body.userId, req.body.requesterId)
+    playlistService.setDelegatedPlayerAdmin(req.body.playlistId, req.body.userId,
+      req.body.requesterId)
       .then((response) => {
         res
           .status(response.status)

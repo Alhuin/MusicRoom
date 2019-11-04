@@ -46,7 +46,6 @@ export default class AddPlaylistModal extends React.Component {
     const { datePickerModalVisible } = this.state;
     const visible = !datePickerModalVisible;
     if (dateType !== undefined) {
-      console.log('AH')
       this.setState({ dateType, datePickerModalVisible: visible });
     } else {
       this.setState({ datePickerModalVisible: visible });
@@ -55,7 +54,8 @@ export default class AddPlaylistModal extends React.Component {
 
   toggleSwitch = (value) => {
     // onValueChange of the switch this function will be called
-    // eslint-disable-next-line no-undef
+    // Navigator sort d'ou ?
+    const { type } = this.state;
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const MyLocation = JSON.stringify(position);
@@ -65,7 +65,7 @@ export default class AddPlaylistModal extends React.Component {
       { enableHighAccuracy: false, timeout: 10000 },
     );
     this.setState({ switchValue: value });
-    if (this.state.type === null) {
+    if (type === null) {
       this.setState({ type: 'GeolocOK' });
     } else {
       this.setState({ type: null });
@@ -94,6 +94,7 @@ export default class AddPlaylistModal extends React.Component {
       userId,
       roomType,
       updatePlaylist,
+      loggedUser,
     } = this.props;
     const {
       switchValue, type, startDate, endDate, location, namePlaylist, datePickerModalVisible,
@@ -202,7 +203,8 @@ export default class AddPlaylistModal extends React.Component {
                 // DESDOUS ET DE RECUP SUR LES MODAL LES DATE
 */
                 if (startDate < endDate && namePlaylist) {
-                  addPlaylist(namePlaylist, switchValue, userId, userId, global.user.name, userId, roomType, startDate, endDate, location, this.generatePrivateId())
+                  addPlaylist(namePlaylist, switchValue, userId, userId, loggedUser.name,
+                    userId, roomType, startDate, endDate, location, this.generatePrivateId())
                     .then(() => {
                       setModalVisible();
                       updatePlaylist();

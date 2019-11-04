@@ -5,7 +5,7 @@ import * as actions from '../redux/actions';
 const mapStateToProps = state => ({
   track: state.playerReducer.track,
   playlistId: state.playerReducer.playlistId,
-  isLoggedIn: state.authReducer.isLoggedIn,
+  loggedUser: state.authReducer.loggedUser,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,5 +1,5 @@
 import {
-  FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View,
+  FlatList, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -11,7 +11,6 @@ class BansListInSettings extends React.Component {
       bans,
       onRefresh,
       playlistId,
-      loading,
       displayLoader,
       isLoading,
     } = this.props;
@@ -39,7 +38,7 @@ class BansListInSettings extends React.Component {
                       if (!isLoading()) {
                         displayLoader();
                         addUserToPlaylistAndUnbanned(playlistId, userId)
-                          .then((response) => {
+                          .then(() => {
                             onRefresh();
                           })
                           .catch((error) => {

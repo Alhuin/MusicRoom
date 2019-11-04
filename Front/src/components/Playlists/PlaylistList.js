@@ -20,7 +20,7 @@ class PlaylistList extends React.Component {
         renderItem={
           ({ item }) => {
             let isUserInPlaylist = false;
-            for (let i = 0; i < item.users.length; i++) {
+            for (let i = 0; i < item.users.length; i += 1) {
               if (String(userId) === String(item.users[i])) {
                 isUserInPlaylist = true;
                 break;

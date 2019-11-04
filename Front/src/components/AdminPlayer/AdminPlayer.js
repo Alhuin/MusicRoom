@@ -9,7 +9,7 @@ import MiniPlayer from '../../containers/MiniPlayer';
 export default class AdminPlayer extends Component {
   render() {
     const {
-      track, playlistId, isLoggedIn, paused,
+      track, playlistId, loggedUser, paused,
     } = this.props;
 
     let nowPlayingCover = null;
@@ -29,12 +29,11 @@ export default class AdminPlayer extends Component {
     return (
       <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
         <AudioPlayer />
-        {isLoggedIn && track !== null && playlistId !== ''
+        {loggedUser !== null && track !== null && playlistId !== ''
         && (
           <>
             <MiniPlayer
-              handlePress={() => this.refs.player.open()}
-              isAdmin
+              handlePress={() => this.player.open()}
               onPressPlay={() => {
                 paused(false);
               }}
@@ -46,11 +45,11 @@ export default class AdminPlayer extends Component {
             />
             <Modal
               style={styles.playerModal}
-              ref={"player"}
+              ref={(r) => { this.player = r; }}
               isOpen={false}
               // onOpened={Alert.alert('opened')}
-              // swipeToClose
-              // backButtonClose
+              swipeToClose
+              backButtonClose
               // coverScreen={false}
             >
               <PlayerDetails track={track} playlistId={playlistId} />

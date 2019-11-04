@@ -5,7 +5,7 @@ import {
   View,
   Text, Image,
 } from 'react-native';
-import SeekBar from '../Player/SeekBar';
+import SeekBar from '../AdminPlayer/SeekBar';
 import { deleteTrackFromPlaylist, getNextTrackByVote } from '../../../API/BackApi';
 
 export default class MiniPlayer extends React.Component {
@@ -43,15 +43,16 @@ export default class MiniPlayer extends React.Component {
     paused(false);
   }
 
-
   render() {
     const {
-      handlePress, isAdmin, cover, details, totalLength,
+      handlePress, cover, details, totalLength,
       onPressPause, onPressPlay, currentPosition, isPaused, paused,
     } = this.props;
 
+    this._onSeek = this.seek.bind(this);
+
     return (
-      <TouchableOpacity style={styles.mainContainer} disabled={!isAdmin} onPress={handlePress}>
+      <TouchableOpacity style={styles.mainContainer} onPress={handlePress}>
         <View style={styles.upContainer}>
           <View style={styles.coverContainer}>
             {cover}
@@ -94,7 +95,7 @@ export default class MiniPlayer extends React.Component {
         </View>
         <View style={styles.downContainer}>
           <SeekBar
-            onSeek={this.seek.bind(this)}
+            onSeek={this._onSeek}
             trackLength={totalLength}
             onSlidingStart={() => paused(true)}
             currentPosition={currentPosition}

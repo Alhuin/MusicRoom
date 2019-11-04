@@ -6,12 +6,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon } from 'native-base';
-import { getUserById } from '../../../API/BackApi';
 
 // must create two components PlaylistInParty and PlaylistInRadio or this one need to be modified
 
 export default class PlaylistInPlaylists extends React.Component {
-
   componentDidMount(): void {
   }
 
@@ -30,41 +28,46 @@ export default class PlaylistInPlaylists extends React.Component {
   };
 
   render() {
-    const { name, roomType, authorName, users } = this.props;
+    const {
+      name, roomType, authorName, users,
+    } = this.props;
 
     if (roomType === 'radio') {
       return (
-          <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
-            <Text>{ name }</Text>
-            <View style={styles.Author}>
-              <Text>
-                Author : { authorName }
-              </Text>
-              <Icon name="people" />
-              <Text>
-                { users.length }
-              </Text>
-            </View>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
+          <Text>{ name }</Text>
+          <View style={styles.Author}>
+            <Text>
+              Author :
+              {' '}
+              { authorName }
+            </Text>
+            <Icon name="people" />
+            <Text>
+              { users.length }
+            </Text>
+          </View>
+        </TouchableOpacity>
       );
-    } else if (roomType === 'party') {
+    } if (roomType === 'party') {
       return (
-          <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
-            <Text>{ name }</Text>
-            <View style={styles.Author}>
-              <Text>
-                Author : { authorName }
-              </Text>
-              <Icon name="people" />
-              <Text>
-                { users.length }
-              </Text>
-            </View>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
+          <Text>{ name }</Text>
+          <View style={styles.Author}>
+            <Text>
+              Author :
+              {' '}
+              { authorName }
+            </Text>
+            <Icon name="people" />
+            <Text>
+              { users.length }
+            </Text>
+          </View>
+        </TouchableOpacity>
       );
-    } else {
-      return (null);
     }
+    return (null);
   }
 }
 

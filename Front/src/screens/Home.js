@@ -28,12 +28,13 @@ class Home extends React.Component {
 
   render() {
     const { modalVisible } = this.state;
+    const { loggedUser } = this.props;
     return (
       <View style={styles.container}>
         <Components.JoinPrivateRoom
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
-          userId={global.user._id}
+          userId={loggedUser._id}
         />
         <TouchableOpacity onPress={this._onPressParty} style={styles.cartes}>
           <View style={styles.place}>
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     color: 'white',
     width: '100%',
     flexDirection: 'column',
-    //flexWrap: 'wrap',
+    // flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'center',
     flex: 1,

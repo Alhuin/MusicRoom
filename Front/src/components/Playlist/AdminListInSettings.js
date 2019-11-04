@@ -4,16 +4,17 @@ import {
 import { Icon } from 'native-base';
 import React from 'react';
 import {
-  adminInPlaylistDowngrade, banUserInPlaylist, deleteUserInPlaylist, setDelegatedPlayerAdmin
+  adminInPlaylistDowngrade, banUserInPlaylist, deleteUserInPlaylist, setDelegatedPlayerAdmin,
 } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
 
 
 class AdminListInSettings extends React.Component {
   _pressSetDelegatedPlayerAdmin = (userId, playlistId, onRefresh, isLoading, displayLoader) => {
+    const { loggedUser } = this.props;
     if (!isLoading()) {
       displayLoader();
-      setDelegatedPlayerAdmin(playlistId, userId, global.user._id)
+      setDelegatedPlayerAdmin(playlistId, userId, loggedUser._id)
         .then(() => {
           onRefresh();
         })
@@ -23,12 +24,14 @@ class AdminListInSettings extends React.Component {
     }
   };
 
-  _pressAdminInPlaylistDowngrade = (userId, item, playlistId, parent, roomType, onRefresh, isLoading, displayLoader) => {
+  _pressAdminInPlaylistDowngrade = (userId, item, playlistId, parent,
+    roomType, onRefresh, isLoading, displayLoader) => {
+    const { loggedUser } = this.props;
     if (!isLoading()) {
       displayLoader();
-      adminInPlaylistDowngrade(playlistId, userId, global.user._id)
+      adminInPlaylistDowngrade(playlistId, userId, loggedUser._id)
         .then(() => {
-          if (String(userId) === String(global.user._id)) {
+          if (String(userId) === String(loggedUser._id)) {
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
             } else if (roomType === 'radio') {
@@ -44,12 +47,14 @@ class AdminListInSettings extends React.Component {
     }
   };
 
-  _pressDeleteUserInPlaylist = (userId, item, playlistId, parent, roomType, onRefresh, isLoading, displayLoader) => {
+  _pressDeleteUserInPlaylist = (userId, item, playlistId, parent,
+    roomType, onRefresh, isLoading, displayLoader) => {
+    const { loggedUser } = this.props;
     if (!isLoading()) {
       displayLoader();
-      deleteUserInPlaylist(playlistId, userId, true, global.user._id)
+      deleteUserInPlaylist(playlistId, userId, true, loggedUser._id)
         .then(() => {
-          if (String(userId) === String(global.user._id)) {
+          if (String(userId) === String(loggedUser._id)) {
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
             } else if (roomType === 'radio') {
@@ -65,12 +70,14 @@ class AdminListInSettings extends React.Component {
     }
   };
 
-  _pressBanUserInPlaylist = (userId, item, playlistId, parent, roomType, onRefresh, isLoading, displayLoader) => {
+  _pressBanUserInPlaylist = (userId, item, playlistId, parent,
+    roomType, onRefresh, isLoading, displayLoader) => {
+    const { loggedUser } = this.props;
     if (!isLoading()) {
       displayLoader();
-      banUserInPlaylist(playlistId, userId, true, global.user._id)
+      banUserInPlaylist(playlistId, userId, true, loggedUser._id)
         .then(() => {
-          if (String(userId) === String(global.user._id)) {
+          if (String(userId) === String(loggedUser._id)) {
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
             } else if (roomType === 'radio') {
@@ -97,6 +104,7 @@ class AdminListInSettings extends React.Component {
       roomType,
       parent,
       delegatedPlayerAdmin,
+      loggedUser,
     } = this.props;
     return (
       <FlatList
@@ -124,7 +132,7 @@ class AdminListInSettings extends React.Component {
                   <Icon name="musical-notes" style={styles.iconsStyle} />
                 </View>
               );
-            } else if (String(global.user._id) === String(delegatedPlayerAdmin)) {
+            } else if (String(loggedUser._id) === String(delegatedPlayerAdmin)) {
               playerUserIcon = (
                 <TouchableOpacity
                   style={styles.iconWrapper}

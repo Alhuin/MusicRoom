@@ -12,7 +12,7 @@ function pad(n, width, z = 0) {
   return o.length >= width ? o : new Array(width - o.length + 1).join(z) + o;
 }
 
-const minutesAndSeconds = (position) => ([
+const minutesAndSeconds = position => ([
   pad(Math.floor(position / 60), 2),
   pad(position % 60, 2),
 ]);

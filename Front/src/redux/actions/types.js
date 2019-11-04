@@ -1,6 +1,5 @@
 export const CHANGE_TRACK = 'CHANGE_TRACK';
 export const CHANGE_PLAYLIST = 'CHANGE_PLAYLIST';
-export const LOGGED = 'LOGGED';
 export const SET_TIME = 'SET_TIME';
 export const SET_DURATION = 'SET_DURATION';
 export const PAUSED = 'PAUSED';

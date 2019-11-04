@@ -10,7 +10,6 @@ import Controls from './Controls';
 import { getNextTrackByVote, deleteTrackFromPlaylist } from '../../../API/BackApi';
 
 export default class PlayerDetails extends Component {
-
   onBack() {
     const {
       audioElement, currentPosition, setCurrentPosition, paused, setTotalLength, changing,
@@ -27,7 +26,7 @@ export default class PlayerDetails extends Component {
       }, 0);
     } else {
       audioElement && audioElement.seek(0);
-      setTime(0);
+      setCurrentPosition(0);
     }
   }
 
@@ -76,6 +75,10 @@ export default class PlayerDetails extends Component {
       onDownPress, currentPosition, track, paused, totalLength, isPaused,
     } = this.props;
 
+    this._onSeek = this.seek.bind(this);
+    this._onBack = this.onBack.bind(this);
+    this._onForward = this.onForward.bind(this);
+
     console.log(currentPosition);
     console.log('length = ');
     console.log(totalLength);
@@ -85,7 +88,7 @@ export default class PlayerDetails extends Component {
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails title={track.title} artist={track.artist} />
         <SeekBar
-          onSeek={this.seek.bind(this)}
+          onSeek={this._onSeek}
           trackLength={totalLength}
           onSlidingStart={() => paused(true)}
           currentPosition={currentPosition}
@@ -99,8 +102,8 @@ export default class PlayerDetails extends Component {
           onPressPause={() => {
             paused(true);
           }}
-          onBack={this.onBack.bind(this)}
-          onForward={this.onForward.bind(this)}
+          onBack={this._onBack}
+          onForward={this._onForward}
           paused={isPaused}
         />
       </View>

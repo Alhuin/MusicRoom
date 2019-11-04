@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import SocialButton from 'rtg-rn-social-buttons';
 import React, { Component } from 'react';
 
@@ -13,7 +13,7 @@ export default class SocialLogin extends Component {
           opacity={0.5}
           height={40}
           width={220}
-          action={() => alert(`facebook ${type}`)}
+          action={() => Alert.alert(`facebook ${type}`)}
         />
         <SocialButton
           type="google"
@@ -21,7 +21,7 @@ export default class SocialLogin extends Component {
           opacity={0.5}
           height={40}
           width={220}
-          action={() => alert(`google ${type}`)}
+          action={() => Alert.alert(`google ${type}`)}
         />
       </View>
     );

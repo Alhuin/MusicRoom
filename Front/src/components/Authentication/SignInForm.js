@@ -4,7 +4,6 @@ import {
   Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text, Alert,
 } from 'react-native';
 import { login } from '../../../API/BackApi';
-import { onSignIn } from '../../services/auth';
 
 export default class SignInForm extends React.Component {
   state = {
@@ -24,21 +23,19 @@ export default class SignInForm extends React.Component {
     const {
       userName, password,
     } = this.state;
-    const { navigation, logged } = this.props;
+    const { navigation, userChanged, admin } = this.props;
     if (!(userName.length && password.length)) {
       Alert.alert('Error, empty field.');
       console.log('error, empty field');
     } else {
       login(userName, password)
         .then((user) => {
-          // console.log(user);
-          onSignIn(JSON.stringify(user))
-            .then(() => {
-              global.user = user;
-              logged(true);
-              navigation.navigate('app');
-            })
-            .catch(error => console.log(error));
+          userChanged(user);
+          if (user.isAdmin) {
+            admin(true);
+          }
+          navigation.navigate('app');
+          console.log(user);
         })
         .catch((error) => {
           // console.log('error');

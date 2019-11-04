@@ -12,7 +12,6 @@ export default class SearchTrack extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      searchText: '',
       playing: null,
       loading: false,
     };

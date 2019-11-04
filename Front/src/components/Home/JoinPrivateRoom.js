@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, TextInput, View, Text,
+  Modal, StyleSheet, TextInput, View, Text, Alert,
 } from 'react-native';
 import { joinRoom } from '../../../API/BackApi';
 
@@ -19,11 +19,11 @@ export default class JoinPrivateRoom extends React.Component {
     joinRoom(userId, text)
       .then(() => {
         setModalVisible();
-        alert(`Vous avez maintenant accès a une nouvelle playlist`);
+        Alert.alert('Vous avez maintenant accès a une nouvelle playlist');
       })
       .catch((error) => {
         setModalVisible();
-        alert('La demande a rencontrée une erreur.');
+        Alert.alert('La demande a rencontrée une erreur.');
         console.error(error);
       });
   };

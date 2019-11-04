@@ -9,7 +9,7 @@ export default class SearchBar extends React.Component {
         <TextInput
           style={styles.textInput}
           placeholder="Cliquer ici pour rechercher une musique"
-          onChangeText={(text) => searchTracks(text)}
+          onChangeText={text => searchTracks(text)}
           autoCorrect={false}
         />
       );
@@ -18,7 +18,7 @@ export default class SearchBar extends React.Component {
       <TextInput
         style={styles.textInput}
         placeholder="Cliquer ici pour rechercher une musique"
-        onChangeText={(text) => updateSearchedText(text)}
+        onChangeText={text => updateSearchedText(text)}
         onSubmitEditing={() => {
           searchTracks();
         }}

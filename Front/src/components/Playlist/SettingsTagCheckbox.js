@@ -5,12 +5,17 @@ import { Text } from 'native-base';
 import React, { Component } from 'react';
 
 export default class SettingsTagCheckbox extends Component {
-  state = {
-    checked: this.props.checked,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      checked: props.checked,
+
+    };
+  }
 
   render() {
-    const { tag, tagsChanged, checked } = this.props;
+    const { tag, tagsChanged } = this.props;
+    const { checked } = this.state;
     return (
       <View
         style={styles.container}
@@ -19,7 +24,7 @@ export default class SettingsTagCheckbox extends Component {
           value={checked !== undefined}
           onValueChange={() => {
             tagsChanged(tag);
-            this.setState({ checked: !this.state.checked });
+            this.setState({ checked: !checked });
           }}
         />
         <Text>

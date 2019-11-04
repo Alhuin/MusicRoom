@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Button, TextInput,
+  StyleSheet, View, Text, TouchableOpacity, Button, TextInput, Alert,
 } from 'react-native';
 import { updateUser } from '../../API/BackApi';
 
@@ -8,11 +8,11 @@ class AppSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: global.user,
-      email: global.user.email,
-      login: global.user.login,
-      name: global.user.name,
-      familyName: global.user.familyName,
+      user: props.loggedUser,
+      email: props.loggedUser.email,
+      login: props.loggedUser.login,
+      name: props.loggedUser.name,
+      familyName: props.loggedUser.familyName,
     };
   }
 
@@ -39,12 +39,12 @@ class AppSettings extends React.Component {
       console.log(`ici:${user._id}`);
       if (!(name.length && familyName.length && email.length
           && login.length)) {
-        alert('error: empty field.');
+        Alert.alert('error: empty field.');
         console.log('error, empty field');
       } else {
         updateUser(user._id, login, name, familyName, email)
           .then(() => {
-            alert('Settings have been modified');
+            Alert.alert('Settings have been modified');
           })
           .catch(error => console.log(error));
       }
@@ -52,6 +52,7 @@ class AppSettings extends React.Component {
 
     render() {
       const { user } = this.state;
+      console.log(user);
       return (
         <View style={styles.card}>
           <Text style={styles.title_set}>
