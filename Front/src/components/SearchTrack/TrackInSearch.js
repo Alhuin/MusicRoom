@@ -7,16 +7,15 @@ import { addMusicToPlaylist } from '../../../API/BackApi';
 class TrackInSearch extends React.Component {
   addMusic = () => {
     const {
-      track, playlistId, updateTracks, userId, setModalVisible, displayLoader,
+      track, playlistId, userId, setModalVisible, displayLoader, socket,
     } = this.props;
 
     displayLoader();
     addMusicToPlaylist(playlistId, userId, track.title, track.artist.name,
       track.album.title, track.album.cover, track.preview, track.link)
       .then(() => {
+        socket.emit('addMusic', playlistId);
         setModalVisible();
-        // this.setState({ loading: 0 });
-        updateTracks();
       })
       .catch((error) => {
         console.error(error);

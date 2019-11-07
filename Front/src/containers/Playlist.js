@@ -5,6 +5,7 @@ import * as actions from '../redux/actions';
 
 const mapStateToProps = state => ({
   loggedUser: state.authReducer.loggedUser,
+  socket: state.playerReducer.socket,
 });
 
 const mapDispatchToProps = dispatch => ({

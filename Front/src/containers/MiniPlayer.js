@@ -9,6 +9,7 @@ const mapStateToProps = state => ({
   audioElement: state.playerReducer.audioElement,
   playlistId: state.playerReducer.playlistId,
   isPaused: state.playerReducer.isPaused,
+  socket: state.playerReducer.socket,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -9,3 +9,4 @@ export const SET_CURRENT_POSITION = 'SET_CURRENT_POSITION';
 export const SET_TOTAL_LENGTH = 'SET_TOTAL_LENGTH';
 export const USER_CHANGED = 'USER_CHANGED';
 export const ADMIN = 'ADMIN';
+export const SET_SOCKET = 'SET_SOCKET';

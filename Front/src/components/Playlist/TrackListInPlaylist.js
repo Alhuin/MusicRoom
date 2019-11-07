@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { moveTrackOrder } from '../../../API/BackApi';
-import TrackInPlaylist from './TrackInPlaylist';
+import TrackInPlaylist from '../../containers/TrackInPlaylist';
 import Player from '../../services/Player';
 
 class TrackListInPlaylist extends React.Component {
@@ -46,7 +46,7 @@ class TrackListInPlaylist extends React.Component {
           data={tracks}
           keyExtractor={item => String(item._id)}
           renderItem={({
-            item, index, move, moveEnd, isActive, // Index necessaire ?
+            item, move, moveEnd, isActive, // Index necessaire ?
           }) => {
             let myVoteValue = 0;
             for (let i = 0; i < myVotes.length; i += 1) {

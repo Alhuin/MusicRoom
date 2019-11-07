@@ -1,15 +1,16 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import SocketIOClient from 'socket.io-client';
 
 export default class Loading extends React.Component {
   componentDidMount() {
-    const { navigation, loggedUser } = this.props;
+    const { navigation, loggedUser, setSocket } = this.props;
     // const timer = setTimeout(() => {
     //   alert('An error occured');
     // }, 5000); // catcher infinite loading
     // clearTimeout(timer);
-    console.log(loggedUser);
     if (loggedUser !== null) {
+      setSocket(SocketIOClient('http://10.3.1.3:4000'));
       navigation.navigate('app');
     } else {
       navigation.navigate('auth');

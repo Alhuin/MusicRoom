@@ -11,14 +11,11 @@ import { voteMusic } from '../../../API/BackApi';
 class TrackInPlaylist extends React.Component {
   _vote = (value) => {
     const {
-      track, playlistId, updateTracks, userId, updateMyVotes,
+      track, playlistId, userId, socket,
     } = this.props;
     voteMusic(userId, track._id, playlistId, value)
       .then(() => {
-        updateMyVotes()
-          .then(() => {
-            updateTracks();
-          });
+        socket.emit('voteMusic', playlistId);
       })
       .catch((error) => {
         if (error.status === 400) {

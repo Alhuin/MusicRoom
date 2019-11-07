@@ -134,6 +134,7 @@ function downloadMusic(musicUrl) {
         if (path === null) {
           path = stdout.replace('\n', '').match(/^(.*) already exists!$/);
         }
+        // CATCHER USER TOKEN EXPIRE
         resolve({
           status: 200,
           data: path[1],

@@ -12,6 +12,37 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 
+const http = require('http');
+const socketio = require('socket.io');
+
+const socketServer = http.Server(app);
+const websocket = socketio(socketServer);
+
+socketServer.listen(4000, () => console.log('socket server listening on port 4000'));
+
+const clients = {};
+
+websocket.on('connection', (socket) => {
+  console.log('user logged in');
+  clients[socket.id] = socket;
+
+  socket.on('userJoined', (playlistId) => {
+    console.log(`user joined playlist ${playlistId}`);
+    socket.join(playlistId);
+  });
+
+  socket.on('addMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
+  socket.on('deleteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
+  socket.on('voteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
+
+  socket.on('userLeaved', (playlistId) => {
+    console.log(`user leaved playlist ${playlistId}`);
+    socket.leave(playlistId);
+  });
+});
+
+websocket.on('disconnect', () => { console.log('user logged Out '); });
+
 app.use(cors());
 
 app.use(express.json());
@@ -19,7 +50,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/tracks', express.static('downloads'));
-console.log(__dirname);
 
 /**
  *      Request logger Middleware

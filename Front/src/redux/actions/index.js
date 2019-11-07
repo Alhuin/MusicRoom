@@ -1,5 +1,5 @@
 import {
-  CHANGE_TRACK, CHANGE_PLAYLIST, SET_TIME, SET_TOTAL_LENGTH, ADMIN,
+  CHANGE_TRACK, CHANGE_PLAYLIST, SET_TIME, SET_TOTAL_LENGTH, ADMIN, SET_SOCKET,
   SET_DURATION, PAUSED, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION, USER_CHANGED,
 } from './types';
 
@@ -45,4 +45,8 @@ export function setCurrentPosition(payload) {
 
 export function setTotalLength(payload) {
   return ({ type: SET_TOTAL_LENGTH, payload });
+}
+
+export function setSocket(payload) {
+  return ({ type: SET_SOCKET, payload });
 }

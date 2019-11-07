@@ -12,11 +12,12 @@ export default class MiniPlayer extends React.Component {
   onForward() {
     const {
       playlistId, audioElement, track, changing, setCurrentPosition,
-      setTotalLength, paused, changeTrack,
+      setTotalLength, paused, changeTrack, socket,
     } = this.props;
 
     deleteTrackFromPlaylist(track.id, playlistId)
       .then(() => {
+        socket.emit('deleteMusic', playlistId);
         getNextTrackByVote(playlistId)
           .then((nextTrack) => {
             audioElement && audioElement.seek(0);

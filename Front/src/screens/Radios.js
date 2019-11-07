@@ -13,6 +13,8 @@ class Radios extends React.Component {
       modalVisible: false,
       refreshing: false,
     };
+    this.onRefreshSignal = this._onRefreshSignal.bind(this);
+    props.socket.on('refresh', this.onRefreshSignal);
   }
 
   componentDidMount(): void {
@@ -25,6 +27,13 @@ class Radios extends React.Component {
         console.error(error);
       });
   }
+
+  _onRefreshSignal = () => {
+    if (this._isMounted) {
+      console.log('socket refresh signal for playlist list recieved');
+      this.updatePlaylist();
+    }
+  };
 
   _onRefresh = () => {
     this.setState({ refreshing: true });

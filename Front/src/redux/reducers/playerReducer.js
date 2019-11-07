@@ -1,5 +1,5 @@
 import {
-  CHANGE_PLAYLIST, CHANGE_TRACK, SET_DURATION, SET_TOTAL_LENGTH,
+  CHANGE_PLAYLIST, CHANGE_TRACK, SET_DURATION, SET_TOTAL_LENGTH, SET_SOCKET,
   PAUSED, SET_TIME, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION,
 } from '../actions/types';
 
@@ -11,6 +11,7 @@ const initialState = {
   audioElement: null,
   currentPosition: 0,
   isChanging: false,
+  socket: null,
 };
 
 const playerReducer = (state = initialState, action) => {
@@ -51,6 +52,10 @@ const playerReducer = (state = initialState, action) => {
     case IS_CHANGING:
       return {
         ...state, isChanging: action.payload,
+      };
+    case SET_SOCKET:
+      return {
+        ...state, socket: action.payload,
       };
     default:
       return state;

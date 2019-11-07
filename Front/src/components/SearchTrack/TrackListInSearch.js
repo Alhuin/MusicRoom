@@ -3,7 +3,7 @@ import {
   FlatList,
   StyleSheet,
 } from 'react-native';
-import TrackInSearch from './TrackInSearch';
+import TrackInSearch from '../../containers/TrackInSearch';
 import Player from '../../services/Player';
 
 class TrackListInSearch extends React.Component {

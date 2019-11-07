@@ -6,14 +6,8 @@ import {
   createSwitchNavigator,
   createDrawerNavigator,
   NavigationScreenProps,
-  DrawerItems,
 } from 'react-navigation';
-import {
-  Platform,
-  Button,
-  SafeAreaView,
-  View,
-} from 'react-native';
+import { Platform } from 'react-native';
 import { Icon } from 'native-base';
 import Connexion from '../screens/Connexion';
 import Home from '../containers/Home';
@@ -28,6 +22,7 @@ import SearchTrack from '../components/SearchTrack/SearchTrack';
 import Playlist from '../containers/Playlist';
 import Radios from '../containers/Radios';
 import Partys from '../containers/Partys';
+import LogoutButton from '../containers/LogoutButton';
 
 const createBurgerMenu = navigation => Platform.select({
   ios: null,
@@ -193,19 +188,20 @@ const MainNavigator = Platform.select({
   },
   {
     contentComponent: props => (
-      <View style={{ flex: 1 }}>
-        <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
-          <DrawerItems {...props} />
-          <Button
-            title="Logout"
-            onPress={() => {
-              const { navigation } = props;
-              // onSignOut();
-              navigation.navigate('auth');
-            }}
-          />
-        </SafeAreaView>
-      </View>
+      <LogoutButton drawerProps={props} navigation={props.navigation} />
+      // <View style={{ flex: 1 }}>
+      //   <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+      //     <DrawerItems {...props} />
+      //     <Button
+      //       title="Logout"
+      //       onPress={() => {
+      //         const { navigation } = props;
+      //         // onSignOut();
+      //         navigation.navigate('auth');
+      //       }}
+      //     />
+      //   </SafeAreaView>
+      // </View>
     ),
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',

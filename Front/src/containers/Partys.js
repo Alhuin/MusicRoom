@@ -3,6 +3,7 @@ import Partys from '../screens/Partys';
 
 const mapStateToProps = state => ({
   loggedUser: state.authReducer.loggedUser,
+  socket: state.playerReducer.socket,
 });
 
 // const mapDispatchToProps = dispatch => ({

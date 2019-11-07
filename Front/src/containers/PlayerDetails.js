@@ -9,6 +9,7 @@ const mapStateToProps = state => ({
   track: state.playerReducer.track,
   totalLength: state.playerReducer.totalLength,
   isPaused: state.playerReducer.isPaused,
+  socket: state.playerReducer.socket,
 });
 
 const mapDispatchToProps = dispatch => ({

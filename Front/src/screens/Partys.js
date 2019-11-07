@@ -13,11 +13,14 @@ class Partys extends React.Component {
       modalVisible: false,
       refreshing: false,
     };
+    this.onRefreshSignal = this._onRefreshSignal.bind(this);
+    props.socket.on('refresh', this.onRefreshSignal);
   }
 
   componentDidMount(): void {
     const { loggedUser } = this.props;
-    console.log(loggedUser);
+
+    this._isMounted = true;
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
         console.log(playlists);
@@ -27,6 +30,17 @@ class Partys extends React.Component {
         console.error(error);
       });
   }
+
+  componentWillUnmount(): void {
+    this._isMounted = false;
+  }
+
+  _onRefreshSignal = () => {
+    if (this._isMounted) {
+      console.log('socket refresh signal for playlist list recieved');
+      this.updatePlaylist();
+    }
+  };
 
   _onRefresh = () => {
     this.setState({ refreshing: true });

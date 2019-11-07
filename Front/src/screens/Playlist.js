@@ -20,34 +20,50 @@ class Playlist extends React.Component {
       modalVisible: false,
       myVotes: [],
     };
+    this.onRefreshSignal = this._onRefreshSignal.bind(this);
+    props.socket.on('refresh', this.onRefreshSignal);
   }
 
   componentDidMount(): void {
-    const { navigation } = this.props;
+    const { navigation, socket } = this.props;
     const playlistId = navigation.getParam('playlistId');
-    // console.log(playlistId);
+    this._isMounted = true;
+
+    socket.emit('userJoined', playlistId);
     this._isAdmin();
     this.updateMyVotes().then(() => {
       this.updateTracks();
     });
     getNextTrackByVote(playlistId)
       .then((track) => {
-        // console.log('nextTrack');
-        // console.log(track);
         this.setState(track);
       })
       .catch(error => console.log(error));
   }
 
   componentWillUnmount(): void {
+    const { navigation, socket } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    this._isMounted = false;
+
+    socket.emit('userLeaved', playlistId);
     this._onChangedPage();
-    // this._navListener.remove();
   }
 
   _onChangedPage = () => {
     const { playing } = this.state;
     if (playing !== null) {
       playing.stop();
+    }
+  };
+
+  _onRefreshSignal = () => {
+    if (this._isMounted) {
+      console.log('socket refresh signal recieved');
+      this.updateMyVotes()
+        .then(() => {
+          this.updateTracks();
+        });
     }
   };
 
