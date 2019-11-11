@@ -22,7 +22,7 @@ const socketio = require('socket.io');
 const socketServer = http.Server(app);
 const websocket = socketio(socketServer);
 
-socketServer.listen(4000, () => console.log('socket server listening on port 4000'));
+socketServer.listen(4000, () => console.log('[Socket Server] : listening on port 4000'));
 
 const clients = {};
 
@@ -31,7 +31,7 @@ websocket.on('connection', (socket) => {
   console.log('[Socket Server] : user logged in');
   clients[socket.id] = socket;
 
-  // Rooms are created when at least one user join a playlist, the events are sent by room.
+  // Rooms are created when at least one user joins a playlist, the events are sent by room.
   // Joining room
   socket.on('userJoined', (playlistId) => {
     console.log(`[Socket Server] : user joined playlist ${playlistId}`);
