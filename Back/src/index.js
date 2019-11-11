@@ -23,11 +23,11 @@ socketServer.listen(4000, () => console.log('socket server listening on port 400
 const clients = {};
 
 websocket.on('connection', (socket) => {
-  console.log('user logged in');
+  console.log('[Socket Server] : user logged in');
   clients[socket.id] = socket;
 
   socket.on('userJoined', (playlistId) => {
-    console.log(`user joined playlist ${playlistId}`);
+    console.log(`[Socket Server] : user joined playlist ${playlistId}`);
     socket.join(playlistId);
   });
 
@@ -36,12 +36,12 @@ websocket.on('connection', (socket) => {
   socket.on('voteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
 
   socket.on('userLeaved', (playlistId) => {
-    console.log(`user leaved playlist ${playlistId}`);
+    console.log(`[Socket Server] : user leaved playlist ${playlistId}`);
     socket.leave(playlistId);
   });
 });
 
-websocket.on('disconnect', () => { console.log('user logged Out '); });
+websocket.on('disconnect', () => { console.log('[Socket Server] : user logged Out '); });
 
 app.use(cors());
 
@@ -77,7 +77,7 @@ connectDb().then(async () => {
     ]);
   }
   seedDatas();
-  app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`));
+  app.listen(process.env.PORT, () => console.log(`App listening on port ${process.env.PORT}!`));
 });
 
 /**

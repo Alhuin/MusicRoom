@@ -23,7 +23,7 @@ class Partys extends React.Component {
     this._isMounted = true;
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
-        console.log(playlists);
+        // console.log(playlists);
         this.setState({ playlists });
       })
       .catch((error) => {
@@ -37,7 +37,7 @@ class Partys extends React.Component {
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
-      console.log('socket refresh signal for playlist list recieved');
+      console.log('[Socket Server] : refresh signal for playlist list recieved');
       this.updatePlaylist();
     }
   };
@@ -51,10 +51,10 @@ class Partys extends React.Component {
 
   updatePlaylist = () => new Promise((resolve, reject) => {
     const { loggedUser } = this.props;
-    console.log(loggedUser);
+    // console.log(loggedUser);
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
-        console.log(playlists);
+        // console.log(playlists);
         this.setState({ playlists });
         resolve();
       })

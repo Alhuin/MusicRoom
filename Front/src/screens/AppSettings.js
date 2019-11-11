@@ -52,7 +52,7 @@ class AppSettings extends React.Component {
 
     render() {
       const { user } = this.state;
-      console.log(user);
+      // console.log(user);
       return (
         <View style={styles.card}>
           <Text style={styles.title_set}>

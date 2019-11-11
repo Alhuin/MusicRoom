@@ -30,7 +30,7 @@ class Radios extends React.Component {
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
-      console.log('socket refresh signal for playlist list recieved');
+      console.log('[Socket Server] : refresh signal for playlist list recieved');
       this.updatePlaylist();
     }
   };

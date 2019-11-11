@@ -94,7 +94,7 @@ function getPlaylistsFiltered(roomType, userId) {
         if (!playlists[0]) {
           reject(new CustomError('PlaylistFiltered', 'No available playlist in database', 400));
         } else {
-          console.log(playlists);
+          // console.log(playlists);
           resolve({
             status: 200,
             data: playlists,
@@ -589,7 +589,7 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
 function deleteTrackFromPlaylist(playlistId, musicId) {
   return new Promise((resolve, reject) => {
     MusicModel.find({ playlist: playlistId, _id: musicId }, (error, musics) => {
-      console.log(musics);
+      // console.log(musics);
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!musics[0]) {

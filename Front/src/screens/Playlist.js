@@ -59,7 +59,7 @@ class Playlist extends React.Component {
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
-      console.log('socket refresh signal recieved');
+      console.log('[Socket Server] : refresh signal recieved');
       this.updateMyVotes()
         .then(() => {
           this.updateTracks();

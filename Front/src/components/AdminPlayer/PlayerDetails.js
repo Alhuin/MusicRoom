@@ -80,9 +80,9 @@ export default class PlayerDetails extends Component {
     this._onBack = this.onBack.bind(this);
     this._onForward = this.onForward.bind(this);
 
-    console.log(currentPosition);
-    console.log('length = ');
-    console.log(totalLength);
+    // console.log(currentPosition);
+    // console.log('length = ');
+    // console.log(totalLength);
     return (
       <View style={styles.container}>
         <Header message="Playing From Charts" onDownPress={onDownPress} />

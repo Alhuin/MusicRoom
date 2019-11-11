@@ -20,7 +20,7 @@ function sendMail(mailOptions, resolve, reject) {
       if (error) {
         reject(new CustomError('Mailer', error.message, 500));
       } else {
-        console.log('Server is ready to take our messages');
+        console.log('[Mailer] : Server is ready to take our messages');
       }
     });
   }
@@ -28,10 +28,10 @@ function sendMail(mailOptions, resolve, reject) {
     if (error) {
       reject(new CustomError('Mailer', error.message, 500));
     } else {
-      console.log('Message sent: %s', info.messageId);
+      console.log('[Mailer] : Message sent: %s', info.messageId);
       resolve({
         status: 202,
-        data: { msg: `An email has been sent to ${mailOptions.to}` },
+        data: { msg: `[Mailer] : An email has been sent to ${mailOptions.to}` },
       });
     }
   });
