@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: {
     type: Date,
   },
-  roles: [{ type: String }],
+  roles: [String],
 });
 
 userSchema.statics.findByLoginOrEmail = async function (login) {

@@ -126,8 +126,7 @@ describe('Playlist Model Tests', () => {
     });
     let err;
     try {
-      const savedPlaylistWithoutNameField = await playlistWithoutNameField.save();
-      error = savedPlaylistWithoutNameField;
+      await playlistWithoutNameField.save();
     } catch (error) {
       err = error;
     }

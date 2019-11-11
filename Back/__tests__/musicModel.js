@@ -87,8 +87,7 @@ describe('Music Model Tests', () => {
     });
     let err;
     try {
-      const savedMusicWithoutTitleField = await musicWithoutTitleField.save();
-      error = savedMusicWithoutTitleField;
+      await musicWithoutTitleField.save();
     } catch (error) {
       err = error;
     }
