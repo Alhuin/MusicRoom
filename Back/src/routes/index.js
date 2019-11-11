@@ -11,6 +11,11 @@ router.get('/', (req, res) => {
   res.status(200).send('Welcome to MusicRoom API !');
 });
 
+/**
+ *    Catched routes redirect to a controller which checks the existence / validity
+ *    of the arguments and then redirects to a service which handles the action.
+ */
+
 /*             Login                 */
 
 router.post('/login', loginController.login);

@@ -3,6 +3,13 @@ import CustomError from '../services/errorHandler';
 
 let transporter = false;
 
+/**
+ * Handles mail sending
+ * @param mailOptions = mail configuration
+ * @param resolve = the resolve object passed from the asynchronous parent
+ * @param reject = the reject object passed from the asynchronous parent
+ */
+
 function sendMail(mailOptions, resolve, reject) {
   if (!(transporter)) {
     transporter = nodeMailer.createTransport({

@@ -1,3 +1,13 @@
+/**
+ *    Logs all the requests which go threw the core server
+ *
+ *    'date :
+ *    REQUEST METHOD    /api/myRoute     responseCode responseStatus'
+ *
+ * @param dateOptions : date options to format the string
+ * @returns {requestLogger}
+ */
+
 module.exports = function (dateOptions) {
   if (dateOptions !== undefined) {
     return function requestLogger(req, res, next) {

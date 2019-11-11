@@ -15,6 +15,10 @@ const app = express();
 const http = require('http');
 const socketio = require('socket.io');
 
+/**
+ *          WebSocket Server for live reloading
+ */
+
 const socketServer = http.Server(app);
 const websocket = socketio(socketServer);
 
@@ -22,26 +26,36 @@ socketServer.listen(4000, () => console.log('socket server listening on port 400
 
 const clients = {};
 
+// Handle socket connection & events
 websocket.on('connection', (socket) => {
   console.log('[Socket Server] : user logged in');
   clients[socket.id] = socket;
 
+  // Rooms are created when at least one user join a playlist, the events are sent by room.
+  // Joining room
   socket.on('userJoined', (playlistId) => {
     console.log(`[Socket Server] : user joined playlist ${playlistId}`);
     socket.join(playlistId);
   });
 
+  // Refresh signal sent on addMusic, deleteMusic & voteMusic
   socket.on('addMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
   socket.on('deleteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
   socket.on('voteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
 
+  // Leaving room ( pas le salon hein )
   socket.on('userLeaved', (playlistId) => {
     console.log(`[Socket Server] : user leaved playlist ${playlistId}`);
     socket.leave(playlistId);
   });
 });
 
+// Handle socket disconnection
 websocket.on('disconnect', () => { console.log('[Socket Server] : user logged Out '); });
+
+/**
+ *          Core Express Server
+ */
 
 app.use(cors());
 
@@ -52,7 +66,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/tracks', express.static('downloads'));
 
 /**
- *      Request logger Middleware
+ *          Request logger Middleware
  */
 
 const dateOptions = {
@@ -65,6 +79,9 @@ app.use(requestLogger);
 
 app.use('/api', API);
 
+/**
+ *        Clean all datas in DB
+ */
 connectDb().then(async () => {
   /* Erase the database if ERASE_DATABASE_ONSYNC is true in .env */
   if (process.env.ERASE_DATABASE_ONSYNC) {
@@ -81,7 +98,7 @@ connectDb().then(async () => {
 });
 
 /**
- *      Init the database with datas
+ *          Init the database with datas
  */
 
 const generateRandomNumber = () => {
