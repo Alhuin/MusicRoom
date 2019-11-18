@@ -1,4 +1,4 @@
-import PlaylistModel from '../src/models/playlistModel';
+import PlaylistModel from '../models/playlistModel';
 
 const mongoose = require('mongoose');
 

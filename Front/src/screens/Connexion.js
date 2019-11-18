@@ -3,9 +3,9 @@ import {
   StyleSheet, KeyboardAvoidingView, Platform, View, ScrollView,
 } from 'react-native';
 import Logo from '../components/Authentication/Logo';
-import SocialLogin from '../components/Authentication/SocialLogin';
 import LoginContext from '../components/Authentication/LoginContext';
 import SignInForm from '../containers/SignInForm';
+import SocialLogin from '../containers/SocialLogin';
 
 class Connexion extends React.Component {
   render() {
@@ -26,7 +26,10 @@ class Connexion extends React.Component {
           <View style={styles.content}>
             <Logo />
             <SignInForm navigation={navigation} />
-            <SocialLogin type={type} />
+            <SocialLogin
+              type={type}
+              navigation={navigation}
+            />
             <LoginContext
               type={type}
               navigation={navigation}

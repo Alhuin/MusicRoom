@@ -1,4 +1,4 @@
-import UserModel from '../src/models/userModel';
+import UserModel from '../models/userModel';
 
 const mongoose = require('mongoose');
 

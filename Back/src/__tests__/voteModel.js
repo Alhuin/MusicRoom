@@ -1,4 +1,4 @@
-import VoteModel from '../src/models/voteModel';
+import VoteModel from '../models/voteModel';
 
 const mongoose = require('mongoose');
 

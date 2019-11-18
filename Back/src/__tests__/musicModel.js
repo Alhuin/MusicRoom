@@ -1,4 +1,4 @@
-import MusicModel from '../src/models/musicModel';
+import MusicModel from '../models/musicModel';
 
 const mongoose = require('mongoose');
 
