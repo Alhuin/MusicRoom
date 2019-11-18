@@ -761,6 +761,49 @@ function setEndDate(playlistId, newDate) {
   });
 }
 
+
+function getEditRestriction(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('GetEditRestriction', 'No playlist with this id found in database', 404));
+      } else {
+        resolve({
+          status: 200,
+          data: playlist.editRestriction,
+        });
+      }
+    });
+  });
+}
+
+function setEditRestriction(playlistId, newEditRestriction) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('SetEditRestriction', 'No playlist with this id found in database', 404));
+      } else {
+        const newPlaylist = playlist;
+        newPlaylist.editRestriction = newEditRestriction;
+        newPlaylist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -791,4 +834,6 @@ export default {
   setEndDate,
   getTags,
   setTags,
+  getEditRestriction,
+  setEditRestriction,
 };

@@ -173,7 +173,7 @@ const seedDatas = async () => {
     if (i === 0) {
       playlist = new models.Playlist({
         name: `${i} - boz`,
-        users: [admin, user1, user2],
+        users: [user1, user2],
         author: admin._id,
         authorName: admin.name,
         delegatedPlayerAdmin: admin._id,

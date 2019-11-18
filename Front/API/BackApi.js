@@ -831,6 +831,27 @@ function formatTags(tags) {
   return newTags;
 }
 
+function getEditRestriction(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/getEditRestriction/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data[0]);
+        } else {
+          reject(new CustomError('getEditRestriction', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function setTags(playlistId, newTags) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/playlists/setTags`, {
@@ -894,6 +915,29 @@ function setEndDate(playlistId, newDate) {
           resolve(data);
         } else {
           reject(new CustomError('setEndDate', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function setEditRestriction(playlistId, newEditRestriction) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/setEditRestriction`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, newEditRestriction }),
+    })
+      .then(async (response) => {
+        // savedPlaylist is the response
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('setEditRestriction', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -989,4 +1033,6 @@ export {
   setEndDate,
   getTags,
   setTags,
+  getEditRestriction,
+  setEditRestriction,
 };

@@ -589,6 +589,46 @@ function setEndDate(req, res) {
   }
 }
 
+function getEditRestriction(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getEditRestriction(req.params.playlistId)
+      .then((response) => {
+        console.log(response);
+        res
+          .status(response.status)
+          .send([response.data]);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function setEditRestriction(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.newEditRestriction !== undefined) {
+    playlistService.setEditRestriction(req.body.playlistId, req.body.newEditRestriction)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getPlaylistById,
   getPlaylists,
@@ -619,5 +659,6 @@ export default {
   setEndDate,
   getTags,
   setTags,
-
+  getEditRestriction,
+  setEditRestriction,
 };

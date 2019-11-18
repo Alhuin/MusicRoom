@@ -9,12 +9,14 @@ import AdminListInSettings from '../components/Playlist/AdminListInSettings';
 import UserListInSettings from '../components/Playlist/UserListInSettings';
 import BansListInSettings from '../components/Playlist/BansListInSettings';
 import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
+import RadioForm from 'react-native-simple-radio-button';
 import Loader from '../components/Authentication/Loader';
 
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
-  getPlaylistDates, setStartDate, setEndDate, getTags, setTags,
+  getPlaylistDates, setStartDate, setEndDate, getTags, setTags, getEditRestriction,
+  setEditRestriction,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
@@ -39,6 +41,7 @@ class PlaylistSettings extends React.Component {
       endDate: new Date(Date.now() + 1000),
       dateType: 0,
       tags: {},
+      radioValue: 0,
     };
   }
 
@@ -80,6 +83,7 @@ class PlaylistSettings extends React.Component {
               .catch((error) => {
                 console.error(error);
               });
+            this.getEditRestriction(playlistId);
             this.getPublicity(playlistId);
             this.getDates(playlistId);
             this.getTags(playlistId);
@@ -108,9 +112,9 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
-      setPublicityOfPlaylist(playlistId, value)
+      setPublicityOfPlaylist(playlistId, !value)
         .then(() => {
-          this.setState({ switchValue: value });
+          this.setState({ switchValue: !value });
         })
         .catch((error) => {
           console.error(error);
@@ -158,6 +162,28 @@ class PlaylistSettings extends React.Component {
     getTags(playlistId)
       .then((data) => {
         this.setState({ tags: data });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  getEditRestriction = (playlistId) => {
+    getEditRestriction(playlistId)
+      .then((data) => {
+        if (data === 'ALL') {
+          this.refs.radioForm.updateIsActiveIndex(0);
+          this.setState({ radioValue: 0 });
+        } else if (data === 'USER_RESTRICTED') {
+          this.refs.radioForm.updateIsActiveIndex(1);
+          this.setState({ radioValue: 1 });
+        } else if (data === 'ADMIN_RESTRICTED') {
+          this.refs.radioForm.updateIsActiveIndex(2);
+          this.setState({ radioValue: 2 });
+        } else if (data === 'EVENT_RESTRICTED') {
+          this.refs.radioForm.updateIsActiveIndex(3);
+          this.setState({ radioValue: 3 });
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -347,16 +373,42 @@ class PlaylistSettings extends React.Component {
 
   formatTags = tags => Object.keys(tags);
 
+  radioIsPressed = (value) => {
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    let newEditRestriction = '';
+    if (value === 0) {
+      newEditRestriction = 'ALL';
+    } else if (value === 1) {
+      newEditRestriction = 'USER_RESTRICTED';
+    } else if (value === 2) {
+      newEditRestriction = 'ADMIN_RESTRICTED';
+    } else if (value === 3) {
+      newEditRestriction = 'EVENT_RESTRICTED';
+    }
+    setEditRestriction(playlistId, newEditRestriction)
+      .then(() => {
+        this.setState({ radioValue: value });
+      })
+      .catch((error) => {
+        console.error(`${error} in radioIsPressed`);
+      });
+  };
+
   render() {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, startDate, endDate, datePickerModalVisible, tags,
+      radioValue,
     } = this.state;
+    console.log(radioValue);
+    let radioProps = [];
     const { navigation, loggedUser } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');
     const roomType = navigation.getParam('roomType');
+    let editRestrictionString = '';
     let adminOptions = (null);
     let notAdminOptions = (null);
     let collapsibleIcon = (null);
@@ -392,6 +444,13 @@ class PlaylistSettings extends React.Component {
         );
       }
       if (roomType === 'party') {
+        radioProps = [
+          { label: 'Tout le monde', value: 0 },
+          { label: 'Utilisateur + Admin.', value: 1 },
+          { label: 'Admin.', value: 2 },
+          { label: 'Localisation et Date', value: 3 },
+        ];
+        editRestrictionString = 'Restriction des droits de vote :';
         specificRoomSettings = (
           <View>
             <DatePickerModal
@@ -445,6 +504,12 @@ class PlaylistSettings extends React.Component {
           </View>
         );
       } else {
+        radioProps = [
+          { label: 'Tout le monde', value: 0 },
+          { label: 'Utilisateur + Admin.', value: 1 },
+          { label: 'Admin.', value: 2 },
+        ];
+        editRestrictionString = "Restriction des droits d'édition :";
         specificRoomSettings = (
           null
         );
@@ -471,7 +536,20 @@ class PlaylistSettings extends React.Component {
             <Switch
               style={styles.switch}
               onValueChange={this.toggleSwitch}
-              value={switchValue}
+              value={!switchValue}
+            />
+          </View>
+          <View>
+            <Text>
+              {editRestrictionString}
+            </Text>
+            <RadioForm
+              ref='radioForm'
+              radio_props={radioProps}
+              initial={radioValue}
+              onPress={(value) => {
+                this.radioIsPressed(value);
+              }}
             />
           </View>
           {specificRoomSettings}
@@ -641,7 +719,7 @@ class PlaylistSettings extends React.Component {
             <Text>
               La playlist est
               {' '}
-              { switchValue ? 'Publique' : 'Privée' }
+              {switchValue ? 'Publique' : 'Privée'}
             </Text>
           </View>
           <View>
