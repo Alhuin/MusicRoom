@@ -5,7 +5,7 @@ import {
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
-  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote, isEditor,
+  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote, isEditor, moveTrackOrder,
 } from '../../API/BackApi';
 
 class Playlist extends React.Component {
@@ -285,6 +285,16 @@ class Playlist extends React.Component {
             myVotes={myVotes}
             isUserInPlaylist={isUserInPlaylist}
             editor={editor}
+            onMoveEnd={(data) => {
+              this.setState({ tracks: data.data });
+              moveTrackOrder(playlistId, data.row._id, data.to)
+                .then(() => {
+                  this._onRefresh();
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            }}
           />
         </View>
         <Components.AddFloatingButton

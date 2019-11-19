@@ -1,12 +1,11 @@
 import React from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import { moveTrackOrder } from '../../../API/BackApi';
 import TrackInPlaylist from '../../containers/TrackInPlaylist';
 import Player from '../../services/Player';
-import Components from "../index";
 
 class TrackListInPlaylist extends React.Component {
+
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
@@ -39,6 +38,7 @@ class TrackListInPlaylist extends React.Component {
       updateMyVotes,
       isUserInPlaylist,
       editor,
+      onMoveEnd,
     } = this.props;
     let render = (null);
     if (isUserInPlaylist === true && roomType === 'radio') {
@@ -79,15 +79,7 @@ class TrackListInPlaylist extends React.Component {
           //   }
           // }}
           contentContainerStyle={{ paddingBottom: 200 }}
-          onMoveEnd={(data) => {
-            moveTrackOrder(playlistId, data.row._id, data.to)
-              .then(() => {
-                onRefresh();
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          }}
+          onMoveEnd={data => onMoveEnd(data)}
         />
       );
     } else {
