@@ -46,7 +46,7 @@ export default class SocialLogin extends Component {
         if (user.isAdmin) {
           admin(true);
         }
-        setSocket(SocketIOClient('http://10.3.1.1:4000'));
+        setSocket(SocketIOClient('http://10.4.4.6:4000'));
         console.log('ALLER');
         navigation.navigate('app');
         console.log('ALLERRRRR');

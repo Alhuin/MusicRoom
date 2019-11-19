@@ -182,6 +182,7 @@ const seedDatas = async () => {
         admins: [user2],
         bans: [],
         privateId: '1234',
+        editRestriction: 'ADMIN_RESTRICTED',
       });
     } else {
       playlist = new models.Playlist({

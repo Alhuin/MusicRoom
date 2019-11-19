@@ -18,6 +18,35 @@ const isAdminInPlaylist = (playlist, userId) => {
   return (flag);
 };
 
+const isEditorInPlaylist = (playlist, userId) => {
+  if (playlist.editRestriction === 'ALL') {
+    return (true);
+  }
+  if (playlist.editRestriction === 'USER_RESTRICTION') {
+    for (let i = 0; i < playlist.users.length; i += 1) {
+      if (String(playlist.users[i]._id) === userId) {
+        return (true);
+      }
+    }
+  } else if (playlist.editRestriction === 'ADMIN_RESTRICTION') {
+    for (let i = 0; i < playlist.admins.length; i += 1) {
+      if (String(playlist.admins[i]._id) === userId) {
+        return (true);
+      }
+    }
+  } else if (playlist.editRestriction === 'EVENT_RESTRICTION') {
+    const now = new Date(Date.now());
+    for (let i = 0; i < playlist.users.length; i += 1) {
+      if (String(playlist.users[i]._id) === userId
+        && now < playlist.endDate && now > playlist.startDate
+      /* && CONDITION ON LOCATION */) {
+        return (true);
+      }
+    }
+  }
+  return (false);
+};
+
 const isInBans = (playlist, userId) => {
   let flag = false;
   for (let i = 0; i < playlist.bans.length; i += 1) {
@@ -46,4 +75,5 @@ export default {
   isAdminInPlaylist,
   isInBans,
   isInUsers,
+  isEditorInPlaylist,
 };

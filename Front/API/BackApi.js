@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.1:3000/api';
+const server = 'http://10.4.4.6:3000/api';
 
 /*
                     Users & Login
@@ -944,6 +944,29 @@ function setEditRestriction(playlistId, newEditRestriction) {
   });
 }
 
+function isEditor(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${server}/playlists/isEditor`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, userId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('isEditor', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+
 /*
                     Track Player
  */
@@ -1035,4 +1058,5 @@ export {
   setTags,
   getEditRestriction,
   setEditRestriction,
+  isEditor,
 };

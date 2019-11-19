@@ -5,7 +5,7 @@ import {
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
-  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
+  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote, isEditor,
 } from '../../API/BackApi';
 
 class Playlist extends React.Component {
@@ -13,6 +13,7 @@ class Playlist extends React.Component {
     super(props);
     this.state = {
       admin: false,
+      editor: false,
       stockedTracks: [],
       tracks: [],
       playing: null,
@@ -31,9 +32,12 @@ class Playlist extends React.Component {
 
     socket.emit('userJoined', playlistId);
     this._isAdmin();
-    this.updateMyVotes().then(() => {
-      this.updateTracks();
-    });
+    this._isEditor();
+    this.updateMyVotes()
+      .then(() => {
+        this.updateTracks();
+      })
+      .catch(error => console.log(error));
     getNextTrackByVote(playlistId)
       .then((track) => {
         this.setState(track);
@@ -60,6 +64,8 @@ class Playlist extends React.Component {
   _onRefreshSignal = () => {
     if (this._isMounted) {
       console.log('[Socket Server] : refresh signal recieved');
+      this._isAdmin();
+      this._isEditor();
       this.updateMyVotes()
         .then(() => {
           this.updateTracks();
@@ -70,6 +76,8 @@ class Playlist extends React.Component {
   _onRefresh = () => {
     const { navigation } = this.props;
     const roomType = navigation.getParam('roomType');
+    this._isAdmin();
+    this._isEditor();
     if (roomType === 'party') {
       this.setState({ refreshing: true });
       this.updateMyVotes()
@@ -147,6 +155,21 @@ class Playlist extends React.Component {
       });
   };
 
+  _isEditor = () => {
+    const { navigation, loggedUser } = this.props;
+    const userId = loggedUser._id;
+    const playlistId = navigation.getParam('playlistId');
+    isEditor(playlistId, userId)
+      .then((response) => {
+        if (response === true) {
+          this.setState({ editor: true });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   updatePlaying = (playing) => {
     this.setState({ playing });
   };
@@ -165,7 +188,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes,
+      tracks, playing, refreshing, modalVisible, admin, myVotes, editor,
     } = this.state;
     const {
       navigation, changeTrack, changePlaylist, loggedUser,
@@ -261,6 +284,7 @@ class Playlist extends React.Component {
             roomType={roomType}
             myVotes={myVotes}
             isUserInPlaylist={isUserInPlaylist}
+            editor={editor}
           />
         </View>
         <Components.AddFloatingButton

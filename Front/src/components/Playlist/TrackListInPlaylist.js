@@ -4,6 +4,7 @@ import DraggableFlatList from 'react-native-draggable-flatlist';
 import { moveTrackOrder } from '../../../API/BackApi';
 import TrackInPlaylist from '../../containers/TrackInPlaylist';
 import Player from '../../services/Player';
+import Components from "../index";
 
 class TrackListInPlaylist extends React.Component {
   handlePress = (preview) => {
@@ -37,9 +38,9 @@ class TrackListInPlaylist extends React.Component {
       myVotes,
       updateMyVotes,
       isUserInPlaylist,
+      editor,
     } = this.props;
     let render = (null);
-    // console.log('renderList');
     if (isUserInPlaylist === true && roomType === 'radio') {
       render = (
         <DraggableFlatList
@@ -67,6 +68,7 @@ class TrackListInPlaylist extends React.Component {
                 move={move}
                 moveEnd={moveEnd}
                 isActive={isActive}
+                editor={editor}
               />
             );
           }}
@@ -110,6 +112,7 @@ class TrackListInPlaylist extends React.Component {
                 updateMyVotes={updateMyVotes}
                 roomType={roomType}
                 myVoteValue={myVoteValue}
+                editor={editor}
               />
             );
           }}

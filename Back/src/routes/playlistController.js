@@ -593,7 +593,6 @@ function getEditRestriction(req, res) {
   if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
     playlistService.getEditRestriction(req.params.playlistId)
       .then((response) => {
-        console.log(response);
         res
           .status(response.status)
           .send([response.data]);
@@ -613,6 +612,26 @@ function setEditRestriction(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.newEditRestriction !== undefined) {
     playlistService.setEditRestriction(req.body.playlistId, req.body.newEditRestriction)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function isEditor(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)) {
+    playlistService.isEditor(req.body.playlistId, req.body.userId)
       .then((response) => {
         res
           .status(response.status)
@@ -661,4 +680,5 @@ export default {
   setTags,
   getEditRestriction,
   setEditRestriction,
+  isEditor,
 };

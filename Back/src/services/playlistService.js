@@ -167,14 +167,10 @@ function isAdmin(userId, playlistId) {
       } else if (!playlist) {
         reject(new CustomError('IsAdmin', 'No playlist with this id in database', 400));
       } else {
-        for (let i = 0; i < playlist.admins.length; i += 1) {
-          if (String(playlist.admins[i]._id) === userId) {
-            resolve({
-              status: 200,
-              data: true,
-            });
-          }
-        }
+        resolve({
+          status: 200,
+          data: utils.isAdminInPlaylist(playlist, userId),
+        });
       }
     });
   });
@@ -804,6 +800,24 @@ function setEditRestriction(playlistId, newEditRestriction) {
   });
 }
 
+
+function isEditor(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('IsEditor', 'No playlist with this id in database', 400));
+      } else {
+        resolve({
+          status: 200,
+          data: utils.isEditorInPlaylist(playlist, userId),
+        });
+      }
+    });
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylistById,
@@ -836,4 +850,5 @@ export default {
   setTags,
   getEditRestriction,
   setEditRestriction,
+  isEditor,
 };

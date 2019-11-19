@@ -20,6 +20,7 @@ import {
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
+import Video from "react-native-video";
 
 
 class PlaylistSettings extends React.Component {
@@ -112,9 +113,9 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
-      setPublicityOfPlaylist(playlistId, !value)
+      setPublicityOfPlaylist(playlistId, value)
         .then(() => {
-          this.setState({ switchValue: !value });
+          this.setState({ switchValue: value });
         })
         .catch((error) => {
           console.error(error);
@@ -172,16 +173,16 @@ class PlaylistSettings extends React.Component {
     getEditRestriction(playlistId)
       .then((data) => {
         if (data === 'ALL') {
-          this.refs.radioForm.updateIsActiveIndex(0);
+          // this.radioForm.updateIsActiveIndex(0);
           this.setState({ radioValue: 0 });
         } else if (data === 'USER_RESTRICTED') {
-          this.refs.radioForm.updateIsActiveIndex(1);
+          // this.radioForm.updateIsActiveIndex(1);
           this.setState({ radioValue: 1 });
         } else if (data === 'ADMIN_RESTRICTED') {
-          this.refs.radioForm.updateIsActiveIndex(2);
+          // this.radioForm.updateIsActiveIndex(2);
           this.setState({ radioValue: 2 });
         } else if (data === 'EVENT_RESTRICTED') {
-          this.refs.radioForm.updateIsActiveIndex(3);
+          // this.radioForm.updateIsActiveIndex(3);
           this.setState({ radioValue: 3 });
         }
       })
@@ -273,8 +274,6 @@ class PlaylistSettings extends React.Component {
 
   updateBans = () => new Promise((resolve, reject) => {
     const { navigation } = this.props;
-    // const { admins } = this.state;
-
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     if (isAdmin) {
@@ -401,7 +400,6 @@ class PlaylistSettings extends React.Component {
       collapsed, collapsedSpec, collapsedTags, startDate, endDate, datePickerModalVisible, tags,
       radioValue,
     } = this.state;
-    console.log(radioValue);
     let radioProps = [];
     const { navigation, loggedUser } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -531,12 +529,12 @@ class PlaylistSettings extends React.Component {
             <Text
               style={styles.subContainerFontStyle}
             >
-              {switchValue ? 'Publique' : 'Privée'}
+              Publique
             </Text>
             <Switch
               style={styles.switch}
               onValueChange={this.toggleSwitch}
-              value={!switchValue}
+              value={switchValue}
             />
           </View>
           <View>
@@ -544,9 +542,10 @@ class PlaylistSettings extends React.Component {
               {editRestrictionString}
             </Text>
             <RadioForm
-              ref='radioForm'
+              ref={(r) => { this.radioForm = r; }}
               radio_props={radioProps}
               initial={radioValue}
+              animation={false}
               onPress={(value) => {
                 this.radioIsPressed(value);
               }}
@@ -719,7 +718,7 @@ class PlaylistSettings extends React.Component {
             <Text>
               La playlist est
               {' '}
-              {switchValue ? 'Publique' : 'Privée'}
+              Publique
             </Text>
           </View>
           <View>
@@ -748,7 +747,7 @@ class PlaylistSettings extends React.Component {
             <Text>
               La playlist est
               {' '}
-              {switchValue ? 'Publique' : 'Privée'}
+              Publique
             </Text>
           </View>
         </View>

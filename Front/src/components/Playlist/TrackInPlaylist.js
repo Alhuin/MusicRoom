@@ -3,7 +3,7 @@ import {
   TouchableOpacity, Image, View, Text, StyleSheet, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
-import { voteMusic } from '../../../API/BackApi';
+import {isEditor, voteMusic} from '../../../API/BackApi';
 
 // must create two components TrackInRadio and TrackInParty or this one need to be modified
 
@@ -30,6 +30,7 @@ class TrackInPlaylist extends React.Component {
       handlePress,
       roomType,
       myVoteValue,
+      editor,
     } = this.props;
     let renderForParty = (null);
     if (roomType === 'party') {
@@ -45,7 +46,12 @@ class TrackInPlaylist extends React.Component {
           <View style={styles.votes_container}>
             <TouchableOpacity
               style={styles.vote_container}
-              onPress={() => this._vote(1)}
+              onPress={() => {
+                if (editor) {
+                  this._vote(1);
+                }
+              }}
+              disabled={!editor}
             >
               <Icon
                 name="ios-arrow-dropup"
@@ -54,7 +60,12 @@ class TrackInPlaylist extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.vote_container}
-              onPress={() => this._vote(-1)}
+              onPress={() => {
+                if (editor) {
+                  this._vote(-1);
+                }
+              }}
+              disabled={!editor}
             >
               <Icon
                 name="ios-arrow-dropdown"
@@ -67,7 +78,7 @@ class TrackInPlaylist extends React.Component {
     }
     let moveDraggable = null;
     let moveEndDraggable = null;
-    if (roomType === 'radio') {
+    if (roomType === 'radio' && editor) {
       const { move, moveEnd } = this.props;
       moveDraggable = move;
       moveEndDraggable = moveEnd;
