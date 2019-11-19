@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.1:3000/api';
+const server = 'http://10.4.3.4:3000/api';
 
 /*
                     Users & Login
