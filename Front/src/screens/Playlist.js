@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity,
+  StyleSheet, View, Text, TouchableOpacity, Dimensions,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
-  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
+  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote, deleteTrackFromPlaylist,
 } from '../../API/BackApi';
 
 class Playlist extends React.Component {
@@ -29,7 +29,7 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     this._isMounted = true;
 
-    socket.emit('userJoined', playlistId);
+    socket.emit('userJoinedPlaylist', playlistId);
     this._isAdmin();
     this.updateMyVotes().then(() => {
       this.updateTracks();
@@ -46,7 +46,7 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     this._isMounted = false;
 
-    socket.emit('userLeaved', playlistId);
+    socket.emit('userLeavedPlaylist', playlistId);
     this._onChangedPage();
   }
 
@@ -168,7 +168,7 @@ class Playlist extends React.Component {
       tracks, playing, refreshing, modalVisible, admin, myVotes,
     } = this.state;
     const {
-      navigation, changeTrack, changePlaylist, loggedUser,
+      navigation, changeTrack, changePlaylist, loggedUser, socket,
     } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
@@ -193,19 +193,23 @@ class Playlist extends React.Component {
         <Icon name="musical-notes" />
       </TouchableOpacity>
     );
-    const playIcon = (
+    const playButton = (
       <TouchableOpacity
         onPress={() => {
           getNextTrackByVote(playlistId)
             .then((nextTrack) => {
               changePlaylist(playlistId);
               changeTrack(nextTrack);
+              // console.log(nextTrack);
+              deleteTrackFromPlaylist(nextTrack.id, playlistId)
+                .then(() => socket.emit('deleteMusic', playlistId))
+                .catch(error => console.error(error));
             })
             .catch(error => console.log(error));
         }}
-        style={styles.headerIconWrapper}
+        style={styles.playButton}
       >
-        <Icon name="play" />
+        <Text style={styles.playText}>Play</Text>
       </TouchableOpacity>
     );
     if (admin === true) {
@@ -225,7 +229,6 @@ class Playlist extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
-          {playIcon}
           {settingsIcon}
           <Text
             style={styles.title}
@@ -263,6 +266,7 @@ class Playlist extends React.Component {
             isUserInPlaylist={isUserInPlaylist}
           />
         </View>
+        { playButton }
         <Components.AddFloatingButton
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
@@ -299,6 +303,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+  },
+  playButton: {
+    height: 50,
+    width: 220,
+    bottom: '20%',
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1db954',
+    lineHeight: 1,
+    borderRadius: 25,
+  },
+  playText: {
+    color: 'white',
+    textTransform: 'uppercase',
   },
 });
 
