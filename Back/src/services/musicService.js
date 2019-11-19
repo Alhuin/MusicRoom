@@ -190,7 +190,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
         if (!data.data.length) {
           downloadMusic(link)
             .then((path) => {
-              const staticMusicPath = path.data.replace('downloads', 'http://10.3.1.3:3000/tracks');
+              const staticMusicPath = path.data.replace('downloads', 'http://10.4.4.4:3000/tracks');
               const staticCoverPath = staticMusicPath.replace(staticMusicPath.split('/')[6], 'cover.png');
               const music = new MusicModel({
                 user: userId,

@@ -95,6 +95,7 @@ export default class AddPlaylistModal extends React.Component {
       roomType,
       updatePlaylist,
       loggedUser,
+      socket,
     } = this.props;
     const {
       switchValue, type, startDate, endDate, location, namePlaylist, datePickerModalVisible,
@@ -206,6 +207,11 @@ export default class AddPlaylistModal extends React.Component {
                   addPlaylist(namePlaylist, switchValue, userId, userId, loggedUser.name,
                     userId, roomType, startDate, endDate, location, this.generatePrivateId())
                     .then(() => {
+                      if (roomType === 'party') {
+                        socket.emit('addParty');
+                      } else {
+                        socket.emit('addRadio');
+                      }
                       setModalVisible();
                       updatePlaylist();
                     })

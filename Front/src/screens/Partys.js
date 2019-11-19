@@ -18,8 +18,9 @@ class Partys extends React.Component {
   }
 
   componentDidMount(): void {
-    const { loggedUser } = this.props;
+    const { loggedUser, socket } = this.props;
 
+    socket.emit('userJoinedPartysList');
     this._isMounted = true;
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
@@ -32,7 +33,11 @@ class Partys extends React.Component {
   }
 
   componentWillUnmount(): void {
+    const { socket } = this.props;
+
     this._isMounted = false;
+
+    socket.emit('userLeavedPartysList');
   }
 
   _onRefreshSignal = () => {
@@ -76,10 +81,11 @@ class Partys extends React.Component {
       modalVisible,
       refreshing,
     } = this.state;
-    const { navigation, loggedUser } = this.props;
+    const { navigation, loggedUser, socket } = this.props;
     return (
       <View style={{ height: '100%' }}>
         <Components.AddPlaylistModal
+          socket={socket}
           loggedUser={loggedUser}
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}

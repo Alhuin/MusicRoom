@@ -18,7 +18,9 @@ class Radios extends React.Component {
   }
 
   componentDidMount(): void {
-    const { loggedUser } = this.props;
+    const { loggedUser, socket } = this.props;
+
+    socket.emit('userJoinedRadiosList');
     getPlaylistsFiltered('radio', loggedUser._id)
       .then((playlists) => {
         this.setState({ playlists });
@@ -26,6 +28,12 @@ class Radios extends React.Component {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  componentWillUnmount(): void {
+    const { socket } = this.props;
+
+    socket.emit('userLeavedRadiosList');
   }
 
   _onRefreshSignal = () => {
