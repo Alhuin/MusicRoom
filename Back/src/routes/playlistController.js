@@ -553,7 +553,7 @@ function getTags(req, res) {
 
 function setTags(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.newTags !== undefined) {
+    && req.body.newTags) {
     playlistService.setTags(req.body.playlistId, req.body.newTags)
       .then((response) => {
         res

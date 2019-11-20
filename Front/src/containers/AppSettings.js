@@ -1,16 +1,13 @@
 import { connect } from 'react-redux';
 import AppSettings from '../screens/AppSettings';
+import * as actions from '../redux/actions';
 
 const mapStateToProps = state => ({
   loggedUser: state.authReducer.loggedUser,
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   changing: payload => dispatch(actions.isChanging(payload)),
-//   setCurrentPosition: payload => dispatch(actions.setCurrentPosition(payload)),
-//   paused: payload => dispatch(actions.paused(payload)),
-//   setTotalLength: payload => dispatch(actions.setTotalLength(payload)),
-//   changeTrack: payload => dispatch(actions.changeTrack(payload)),
-// });
+const mapDispatchToProps = dispatch => ({
+  userChanged: payload => dispatch(actions.userChanged(payload)),
+});
 
-export default connect(mapStateToProps, null)(AppSettings);
+export default connect(mapStateToProps, mapDispatchToProps)(AppSettings);

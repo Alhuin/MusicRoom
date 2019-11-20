@@ -65,8 +65,18 @@ const playlistSchema = new mongoose.Schema({
     default: [],
   },
   tags: {
-    type: [String],
-    default: [],
+    type: {},
+    default: {
+      Rock: false,
+      Rap: false,
+      Classic: false,
+      Electro: false,
+      Reggae: false,
+      Metal: false,
+      Pop: false,
+      Dub: false,
+      Country: false,
+    },
   },
   editRestriction: {
     type: String,

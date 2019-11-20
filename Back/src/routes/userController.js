@@ -83,10 +83,10 @@ function addUser(req, res) {
 
 function updateUser(req, res) {
   // checker email valide et les champs uniques
-  if ((req.body.newLogin && req.body.name
-      && req.body.familyName && req.body.email)) {
+  if ((req.body.newLogin && req.body.name && req.body.familyName
+    && req.body.email && req.body.phoneNumber && req.body.preferences)) {
     userService.updateUser(req.body.userId, req.body.newLogin, req.body.name,
-      req.body.familyName, req.body.email)
+      req.body.familyName, req.body.email, req.body.phoneNumber, req.body.preferences)
       .then((response) => {
         res
           .status(response.status)

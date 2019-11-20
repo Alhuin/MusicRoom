@@ -156,6 +156,7 @@ const seedDatas = async () => {
     name: 'Jul',
     familyName: 'Janin-R',
     email: 'janin.reynaud.julien@gma',
+    phoneNumber: '00',
   });
   const salty = await bcrypt.genSaltSync(10);
   const hashy = await bcrypt.hashSync('a', salty);
@@ -165,6 +166,7 @@ const seedDatas = async () => {
     name: 'Julien',
     familyName: 'Janin-Reynaud',
     email: 'julien.janinr@protonmail.com',
+    phoneNumber: '01',
     isVerified: true,
   });
   const user2 = new models.User({
@@ -174,6 +176,7 @@ const seedDatas = async () => {
     familyName: 'Renoi',
     email: 'a.b@protonmail.com',
     isVerified: true,
+    phoneNumber: '02',
   });
   const user3 = new models.User({
     login: 'c',
@@ -182,14 +185,16 @@ const seedDatas = async () => {
     familyName: 'Renoi',
     email: 'a.c@protonmail.com',
     isVerified: true,
+    phoneNumber: '03',
   });
   const user4 = new models.User({
     login: 'd',
     password: hashy,
-    name: 'Billy',
+    name: 'Boris',
     familyName: 'Renoi',
     email: 'a.d@protonmail.com',
     isVerified: true,
+    phoneNumber: '04',
   });
   await admin.save();
   await user1.save();

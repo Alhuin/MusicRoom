@@ -19,10 +19,42 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
   },
+  phoneNumber: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
     unique: true,
+  },
+  preferences: {
+    type: {},
+    default: {
+      Rock: false,
+      Rap: false,
+      Classic: false,
+      Electro: false,
+      Reggae: false,
+      Metal: false,
+      Pop: false,
+      Dub: false,
+      Country: false,
+    },
+  },
+  friends: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'UserModel',
+    default: [],
+  },
+  visibilityTable: {
+    type: {},
+    default: {
+      name: 'ALL',
+      familyName: 'ALL',
+      email: 'PRIVATE',
+      phoneNumber: 'FRIEND_ONLY',
+      preferences: 'ALL',
+    },
   },
   isVerified: {
     type: Boolean,

@@ -88,7 +88,7 @@ function addUser(login, password, name, familyName, email) {
   });
 }
 
-function updateUser(userId, login, name, familyName, email) {
+function updateUser(userId, login, name, familyName, email, phoneNumber, preferences) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
@@ -101,6 +101,8 @@ function updateUser(userId, login, name, familyName, email) {
         updatedUser.name = name;
         updatedUser.familyName = familyName;
         updatedUser.email = email;
+        updatedUser.phoneNumber = phoneNumber;
+        updatedUser.preferences = preferences;
         updatedUser.save((saveError, newUser) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));

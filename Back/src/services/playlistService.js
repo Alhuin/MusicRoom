@@ -4,7 +4,6 @@ import models from '../models';
 import UserModel from '../models/userModel';
 import MusicModel from '../models/musicModel';
 import utils from '../utils';
-import VoteModel from "../models/voteModel";
 
 function getPlaylists() {
   return new Promise((resolve, reject) => {
@@ -173,35 +172,9 @@ function deletePlaylistByAdmin(playlistId, userId) {
             if (removeError) {
               reject(new CustomError('MongoError', removeError, 500));
             } else {
-              MusicModel.find({ playlist: playlistId }, (errorMusicFind, musics) => {
-                if (errorMusicFind) {
-                  reject(new CustomError('MongoError', error.message, 500));
-                } else if (!musics[0]) {
-                  for (let i = 0; i < musics.length; i++) {
-                    musics[i].remove((removeMusicError, removedMusic) => {
-                      if (removeError) {
-                        reject(new CustomError(`MongoError on ${removedMusic.id}`, removeMusicError, 500));
-                      }
-                    });
-                  }
-                  VoteModel.find({ playlist: playlistId }, (errorVoteFind, votes) => {
-                    if (errorMusicFind) {
-                      reject(new CustomError('MongoError', error.message, 500));
-                    } else if (!votes[0]) {
-                      for (let i = 0; i < votes.length; i++) {
-                        votes[i].remove((removeVoteError, removedVote) => {
-                          if (removeError) {
-                            reject(new CustomError(`MongoError on ${removedVote.id}`, removeVoteError, 500));
-                          }
-                        });
-                      }
-                      resolve({
-                        status: 200,
-                        data: removedPlaylist,
-                      });
-                    }
-                  });
-                }
+              resolve({
+                status: 200,
+                data: removedPlaylist,
               });
             }
           });

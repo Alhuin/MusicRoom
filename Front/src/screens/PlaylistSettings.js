@@ -351,16 +351,10 @@ class PlaylistSettings extends React.Component {
   };
 
   tagsChanged = (tag) => {
-    let { tags } = this.state;
+    const { tags } = this.state;
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
-
-    if (tags[tag]) {
-      delete tags[tag];
-    } else {
-      tags[tag] = true;
-    }
-    tags = this.formatTags(tags);
+    tags[tag] = !tags[tag];
     setTags(playlistId, tags)
       .then((data) => {
         this.setState({ tags: data });
@@ -369,8 +363,6 @@ class PlaylistSettings extends React.Component {
         console.error(`${error} in tagsChanged`);
       });
   };
-
-  formatTags = tags => Object.keys(tags);
 
   radioIsPressed = (value) => {
     const { navigation } = this.props;

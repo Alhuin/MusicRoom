@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Button, TextInput, Alert,
+  StyleSheet, View, Text, Button, TextInput, Alert,
 } from 'react-native';
 import { updateUser } from '../../API/BackApi';
+import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
 
 class AppSettings extends React.Component {
   constructor(props) {
@@ -13,6 +14,9 @@ class AppSettings extends React.Component {
       login: props.loggedUser.login,
       name: props.loggedUser.name,
       familyName: props.loggedUser.familyName,
+      phoneNumber: props.loggedUser.phoneNumber,
+      preferences: props.loggedUser.preferences,
+      // friends: props.loggedUser.friends,
     };
   }
 
@@ -32,103 +36,185 @@ class AppSettings extends React.Component {
     this.setState({ email: text });
   };
 
-    _onPressModify = () => {
-      const {
-        user, login, name, familyName, email,
-      } = this.state;
-      console.log(`ici:${user._id}`);
-      if (!(name.length && familyName.length && email.length
-          && login.length)) {
-        Alert.alert('error: empty field.');
-        console.log('error, empty field');
-      } else {
-        updateUser(user._id, login, name, familyName, email)
-          .then(() => {
-            Alert.alert('Settings have been modified');
-          })
-          .catch(error => console.log(error));
-      }
-    };
+  updatePhoneNumber = (text) => {
+    this.setState({ phoneNumber: text });
+  };
 
-    render() {
-      const { user } = this.state;
-      // console.log(user);
-      return (
-        <View style={styles.card}>
-          <Text style={styles.title_set}>
-              Settings
-          </Text>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.main_container}
-          >
-            <View style={styles.content_container}>
-              <View style={styles.title_container}>
-                <Text style={styles.title_text}>Login :</Text>
-                <TextInput
-                  style={styles.title_text}
-                  onChangeText={this.updateLogin}
-                >
-                  { user.login }
-                </TextInput>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.main_container}
-          >
-            <View style={styles.content_container}>
-              <View style={styles.title_container}>
-                <Text style={styles.title_text}>Name :</Text>
-                <TextInput
-                  style={styles.title_text}
-                  onChangeText={this.updateName}
-                >
-                  { user.name }
-                </TextInput>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.main_container}
-          >
-            <View style={styles.content_container}>
-              <View style={styles.title_container}>
-                <Text style={styles.title_text}>Family Name :</Text>
-                <TextInput
-                  style={styles.title_text}
-                  onChangeText={this.updateFamilyName}
-                >
-                  { user.familyName }
-                </TextInput>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.main_container}
-          >
-            <View style={styles.content_container}>
-              <View style={styles.title_container}>
-                <Text style={styles.title_text}>Email :</Text>
-                <TextInput
-                  style={styles.title_text}
-                  onChangeText={this.updateEmail}
-                >
-                  { user.email }
-                </TextInput>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <Button
-            title="Modify"
-            onPress={this._onPressModify}
-          />
-        </View>
-      );
+  onPreferenceChanged = (tag) => {
+    const { preferences } = this.state;
+    preferences[tag] = !preferences[tag];
+    this.setState({ preferences });
+  };
+
+  _onPressModify = () => {
+    const { userChanged } = this.props;
+    const {
+      user, login, name, familyName, email, phoneNumber, preferences,
+    } = this.state;
+    if (!(name.length && familyName.length && email.length
+        && login.length && phoneNumber.length)) {
+      Alert.alert('error: empty field.');
+      console.log('error, empty field');
+    } else {
+      updateUser(user._id, login, name, familyName, email, phoneNumber, preferences)
+        .then((newUser) => {
+          userChanged(newUser);
+          Alert.alert('Les paramètres ont bien été modifiés');
+        })
+        .catch(error => console.log(error));
     }
+  };
+
+  render() {
+    const { user, preferences } = this.state;
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title_set}>
+          Settings
+        </Text>
+        <View
+          style={styles.main_container}
+        >
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>Identifiant :</Text>
+              <TextInput
+                style={styles.title_text}
+                onChangeText={this.updateLogin}
+              >
+                { user.login }
+              </TextInput>
+            </View>
+          </View>
+        </View>
+        <View
+          style={styles.main_container}
+        >
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>Nom :</Text>
+              <TextInput
+                style={styles.title_text}
+                onChangeText={this.updateName}
+              >
+                { user.name }
+              </TextInput>
+            </View>
+          </View>
+        </View>
+        <View
+          style={styles.main_container}
+        >
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>Nom de famille :</Text>
+              <TextInput
+                style={styles.title_text}
+                onChangeText={this.updateFamilyName}
+              >
+                { user.familyName }
+              </TextInput>
+            </View>
+          </View>
+        </View>
+        <View
+          style={styles.main_container}
+        >
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>Email :</Text>
+              <TextInput
+                style={styles.title_text}
+                onChangeText={this.updateEmail}
+              >
+                { user.email }
+              </TextInput>
+            </View>
+          </View>
+        </View>
+        <View
+          style={styles.main_container}
+        >
+          <View style={styles.content_container}>
+            <View style={styles.title_container}>
+              <Text style={styles.title_text}>Tél. :</Text>
+              <TextInput
+                style={styles.title_text}
+                onChangeText={this.updatePhoneNumber}
+              >
+                { user.phoneNumber }
+              </TextInput>
+            </View>
+          </View>
+        </View>
+        <View
+          style={styles.checkboxesWrapper}
+        >
+          <View
+            style={styles.checkboxRow}
+          >
+            <SettingsTagCheckbox
+              checked={preferences.Rock}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Rock"
+            />
+            <SettingsTagCheckbox
+              checked={preferences.Rap}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Rap"
+            />
+            <SettingsTagCheckbox
+              checked={preferences.Classic}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Classic"
+            />
+          </View>
+          <View
+            style={styles.checkboxRow}
+          >
+            <SettingsTagCheckbox
+              checked={preferences.Electro}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Electro"
+            />
+            <SettingsTagCheckbox
+              checked={preferences.Reggae}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Reggae"
+            />
+            <SettingsTagCheckbox
+              checked={preferences.Metal}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Metal"
+            />
+          </View>
+          <View
+            style={styles.checkboxRow}
+          >
+            <SettingsTagCheckbox
+              checked={preferences.Pop}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Pop"
+            />
+            <SettingsTagCheckbox
+              checked={preferences.Dub}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Dub"
+            />
+            <SettingsTagCheckbox
+              checked={preferences.Country}
+              tagsChanged={this.onPreferenceChanged}
+              tag="Country"
+            />
+          </View>
+        </View>
+        <Button
+          title="Modifier"
+          onPress={this._onPressModify}
+        />
+      </View>
+    );
+  }
 }
 
 let styles = StyleSheet.create({
@@ -171,6 +257,15 @@ let styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     paddingRight: 5,
+  },
+  checkboxRow: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+  },
+  checkboxesWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 

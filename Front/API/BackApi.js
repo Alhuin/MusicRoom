@@ -134,7 +134,7 @@ function sendPasswordToken(loginOrEmail) {
   });
 }
 
-function updateUser(userId, newLogin, name, familyName, email) {
+function updateUser(userId, newLogin, name, familyName, email, phoneNumber, preferences) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/users/update`, {
       method: 'POST',
@@ -143,17 +143,15 @@ function updateUser(userId, newLogin, name, familyName, email) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId, newLogin, name, familyName, email,
+        userId, newLogin, name, familyName, email, phoneNumber, preferences,
       }),
     })
       .then(async (response) => {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
-          // alert(data.msg);
         } else {
           reject(new CustomError('updateUser', data.msg, response.status));
-          // alert(`error ${data.status}: ${data.msg}`);
         }
       })
       .catch(error => reject(error));
@@ -810,25 +808,15 @@ function getTags(playlistId) {
       },
     })
       .then(async (response) => {
-        let data = await response.json();
-        data = formatTags(data);
+        const data = await response.json();
         if (response.status === 200) {
           resolve(data);
         } else {
           reject(new CustomError('getTags', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
   });
-}
-
-function formatTags(tags) {
-  const newTags = {};
-  for (let i = 0; i < tags.length; i += 1) {
-    newTags[tags[i]] = true;
-  }
-  return newTags;
 }
 
 function getEditRestriction(playlistId) {
@@ -863,10 +851,8 @@ function setTags(playlistId, newTags) {
       body: JSON.stringify({ playlistId, newTags }),
     })
       .then(async (response) => {
-        // savedPlaylist is the response
         let data = await response.json();
         data = data.tags;
-        data = formatTags(data);
         if (response.status === 200) {
           resolve(data);
         } else {
