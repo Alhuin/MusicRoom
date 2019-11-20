@@ -4,6 +4,7 @@ import models from '../models';
 import UserModel from '../models/userModel';
 import MusicModel from '../models/musicModel';
 import utils from '../utils';
+import VoteModel from "../models/voteModel";
 
 function getPlaylists() {
   return new Promise((resolve, reject) => {
@@ -156,6 +157,59 @@ function deletePlaylistById(playlistId) {
         });
       }
     });
+  });
+}
+
+function deletePlaylistByAdmin(playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    if (utils.isAdminInPlaylist(playlistId, userId)) {
+      PlaylistModel.findById(playlistId, (error, playlist) => {
+        if (error) {
+          reject(new CustomError('MongoError', error.message, 500));
+        } else if (!playlist) {
+          reject(new CustomError('DeletePlaylistByAdmin', 'No playlist with this id in database', 400));
+        } else {
+          playlist.remove((removeError, removedPlaylist) => {
+            if (removeError) {
+              reject(new CustomError('MongoError', removeError, 500));
+            } else {
+              MusicModel.find({ playlist: playlistId }, (errorMusicFind, musics) => {
+                if (errorMusicFind) {
+                  reject(new CustomError('MongoError', error.message, 500));
+                } else if (!musics[0]) {
+                  for (let i = 0; i < musics.length; i++) {
+                    musics[i].remove((removeMusicError, removedMusic) => {
+                      if (removeError) {
+                        reject(new CustomError(`MongoError on ${removedMusic.id}`, removeMusicError, 500));
+                      }
+                    });
+                  }
+                  VoteModel.find({ playlist: playlistId }, (errorVoteFind, votes) => {
+                    if (errorMusicFind) {
+                      reject(new CustomError('MongoError', error.message, 500));
+                    } else if (!votes[0]) {
+                      for (let i = 0; i < votes.length; i++) {
+                        votes[i].remove((removeVoteError, removedVote) => {
+                          if (removeError) {
+                            reject(new CustomError(`MongoError on ${removedVote.id}`, removeVoteError, 500));
+                          }
+                        });
+                      }
+                      resolve({
+                        status: 200,
+                        data: removedPlaylist,
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    } else {
+      reject(new CustomError('DeletePlaylistByAdmin', 'Not authorized', 401));
+    }
   });
 }
 
@@ -463,6 +517,8 @@ function joinPlaylist(userId, playlistCode) {
     PlaylistModel.find({ privateId: playlistCode }, (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlists[0]) {
+        reject(new CustomError('DeleteTrackFromPlaylist', 'No playlist with this id in database', 400));
       } else {
         const newPlaylist = playlists[0];
         newPlaylist.users.push(userId);
@@ -589,7 +645,7 @@ function deleteTrackFromPlaylist(playlistId, musicId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!musics[0]) {
-        reject(new CustomError('DeleteTrackFromPlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('DeleteTrackFromPlaylist', 'No Music with this id in database', 400));
       } else {
         musics[0].remove((removeError, removedMusic) => {
           if (removeError) {
@@ -826,6 +882,7 @@ export default {
   getPublicityOfPlaylistById,
   addPlaylist,
   deletePlaylistById,
+  deletePlaylistByAdmin,
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,

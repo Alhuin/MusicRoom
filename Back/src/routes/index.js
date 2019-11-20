@@ -73,6 +73,7 @@ router.post('/playlists/user/unbanned', playlistController.addUserToPlaylistAndU
 router.post('/playlists/isAdmin', playlistController.isAdmin);
 router.post('/playlists/isEditor', playlistController.isEditor);
 router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
+router.delete('/playlists/deletePlaylistByAdmin', playlistController.deletePlaylistByAdmin);
 router.post('/playlists/join', playlistController.joinPlaylist);
 router.post('/playlists/setPublicity', playlistController.setPublicityOfPlaylist);
 router.post('/playlists/deleteTrack', playlistController.deleteTrackFromPlaylist);

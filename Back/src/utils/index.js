@@ -9,13 +9,12 @@ const isValidId = (id) => {
 };
 
 const isAdminInPlaylist = (playlist, userId) => {
-  let flag = false;
   for (let j = 0; j < playlist.admins.length; j += 1) {
     if (String(playlist.admins[j]._id) === String(userId)) {
-      flag = true;
+      return (true);
     }
   }
-  return (flag);
+  return (false);
 };
 
 const isEditorInPlaylist = (playlist, userId) => {

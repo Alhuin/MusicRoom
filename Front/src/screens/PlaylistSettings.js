@@ -5,22 +5,21 @@ import React from 'react';
 import { Icon } from 'native-base';
 import Collapsible from 'react-native-collapsible';
 import SimpleToast from 'react-native-simple-toast';
+import RadioForm from 'react-native-simple-radio-button';
 import AdminListInSettings from '../components/Playlist/AdminListInSettings';
 import UserListInSettings from '../components/Playlist/UserListInSettings';
 import BansListInSettings from '../components/Playlist/BansListInSettings';
 import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
-import RadioForm from 'react-native-simple-radio-button';
 import Loader from '../components/Authentication/Loader';
 
 import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
   getPlaylistDates, setStartDate, setEndDate, getTags, setTags, getEditRestriction,
-  setEditRestriction,
+  setEditRestriction, deletePlaylistByAdmin,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
-import Video from "react-native-video";
 
 
 class PlaylistSettings extends React.Component {
@@ -43,6 +42,7 @@ class PlaylistSettings extends React.Component {
       dateType: 0,
       tags: {},
       radioValue: 0,
+      deletePlaylistState: 'Supprimer la Playlist',
     };
   }
 
@@ -394,11 +394,36 @@ class PlaylistSettings extends React.Component {
       });
   };
 
+  onDeletePlaylistTouchable = () => {
+    const { deletePlaylistState } = this.state;
+    const { navigation, loggedUser } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    const roomType = navigation.getParam('roomType');
+
+    if (deletePlaylistState === 'Supprimer la Playlist') {
+      this.setState({ deletePlaylistState: 'Vous êtes certain.e ?' });
+    } else if (deletePlaylistState === 'Vous êtes certain.e ?') {
+      this.setState({ deletePlaylistState: 'Dernière chance !' });
+    } else if (deletePlaylistState === 'Dernière chance !') {
+      deletePlaylistByAdmin(playlistId, loggedUser._id)
+        .then(() => {
+          if (roomType === 'party') {
+            NavigationUtils.resetStack(this, 'PartysList', null);
+          } else if (roomType === 'radio') {
+            NavigationUtils.resetStack(this, 'RadiosList', null);
+          }
+        })
+        .catch((error) => {
+          console.error(`${error} in onDeletePlaylistTouchable`);
+        });
+    }
+  };
+
   render() {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, startDate, endDate, datePickerModalVisible, tags,
-      radioValue,
+      radioValue, deletePlaylistState,
     } = this.state;
     let radioProps = [];
     const { navigation, loggedUser } = this.props;
@@ -670,45 +695,75 @@ class PlaylistSettings extends React.Component {
           >
             Administrateurs
           </Text>
-          <AdminListInSettings
-            loggedUser={loggedUser}
-            displayLoader={this.displayLoader}
-            admins={admins}
-            onRefresh={this._onRefresh}
-            authorId={authorId}
-            playlistId={playlistId}
-            isLoading={this.isLoading}
-            roomType={roomType}
-            parent={this}
-            delegatedPlayerAdmin={delegatedPlayerAdmin}
-          />
+          <View
+            style={{
+              borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+            }}
+          >
+            <AdminListInSettings
+              loggedUser={loggedUser}
+              displayLoader={this.displayLoader}
+              admins={admins}
+              onRefresh={this._onRefresh}
+              authorId={authorId}
+              playlistId={playlistId}
+              isLoading={this.isLoading}
+              roomType={roomType}
+              parent={this}
+              delegatedPlayerAdmin={delegatedPlayerAdmin}
+            />
+          </View>
           <Text
             style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
           >
             Utilisateurs
           </Text>
-          <UserListInSettings
-            loggedUser={loggedUser}
-            displayLoader={this.displayLoader}
-            users={users}
-            onRefresh={this._onRefresh}
-            playlistId={playlistId}
-            isLoading={this.isLoading}
-            roomType={roomType}
-            parent={this}
-          />
+          <View
+            style={{
+              borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+            }}
+          >
+            <UserListInSettings
+              loggedUser={loggedUser}
+              displayLoader={this.displayLoader}
+              users={users}
+              onRefresh={this._onRefresh}
+              playlistId={playlistId}
+              isLoading={this.isLoading}
+              roomType={roomType}
+              parent={this}
+            />
+          </View>
           <Text
             style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
           >
             Bannis
           </Text>
-          <BansListInSettings
-            displayLoader={this.displayLoader}
-            bans={bans}
-            onRefresh={this._onRefresh}
-            playlistId={playlistId}
-            isLoading={this.isLoading}
-          />
+          <View
+            style={{
+              borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+            }}
+          >
+            <BansListInSettings
+              displayLoader={this.displayLoader}
+              bans={bans}
+              onRefresh={this._onRefresh}
+              playlistId={playlistId}
+              isLoading={this.isLoading}
+            />
+          </View>
+          <View>
+            <TouchableOpacity
+              onPress={this.onDeletePlaylistTouchable}
+              style={styles.deletePlaylistTouchable}
+            >
+              <Text
+                style={{ fontSize: 20 }}
+              >
+                {deletePlaylistState}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       );
     } else if (roomType === 'party') {
@@ -718,7 +773,7 @@ class PlaylistSettings extends React.Component {
             <Text>
               La playlist est
               {' '}
-              Publique
+              {switchValue ? 'publique.' : 'privée.'}
             </Text>
           </View>
           <View>
@@ -747,7 +802,7 @@ class PlaylistSettings extends React.Component {
             <Text>
               La playlist est
               {' '}
-              Publique
+              {switchValue ? 'publique.' : 'privée.'}
             </Text>
           </View>
         </View>
@@ -857,6 +912,13 @@ const styles = StyleSheet.create({
   checkboxesWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  deletePlaylistTouchable: {
+    padding: 10,
+    margin: 5,
+    borderRadius: 20,
+    backgroundColor: '#F5FCFF',
+    alignItems: 'center',
   },
 });
 

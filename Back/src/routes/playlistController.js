@@ -125,8 +125,28 @@ function addPlaylist(req, res) {
 }
 
 function deletePlaylistById(req, res) {
-  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
-    playlistService.deletePlaylistById(req.params.playlistId)
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)) {
+    playlistService.deletePlaylistById(req.body.playlistId, req.body.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function deletePlaylistByAdmin(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)) {
+    playlistService.deletePlaylistByAdmin(req.body.playlistId, req.body.userId)
       .then((response) => {
         res
           .status(response.status)
@@ -656,6 +676,7 @@ export default {
   getPublicityOfPlaylistById,
   addPlaylist,
   deletePlaylistById,
+  deletePlaylistByAdmin,
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,
