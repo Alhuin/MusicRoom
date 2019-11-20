@@ -11,7 +11,13 @@ import { addUser, login } from '../../../API/BackApi';
 export default class SocialLogin extends Component {
   signIn = async () => {
     console.log('CHECKER');
-    const { type } = this.props;
+    const {
+      type, navigation, userChanged, setSocket, admin,
+    } = this.props;
+    const loginSocial = await AsyncStorage.getItem('userName');
+    const passSocial = await AsyncStorage.getItem('password');
+    console.log(`propsType = ${type}`);
+    console.log(`asyncType = ${await AsyncStorage.getItem('type')}`);
     if (type === 'Sign Up' && await AsyncStorage.getItem('type') === null) {
       GoogleSignin.configure({
         webClientId: '846991476431-n04g8tt0rlgqlf40n93j93ehapdh6rtm.apps.googleusercontent.com',
@@ -30,32 +36,25 @@ export default class SocialLogin extends Component {
       } catch (error) {
         console.log(`4 :${error.code}`);
       }
+    } else if (await AsyncStorage.getItem('type') === 'SignIn') {
+      login(loginSocial, passSocial)
+        .then((user) => {
+          console.log('ALLER');
+          userChanged(user);
+          if (user.isAdmin) {
+            admin(true);
+          }
+          setSocket(SocketIOClient('http://10.4.4.6:4000'));
+          console.log('ALLER');
+          navigation.navigate('app');
+          console.log('ALLERRRRR');
+        })
+        .catch((error) => {
+          if (error.status === 401) {
+            Alert.alert('Error, wrong username or password');
+          }
+        });
     }
-  };
-
-  signInn = async () => {
-    const {
-      navigation, userChanged, setSocket, admin,
-    } = this.props;
-    const loginSocial = await AsyncStorage.getItem('userName');
-    const passSocial = await AsyncStorage.getItem('password');
-    login(loginSocial, passSocial)
-      .then((user) => {
-        console.log('ALLER');
-        userChanged(user);
-        if (user.isAdmin) {
-          admin(true);
-        }
-        setSocket(SocketIOClient('http://10.4.4.6:4000'));
-        console.log('ALLER');
-        navigation.navigate('app');
-        console.log('ALLERRRRR');
-      })
-      .catch((error) => {
-        if (error.status === 401) {
-          Alert.alert('Error, wrong username or password');
-        }
-      });
   };
 
   render() {
@@ -66,11 +65,6 @@ export default class SocialLogin extends Component {
           size={GoogleSigninButton.Size.Icon}
           color={GoogleSigninButton.Color.Dark}
           onPress={this.signIn}
-        />
-        <Button
-          title="google"
-          style={{ width: 48, height: 48 }}
-          onPress={this.signInn}
         />
       </View>
     );

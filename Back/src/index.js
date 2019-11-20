@@ -31,22 +31,52 @@ websocket.on('connection', (socket) => {
   console.log('[Socket Server] : user logged in');
   clients[socket.id] = socket;
 
-  // Rooms are created when at least one user joins a playlist, the events are sent by room.
-  // Joining room
-  socket.on('userJoined', (playlistId) => {
+
+  // Joining radiosList room
+  socket.on('userJoinedRadiosList', () => {
+    console.log('[Socket Server] : user joined radiosList');
+    socket.join('radiosList');
+  });
+
+  // Joining partysList room
+  socket.on('userJoinedPartysList', () => {
+    console.log('[Socket Server] : user joined partysList');
+    socket.join('partysList');
+  });
+
+  // Joining a playlist room
+  socket.on('userJoinedPlaylist', (playlistId) => {
     console.log(`[Socket Server] : user joined playlist ${playlistId}`);
     socket.join(playlistId);
   });
 
-  // Refresh signal sent on addMusic, deleteMusic & voteMusic
+  // Refresh signal sent to PlaylistList on removePlaylist & addPlaylsit
+  socket.on('addRadio', () => websocket.to('radiosList').emit('refresh'));
+  socket.on('addParty', () => websocket.to('partysList').emit('refresh'));
+  socket.on('removeParty', () => websocket.to('partysList').emit('refresh'));
+  socket.on('removeRadio', () => websocket.to('radiosList').emit('refresh'));
+
+  // Refresh signal sent to a specific playlist on addMusic, deleteMusic & voteMusic
   socket.on('addMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
   socket.on('deleteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
   socket.on('voteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
 
-  // Leaving room ( pas le salon hein )
-  socket.on('userLeaved', (playlistId) => {
+  // Leaving Playlist room
+  socket.on('userLeavedPlaylist', (playlistId) => {
     console.log(`[Socket Server] : user leaved playlist ${playlistId}`);
     socket.leave(playlistId);
+  });
+
+  // Leaving radiosList room
+  socket.on('userLeavedRadiosList', () => {
+    console.log('[Socket Server] : user leaved radiosList');
+    socket.leave('radiosList');
+  });
+
+  // Leaving partysList room
+  socket.on('userLeavedPartysList', () => {
+    console.log('[Socket Server] : user leaved partysList');
+    socket.leave('partysList');
   });
 });
 
