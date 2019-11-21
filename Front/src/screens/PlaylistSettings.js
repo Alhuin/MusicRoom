@@ -473,13 +473,9 @@ class PlaylistSettings extends React.Component {
               DateModalVisible={datePickerModalVisible}
               onDateChanged={this.onDateChanged}
             />
-            <TouchableOpacity
-              onPress={this.toggleExpandedSpec}
-            >
+            <TouchableOpacity onPress={this.toggleExpandedSpec}>
               <View style={styles.header}>
-                <Text
-                  style={styles.header}
-                >
+                <Text style={styles.header}>
                   Option de Party
                 </Text>
                 {collapsibleIconSpec}
@@ -531,21 +527,15 @@ class PlaylistSettings extends React.Component {
       }
       adminOptions = (
         <View>
-          <Text
-            style={styles.subText}
-          >
+          <Text style={styles.subText}>
             Les paramètres sont rafraîchis à chaque modification,
             {' '}
             et peuvent être modifiés en même temps
             {' '}
             par d&apos;autres utilisateurs ou administrateurs.
           </Text>
-          <View
-            style={[styles.subContainer, { justifyContent: 'space-between' }]}
-          >
-            <Text
-              style={styles.subContainerFontStyle}
-            >
+          <View style={[styles.subContainer, { justifyContent: 'space-between' }]}>
+            <Text style={styles.subContainerFontStyle}>
               Publique
             </Text>
             <Switch
@@ -569,25 +559,17 @@ class PlaylistSettings extends React.Component {
             />
           </View>
           {specificRoomSettings}
-          <TouchableOpacity
-            onPress={this.toggleExpandedTags}
-          >
+          <TouchableOpacity onPress={this.toggleExpandedTags}>
             <View style={styles.header}>
-              <Text
-                style={styles.header}
-              >
+              <Text style={styles.header}>
                 Tags
               </Text>
               {collapsibleIconTags}
             </View>
           </TouchableOpacity>
           <Collapsible collapsed={collapsedTags} align="center">
-            <View
-              style={styles.checkboxesWrapper}
-            >
-              <View
-                style={styles.checkboxRow}
-              >
+            <View style={styles.checkboxesWrapper}>
+              <View style={styles.checkboxRow}>
                 <SettingsTagCheckbox
                   checked={tags.Rock}
                   tagsChanged={this.tagsChanged}
@@ -604,9 +586,7 @@ class PlaylistSettings extends React.Component {
                   tag="Classic"
                 />
               </View>
-              <View
-                style={styles.checkboxRow}
-              >
+              <View style={styles.checkboxRow}>
                 <SettingsTagCheckbox
                   checked={tags.Electro}
                   tagsChanged={this.tagsChanged}
@@ -623,9 +603,7 @@ class PlaylistSettings extends React.Component {
                   tag="Metal"
                 />
               </View>
-              <View
-                style={styles.checkboxRow}
-              >
+              <View style={styles.checkboxRow}>
                 <SettingsTagCheckbox
                   checked={tags.Pop}
                   tagsChanged={this.tagsChanged}
@@ -644,13 +622,9 @@ class PlaylistSettings extends React.Component {
               </View>
             </View>
           </Collapsible>
-          <TouchableOpacity
-            onPress={this.toggleExpanded}
-          >
+          <TouchableOpacity onPress={this.toggleExpanded}>
             <View style={styles.header}>
-              <Text
-                style={styles.header}
-              >
+              <Text style={styles.header}>
                 Légende
               </Text>
               {collapsibleIcon}
@@ -682,9 +656,7 @@ class PlaylistSettings extends React.Component {
               <Text> Bannissement </Text>
             </View>
           </Collapsible>
-          <Text
-            style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
-          >
+          <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
             Administrateurs
           </Text>
           <View
@@ -705,9 +677,7 @@ class PlaylistSettings extends React.Component {
               delegatedPlayerAdmin={delegatedPlayerAdmin}
             />
           </View>
-          <Text
-            style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
-          >
+          <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
             Utilisateurs
           </Text>
           <View
@@ -726,9 +696,7 @@ class PlaylistSettings extends React.Component {
               parent={this}
             />
           </View>
-          <Text
-            style={[styles.subContainerFontStyle, { textAlign: 'center' }]}
-          >
+          <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
             Bannis
           </Text>
           <View
@@ -749,9 +717,7 @@ class PlaylistSettings extends React.Component {
               onPress={this.onDeletePlaylistTouchable}
               style={styles.deletePlaylistTouchable}
             >
-              <Text
-                style={{ fontSize: 20 }}
-              >
+              <Text style={{ fontSize: 20 }}>
                 {deletePlaylistState}
               </Text>
             </TouchableOpacity>
@@ -802,14 +768,10 @@ class PlaylistSettings extends React.Component {
     }
     const rendering = (
       <ScrollView style={styles.container}>
-        <Text
-          style={styles.title}
-        >
+        <Text style={styles.title}>
           Paramètres de la playlist
         </Text>
-        <View
-          style={[styles.subContainer, { justifyContent: 'center' }]}
-        >
+        <View style={[styles.subContainer, { justifyContent: 'center' }]}>
           <Button
             title="Quitter la playlist"
             onPress={() => {
@@ -818,9 +780,7 @@ class PlaylistSettings extends React.Component {
             style={styles.leavingButton}
           />
         </View>
-        <View
-          style={[styles.subContainer, { justifyContent: 'space-between' }]}
-        >
+        <View style={[styles.subContainer, { justifyContent: 'space-between' }]}>
           <Text
             selectable
             style={styles.subContainerFontStyle}

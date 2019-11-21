@@ -1,6 +1,6 @@
 import CustomError from './errorHandler';
 
-const server = 'http://10.4.4.6:3000/api';
+const server = 'http://10.4.5.5:3000/api';
 
 /*
                     Users & Login
@@ -134,7 +134,8 @@ function sendPasswordToken(loginOrEmail) {
   });
 }
 
-function updateUser(userId, newLogin, name, familyName, email, phoneNumber, preferences) {
+function updateUser(userId, newLogin, name, familyName,
+  email, phoneNumber, preferences, visibilityTable) {
   return new Promise((resolve, reject) => {
     fetch(`${server}/users/update`, {
       method: 'POST',
@@ -143,7 +144,7 @@ function updateUser(userId, newLogin, name, familyName, email, phoneNumber, pref
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId, newLogin, name, familyName, email, phoneNumber, preferences,
+        userId, newLogin, name, familyName, email, phoneNumber, preferences, visibilityTable,
       }),
     })
       .then(async (response) => {

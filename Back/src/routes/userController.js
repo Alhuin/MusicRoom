@@ -84,9 +84,11 @@ function addUser(req, res) {
 function updateUser(req, res) {
   // checker email valide et les champs uniques
   if ((req.body.newLogin && req.body.name && req.body.familyName
-    && req.body.email && req.body.phoneNumber && req.body.preferences)) {
+    && req.body.email && req.body.phoneNumber && req.body.preferences
+    && req.body.visibilityTable)) {
     userService.updateUser(req.body.userId, req.body.newLogin, req.body.name,
-      req.body.familyName, req.body.email, req.body.phoneNumber, req.body.preferences)
+      req.body.familyName, req.body.email, req.body.phoneNumber, req.body.preferences,
+      req.body.visibilityTable)
       .then((response) => {
         res
           .status(response.status)

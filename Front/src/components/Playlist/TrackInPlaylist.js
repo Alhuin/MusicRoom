@@ -3,7 +3,7 @@ import {
   TouchableOpacity, Image, View, Text, StyleSheet, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
-import {isEditor, voteMusic} from '../../../API/BackApi';
+import { voteMusic } from '../../../API/BackApi';
 
 // must create two components TrackInRadio and TrackInParty or this one need to be modified
 

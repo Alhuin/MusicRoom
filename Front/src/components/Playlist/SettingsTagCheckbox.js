@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 export default class SettingsTagCheckbox extends Component {
   render() {
-    const { tag, tagsChanged, checked } = this.props;
+    const { tag, tagsChanged, checked, textStyle } = this.props;
     return (
       <View
         style={styles.container}
@@ -17,7 +17,9 @@ export default class SettingsTagCheckbox extends Component {
             tagsChanged(tag);
           }}
         />
-        <Text>
+        <Text
+          style={textStyle}
+        >
           {tag}
         </Text>
       </View>
