@@ -22,7 +22,7 @@ const socketio = require('socket.io');
 const socketServer = http.Server(app);
 const websocket = socketio(socketServer);
 
-socketServer.listen(4000, () => console.log('[Socket Server] : listening on port 4000'));
+socketServer.listen(process.env.WEBSOCKET_PORT, () => console.log(`[Socket Server] : listening on port ${process.env.WEBSOCKET_PORT}`));
 
 const clients = {};
 
@@ -124,7 +124,7 @@ connectDb().then(async () => {
     ]);
   }
   seedDatas();
-  app.listen(process.env.PORT, () => console.log(`App listening on port ${process.env.PORT}!`));
+  app.listen(process.env.EXPRESS_PORT, () => console.log(`App listening on port ${process.env.EXPRESS_PORT}!`));
 });
 
 /**

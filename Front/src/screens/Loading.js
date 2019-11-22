@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import SocketIOClient from 'socket.io-client';
+import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 
 export default class Loading extends React.Component {
   componentDidMount() {
@@ -10,7 +11,7 @@ export default class Loading extends React.Component {
     // }, 5000); // catcher infinite loading
     // clearTimeout(timer);
     if (loggedUser !== null) {
-      setSocket(SocketIOClient('http://10.3.1.3:4000'));
+      setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
       navigation.navigate('app');
     } else {
       navigation.navigate('auth');

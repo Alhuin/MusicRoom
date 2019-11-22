@@ -1,10 +1,11 @@
 import {
-  View, StyleSheet, Alert, Button,
+  View, StyleSheet, Alert,
 } from 'react-native';
 import React, { Component } from 'react';
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import SocketIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
+import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import { addUser, login } from '../../../API/BackApi';
 
 
@@ -44,7 +45,7 @@ export default class SocialLogin extends Component {
           if (user.isAdmin) {
             admin(true);
           }
-          setSocket(SocketIOClient('http://10.3.1.3:4000'));
+          setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
           console.log('ALLER');
           navigation.navigate('app');
           console.log('ALLERRRRR');

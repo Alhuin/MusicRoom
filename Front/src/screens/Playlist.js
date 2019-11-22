@@ -21,7 +21,7 @@ class Playlist extends React.Component {
       refreshing: false,
       modalVisible: false,
       myVotes: [],
-      playButtonVisible: false,
+      playlistLaunched: false,
     };
     this.onRefreshSignal = this._onRefreshSignal.bind(this);
     props.socket.on('refresh', this.onRefreshSignal);
@@ -36,10 +36,7 @@ class Playlist extends React.Component {
     this._isAdmin();
     this._isEditor();
     this.updateMyVotes()
-      .then(() => {
-        this.updateTracks()
-          .then(tracksLength => (tracksLength ? this.setState({ playButtonVisible: true }) : null));
-      })
+      .then(() => this.updateTracks())
       .catch(error => console.log(error));
     getNextTrackByVote(playlistId)
       .then((track) => {
@@ -120,7 +117,7 @@ class Playlist extends React.Component {
     getMusicsByVote(playlistId, roomType)
       .then((response) => {
         this.setState({ tracks: response, stockedTracks: response });
-        resolve(response.length);
+        resolve();
       })
       .catch((error) => {
         console.error(error);
@@ -191,7 +188,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playButtonVisible,
+      tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched,
     } = this.state;
     const {
       navigation, changeTrack, changePlaylist, loggedUser, socket,
@@ -202,11 +199,7 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
-    // const nowPlaying = this._getNowPlaying();
 
-    /*
-          Double fonction ? '-'
-     */
     let settingsIcon = (
       <TouchableOpacity
         onPress={() => {
@@ -219,28 +212,32 @@ class Playlist extends React.Component {
         <Icon name="musical-notes" />
       </TouchableOpacity>
     );
-    const playButton = playButtonVisible && (
-      <TouchableOpacity
-        onPress={() => {
-          getNextTrackByVote(playlistId)
-            .then((nextTrack) => {
-              changePlaylist(playlistId);
-              changeTrack(nextTrack);
-              // console.log(nextTrack);
-              deleteTrackFromPlaylist(nextTrack.id, playlistId)
-                .then(() => {
-                  this.setState({ playButtonVisible: false });
-                  socket.emit('deleteMusic', playlistId);
-                })
-                .catch(error => console.error(error));
-            })
-            .catch(error => console.log(error));
-        }}
-        style={styles.playButton}
-      >
-        <Text style={styles.playText}>Play</Text>
-      </TouchableOpacity>
+
+    const playButton = (
+      (!playlistLaunched && tracks.length > 0) && (
+        <TouchableOpacity
+          onPress={() => {
+            getNextTrackByVote(playlistId)
+              .then((nextTrack) => {
+                changePlaylist(playlistId);
+                changeTrack(nextTrack);
+                // console.log(nextTrack);
+                deleteTrackFromPlaylist(nextTrack.id, playlistId)
+                  .then(() => {
+                    this.setState({ playlistLaunched: true });
+                    socket.emit('deleteMusic', playlistId);
+                  })
+                  .catch(error => console.error(error));
+              })
+              .catch(error => console.log(error));
+          }}
+          style={styles.playButton}
+        >
+          <Text style={styles.playText}>Play</Text>
+        </TouchableOpacity>
+      )
     );
+
     if (admin === true) {
       settingsIcon = (
         <TouchableOpacity
@@ -255,6 +252,7 @@ class Playlist extends React.Component {
         </TouchableOpacity>
       );
     }
+
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
@@ -333,11 +331,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     marginLeft: 10,
-    // color: 'white',
-  },
-  playlistContainer: {
-    // backgroundColor: '#999966',
-    // width: '100%',
   },
   playerModal: {
     justifyContent: 'center',

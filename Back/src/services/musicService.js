@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import MusicModel from '../models/musicModel';
 import CustomError from './errorHandler';
 import playlistService from './playlistService';
@@ -117,7 +118,7 @@ function downloadMusic(musicUrl) {
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';
-    const deezpy = spawn('python3', ['/Users/jjanin-r/Projects/MusicRoom/Back/src/deezpy/deezpy.py', '-l', musicUrl]);
+    const deezpy = spawn('python3', [process.env.DEEZPY_PATH, '-l', musicUrl]);
     deezpy.stdout.on('data', (data) => {
       stdout += data;
     });
@@ -190,7 +191,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
         if (!data.data.length) {
           downloadMusic(link)
             .then((path) => {
-              const staticMusicPath = path.data.replace('downloads', 'http://10.3.1.3:3000/tracks');
+              const staticMusicPath = path.data.replace('downloads', `${process.env.SERVER}:${process.env.EXPRESS_PORT}/tracks`);
               const staticCoverPath = staticMusicPath.replace(staticMusicPath.split('/')[6], 'cover.png');
               const music = new MusicModel({
                 user: userId,

@@ -3,6 +3,7 @@ import {
   Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text, Alert,
 } from 'react-native';
 import SocketIOClient from 'socket.io-client';
+import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import { login } from '../../../API/BackApi';
 
 
@@ -37,7 +38,7 @@ export default class SignInForm extends React.Component {
           if (user.isAdmin) {
             admin(true);
           }
-          setSocket(SocketIOClient('http://10.3.1.3:4000'));
+          setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
           navigation.navigate('app');
         })
         .catch((error) => {

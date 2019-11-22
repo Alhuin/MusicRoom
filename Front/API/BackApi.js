@@ -1,6 +1,7 @@
+import { SERVER, EXPRESS_PORT } from 'react-native-dotenv';
 import CustomError from './errorHandler';
 
-const server = 'http://10.3.1.3:3000/api';
+const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 /*
                     Users & Login
@@ -10,7 +11,7 @@ const server = 'http://10.3.1.3:3000/api';
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/login`, {
+    fetch(`${api}/login`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -36,7 +37,7 @@ function login(userName, password) {
 
 function getUserById(userId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/users/${userId}`, {
+    fetch(`${api}/users/${userId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -59,7 +60,7 @@ function getUserById(userId) {
 
 function addUser(userName, password, name, familyName, email) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/users`, {
+    fetch(`${api}/users`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -85,7 +86,7 @@ function addUser(userName, password, name, familyName, email) {
 //
 // function sendEmailToken(loginOrEmail) {
 //   return new Promise((resolve, reject) => {
-//     fetch(`${server}/users/emailToken/`, {
+//     fetch(`${api}/users/emailToken/`, {
 //       method: 'POST',
 //       headers: {
 //         Accept: 'application/json, text/plain, */*',
@@ -112,7 +113,7 @@ function addUser(userName, password, name, familyName, email) {
 
 function sendPasswordToken(loginOrEmail) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/users/passToken/`, {
+    fetch(`${api}/users/passToken/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -137,7 +138,7 @@ function sendPasswordToken(loginOrEmail) {
 function updateUser(userId, newLogin, name, familyName,
   email, phoneNumber, preferences, visibilityTable) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/users/update`, {
+    fetch(`${api}/users/update`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -161,7 +162,7 @@ function updateUser(userId, newLogin, name, familyName,
 
 function updatePassword(userId, password) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/users/newPass/`, {
+    fetch(`${api}/users/newPass/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -185,33 +186,34 @@ function updatePassword(userId, password) {
                       Musics, Playlists & Votes
  */
 
+// Unused Function
 
-function getPlaylists() {
-  return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          // alert('GetAllPlaylists is success');
-          resolve(data);
-        } else {
-          reject(new CustomError('GetPlaylists', data.msg, response.status));
-          // alert(`error ${data.status}: ${data.msg}`);
-        }
-      })
-      .catch(error => reject(error));
-  });
-}
+// function getPlaylists() {
+//   return new Promise((resolve, reject) => {
+//     fetch(`${api}/playlists`, {
+//       method: 'GET',
+//       headers: {
+//         Accept: 'application/json, text/plain, */*',
+//         'Content-Type': 'application/json',
+//       },
+//     })
+//       .then(async (response) => {
+//         const data = await response.json();
+//         if (response.status === 200) {
+//           // alert('GetAllPlaylists is success');
+//           resolve(data);
+//         } else {
+//           reject(new CustomError('GetPlaylists', data.msg, response.status));
+//           // alert(`error ${data.status}: ${data.msg}`);
+//         }
+//       })
+//       .catch(error => reject(error));
+//   });
+// }
 
 function getPlaylistsFilteredByRoom(roomType) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/${roomType}`, {
+    fetch(`${api}/playlists/${roomType}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -232,7 +234,7 @@ function getPlaylistsFilteredByRoom(roomType) {
 
 function getPlaylistsFiltered(roomType, userId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/filtered`, {
+    fetch(`${api}/playlists/filtered`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -258,7 +260,7 @@ function getPlaylistsFiltered(roomType, userId) {
 
 // function getPlaylistById(playlistId) {
 //   return new Promise((resolve, reject) => {
-//     fetch(`${server}/playlists/${playlistId}`, {
+//     fetch(`${api}/playlists/${playlistId}`, {
 //       method: 'GET',
 //       headers: {
 //         Accept: 'application/json, text/plain, */*',
@@ -279,7 +281,7 @@ function getPlaylistsFiltered(roomType, userId) {
 
 function getMusicsByVote(playlistId, roomType) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/musicsByVote/${playlistId}&${roomType}`, {
+    fetch(`${api}/musicsByVote/${playlistId}&${roomType}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -300,7 +302,7 @@ function getMusicsByVote(playlistId, roomType) {
 
 function voteMusic(userId, musicId, playlistId, value) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/voteMusic`, {
+    fetch(`${api}/voteMusic`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -324,7 +326,7 @@ function voteMusic(userId, musicId, playlistId, value) {
 
 function getMyVotesInPlaylist(userId, playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/votes/playlist`, {
+    fetch(`${api}/votes/playlist`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -348,7 +350,7 @@ function getMyVotesInPlaylist(userId, playlistId) {
 
 function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover, preview, link) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/musics/add`, {
+    fetch(`${api}/musics/add`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -374,7 +376,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
 function addPlaylist(name, publicFlag, userId, author, authorName,
   delegatedPlayerAdmin, roomType, startDate, endDate, location, privateId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/add`, {
+    fetch(`${api}/playlists/add`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -409,7 +411,7 @@ function addPlaylist(name, publicFlag, userId, author, authorName,
 
 function joinRoom(userId, playlistCode) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/join`, {
+    fetch(`${api}/playlists/join`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -434,7 +436,7 @@ function joinRoom(userId, playlistCode) {
 
 function isAdmin(userId, playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/isAdmin`, {
+    fetch(`${api}/playlists/isAdmin`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -459,7 +461,7 @@ function isAdmin(userId, playlistId) {
 
 function getAdminsByPlaylistId(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/admins/${playlistId}`, {
+    fetch(`${api}/playlists/admins/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -481,7 +483,7 @@ function getAdminsByPlaylistId(playlistId) {
 
 function getUsersByPlaylistId(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/users/${playlistId}`, {
+    fetch(`${api}/playlists/users/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -503,7 +505,7 @@ function getUsersByPlaylistId(playlistId) {
 
 function getBansByPlaylistId(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/bans/${playlistId}`, {
+    fetch(`${api}/playlists/bans/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -525,7 +527,7 @@ function getBansByPlaylistId(playlistId) {
 
 function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/admins/downgrade`, {
+    fetch(`${api}/playlists/admins/downgrade`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -550,7 +552,7 @@ function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
 
 function userInPlaylistUpgrade(playlistId, userId, requesterId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/users/upgrade`, {
+    fetch(`${api}/playlists/users/upgrade`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -575,7 +577,7 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
 
 function banUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/users/ban`, {
+    fetch(`${api}/playlists/users/ban`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -600,7 +602,7 @@ function banUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
 
 function deleteUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/users/delete`, {
+    fetch(`${api}/playlists/users/delete`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -625,7 +627,7 @@ function deleteUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
 
 function getPublicityOfPlaylistById(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/publicity/${playlistId}`, {
+    fetch(`${api}/playlists/publicity/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -647,7 +649,7 @@ function getPublicityOfPlaylistById(playlistId) {
 
 function getPlaylistPrivateId(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/privateId/${playlistId}`, {
+    fetch(`${api}/playlists/privateId/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -669,7 +671,7 @@ function getPlaylistPrivateId(playlistId) {
 
 function getDelegatedPlayerAdmin(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/delegatedPlayerAdmin/${playlistId}`, {
+    fetch(`${api}/playlists/delegatedPlayerAdmin/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -691,7 +693,7 @@ function getDelegatedPlayerAdmin(playlistId) {
 
 function addUserToPlaylistAndUnbanned(playlistId, userId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/user/unbanned`, {
+    fetch(`${api}/playlists/user/unbanned`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -713,7 +715,7 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
 
 function setPublicityOfPlaylist(playlistId, value) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/setPublicity`, {
+    fetch(`${api}/playlists/setPublicity`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -735,7 +737,7 @@ function setPublicityOfPlaylist(playlistId, value) {
 
 function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/setDelegatedPlayerAdmin`, {
+    fetch(`${api}/playlists/setDelegatedPlayerAdmin`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -757,7 +759,7 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
 
 function moveTrackOrder(playlistId, musicId, newIndex) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/moveTrackOrder`, {
+    fetch(`${api}/playlists/moveTrackOrder`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -779,7 +781,7 @@ function moveTrackOrder(playlistId, musicId, newIndex) {
 
 function getPlaylistDates(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/dates/${playlistId}`, {
+    fetch(`${api}/playlists/dates/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -801,7 +803,7 @@ function getPlaylistDates(playlistId) {
 
 function getTags(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/getTags/${playlistId}`, {
+    fetch(`${api}/playlists/getTags/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -822,7 +824,7 @@ function getTags(playlistId) {
 
 function getEditRestriction(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/getEditRestriction/${playlistId}`, {
+    fetch(`${api}/playlists/getEditRestriction/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -843,7 +845,7 @@ function getEditRestriction(playlistId) {
 
 function setTags(playlistId, newTags) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/setTags`, {
+    fetch(`${api}/playlists/setTags`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -866,7 +868,7 @@ function setTags(playlistId, newTags) {
 
 function setStartDate(playlistId, newDate) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/setStartDate`, {
+    fetch(`${api}/playlists/setStartDate`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -888,7 +890,7 @@ function setStartDate(playlistId, newDate) {
 
 function setEndDate(playlistId, newDate) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/setEndDate`, {
+    fetch(`${api}/playlists/setEndDate`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -910,7 +912,7 @@ function setEndDate(playlistId, newDate) {
 
 function setEditRestriction(playlistId, newEditRestriction) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/setEditRestriction`, {
+    fetch(`${api}/playlists/setEditRestriction`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -933,7 +935,7 @@ function setEditRestriction(playlistId, newEditRestriction) {
 
 function isEditor(playlistId, userId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/isEditor`, {
+    fetch(`${api}/playlists/isEditor`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -955,7 +957,7 @@ function isEditor(playlistId, userId) {
 
 function deletePlaylistByAdmin(playlistId, userId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/deletePlaylistById`, {
+    fetch(`${api}/playlists/deletePlaylistById`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -981,7 +983,7 @@ function deletePlaylistByAdmin(playlistId, userId) {
 
 function getNextTrackByVote(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/nextTrack/${playlistId}`, {
+    fetch(`${api}/playlists/nextTrack/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -1003,7 +1005,7 @@ function getNextTrackByVote(playlistId) {
 
 function deleteTrackFromPlaylist(musicId, playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${server}/playlists/deleteTrack`, {
+    fetch(`${api}/playlists/deleteTrack`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -1031,7 +1033,7 @@ export {
   // sendEmailToken,
   sendPasswordToken,
   updatePassword,
-  getPlaylists,
+  // getPlaylists,
   getPlaylistsFilteredByRoom,
   getPlaylistsFiltered,
   getMusicsByVote,
