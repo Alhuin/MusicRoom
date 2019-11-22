@@ -37,7 +37,7 @@ export default class SignInForm extends React.Component {
           if (user.isAdmin) {
             admin(true);
           }
-          setSocket(SocketIOClient('http://10.4.5.5:4000'));
+          setSocket(SocketIOClient('http://10.3.1.3:4000'));
           navigation.navigate('app');
         })
         .catch((error) => {

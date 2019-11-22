@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity,
+  StyleSheet, View, Text, TouchableOpacity, Dimensions,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
-  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote, isEditor, moveTrackOrder, deleteTrackFromPlaylist,
+  getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
+  isEditor, moveTrackOrder, deleteTrackFromPlaylist,
 } from '../../API/BackApi';
 
 class Playlist extends React.Component {
@@ -20,6 +21,7 @@ class Playlist extends React.Component {
       refreshing: false,
       modalVisible: false,
       myVotes: [],
+      playButtonVisible: false,
     };
     this.onRefreshSignal = this._onRefreshSignal.bind(this);
     props.socket.on('refresh', this.onRefreshSignal);
@@ -35,7 +37,8 @@ class Playlist extends React.Component {
     this._isEditor();
     this.updateMyVotes()
       .then(() => {
-        this.updateTracks();
+        this.updateTracks()
+          .then(tracksLength => (tracksLength ? this.setState({ playButtonVisible: true }) : null));
       })
       .catch(error => console.log(error));
     getNextTrackByVote(playlistId)
@@ -117,7 +120,7 @@ class Playlist extends React.Component {
     getMusicsByVote(playlistId, roomType)
       .then((response) => {
         this.setState({ tracks: response, stockedTracks: response });
-        resolve();
+        resolve(response.length);
       })
       .catch((error) => {
         console.error(error);
@@ -188,7 +191,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes, editor,
+      tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playButtonVisible,
     } = this.state;
     const {
       navigation, changeTrack, changePlaylist, loggedUser, socket,
@@ -216,7 +219,7 @@ class Playlist extends React.Component {
         <Icon name="musical-notes" />
       </TouchableOpacity>
     );
-    const playButton = (
+    const playButton = playButtonVisible && (
       <TouchableOpacity
         onPress={() => {
           getNextTrackByVote(playlistId)
@@ -225,7 +228,10 @@ class Playlist extends React.Component {
               changeTrack(nextTrack);
               // console.log(nextTrack);
               deleteTrackFromPlaylist(nextTrack.id, playlistId)
-                .then(() => socket.emit('deleteMusic', playlistId))
+                .then(() => {
+                  this.setState({ playButtonVisible: false });
+                  socket.emit('deleteMusic', playlistId);
+                })
                 .catch(error => console.error(error));
             })
             .catch(error => console.log(error));
@@ -340,14 +346,15 @@ const styles = StyleSheet.create({
   },
   playButton: {
     height: 50,
-    width: 220,
-    bottom: '20%',
+    width: 180,
+    bottom: 0,
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#1db954',
     lineHeight: 1,
     borderRadius: 25,
+    margin: (Dimensions.get('window').width - 180) / 2,
   },
   playText: {
     color: 'white',

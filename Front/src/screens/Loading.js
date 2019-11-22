@@ -10,7 +10,7 @@ export default class Loading extends React.Component {
     // }, 5000); // catcher infinite loading
     // clearTimeout(timer);
     if (loggedUser !== null) {
-      setSocket(SocketIOClient('http://10.4.5.5:4000'));
+      setSocket(SocketIOClient('http://10.3.1.3:4000'));
       navigation.navigate('app');
     } else {
       navigation.navigate('auth');

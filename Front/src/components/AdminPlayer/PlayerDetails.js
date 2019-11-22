@@ -38,29 +38,25 @@ export default class PlayerDetails extends Component {
 
   onForward() {
     const {
-      playlistId, audioElement, track, changing, setCurrentPosition,
-      setTotalLength, paused, changeTrack, socket,
+      playlistId, audioElement, changing, setCurrentPosition,
+      setTotalLength, paused, changeTrack,
     } = this.props;
 
-    deleteTrackFromPlaylist(track.id, playlistId)
-      .then(() => {
-        socket.emit('deleteMusic', playlistId);
-        getNextTrackByVote(playlistId)
-          .then((nextTrack) => {
-            audioElement && audioElement.seek(0);
-            changing(true);
-            setTimeout(() => {
-              setCurrentPosition(0);
-              paused(false);
-              setTotalLength(1);
-              changing(false);
-              changeTrack(nextTrack);
-            }, 0);
-          })
-          .catch(error => console.log(error));
+    getNextTrackByVote(playlistId)
+      .then((nextTrack) => {
+        audioElement && audioElement.seek(0);
+        changing(true);
+        setTimeout(() => {
+          setCurrentPosition(0);
+          paused(false);
+          setTotalLength(1);
+          changing(false);
+          changeTrack(nextTrack);
+        }, 0);
       })
       .catch(error => console.log(error));
   }
+
 
   seek(time) {
     const { audioElement, setCurrentPosition, paused } = this.props;
