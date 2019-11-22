@@ -26,13 +26,40 @@ function getUserById(userId) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
-        reject(new CustomError('GetUser', error.message, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!user) {
         reject(new CustomError('GetUser', 'No user with this id found in database', 404));
       } else {
         resolve({
           status: 200,
           data: user,
+        });
+      }
+    });
+  });
+}
+
+function getFriends(userId) {
+  return new Promise((resolve, reject) => {
+    UserModel.findById(userId, (error, user) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!user) {
+        reject(new CustomError('GetFriends', 'No user with this id found in database', 404));
+      } else {
+        UserModel.find({
+          _id: {
+            $in: user.friends,
+          },
+        }, (err, friends) => {
+          if (error) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: friends,
+            });
+          }
         });
       }
     });
@@ -93,7 +120,7 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
-        reject(new CustomError('MongoError1', error.message, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!user) {
         reject(new CustomError('UpdateUser', 'No user with this id found in database', 404));
       } else {
@@ -124,7 +151,7 @@ function addFriend(friendId, userId) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
-        reject(new CustomError('MongoError1', error.message, 500));
+        reject(new CustomError('MongoError', error.message, 500));
       } else if (!user) {
         reject(new CustomError('AddFriend', 'No user with this id found in database', 404));
       } else {
@@ -132,7 +159,33 @@ function addFriend(friendId, userId) {
         if (!updatedUser.friends.includes(friendId)) {
           updatedUser.friends.push(friendId);
         }
-        console.log(updatedUser);
+        updatedUser.save((saveError, newUser) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: newUser,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+function deleteFriend(friendId, userId) {
+  return new Promise((resolve, reject) => {
+    UserModel.findById(userId, (error, user) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!user) {
+        reject(new CustomError('DeleteFriend', 'No user with this id found in database', 404));
+      } else {
+        const updatedUser = user;
+        if (updatedUser.friends.includes(friendId)) {
+          updatedUser.friends.remove(friendId);
+        }
         updatedUser.save((saveError, newUser) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
@@ -348,4 +401,6 @@ export default {
   updatePassword,
   updateUser,
   addFriend,
+  deleteFriend,
+  getFriends,
 };

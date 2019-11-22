@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, Button, TextInput, Alert, TouchableOpacity, ScrollView,
+  StyleSheet, View, Text, Button, TextInput, Alert, TouchableOpacity, ScrollView, FlatList,
 } from 'react-native';
 import { Icon } from 'native-base';
-import { updateUser } from '../../API/BackApi';
+import Collapsible from 'react-native-collapsible';
+import { updateUser, deleteFriend, getFriends } from '../../API/BackApi';
 import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
 
 class AppSettings extends React.Component {
@@ -18,8 +19,21 @@ class AppSettings extends React.Component {
       phoneNumber: props.loggedUser.phoneNumber,
       preferences: props.loggedUser.preferences,
       visibilityTable: props.loggedUser.visibilityTable,
+      collapsed: true,
+      friends: [],
       // friends: props.loggedUser.friends,
     };
+  }
+
+  componentDidMount(): void {
+    const { user } = this.state;
+    getFriends(user._id)
+      .then((friends) => {
+        this.setState({ friends });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   updateLogin = (text) => {
@@ -81,8 +95,15 @@ class AppSettings extends React.Component {
     }
   };
 
+  toggleExpanded = () => {
+    const { collapsed } = this.state;
+    this.setState({ collapsed: !collapsed });
+  };
+
   render() {
-    const { user, preferences, visibilityTable } = this.state;
+    const {
+      user, preferences, visibilityTable, collapsed, friends,
+    } = this.state;
     const iconFromVisibilityTable = {};
     Object.assign(iconFromVisibilityTable, visibilityTable);
     Object.keys(iconFromVisibilityTable).forEach((key) => {
@@ -96,7 +117,13 @@ class AppSettings extends React.Component {
         }
       }
     });
-    // console.log(visibilityTable);
+    let collapsibleIcon = (null);
+    if (collapsed) {
+      collapsibleIcon = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
+    } else {
+      collapsibleIcon = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
+    }
+    // console.log(friends);
     return (
       <ScrollView>
         <View style={styles.main_container}>
@@ -304,6 +331,67 @@ class AppSettings extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
+          <TouchableOpacity onPress={this.toggleExpanded}>
+            <View style={styles.header}>
+              <Text style={styles.header}>
+                Gérer les amis
+              </Text>
+              {collapsibleIcon}
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={collapsed} align="center">
+            <View
+              style={{
+                borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+              }}
+            >
+              <FlatList
+                data={friends}
+                keyExtractor={item => item._id.toString()}
+                renderItem={
+                  ({ item }) => {
+                    const friendId = item._id;
+                    const element = (
+                      <View
+                        style={styles.row}
+                      >
+                        <Text
+                          style={styles.elementListTitle}
+                        >
+                          {item.name}
+                        </Text>
+                        <View
+                          style={styles.touchableWrapper}
+                        >
+                          <TouchableOpacity
+                            onPress={() => {
+                              deleteFriend(friendId, user._id)
+                                .then(() => {
+                                  getFriends(user._id)
+                                    .then((newFriends) => {
+                                      this.setState({ friends: newFriends });
+                                    })
+                                    .catch((error) => {
+                                      console.error(error);
+                                    });
+                                })
+                                .catch((error) => {
+                                  console.error(error);
+                                });
+                            }}
+                            style={styles.iconWrapper}
+                          >
+                            <Icon name="ios-remove" style={{ fontSize: 45 }} />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    );
+                    return (element);
+                  }
+                }
+              />
+            </View>
+          </Collapsible>
           <Button
             title="Modifier"
             onPress={this._onPressModify}
@@ -366,13 +454,47 @@ let styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   iconWrapper: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   iconStyle: {
     fontSize: 40,
     color: 'white',
+  },
+  header: {
+    backgroundColor: '#F5FCFF',
+    padding: 10,
+    margin: 5,
+    borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  headerText: {
+    // textAlign: 'center',
+    fontSize: 22,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 5,
+    padding: 5,
+    flex: 1,
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '#CCCCCC',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  elementListTitle: {
+    flex: 6,
+    padding: 10,
+    margin: 5,
+  },
+  touchableWrapper: {
+    height: '100%',
+    flexDirection: 'row',
+    flex: 1,
   },
 });
 

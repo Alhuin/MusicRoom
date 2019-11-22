@@ -13,26 +13,14 @@ import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
 import Loader from '../components/Authentication/Loader';
 
 import {
-  getAdminsByPlaylistId,
-  getUsersByPlaylistId,
-  getPublicityOfPlaylistById,
-  deleteUserInPlaylist,
-  getBansByPlaylistId,
-  getPlaylistPrivateId,
-  setPublicityOfPlaylist,
-  getDelegatedPlayerAdmin,
-  getPlaylistDates,
-  setStartDate,
-  setEndDate,
-  getTags,
-  setTags,
-  getEditRestriction,
-  setEditRestriction,
-  deletePlaylistByAdmin,
-  joinPlaylistWithId,
+  getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
+  getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
+  getPlaylistDates, setStartDate, setEndDate, getTags, setTags, getEditRestriction,
+  setEditRestriction, deletePlaylistByAdmin, joinPlaylistWithId, getFriends,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
+import FriendsInSettings from '../components/Playlist/FriendsInSettings';
 
 
 class PlaylistSettings extends React.Component {
@@ -42,6 +30,7 @@ class PlaylistSettings extends React.Component {
       admins: [],
       users: [],
       bans: [],
+      friends: [],
       switchValue: false,
       loading: false,
       privateId: '',
@@ -63,35 +52,11 @@ class PlaylistSettings extends React.Component {
 
 
   componentDidMount(): void {
-    const { navigation } = this.props;
-    const playlistId = navigation.getParam('playlistId');
-    const isAdmin = navigation.getParam('isAdmin');
-    if (isAdmin) {
-      this._updateState(playlistId);
-    } else {
-      this.updateUsers()
-        .then(() => {
-          const { isUser } = this.state;
-          if (isUser) {
-            getPlaylistPrivateId(playlistId)
-              .then((privateId) => {
-                this.setState({ privateId });
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          }
-          this.getPublicity(playlistId);
-          this.getDates(playlistId);
-          this.hideLoader();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+    this._onRefresh();
   }
 
   _updateState = (playlistId) => {
+    const { loggedUser } = this.props;
     getPlaylistPrivateId(playlistId)
       .then((privateId) => {
         getDelegatedPlayerAdmin(playlistId)
@@ -103,7 +68,15 @@ class PlaylistSettings extends React.Component {
                   .then(() => {
                     this.updateBans()
                       .then(() => {
-                        this.hideLoader();
+                        getFriends(loggedUser._id)
+                          .then((friends) => {
+                            const newFriends = this.sliceFriends(friends);
+                            this.setState({ friends: newFriends });
+                            this.hideLoader();
+                          })
+                          .catch((error) => {
+                            console.error(error);
+                          });
                       })
                       .catch((error) => {
                         console.error(error);
@@ -241,7 +214,7 @@ class PlaylistSettings extends React.Component {
   };
 
   _onRefresh = () => {
-    const { navigation } = this.props;
+    const { navigation, loggedUser } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const isAdmin = navigation.getParam('isAdmin');
     if (isAdmin) {
@@ -249,6 +222,24 @@ class PlaylistSettings extends React.Component {
     } else {
       this.updateUsers()
         .then(() => {
+          const { isUser } = this.state;
+          if (isUser) {
+            getPlaylistPrivateId(playlistId)
+              .then((privateId) => {
+                this.setState({ privateId });
+                getFriends(loggedUser._id)
+                  .then((friends) => {
+                    const newFriends = this.sliceFriends(friends);
+                    this.setState({ friends: newFriends });
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
           this.getPublicity(playlistId);
           this.getDates(playlistId);
           this.hideLoader();
@@ -257,6 +248,33 @@ class PlaylistSettings extends React.Component {
           console.error(error);
         });
     }
+  };
+
+  sliceFriends = (friends) => {
+    const { admins, users } = this.state;
+    if (users) {
+      for (let i = 0; i < friends.length; i += 1) {
+        for (let j = 0; j < users.length; j += 1) {
+          if (String(users[j]._id) === String(friends[i]._id)) {
+            friends.splice(i, 1);
+            i -= 1;
+            break;
+          }
+        }
+      }
+    }
+    if (admins) {
+      for (let i = 0; i < friends.length; i += 1) {
+        for (let j = 0; j < admins.length; j += 1) {
+          if (String(admins[j]._id) === String(friends[i]._id)) {
+            friends.splice(i, 1);
+            i -= 1;
+            break;
+          }
+        }
+      }
+    }
+    return friends;
   };
 
   updateAdmins = () => new Promise((resolve, reject) => {
@@ -469,7 +487,7 @@ class PlaylistSettings extends React.Component {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, collapsedAddFriendToPlaylist,
       startDate, endDate, datePickerModalVisible, tags, radioValue, deletePlaylistState,
-      isUser,
+      isUser, friends,
     } = this.state;
     let radioProps = [];
     const { navigation, loggedUser, userChanged } = this.props;
@@ -772,20 +790,35 @@ class PlaylistSettings extends React.Component {
             </View>
           </TouchableOpacity>
           <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
-            <FlatList
-              data={loggedUser.friends}
+            <View
+              style={{
+                borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+              }}
+            >
+              <FriendsInSettings
+                friends={friends}
+                users={users}
+                admins={admins}
+                onRefresh={this._onRefresh}
+                playlistId={playlistId}
+                displayLoader={this.displayLoader}
+                isLoading={this.isLoading}
+              />
+            </View>
+            {/* <FlatList
+              data={friends}
               keyExtractor={item => item._id.toString()}
               renderItem={
                 ({ item }) => {
-                  const userId = item._id;
+                  const friendId = item._id;
                   let friendInPlaylist = (null);
-                  if (!users.includes(userId)) {
+                  if (!users.includes(friendId) || !admins.includes(friendId)) {
                     friendInPlaylist = (
                       <TouchableOpacity
                         onPress={() => {
                           if (!this.isLoading()) {
                             this.displayLoader();
-                            joinPlaylistWithId(userId, playlistId)
+                            joinPlaylistWithId(friendId, playlistId)
                               .then(() => {
                                 this._onRefresh();
                               })
@@ -819,7 +852,7 @@ class PlaylistSettings extends React.Component {
                   return (element);
                 }
               }
-            />
+            /> */}
           </Collapsible>
           <View>
             <TouchableOpacity
@@ -918,6 +951,31 @@ class PlaylistSettings extends React.Component {
                 userChanged={userChanged}
               />
             </View>
+            <TouchableOpacity onPress={this.toggleExpandedAddFriendToPlaylist}>
+              <View style={styles.header}>
+                <Text style={styles.header}>
+                  Ajouter un ami à la playlist
+                </Text>
+                {collapsibleIconAddFriendToPlaylist}
+              </View>
+            </TouchableOpacity>
+            <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
+              <View
+                style={{
+                  borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+                }}
+              >
+                <FriendsInSettings
+                  friends={friends}
+                  users={users}
+                  admins={admins}
+                  onRefresh={this._onRefresh}
+                  playlistId={playlistId}
+                  displayLoader={this.displayLoader}
+                  isLoading={this.isLoading}
+                />
+              </View>
+            </Collapsible>
           </View>
         );
       }

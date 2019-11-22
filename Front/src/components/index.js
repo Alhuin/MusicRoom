@@ -23,6 +23,7 @@ import BansListInSettings from './Playlist/BansListInSettings';
 import DatePickerModal from './Playlists/DatePickerModal';
 import MiniPlayer from './Playlist/MiniPlayer';
 import SettingsTagCheckbox from './Playlist/SettingsTagCheckbox';
+import FriendsInSettings from './Playlist/FriendsInSettings';
 
 export default {
   SignInForm,
@@ -50,4 +51,5 @@ export default {
   BansListInSettings,
   MiniPlayer,
   SettingsTagCheckbox,
+  FriendsInSettings,
 };

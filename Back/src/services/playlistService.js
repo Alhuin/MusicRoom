@@ -494,7 +494,11 @@ function joinPlaylistWithCode(userId, playlistCode) {
         reject(new CustomError('JoinPlaylistWithCode', 'No playlist with this id in database', 400));
       } else {
         const newPlaylist = playlists[0];
-        newPlaylist.users.push(userId);
+        if (!newPlaylist.bans.includes(userId)
+          && !newPlaylist.admins.includes(userId)
+          && !newPlaylist.users.includes(userId)) {
+          newPlaylist.users.push(userId);
+        }
         newPlaylist.save((saveError, savedPlaylist) => {
           if (saveError) {
             reject(new CustomError('MongoError', error.message, 500));
@@ -519,7 +523,11 @@ function joinPlaylistWithId(userId, playlistId) {
         reject(new CustomError('JoinPlaylistWithId', 'No playlist with this id in database', 400));
       } else {
         const newPlaylist = playlist;
-        newPlaylist.users.push(userId);
+        if (!newPlaylist.bans.includes(userId)
+          && !newPlaylist.admins.includes(userId)
+          && !newPlaylist.users.includes(userId)) {
+          newPlaylist.users.push(userId);
+        }
         newPlaylist.save((saveError, savedPlaylist) => {
           if (saveError) {
             reject(new CustomError('MongoError', error.message, 500));

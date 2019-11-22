@@ -25,10 +25,12 @@ router.post('/login', loginController.login);
 
 router.get('/users', userController.getUsers);
 router.get('/users/:userId', userController.getUserById);
+router.get('/users/getFriends/:userId', userController.getFriends);
 router.delete('/users/:userId', userController.deleteUserById);
 router.post('/users', userController.addUser);
 router.post('/users/update', userController.updateUser);
 router.post('/users/addFriend', userController.addFriend);
+router.post('/users/deleteFriend', userController.deleteFriend);
 router.post('/users/newPass/', userController.updatePassword);
 
 // Mail Tokens

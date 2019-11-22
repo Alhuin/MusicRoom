@@ -40,6 +40,24 @@ function getUserById(req, res) {
   }
 }
 
+function getFriends(req, res) {
+  if ((req.params.userId && utils.isValidId(req.params.userId))) {
+    userService.getFriends(req.params.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong parameters' });
+  }
+}
+
 function deleteUserById(req, res) {
   if ((req.params.userId && utils.isValidId(req.params.userId))) {
     userService.deleteUserById(req.params.userId)
@@ -111,6 +129,27 @@ function addFriend(req, res) {
   if ((req.body.friendId && utils.isValidId(req.body.friendId)
     && req.body.userId && utils.isValidId(req.body.userId))) {
     userService.addFriend(req.body.friendId, req.body.userId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function deleteFriend(req, res) {
+  // checker email valide et les champs uniques
+  if ((req.body.friendId && utils.isValidId(req.body.friendId)
+    && req.body.userId && utils.isValidId(req.body.userId))) {
+    userService.deleteFriend(req.body.friendId, req.body.userId)
       .then((response) => {
         res
           .status(response.status)
@@ -243,4 +282,6 @@ export default {
   updatePassword,
   updateUser,
   addFriend,
+  deleteFriend,
+  getFriends,
 };

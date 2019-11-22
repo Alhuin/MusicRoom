@@ -204,6 +204,49 @@ function addFriend(friendId, userId) {
   });
 }
 
+function deleteFriend(friendId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/deleteFriend`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ friendId, userId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('isEditor', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function getFriends(userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/getFriends/${userId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getFriends', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                       Musics, Playlists & Votes
  */
@@ -1119,4 +1162,6 @@ export {
   isEditor,
   deletePlaylistByAdmin,
   addFriend,
+  deleteFriend,
+  getFriends,
 };

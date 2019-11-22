@@ -190,7 +190,7 @@ const seedDatas = async () => {
   const user4 = new models.User({
     login: 'd',
     password: hashy,
-    name: 'Boris',
+    name: 'Jean',
     familyName: 'Renoi',
     email: 'a.d@protonmail.com',
     isVerified: true,
