@@ -83,12 +83,34 @@ function addUser(req, res) {
 
 function updateUser(req, res) {
   // checker email valide et les champs uniques
-  if ((req.body.newLogin && req.body.name && req.body.familyName
+  if ((req.body.userId && utils.isValidId(req.body.userId)
+    && req.body.newLogin && req.body.name && req.body.familyName
     && req.body.email && req.body.phoneNumber && req.body.preferences
     && req.body.visibilityTable)) {
     userService.updateUser(req.body.userId, req.body.newLogin, req.body.name,
       req.body.familyName, req.body.email, req.body.phoneNumber, req.body.preferences,
       req.body.visibilityTable)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function addFriend(req, res) {
+  // checker email valide et les champs uniques
+  if ((req.body.friendId && utils.isValidId(req.body.friendId)
+    && req.body.userId && utils.isValidId(req.body.userId))) {
+    userService.addFriend(req.body.friendId, req.body.userId)
       .then((response) => {
         res
           .status(response.status)
@@ -220,4 +242,5 @@ export default {
   confirmPasswordToken,
   updatePassword,
   updateUser,
+  addFriend,
 };

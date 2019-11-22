@@ -182,6 +182,28 @@ function updatePassword(userId, password) {
   });
 }
 
+function addFriend(friendId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/addFriend`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ friendId, userId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('isEditor', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                       Musics, Playlists & Votes
  */
@@ -1070,4 +1092,5 @@ export {
   setEditRestriction,
   isEditor,
   deletePlaylistByAdmin,
+  addFriend,
 };

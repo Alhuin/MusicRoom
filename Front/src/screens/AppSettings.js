@@ -71,7 +71,8 @@ class AppSettings extends React.Component {
       Alert.alert('error: empty field.');
       console.log('error, empty field');
     } else {
-      updateUser(user._id, login, name, familyName, email, phoneNumber, preferences, visibilityTable)
+      updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
+        visibilityTable)
         .then((newUser) => {
           userChanged(newUser);
           Alert.alert('Les paramètres ont bien été modifiés');

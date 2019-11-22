@@ -88,13 +88,14 @@ function addUser(login, password, name, familyName, email) {
   });
 }
 
-function updateUser(userId, login, name, familyName, email, phoneNumber, preferences, visibilityTable) {
+function updateUser(userId, login, name, familyName, email, phoneNumber, preferences,
+  visibilityTable) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
         reject(new CustomError('MongoError1', error.message, 500));
       } else if (!user) {
-        reject(new CustomError('updateUser', 'No user with this id found in database', 404));
+        reject(new CustomError('UpdateUser', 'No user with this id found in database', 404));
       } else {
         const updatedUser = user;
         updatedUser.login = login;
@@ -104,6 +105,34 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
         updatedUser.phoneNumber = phoneNumber;
         updatedUser.preferences = preferences;
         updatedUser.visibilityTable = visibilityTable;
+        updatedUser.save((saveError, newUser) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: newUser,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+function addFriend(friendId, userId) {
+  return new Promise((resolve, reject) => {
+    UserModel.findById(userId, (error, user) => {
+      if (error) {
+        reject(new CustomError('MongoError1', error.message, 500));
+      } else if (!user) {
+        reject(new CustomError('AddFriend', 'No user with this id found in database', 404));
+      } else {
+        const updatedUser = user;
+        if (!updatedUser.friends.includes(friendId)) {
+          updatedUser.friends.push(friendId);
+        }
+        console.log(updatedUser);
         updatedUser.save((saveError, newUser) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
@@ -318,4 +347,5 @@ export default {
   confirmPasswordToken,
   updatePassword,
   updateUser,
+  addFriend,
 };

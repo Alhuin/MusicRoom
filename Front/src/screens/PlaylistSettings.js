@@ -43,6 +43,7 @@ class PlaylistSettings extends React.Component {
       tags: {},
       radioValue: 0,
       deletePlaylistState: 'Supprimer la Playlist',
+      isUser: false,
     };
   }
 
@@ -54,8 +55,25 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       this._updateState(playlistId);
     } else {
-      this.getPublicity(playlistId);
-      this.getDates(playlistId);
+      this.updateUsers()
+        .then(() => {
+          const { isUser } = this.state;
+          if (isUser) {
+            getPlaylistPrivateId(playlistId)
+              .then((privateId) => {
+                this.setState({ privateId });
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+          this.getPublicity(playlistId);
+          this.getDates(playlistId);
+          this.hideLoader();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }
 
@@ -211,7 +229,20 @@ class PlaylistSettings extends React.Component {
   _onRefresh = () => {
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
-    this._updateState(playlistId);
+    const isAdmin = navigation.getParam('isAdmin');
+    if (isAdmin) {
+      this._updateState(playlistId);
+    } else {
+      this.updateUsers()
+        .then(() => {
+          this.getPublicity(playlistId);
+          this.getDates(playlistId);
+          this.hideLoader();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   updateAdmins = () => new Promise((resolve, reject) => {
@@ -244,32 +275,35 @@ class PlaylistSettings extends React.Component {
   });
 
   updateUsers = () => new Promise((resolve, reject) => {
-    const { navigation } = this.props;
+    const { navigation, loggedUser } = this.props;
     const { admins } = this.state;
 
-    const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
-    if (isAdmin) {
-      getUsersByPlaylistId(playlistId)
-        .then((response) => {
-          if (admins) {
-            for (let i = 0; i < admins.length; i += 1) {
-              for (let j = 0; j < response.length; j += 1) {
-                if (String(admins[i]._id) === String(response[j]._id)) {
-                  response.splice(j, 1);
-                  j -= 1;
-                }
+    getUsersByPlaylistId(playlistId)
+      .then((response) => {
+        if (admins) {
+          for (let i = 0; i < admins.length; i += 1) {
+            for (let j = 0; j < response.length; j += 1) {
+              if (String(admins[i]._id) === String(response[j]._id)) {
+                response.splice(j, 1);
+                j -= 1;
               }
             }
           }
-          this.setState({ users: response });
-          resolve();
-        })
-        .catch((error) => {
-          console.error(`${error} in updateUsers`);
-          reject();
-        });
-    }
+        }
+        let isUser = false;
+        for (let i = 0; i < response.length; i += 1) {
+          if (String(response[i]._id) === String(loggedUser._id)) {
+            isUser = true;
+          }
+        }
+        this.setState({ users: response, isUser });
+        resolve();
+      })
+      .catch((error) => {
+        console.error(`${error} in updateUsers`);
+        reject();
+      });
   });
 
   updateBans = () => new Promise((resolve, reject) => {
@@ -415,16 +449,17 @@ class PlaylistSettings extends React.Component {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, startDate, endDate, datePickerModalVisible, tags,
-      radioValue, deletePlaylistState,
+      radioValue, deletePlaylistState, isUser,
     } = this.state;
     let radioProps = [];
-    const { navigation, loggedUser } = this.props;
+    const { navigation, loggedUser, userChanged } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');
     const roomType = navigation.getParam('roomType');
     let editRestrictionString = '';
     let adminOptions = (null);
+    let userOptions = (null);
     let notAdminOptions = (null);
     let collapsibleIcon = (null);
     let collapsibleIconSpec = (null);
@@ -694,6 +729,8 @@ class PlaylistSettings extends React.Component {
               isLoading={this.isLoading}
               roomType={roomType}
               parent={this}
+              isAdmin={isAdmin}
+              userChanged={userChanged}
             />
           </View>
           <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
@@ -724,47 +761,94 @@ class PlaylistSettings extends React.Component {
           </View>
         </View>
       );
-    } else if (roomType === 'party') {
-      notAdminOptions = (
-        <View>
-          <View>
-            <Text>
-              La playlist est
-              {' '}
-              {switchValue ? 'publique.' : 'privée.'}
-            </Text>
-          </View>
-          <View>
-            <Text>
-              Localisation : (?)
-            </Text>
-          </View>
-          <Text>
-            Date de début de l&apos;évènement :
-          </Text>
-          <Text>
-            {String(startDate)}
-          </Text>
-          <Text>
-            Date de fin de l&apos;évènement :
-          </Text>
-          <Text>
-            {String(endDate)}
-          </Text>
-        </View>
-      );
     } else {
-      notAdminOptions = (
-        <View>
+      if (roomType === 'party' && !isAdmin) {
+        notAdminOptions = (
           <View>
+            <View>
+              <Text>
+                La playlist est
+                {' '}
+                {switchValue ? 'publique.' : 'privée.'}
+              </Text>
+            </View>
+            <View>
+              <Text>
+                Localisation : (?)
+              </Text>
+            </View>
             <Text>
-              La playlist est
-              {' '}
-              {switchValue ? 'publique.' : 'privée.'}
+              Date de début de l&apos;évènement :
+            </Text>
+            <Text>
+              {String(startDate)}
+            </Text>
+            <Text>
+              Date de fin de l&apos;évènement :
+            </Text>
+            <Text>
+              {String(endDate)}
             </Text>
           </View>
-        </View>
-      );
+        );
+      } else if (roomType === 'radio' && !isAdmin) {
+        notAdminOptions = (
+          <View>
+            <View>
+              <Text>
+                La playlist est
+                {' '}
+                {switchValue ? 'publique.' : 'privée.'}
+              </Text>
+            </View>
+          </View>
+        );
+      }
+      if (isUser) {
+        userOptions = (
+          <View>
+            <View style={[styles.subContainer, { justifyContent: 'space-between' }]}>
+              <Text
+                selectable
+                style={styles.subContainerFontStyle}
+              >
+                Code privé :
+                {' '}
+                {privateId}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Clipboard.setString(String(privateId));
+                  SimpleToast.show('Code copié dans le Presse-Papier.');
+                }}
+              >
+                <Icon name="ios-clipboard" style={{ marginRight: 10, fontSize: 35 }} />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
+              Utilisateurs
+            </Text>
+            <View
+              style={{
+                borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+              }}
+            >
+              <UserListInSettings
+                loggedUser={loggedUser}
+                displayLoader={this.displayLoader}
+                users={users}
+                onRefresh={this._onRefresh}
+                playlistId={playlistId}
+                isLoading={this.isLoading}
+                roomType={roomType}
+                parent={this}
+                isAdmin={isAdmin}
+                userChanged={userChanged}
+              />
+            </View>
+          </View>
+        );
+      }
     }
     const rendering = (
       <ScrollView style={styles.container}>
@@ -780,24 +864,7 @@ class PlaylistSettings extends React.Component {
             style={styles.leavingButton}
           />
         </View>
-        <View style={[styles.subContainer, { justifyContent: 'space-between' }]}>
-          <Text
-            selectable
-            style={styles.subContainerFontStyle}
-          >
-            Code privé :
-            {' '}
-            {privateId}
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              Clipboard.setString(String(privateId));
-              SimpleToast.show('Code copié dans le Presse-Papier.');
-            }}
-          >
-            <Icon name="ios-clipboard" style={{ marginRight: 10, fontSize: 35 }} />
-          </TouchableOpacity>
-        </View>
+        {userOptions}
         {notAdminOptions}
         {adminOptions}
         <Loader loading={loading} />
