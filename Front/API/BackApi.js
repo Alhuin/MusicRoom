@@ -431,9 +431,9 @@ function addPlaylist(name, publicFlag, userId, author, authorName,
   });
 }
 
-function joinRoom(userId, playlistCode) {
+function joinPlaylistWithCode(userId, playlistCode) {
   return new Promise((resolve, reject) => {
-    fetch(`${api}/playlists/join`, {
+    fetch(`${api}/playlists/joinWithCode`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -448,7 +448,32 @@ function joinRoom(userId, playlistCode) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('JoinRoom', data.msg, response.status));
+          reject(new CustomError('joinPlaylistWithCode', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function joinPlaylistWithId(userId, playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/joinPlaylistWithId`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, playlistId,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('joinPlaylistWithId', data.msg, response.status));
           // console.log(data.msg);
         }
       })
@@ -1064,7 +1089,8 @@ export {
   voteMusic,
   addMusicToPlaylist,
   addPlaylist,
-  joinRoom,
+  joinPlaylistWithCode,
+  joinPlaylistWithId,
   isAdmin,
   getAdminsByPlaylistId,
   getUsersByPlaylistId,

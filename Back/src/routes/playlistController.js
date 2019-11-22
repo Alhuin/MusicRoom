@@ -373,9 +373,28 @@ function getNextTrackByVote(req, res) {
   }
 }
 
-function joinPlaylist(req, res) {
+function joinPlaylistWithCode(req, res) {
   if (utils.isValidId(req.body.userId) && req.body.playlistCode) {
-    playlistService.joinPlaylist(req.body.userId, req.body.playlistCode)
+    playlistService.joinPlaylistWithCode(req.body.userId, req.body.playlistCode)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function joinPlaylistWithId(req, res) {
+  if (utils.isValidId(req.body.userId) && req.body.playlistId) {
+    playlistService.joinPlaylistWithId(req.body.userId, req.body.playlistId)
       .then((response) => {
         res
           .status(response.status)
@@ -687,7 +706,8 @@ export default {
   deleteUserInPlaylist,
   getNextTrackByVote,
   addUserToPlaylistAndUnbanned,
-  joinPlaylist,
+  joinPlaylistWithCode,
+  joinPlaylistWithId,
   getPlaylistPrivateId,
   getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,

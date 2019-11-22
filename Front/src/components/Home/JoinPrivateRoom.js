@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Modal, StyleSheet, TextInput, View, Text, Alert,
 } from 'react-native';
-import { joinRoom } from '../../../API/BackApi';
+import { joinPlaylistWithCode } from '../../../API/BackApi';
 
 export default class JoinPrivateRoom extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ export default class JoinPrivateRoom extends React.Component {
     const { userId, setModalVisible } = this.props;
     const { text } = this.state;
     setModalVisible();
-    joinRoom(userId, text)
+    joinPlaylistWithCode(userId, text)
       .then(() => {
         setModalVisible();
         Alert.alert('Vous avez maintenant accès a une nouvelle playlist');

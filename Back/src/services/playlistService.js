@@ -485,15 +485,40 @@ function getNextTrackByVote(playlistId) {
   });
 }
 
-function joinPlaylist(userId, playlistCode) {
+function joinPlaylistWithCode(userId, playlistCode) {
   return new Promise((resolve, reject) => {
     PlaylistModel.find({ privateId: playlistCode }, (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlists[0]) {
-        reject(new CustomError('DeleteTrackFromPlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('JoinPlaylistWithCode', 'No playlist with this id in database', 400));
       } else {
         const newPlaylist = playlists[0];
+        newPlaylist.users.push(userId);
+        newPlaylist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', error.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+function joinPlaylistWithId(userId, playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (error, playlist) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('JoinPlaylistWithId', 'No playlist with this id in database', 400));
+      } else {
+        const newPlaylist = playlist;
         newPlaylist.users.push(userId);
         newPlaylist.save((saveError, savedPlaylist) => {
           if (saveError) {
@@ -866,7 +891,8 @@ export default {
   deleteUserInPlaylist,
   getNextTrackByVote,
   addUserToPlaylistAndUnbanned,
-  joinPlaylist,
+  joinPlaylistWithCode,
+  joinPlaylistWithId,
   getPlaylistPrivateId,
   getDelegatedPlayerAdmin,
   setPublicityOfPlaylist,

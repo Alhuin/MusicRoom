@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert, FlatList,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -13,10 +13,23 @@ import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
 import Loader from '../components/Authentication/Loader';
 
 import {
-  getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
-  getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
-  getPlaylistDates, setStartDate, setEndDate, getTags, setTags, getEditRestriction,
-  setEditRestriction, deletePlaylistByAdmin,
+  getAdminsByPlaylistId,
+  getUsersByPlaylistId,
+  getPublicityOfPlaylistById,
+  deleteUserInPlaylist,
+  getBansByPlaylistId,
+  getPlaylistPrivateId,
+  setPublicityOfPlaylist,
+  getDelegatedPlayerAdmin,
+  getPlaylistDates,
+  setStartDate,
+  setEndDate,
+  getTags,
+  setTags,
+  getEditRestriction,
+  setEditRestriction,
+  deletePlaylistByAdmin,
+  joinPlaylistWithId,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
@@ -36,6 +49,7 @@ class PlaylistSettings extends React.Component {
       collapsed: true,
       collapsedSpec: true,
       collapsedTags: true,
+      collapsedAddFriendToPlaylist: true,
       datePickerModalVisible: false,
       startDate: new Date(),
       endDate: new Date(Date.now() + 1000),
@@ -343,6 +357,11 @@ class PlaylistSettings extends React.Component {
     this.setState({ collapsedTags: !collapsedTags });
   };
 
+  toggleExpandedAddFriendToPlaylist = () => {
+    const { collapsedAddFriendToPlaylist } = this.state;
+    this.setState({ collapsedAddFriendToPlaylist: !collapsedAddFriendToPlaylist });
+  };
+
   setDatePickerModalVisible = (dateType) => {
     const { datePickerModalVisible } = this.state;
     const visible = !datePickerModalVisible;
@@ -448,8 +467,9 @@ class PlaylistSettings extends React.Component {
   render() {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
-      collapsed, collapsedSpec, collapsedTags, startDate, endDate, datePickerModalVisible, tags,
-      radioValue, deletePlaylistState, isUser,
+      collapsed, collapsedSpec, collapsedTags, collapsedAddFriendToPlaylist,
+      startDate, endDate, datePickerModalVisible, tags, radioValue, deletePlaylistState,
+      isUser,
     } = this.state;
     let radioProps = [];
     const { navigation, loggedUser, userChanged } = this.props;
@@ -464,34 +484,28 @@ class PlaylistSettings extends React.Component {
     let collapsibleIcon = (null);
     let collapsibleIconSpec = (null);
     let collapsibleIconTags = (null);
+    let collapsibleIconAddFriendToPlaylist = (null);
     let specificRoomSettings = (null);
     if (isAdmin) {
       if (collapsed) {
-        collapsibleIcon = (
-          <Icon name="ios-arrow-up" style={{ marginRight: 5 }} />
-        );
+        collapsibleIcon = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
       } else {
-        collapsibleIcon = (
-          <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
-        );
+        collapsibleIcon = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
       }
       if (collapsedSpec) {
-        collapsibleIconSpec = (
-          <Icon name="ios-arrow-up" style={{ marginRight: 5 }} />
-        );
+        collapsibleIconSpec = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
       } else {
-        collapsibleIconSpec = (
-          <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
-        );
+        collapsibleIconSpec = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
       }
       if (collapsedTags) {
-        collapsibleIconTags = (
-          <Icon name="ios-arrow-up" style={{ marginRight: 5 }} />
-        );
+        collapsibleIconTags = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
       } else {
-        collapsibleIconTags = (
-          <Icon name="ios-arrow-down" style={{ marginRight: 5 }} />
-        );
+        collapsibleIconTags = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
+      }
+      if (collapsedAddFriendToPlaylist) {
+        collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
+      } else {
+        collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
       }
       if (roomType === 'party') {
         radioProps = [
@@ -692,7 +706,7 @@ class PlaylistSettings extends React.Component {
             </View>
           </Collapsible>
           <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
-            Administrateurs
+            Droits Administrateurs
           </Text>
           <View
             style={{
@@ -749,6 +763,64 @@ class PlaylistSettings extends React.Component {
               isLoading={this.isLoading}
             />
           </View>
+          <TouchableOpacity onPress={this.toggleExpandedAddFriendToPlaylist}>
+            <View style={styles.header}>
+              <Text style={styles.header}>
+                Ajouter un ami à la playlist
+              </Text>
+              {collapsibleIconAddFriendToPlaylist}
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
+            <FlatList
+              data={loggedUser.friends}
+              keyExtractor={item => item._id.toString()}
+              renderItem={
+                ({ item }) => {
+                  const userId = item._id;
+                  let friendInPlaylist = (null);
+                  if (!users.includes(userId)) {
+                    friendInPlaylist = (
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (!this.isLoading()) {
+                            this.displayLoader();
+                            joinPlaylistWithId(userId, playlistId)
+                              .then(() => {
+                                this._onRefresh();
+                              })
+                              .catch((error) => {
+                                console.error(error);
+                              });
+                          }
+                        }}
+                        style={styles.iconWrapper}
+                      >
+                        <Icon name="md-add" style={styles.iconsStyle} />
+                      </TouchableOpacity>
+                    );
+                  }
+                  const element = (
+                    <View
+                      style={styles.row}
+                    >
+                      <Text
+                        style={styles.elementListTitle}
+                      >
+                        {item.name}
+                      </Text>
+                      <View
+                        style={styles.touchableWrapper}
+                      >
+                        {friendInPlaylist}
+                      </View>
+                    </View>
+                  );
+                  return (element);
+                }
+              }
+            />
+          </Collapsible>
           <View>
             <TouchableOpacity
               onPress={this.onDeletePlaylistTouchable}
@@ -938,6 +1010,32 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#F5FCFF',
     alignItems: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 5,
+    padding: 5,
+    flex: 1,
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '#CCCCCC',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  elementListTitle: {
+    // backgroundColor: '#888888',
+    padding: 10,
+    margin: 5,
+  },
+  touchableWrapper: {
+    height: '100%',
+    flexDirection: 'row',
+  },
+  iconWrapper: {
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
