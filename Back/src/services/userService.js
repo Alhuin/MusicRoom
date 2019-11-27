@@ -196,9 +196,27 @@ function addFriend(friendId, userId) {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
           } else {
-            resolve({
-              status: 200,
-              data: newUser,
+            UserModel.findById(friendId, (errorFriend, friend) => {
+              if (error) {
+                reject(new CustomError('MongoError', errorFriend.message, 500));
+              } else if (!friend) {
+                reject(new CustomError('AddFriend', 'No user with this id found in database', 404));
+              } else {
+                const updatedFriend = friend;
+                if (!updatedFriend.friends.includes(userId)) {
+                  updatedFriend.friends.push(userId);
+                }
+                updatedUser.save((saveErrorFriend, newFriend) => {
+                  if (saveError || newFriend) {
+                    reject(new CustomError('MongoError', saveErrorFriend.message, 500));
+                  } else {
+                    resolve({
+                      status: 200,
+                      data: newUser,
+                    });
+                  }
+                });
+              }
             });
           }
         });

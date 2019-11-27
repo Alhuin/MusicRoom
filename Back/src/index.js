@@ -197,6 +197,7 @@ const seedDatas = async () => {
     isVerified: true,
     friends: [user3],
   });
+  user3.friends = [admin];
   await admin.save();
   await user1.save();
   await user2.save();

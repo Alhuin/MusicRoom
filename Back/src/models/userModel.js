@@ -49,8 +49,7 @@ const userSchema = new mongoose.Schema({
   visibilityTable: {
     type: {},
     default: {
-      name: 'ALL',
-      familyName: 'ALL',
+      familyName: 'FRIEND_ONLY',
       email: 'PRIVATE',
       phoneNumber: 'FRIEND_ONLY',
       preferences: 'ALL',

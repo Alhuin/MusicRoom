@@ -75,10 +75,12 @@ class Radios extends React.Component {
       modalVisible,
       refreshing,
     } = this.state;
-    const { navigation, loggedUser } = this.props;
+    const { navigation, loggedUser, socket } = this.props;
     return (
       <View style={{ height: '100%' }}>
         <Components.AddPlaylistModal
+          socket={socket}
+          loggedUser={loggedUser}
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
           userId={loggedUser._id}

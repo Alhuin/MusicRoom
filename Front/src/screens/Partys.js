@@ -100,6 +100,7 @@ class Partys extends React.Component {
             refreshing={refreshing}
             onRefresh={this._onRefresh}
             roomType="party"
+            userId={loggedUser._id}
           />
         </View>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />

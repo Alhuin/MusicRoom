@@ -159,17 +159,6 @@ class AppSettings extends React.Component {
                   { user.name }
                 </TextInput>
               </View>
-              <TouchableOpacity
-                style={styles.iconWrapper}
-                onPress={() => {
-                  this.onVisibilityChanged('name');
-                }}
-              >
-                <Icon
-                  name={iconFromVisibilityTable.name}
-                  style={styles.iconStyle}
-                />
-              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.card}>

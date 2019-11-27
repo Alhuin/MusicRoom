@@ -52,6 +52,7 @@ class UserProfile extends React.Component {
         }
       }
     });
+    console.log(user);
     return (
       <ScrollView>
         <View style={styles.main_container}>
@@ -65,7 +66,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  { user.name ? 'Anonyme' : user.name }
+                  { !user.name ? 'Anonyme' : user.name }
                 </Text>
               </View>
             </View>
@@ -77,7 +78,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <TextInput style={styles.textStyle}>
-                  { user.familyName ? 'Anonyme' : user.familyName }
+                  { !user.familyName ? 'Anonyme' : user.familyName }
                 </TextInput>
               </View>
             </View>
@@ -89,7 +90,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  { user.email ? 'Privé' : user.email}
+                  { !user.email ? 'Privé' : user.email}
                 </Text>
               </View>
             </View>
@@ -101,7 +102,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  { user.phoneNumber ? 'Privé' : user.phoneNumber}
+                  { !user.phoneNumber ? 'Privé' : user.phoneNumber}
                 </Text>
               </View>
             </View>
@@ -113,7 +114,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  { preferences ? 'Privé' : preferences }
+                  { !preferences ? 'Privé' : preferences }
                 </Text>
               </View>
             </View>
