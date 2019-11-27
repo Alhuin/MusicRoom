@@ -15,6 +15,7 @@ import SendTokens from '../screens/SendTokens';
 import UpdatePass from '../screens/UpdatePass';
 import Inscription from '../containers/Inscription';
 import UserSettings from '../screens/UserSettings';
+import UserProfile from '../containers/UserProfile';
 import AppSettings from '../containers/AppSettings';
 import PlaylistSettings from '../containers/PlaylistSettings';
 import Loading from '../containers/Loading';
@@ -138,6 +139,12 @@ const PartysNavigator = createStackNavigator({
       header: null,
     },
   },
+  UserProfile: {
+    screen: UserProfile,
+    navigationOptions: {
+      header: null,
+    },
+  },
 });
 
 const RadiosNavigator = createStackNavigator({
@@ -163,6 +170,12 @@ const RadiosNavigator = createStackNavigator({
   },
   PlaylistSettings: {
     screen: PlaylistSettings,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  UserProfile: {
+    screen: UserProfile,
     navigationOptions: {
       header: null,
     },

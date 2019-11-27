@@ -6,7 +6,9 @@ import React, { Component } from 'react';
 
 export default class SettingsTagCheckbox extends Component {
   render() {
-    const { tag, tagsChanged, checked, textStyle } = this.props;
+    const {
+      tag, tagsChanged, checked, textStyle,
+    } = this.props;
     return (
       <View
         style={styles.container}

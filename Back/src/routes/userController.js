@@ -40,6 +40,25 @@ function getUserById(req, res) {
   }
 }
 
+function getUserByIdByPreferences(req, res) {
+  if ((req.params.userId && utils.isValidId(req.params.userId)
+    && req.params.requesterId && utils.isValidId(req.params.requesterId))) {
+    userService.getUserByIdByPreferences(req.params.userId, req.params.requesterId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong parameters' });
+  }
+}
+
 function getFriends(req, res) {
   if ((req.params.userId && utils.isValidId(req.params.userId))) {
     userService.getFriends(req.params.userId)
@@ -272,6 +291,7 @@ function confirmPasswordToken(req, res) {
 
 export default {
   getUserById,
+  getUserByIdByPreferences,
   getUsers,
   deleteUserById,
   addUser,

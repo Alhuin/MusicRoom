@@ -39,6 +39,39 @@ function getUserById(userId) {
   });
 }
 
+function getUserByIdByPreferences(userId, requesterId) {
+  return new Promise((resolve, reject) => {
+    UserModel.findById(userId, (error, user) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!user) {
+        reject(new CustomError('GetUserByIdByPreferences', 'No user with this id found in database', 404));
+      } else {
+        const newUser = user;
+        // let keys;
+        // Object.assign(iconFromVisibilityTable, user.visibilityTable);
+        Object.keys(user.visibilityTable).forEach((key) => {
+          if (Object.prototype.hasOwnProperty.call(user.visibilityTable, key)) {
+            /* if (user.visibilityTable[key] === 'ALL') {
+            } else */
+            if (user.visibilityTable[key] === 'PRIVATE') {
+              newUser[key] = '';
+            } else if (user.visibilityTable[key] === 'FRIEND_ONLY') {
+              if (!user.friends.includes(requesterId)) {
+                newUser[key] = '';
+              }
+            }
+          }
+        });
+        resolve({
+          status: 200,
+          data: newUser,
+        });
+      }
+    });
+  });
+}
+
 function getFriends(userId) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
@@ -392,6 +425,7 @@ function confirmEmailToken(tokenString) {
 export default {
   getUsers,
   getUserById,
+  getUserByIdByPreferences,
   deleteUserById,
   addUser,
   askEmailToken,

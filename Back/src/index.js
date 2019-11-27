@@ -160,15 +160,6 @@ const seedDatas = async () => {
   });
   const salty = await bcrypt.genSaltSync(10);
   const hashy = await bcrypt.hashSync('a', salty);
-  const admin = new models.User({
-    login: 'a',
-    password: hashy,
-    name: 'Julien',
-    familyName: 'Janin-Reynaud',
-    email: 'julien.janinr@protonmail.com',
-    phoneNumber: '01',
-    isVerified: true,
-  });
   const user2 = new models.User({
     login: 'b',
     password: hashy,
@@ -195,6 +186,16 @@ const seedDatas = async () => {
     email: 'a.d@protonmail.com',
     isVerified: true,
     phoneNumber: '04',
+  });
+  const admin = new models.User({
+    login: 'a',
+    password: hashy,
+    name: 'Julien',
+    familyName: 'Janin-Reynaud',
+    email: 'julien.janinr@protonmail.com',
+    phoneNumber: '01',
+    isVerified: true,
+    friends: [user3],
   });
   await admin.save();
   await user1.save();

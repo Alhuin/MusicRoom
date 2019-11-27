@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert, FlatList,
+  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -16,7 +16,7 @@ import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
   getPlaylistDates, setStartDate, setEndDate, getTags, setTags, getEditRestriction,
-  setEditRestriction, deletePlaylistByAdmin, joinPlaylistWithId, getFriends,
+  setEditRestriction, deletePlaylistByAdmin, getFriends,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
@@ -803,57 +803,19 @@ class PlaylistSettings extends React.Component {
                 playlistId={playlistId}
                 displayLoader={this.displayLoader}
                 isLoading={this.isLoading}
+                navigation={navigation}
               />
             </View>
-            {/* <FlatList
-              data={friends}
-              keyExtractor={item => item._id.toString()}
-              renderItem={
-                ({ item }) => {
-                  const friendId = item._id;
-                  let friendInPlaylist = (null);
-                  if (!users.includes(friendId) || !admins.includes(friendId)) {
-                    friendInPlaylist = (
-                      <TouchableOpacity
-                        onPress={() => {
-                          if (!this.isLoading()) {
-                            this.displayLoader();
-                            joinPlaylistWithId(friendId, playlistId)
-                              .then(() => {
-                                this._onRefresh();
-                              })
-                              .catch((error) => {
-                                console.error(error);
-                              });
-                          }
-                        }}
-                        style={styles.iconWrapper}
-                      >
-                        <Icon name="md-add" style={styles.iconsStyle} />
-                      </TouchableOpacity>
-                    );
-                  }
-                  const element = (
-                    <View
-                      style={styles.row}
-                    >
-                      <Text
-                        style={styles.elementListTitle}
-                      >
-                        {item.name}
-                      </Text>
-                      <View
-                        style={styles.touchableWrapper}
-                      >
-                        {friendInPlaylist}
-                      </View>
-                    </View>
-                  );
-                  return (element);
-                }
-              }
-            /> */}
           </Collapsible>
+          <View style={[styles.subContainer, { justifyContent: 'center' }]}>
+            <Button
+              title="Quitter la playlist"
+              onPress={() => {
+                this.leavingPlaylist();
+              }}
+              style={styles.leavingButton}
+            />
+          </View>
           <View>
             <TouchableOpacity
               onPress={this.onDeletePlaylistTouchable}
@@ -973,9 +935,19 @@ class PlaylistSettings extends React.Component {
                   playlistId={playlistId}
                   displayLoader={this.displayLoader}
                   isLoading={this.isLoading}
+                  navigation={navigation}
                 />
               </View>
             </Collapsible>
+            <View style={[styles.subContainer, { justifyContent: 'center' }]}>
+              <Button
+                title="Quitter la playlist"
+                onPress={() => {
+                  this.leavingPlaylist();
+                }}
+                style={styles.leavingButton}
+              />
+            </View>
           </View>
         );
       }
@@ -985,15 +957,6 @@ class PlaylistSettings extends React.Component {
         <Text style={styles.title}>
           Paramètres de la playlist
         </Text>
-        <View style={[styles.subContainer, { justifyContent: 'center' }]}>
-          <Button
-            title="Quitter la playlist"
-            onPress={() => {
-              this.leavingPlaylist();
-            }}
-            style={styles.leavingButton}
-          />
-        </View>
         {userOptions}
         {notAdminOptions}
         {adminOptions}

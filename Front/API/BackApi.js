@@ -58,6 +58,27 @@ function getUserById(userId) {
   });
 }
 
+function getUserByIdByPreferences(userId, requesterId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/getByPreferences/${userId}&${requesterId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else if (response.status === 404) {
+          reject(new CustomError('GetUser', data.msg, 404));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function addUser(userName, password, name, familyName, email) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/users`, {
@@ -1129,6 +1150,7 @@ export {
   getMusicsByVote,
   // getPlaylistById,
   getUserById,
+  getUserByIdByPreferences,
   voteMusic,
   addMusicToPlaylist,
   addPlaylist,
