@@ -742,6 +742,7 @@ class PlaylistSettings extends React.Component {
               roomType={roomType}
               parent={this}
               delegatedPlayerAdmin={delegatedPlayerAdmin}
+              navigation={navigation}
             />
           </View>
           <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
@@ -763,6 +764,7 @@ class PlaylistSettings extends React.Component {
               parent={this}
               isAdmin={isAdmin}
               userChanged={userChanged}
+              navigation={navigation}
             />
           </View>
           <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
@@ -779,6 +781,7 @@ class PlaylistSettings extends React.Component {
               onRefresh={this._onRefresh}
               playlistId={playlistId}
               isLoading={this.isLoading}
+              navigation={navigation}
             />
           </View>
           <TouchableOpacity onPress={this.toggleExpandedAddFriendToPlaylist}>

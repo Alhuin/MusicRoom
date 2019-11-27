@@ -65,7 +65,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  { user.name }
+                  { user.name ? 'Anonyme' : user.name }
                 </Text>
               </View>
             </View>
@@ -77,7 +77,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <TextInput style={styles.textStyle}>
-                  { user.familyName }
+                  { user.familyName ? 'Anonyme' : user.familyName }
                 </TextInput>
               </View>
             </View>
@@ -89,7 +89,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  { user.email }
+                  { user.email ? 'Privé' : user.email}
                 </Text>
               </View>
             </View>
@@ -101,7 +101,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  { user.phoneNumber }
+                  { user.phoneNumber ? 'Privé' : user.phoneNumber}
                 </Text>
               </View>
             </View>
@@ -113,7 +113,7 @@ class UserProfile extends React.Component {
             <View style={styles.content_container}>
               <View style={styles.content}>
                 <Text style={styles.textStyle}>
-                  {preferences}
+                  { preferences ? 'Privé' : preferences }
                 </Text>
               </View>
             </View>
@@ -165,58 +165,6 @@ let styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingRight: 5,
     textAlign: 'center',
-  },
-  checkboxRow: {
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-  },
-  checkboxesWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  iconWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconStyle: {
-    fontSize: 40,
-    color: 'white',
-  },
-  header: {
-    backgroundColor: '#F5FCFF',
-    padding: 10,
-    margin: 5,
-    borderRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerText: {
-    // textAlign: 'center',
-    fontSize: 22,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 5,
-    padding: 5,
-    flex: 1,
-    alignItems: 'center',
-    height: 40,
-    backgroundColor: '#CCCCCC',
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  elementListTitle: {
-    flex: 6,
-    padding: 10,
-    margin: 5,
-  },
-  touchableWrapper: {
-    height: '100%',
-    flexDirection: 'row',
-    flex: 1,
   },
 });
 

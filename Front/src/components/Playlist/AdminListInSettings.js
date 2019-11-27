@@ -105,6 +105,7 @@ class AdminListInSettings extends React.Component {
       parent,
       delegatedPlayerAdmin,
       loggedUser,
+      navigation,
     } = this.props;
     return (
       <FlatList
@@ -195,11 +196,19 @@ class AdminListInSettings extends React.Component {
               <View
                 style={styles.row}
               >
-                <Text
-                  style={styles.title}
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!isLoading()) {
+                      navigation.navigate('UserProfile', { userProfileId: item._id });
+                    }
+                  }}
                 >
-                  {item.name}
-                </Text>
+                  <Text
+                    style={styles.title}
+                  >
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
                 {doNotTouchTheDelegated}
               </View>
             );

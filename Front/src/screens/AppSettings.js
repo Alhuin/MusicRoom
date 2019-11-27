@@ -101,6 +101,7 @@ class AppSettings extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
     const {
       user, preferences, visibilityTable, collapsed, friends,
     } = this.state;
@@ -123,7 +124,7 @@ class AppSettings extends React.Component {
     } else {
       collapsibleIcon = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
     }
-    // console.log(friends);
+    console.log(friends);
     return (
       <ScrollView>
         <View style={styles.main_container}>
@@ -355,11 +356,18 @@ class AppSettings extends React.Component {
                       <View
                         style={styles.row}
                       >
-                        <Text
-                          style={styles.elementListTitle}
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('UserProfile', { userProfileId: item._id });
+                          }}
+                          style={{ flex: 6 }}
                         >
-                          {item.name}
-                        </Text>
+                          <Text
+                            style={styles.elementListTitle}
+                          >
+                            {item.name}
+                          </Text>
+                        </TouchableOpacity>
                         <View
                           style={styles.touchableWrapper}
                         >
@@ -487,7 +495,6 @@ let styles = StyleSheet.create({
     overflow: 'hidden',
   },
   elementListTitle: {
-    flex: 6,
     padding: 10,
     margin: 5,
   },

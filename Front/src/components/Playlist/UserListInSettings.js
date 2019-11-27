@@ -20,6 +20,7 @@ class UserListInSettings extends React.Component {
       parent,
       loggedUser,
       isAdmin,
+      navigation,
     } = this.props;
     return (
       <FlatList
@@ -60,11 +61,19 @@ class UserListInSettings extends React.Component {
                 <View
                   style={styles.row}
                 >
-                  <Text
-                    style={styles.title}
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (!isLoading()) {
+                        navigation.navigate('UserProfile', { userProfileId: item._id });
+                      }
+                    }}
                   >
-                    {item.name}
-                  </Text>
+                    <Text
+                      style={styles.title}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
                   <View
                     style={styles.touchableWrapper}
                   >
@@ -144,11 +153,19 @@ class UserListInSettings extends React.Component {
                 <View
                   style={styles.row}
                 >
-                  <Text
-                    style={styles.title}
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (!isLoading()) {
+                        navigation.navigate('UserProfile', { userProfileId: item._id });
+                      }
+                    }}
                   >
-                    {item.name}
-                  </Text>
+                    <Text
+                      style={styles.title}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
                   <View
                     style={styles.touchableWrapper}
                   >
