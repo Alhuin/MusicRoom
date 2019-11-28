@@ -227,7 +227,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 5,
+    marginBottom: 5,
+    marginTop: 5,
     padding: 5,
     flex: 1,
     alignItems: 'center',
@@ -251,14 +252,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconsStyle: {
-    fontSize: 45,
+    fontSize: 40,
   },
   iconsStyleBlank: {
-    fontSize: 45,
+    fontSize: 40,
     color: 'white',
   },
   authorIconStyle: {
-    fontSize: 45,
+    fontSize: 40,
   },
 });
 

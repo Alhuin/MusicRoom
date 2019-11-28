@@ -62,6 +62,10 @@ class PlaylistSettings extends React.Component {
         getDelegatedPlayerAdmin(playlistId)
           .then((delegatedPlayerAdmin) => {
             this.setState({ privateId, delegatedPlayerAdmin });
+            this.getEditRestriction(playlistId);
+            this.getPublicity(playlistId);
+            this.getDates(playlistId);
+            this.getTags(playlistId);
             this.updateAdmins()
               .then(() => {
                 this.updateUsers()
@@ -89,10 +93,6 @@ class PlaylistSettings extends React.Component {
               .catch((error) => {
                 console.error(error);
               });
-            this.getEditRestriction(playlistId);
-            this.getPublicity(playlistId);
-            this.getDates(playlistId);
-            this.getTags(playlistId);
           })
           .catch((error) => {
             console.error(error);
@@ -149,7 +149,7 @@ class PlaylistSettings extends React.Component {
           console.error(error);
         });
     } else {
-      Alert.alert('Impossible de quitter la playlist tant que vous êtes Délégué au contrôle du PlayerDetails.');
+      Alert.alert('Impossible de quitter la playlist tant que vous êtes Délégué au Contrôle du Player.');
       // navigation.goBack();
     }
   };
@@ -224,6 +224,9 @@ class PlaylistSettings extends React.Component {
         .then(() => {
           const { isUser } = this.state;
           if (isUser) {
+            this.getPublicity(playlistId);
+            this.getDates(playlistId);
+            this.hideLoader();
             getPlaylistPrivateId(playlistId)
               .then((privateId) => {
                 this.setState({ privateId });
@@ -240,9 +243,6 @@ class PlaylistSettings extends React.Component {
                 console.error(error);
               });
           }
-          this.getPublicity(playlistId);
-          this.getDates(playlistId);
-          this.hideLoader();
         })
         .catch((error) => {
           console.error(error);
@@ -554,30 +554,46 @@ class PlaylistSettings extends React.Component {
                   Changer la localisation : (?)
                 </Text>
               </View>
-              <TouchableOpacity
-                onPress={() => {
-                  this.setDatePickerModalVisible('start');
-                }}
-              >
-                <Text>
-                  Changer la date de début :
-                </Text>
-                <Text>
-                  {String(startDate)}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  this.setDatePickerModalVisible('end');
-                }}
-              >
-                <Text>
-                  Changer la date de fin :
-                </Text>
-                <Text>
-                  {String(endDate)}
-                </Text>
-              </TouchableOpacity>
+              <View style={{ width: '100%', flexDirection: 'row' }}>
+                <View style={{ flex: 6 }}>
+                  <Text>
+                    Date de début :
+                  </Text>
+                  <Text>
+                    {String(startDate)}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setDatePickerModalVisible('start');
+                  }}
+                  style={styles.customizedTouchable}
+                >
+                  <Text>
+                    Modifier
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ width: '100%', flexDirection: 'row' }}>
+                <View style={{ flex: 6 }}>
+                  <Text>
+                    Date de fin :
+                  </Text>
+                  <Text>
+                    {String(startDate)}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setDatePickerModalVisible('end');
+                  }}
+                  style={styles.customizedTouchable}
+                >
+                  <Text>
+                    Modifier
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </Collapsible>
           </View>
         );
@@ -704,7 +720,7 @@ class PlaylistSettings extends React.Component {
             </View>
             <View style={styles.iconsDescriptionWrapper}>
               <Icon name="musical-notes" style={styles.iconsStyle} />
-              <Text> Délégué au Player</Text>
+              <Text> Délégué au Contrôle du Player</Text>
             </View>
             <View style={styles.iconsDescriptionWrapper}>
               <Icon name="arrow-down" style={styles.iconsStyle} />
@@ -974,6 +990,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#DDDDDD',
+    padding: 5,
   },
   title: {
     fontSize: 25,
@@ -1060,6 +1077,16 @@ const styles = StyleSheet.create({
     width: 80,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  customizedTouchable: {
+    flex: 1,
+    alignItems: 'center',
+    minWidth: 20,
+    backgroundColor: '#F5FCFF',
+    padding: 5,
+    margin: 5,
+    height: 30,
+    borderRadius: 20,
   },
 });
 
