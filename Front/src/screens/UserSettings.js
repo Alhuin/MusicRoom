@@ -9,7 +9,7 @@ class UserSettings extends React.Component {
     return (
       <View style={styles.content}>
         <Components.Logo />
-        <Text>Settings</Text>
+        <Text>Paramètres</Text>
       </View>
     );
   }

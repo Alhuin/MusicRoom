@@ -65,13 +65,13 @@ export default class CustomForm extends React.Component {
           autoCapitalize="none"
           underlineColorAndroid="grey"
           style={styles.inputBox}
-          placeholder="Login"
+          placeholder="Identifiant"
         />
         <TextInput
           onChangeText={this.updatePassword}
           underlineColorAndroid="grey"
           style={styles.inputBox}
-          placeholder="Password"
+          placeholder="Mot de passe"
           secureTextEntry
         />
         <TextInput
@@ -79,21 +79,21 @@ export default class CustomForm extends React.Component {
           underlineColorAndroid="grey"
           secureTextEntry
           style={styles.inputBox}
-          placeholder="Confirm password"
+          placeholder="Confirmer le mot de passe"
         />
         <TextInput
           onChangeText={this.updateName}
           autoCorrect={false}
           underlineColorAndroid="grey"
           style={styles.inputBox}
-          placeholder="Name"
+          placeholder="Nom"
         />
         <TextInput
           onChangeText={this.updateFamilyName}
           autoCorrect={false}
           underlineColorAndroid="grey"
           style={styles.inputBox}
-          placeholder="Family Name"
+          placeholder="Nom de famille"
         />
         <TextInput
           onChangeText={this.updateEmail}

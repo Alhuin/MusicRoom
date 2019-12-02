@@ -38,13 +38,13 @@ class Home extends React.Component {
         />
         <TouchableOpacity onPress={this._onPressParty} style={styles.cartes}>
           <View style={styles.place}>
-            <Text style={styles.textcard}>Party mode</Text>
+            <Text style={styles.textcard}>Party</Text>
             <Icon name="musical-notes" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={this._onPressRadio} style={styles.cartes}>
           <View style={styles.place}>
-            <Text style={styles.textcard}>Radio mode</Text>
+            <Text style={styles.textcard}>Radio</Text>
             <Icon name="radio" />
           </View>
         </TouchableOpacity>

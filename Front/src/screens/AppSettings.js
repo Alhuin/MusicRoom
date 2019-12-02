@@ -129,7 +129,7 @@ class AppSettings extends React.Component {
       <ScrollView>
         <View style={styles.main_container}>
           <Text style={styles.title_set}>
-            Settings
+            Paramètres
           </Text>
           <View style={styles.card}>
             <View style={styles.title_container}>

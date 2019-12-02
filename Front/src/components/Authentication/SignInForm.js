@@ -65,13 +65,13 @@ export default class SignInForm extends React.Component {
           autoCapitalize="none"
           underlineColorAndroid="grey"
           style={styles.inputBox}
-          placeholder="Login"
+          placeholder="Identifiant"
         />
         <TextInput
           onChangeText={this.updatePassword}
           underlineColorAndroid="grey"
           style={styles.inputBox}
-          placeholder="Password"
+          placeholder="Mot de passe"
           secureTextEntry
         />
         <View
@@ -89,7 +89,7 @@ export default class SignInForm extends React.Component {
           style={styles.forgotPass}
           onPress={this.ForgotPassPage}
         >
-          <Text>Forgot your password ? Click here</Text>
+          <Text>Mot de passe oublié ?</Text>
         </TouchableOpacity>
       </View>
     );

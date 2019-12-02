@@ -44,7 +44,7 @@ export default class JoinPrivateRoom extends React.Component {
         <Text
           style={styles.title}
         >
-          Rejoindre une Room Privée
+          Rejoindre une Playlist Privée
         </Text>
         <View
           style={styles.container}

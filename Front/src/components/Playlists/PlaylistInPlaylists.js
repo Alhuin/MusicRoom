@@ -38,7 +38,7 @@ export default class PlaylistInPlaylists extends React.Component {
           <Text>{ name }</Text>
           <View style={styles.Author}>
             <Text>
-              Author :
+              Auteur :
               {' '}
               { authorName }
             </Text>
@@ -55,7 +55,7 @@ export default class PlaylistInPlaylists extends React.Component {
           <Text>{ name }</Text>
           <View style={styles.Author}>
             <Text>
-              Author :
+              Auteur :
               {' '}
               { authorName }
             </Text>
