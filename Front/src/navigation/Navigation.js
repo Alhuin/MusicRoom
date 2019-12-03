@@ -188,14 +188,26 @@ const MainNavigator = Platform.select({
       screen: HomeNavigator,
       path: 'main',
     },
-    Settings: AppSettings,
+    Settings: {
+      screen: AppSettings,
+      navigationOptions: {
+        drawerLabel: 'Paramètres',
+      },
+    },
+    Parties: PartysNavigator,
+    Radios: RadiosNavigator,
   }),
   android: createDrawerNavigator({
     Home: {
       screen: HomeNavigator,
       path: 'main',
     },
-    Settings: AppSettings,
+    Settings: {
+      screen: AppSettings,
+      navigationOptions: {
+        drawerLabel: 'Paramètres',
+      },
+    },
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
   },

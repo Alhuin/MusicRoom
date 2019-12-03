@@ -64,7 +64,7 @@ function getMusicsByVote(playlistId, roomType) {
                 reject(new CustomError('GetPlaylist', 'No playlist with this id found in database', 404));
               } else {
                 const order = playlist.musics;
-                let res = [];
+                const res = [];
                 order.forEach((key) => {
                   let found = false;
                   musics = musics.filter((item) => {

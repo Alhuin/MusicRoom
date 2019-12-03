@@ -863,7 +863,7 @@ function setEditRestriction(playlistId, newEditRestriction) {
 }
 
 
-function isEditor(playlistId, userId) {
+function isEditor(playlistId, userId, pos) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
@@ -873,7 +873,7 @@ function isEditor(playlistId, userId) {
       } else {
         resolve({
           status: 200,
-          data: utils.isEditorInPlaylist(playlist, userId),
+          data: utils.isEditorInPlaylist(playlist, userId, pos),
         });
       }
     });

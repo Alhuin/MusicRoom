@@ -22,7 +22,7 @@ const socketio = require('socket.io');
 const socketServer = http.Server(app);
 const websocket = socketio(socketServer);
 
-socketServer.listen(process.env.WEBSOCKET_PORT, () => console.log(`[Socket Server] : listening on port ${process.env.WEBSOCKET_PORT}`));
+socketServer.listen(process.env.WEBSOCKET_PORT, () => console.log(`[Socket Server] : listening on port ${process.env.WEBSOCKET_PORT} at ${process.env.SERVER}`));
 
 const clients = {};
 
@@ -210,7 +210,7 @@ const seedDatas = async () => {
     if (i === 0) {
       playlist = new models.Playlist({
         name: `${i} - boz`,
-        users: [user1, user2],
+        users: [admin, user1, user2],
         author: admin._id,
         authorName: admin.name,
         delegatedPlayerAdmin: admin._id,
@@ -219,7 +219,15 @@ const seedDatas = async () => {
         admins: [user2],
         bans: [],
         privateId: '1234',
-        editRestriction: 'ADMIN_RESTRICTED',
+        editRestriction: 'EVENT_RESTRICTED',
+        startDate: new Date(Date.now()),
+        endDate: new Date(Date.now() + 10000000000),
+        location: {
+          coords: {
+            latitude: 45.73941704121705,
+            longitude: 4.817631669272994,
+          },
+        },
       });
     } else {
       playlist = new models.Playlist({

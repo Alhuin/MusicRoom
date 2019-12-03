@@ -7,13 +7,13 @@ import { voteMusic } from '../../../API/BackApi';
 
 // must create two components TrackInRadio and TrackInParty or this one need to be modified
 
-
 class TrackInPlaylist extends React.Component {
   _vote = (value) => {
     const {
-      track, playlistId, userId, socket,
+      track, playlistId, userId, socket, pos,
     } = this.props;
-    voteMusic(userId, track._id, playlistId, value)
+    console.log(pos);
+    voteMusic(userId, track._id, playlistId, value, pos)
       .then(() => {
         socket.emit('voteMusic', playlistId);
       })
@@ -31,7 +31,9 @@ class TrackInPlaylist extends React.Component {
       roomType,
       myVoteValue,
       editor,
+      pos,
     } = this.props;
+    console.log(pos)
     let renderForParty = (null);
     if (roomType === 'party') {
       let arrowUpStyle = { color: 'grey' };

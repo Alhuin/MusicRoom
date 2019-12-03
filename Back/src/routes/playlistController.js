@@ -102,7 +102,7 @@ function addPlaylist(req, res) {
     && req.body.roomType
     && req.body.startDate !== undefined
     && req.body.endDate !== undefined
-    && req.body.location !== undefined
+    && req.body.location
     && req.body.privateId !== undefined) {
     playlistService.addPlaylist(req.body.name, req.body.publicFlag,
       req.body.userId, req.body.author, req.body.authorName,
@@ -669,8 +669,8 @@ function setEditRestriction(req, res) {
 
 function isEditor(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.userId && utils.isValidId(req.body.userId)) {
-    playlistService.isEditor(req.body.playlistId, req.body.userId)
+    && req.body.userId && utils.isValidId(req.body.userId) && req.body.pos) {
+    playlistService.isEditor(req.body.playlistId, req.body.userId, req.body.pos)
       .then((response) => {
         res
           .status(response.status)

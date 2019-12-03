@@ -54,7 +54,8 @@ const playlistSchema = new mongoose.Schema({
     default: new Date(Date.now() + 1000),
   },
   location: {
-    type: String,
+    type: {},
+    default: {},
   },
   privateId: {
     type: String,

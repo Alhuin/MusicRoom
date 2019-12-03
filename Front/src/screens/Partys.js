@@ -24,11 +24,12 @@ class Partys extends React.Component {
     this._isMounted = true;
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
-        // console.log(playlists);
         this.setState({ playlists });
       })
       .catch((error) => {
-        console.error(error);
+        if (error.status !== 400) {
+          console.error(error);
+        }
       });
   }
 
@@ -59,12 +60,13 @@ class Partys extends React.Component {
     // console.log(loggedUser);
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
-        // console.log(playlists);
         this.setState({ playlists });
         resolve();
       })
       .catch((error) => {
-        console.error(error);
+        if (error.status !== 400) {
+          console.error(error);
+        }
         reject(error);
       });
   });

@@ -26,8 +26,9 @@ class Radios extends React.Component {
         this.setState({ playlists });
       })
       .catch((error) => {
-        console.error(error);
-      });
+        if (error.status !== 400) {
+          console.error(error);
+        }      });
   }
 
   componentWillUnmount(): void {
@@ -58,7 +59,9 @@ class Radios extends React.Component {
         resolve();
       })
       .catch((error) => {
-        console.error(error);
+        if (error.status !== 400) {
+          console.error(error);
+        }
         reject(error);
       });
   });

@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Button, Keyboard, View, StyleSheet, TextInput, Alert,
 } from 'react-native';
-
 import { addUser } from '../../../API/BackApi';
 
 export default class CustomForm extends React.Component {
@@ -52,7 +51,11 @@ export default class CustomForm extends React.Component {
       Alert.alert('error: passwords don\'t match');
       console.log('error, passwords don\'t match');
     } else {
-      addUser(userName, password, name, familyName, email);// .then.catch?
+      addUser(userName, password, name, familyName, email)
+        .then((res) => {
+          Alert.alert(res)
+        })
+        .catch(error => console.error(error));
     }
   };
 

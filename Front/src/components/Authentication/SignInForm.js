@@ -6,7 +6,6 @@ import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import { login } from '../../../API/BackApi';
 
-
 export default class SignInForm extends React.Component {
   state = {
     password: '',

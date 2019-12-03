@@ -77,8 +77,11 @@ function deleteVoteById(req, res) {
 function voteMusic(req, res) {
   if (req.body.userId && req.body.musicId && req.body.playlistId && req.body.value
     && utils.isValidId(req.body.musicId) && utils.isValidId(req.body.playlistId)
-    && (req.body.value === 1 || req.body.value === -1) && utils.isValidId(req.body.userId)) {
-    voteService.voteMusic(req.body.userId, req.body.musicId, req.body.playlistId, req.body.value)
+    && (req.body.value === 1 || req.body.value === -1) && utils.isValidId(req.body.userId)
+    && req.body.pos !== undefined) {
+    voteService.voteMusic(
+      req.body.userId, req.body.musicId, req.body.playlistId, req.body.value, req.body.pos,
+    )
       .then((response) => {
         res
           .status(response.status)

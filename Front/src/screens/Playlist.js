@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Dimensions,
+  StyleSheet, View, Text, TouchableOpacity, Dimensions, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
-  isEditor, moveTrackOrder, deleteTrackFromPlaylist,
+  isEditor, moveTrackOrder, deleteTrackFromPlaylist, getEditRestriction,
 } from '../../API/BackApi';
 
 class Playlist extends React.Component {
@@ -22,6 +22,7 @@ class Playlist extends React.Component {
       modalVisible: false,
       myVotes: [],
       playlistLaunched: false,
+      pos: {},
     };
     this.onRefreshSignal = this._onRefreshSignal.bind(this);
     props.socket.on('refresh', this.onRefreshSignal);
@@ -33,8 +34,7 @@ class Playlist extends React.Component {
     this._isMounted = true;
 
     socket.emit('userJoinedPlaylist', playlistId);
-    this._isAdmin();
-    this._isEditor();
+    this.isAdminAndisEditor();
     this.updateMyVotes()
       .then(() => this.updateTracks())
       .catch(error => console.log(error));
@@ -64,8 +64,7 @@ class Playlist extends React.Component {
   _onRefreshSignal = () => {
     if (this._isMounted) {
       console.log('[Socket Server] : refresh signal recieved');
-      this._isAdmin();
-      this._isEditor();
+      this.isAdminAndisEditor();
       this.updateMyVotes()
         .then(() => {
           this.updateTracks();
@@ -76,8 +75,7 @@ class Playlist extends React.Component {
   _onRefresh = () => {
     const { navigation } = this.props;
     const roomType = navigation.getParam('roomType');
-    this._isAdmin();
-    this._isEditor();
+    this.isAdminAndisEditor();
     if (roomType === 'party') {
       this.setState({ refreshing: true });
       this.updateMyVotes()
@@ -140,7 +138,7 @@ class Playlist extends React.Component {
       });
   });
 
-  _isAdmin = () => {
+  isAdminAndisEditor = () => {
     const { navigation, loggedUser } = this.props;
     const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');
@@ -149,6 +147,7 @@ class Playlist extends React.Component {
         if (response === true) {
           this.setState({ admin: true });
         }
+        this._isEditor();
       })
       .catch((error) => {
         console.error(error);
@@ -159,10 +158,28 @@ class Playlist extends React.Component {
     const { navigation, loggedUser } = this.props;
     const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');
-    isEditor(playlistId, userId)
-      .then((response) => {
-        if (response === true) {
-          this.setState({ editor: true });
+    getEditRestriction(playlistId)
+      .then((data) => {
+        if (data === 'EVENT_RESTRICTED') {
+          // eslint-disable-next-line no-undef
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              this.setState({ pos: position });
+              isEditor(playlistId, userId, position)
+                .then((response) => {
+                  if (response === true) {
+                    this.setState({ editor: true });
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            },
+            error => Alert.alert(
+              `${error.message}\n Position introuvable.`,
+            ),
+            { enableHighAccuracy: false, timeout: 10000 },
+          );
         }
       })
       .catch((error) => {
@@ -188,7 +205,7 @@ class Playlist extends React.Component {
 
   render() {
     const {
-      tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched,
+      tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched, pos,
     } = this.state;
     const {
       navigation, changeTrack, changePlaylist, loggedUser, socket,
@@ -199,7 +216,6 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
-
     let settingsIcon = (
       <TouchableOpacity
         onPress={() => {
@@ -292,6 +308,7 @@ class Playlist extends React.Component {
             myVotes={myVotes}
             isUserInPlaylist={isUserInPlaylist}
             editor={editor}
+            pos={pos}
             onMoveEnd={(data) => {
               this.setState({ tracks: data.data });
               moveTrackOrder(playlistId, data.row._id, data.to)

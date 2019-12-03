@@ -17,29 +17,65 @@ const isAdminInPlaylist = (playlist, userId) => {
   return (false);
 };
 
-const isEditorInPlaylist = (playlist, userId) => {
+const degreesToRadians = (degrees) => {
+  const pi = Math.PI;
+  return degrees * (pi / 180);
+};
+
+const getDistanceLongLat = (lat1, lng1, lat2, lng2) => {
+  const earthRadius = 63781370;
+  const rlo1 = degreesToRadians(lng1);
+  const rla1 = degreesToRadians(lat1);
+  const rlo2 = degreesToRadians(lng2);
+  const rla2 = degreesToRadians(lat2);
+  const dlo = (rlo2 - rlo1) / 2;
+  const dla = (rla2 - rla1) / 2;
+  const a = (Math.sin(dla) * Math.sin(dla)) + Math.cos(rla1) * Math.cos(rla2)
+    * (Math.sin(dlo) * Math.sin(dlo));
+  const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return (earthRadius * d);
+};
+
+const isEditorInPlaylist = (playlist, userId, pos) => {
+  console.log(playlist);
+  console.log(userId);
+  console.log(pos);
   if (playlist.editRestriction === 'ALL') {
     return (true);
   }
-  if (playlist.editRestriction === 'USER_RESTRICTION') {
+  if (playlist.editRestriction === 'USER_RESTRICTED') {
     for (let i = 0; i < playlist.users.length; i += 1) {
       if (String(playlist.users[i]._id) === userId) {
         return (true);
       }
     }
-  } else if (playlist.editRestriction === 'ADMIN_RESTRICTION') {
+  } else if (playlist.editRestriction === 'ADMIN_RESTRICTED') {
     for (let i = 0; i < playlist.admins.length; i += 1) {
       if (String(playlist.admins[i]._id) === userId) {
         return (true);
       }
     }
-  } else if (playlist.editRestriction === 'EVENT_RESTRICTION') {
+  } else if (playlist.editRestriction === 'EVENT_RESTRICTED') {
     const now = new Date(Date.now());
-    for (let i = 0; i < playlist.users.length; i += 1) {
-      if (String(playlist.users[i]._id) === userId
-        && now < playlist.endDate && now > playlist.startDate
-      /* && CONDITION ON LOCATION */) {
-        return (true);
+    if (now < playlist.endDate && now > playlist.startDate) {
+      let lat1 = 0;
+      let lng1 = 0;
+      let lat2 = 0;
+      let lng2 = 0;
+      if (pos !== {}) {
+        lat1 = pos.coords.latitude;
+        lng1 = pos.coords.longitude;
+      }
+      if (playlist.location !== {}) {
+        lat2 = playlist.location.coords.latitude;
+        lng2 = playlist.location.coords.longitude;
+      }
+      for (let i = 0; i < playlist.users.length; i += 1) {
+        if ((playlist.location === {} && String(playlist.admins[i]._id) === userId)
+          || (playlist.location !== {} && String(playlist.users[i]._id) === userId
+            && pos !== {} && getDistanceLongLat(lat1, lng1, lat2, lng2) <= 100)) {
+          return (true);
+        }
       }
     }
   }

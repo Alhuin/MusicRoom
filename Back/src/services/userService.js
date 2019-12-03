@@ -206,8 +206,9 @@ function addFriend(friendId, userId) {
                 if (!updatedFriend.friends.includes(userId)) {
                   updatedFriend.friends.push(userId);
                 }
+                // eslint-disable-next-line no-unused-vars
                 updatedUser.save((saveErrorFriend, newFriend) => {
-                  if (saveError || newFriend) {
+                  if (saveErrorFriend) {
                     reject(new CustomError('MongoError', saveErrorFriend.message, 500));
                   } else {
                     resolve({

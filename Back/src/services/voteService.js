@@ -74,14 +74,14 @@ function deleteVoteById(voteId) {
   });
 }
 
-function voteMusic(userId, musicId, playlistId, value) {
+function voteMusic(userId, musicId, playlistId, value, pos) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
         reject(new CustomError('voteMusic', 'No playlist with this id in database', 400));
-      } else if (utils.isEditorInPlaylist(playlist, userId)) {
+      } else if (utils.isEditorInPlaylist(playlist, userId, pos)) {
         VoteModel
           .find({ user: userId, music: musicId, playlist: playlistId }, (voteError, votes) => {
             if (voteError) {

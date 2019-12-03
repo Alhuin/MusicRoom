@@ -19,7 +19,7 @@ export default class LogoutButton extends React.Component {
         <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItems {...drawerProps} />
           <Button
-            title="Logout"
+            title="Déconnexion"
             onPress={() => this._logout()}
           />
         </SafeAreaView>

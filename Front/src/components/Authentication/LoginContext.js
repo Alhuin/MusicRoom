@@ -11,11 +11,15 @@ export default class LoginContext extends Component {
     let route;
     const { type } = this.props;
     if (type === 'Sign Up') {
-      contextText = <Text style={styles.contextText}>Already have an account ? </Text>;
+      contextText = <Text style={styles.contextText}>Vous possédez déjà un compte ? </Text>;
       other = 'Sign In !';
       route = 'Connexion_noTransition';
     } else {
-      contextText = <Text style={styles.contextText}>Don&apos;t have an account yet ? </Text>;
+      contextText = (
+        <Text style={styles.contextText}>
+          Vous n&apos;avez pas encore de compte ?
+        </Text>
+      );
       other = 'Sign Up !';
       route = 'Inscription_noTransition';
     }

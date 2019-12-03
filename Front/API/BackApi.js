@@ -9,6 +9,7 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 // Dans le catch du fetch on reject(error) car on connait pas son objet d'erreur => a tester
 
+
 function login(userName, password) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/login`, {
@@ -95,10 +96,8 @@ function addUser(userName, password, name, familyName, email) {
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
-          // alert(data.msg);
         } else {
           reject(new CustomError('AddUser', data.msg, response.status));
-          // alert(`error ${data.status}: ${data.msg}`);
         }
       })
       .catch(error => reject(error));
@@ -386,7 +385,7 @@ function getMusicsByVote(playlistId, roomType) {
   });
 }
 
-function voteMusic(userId, musicId, playlistId, value) {
+function voteMusic(userId, musicId, playlistId, value, pos) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/voteMusic`, {
       method: 'POST',
@@ -395,7 +394,7 @@ function voteMusic(userId, musicId, playlistId, value) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId, musicId, playlistId, value,
+        userId, musicId, playlistId, value, pos,
       }),
     })
       .then(async (response) => {
@@ -1044,7 +1043,7 @@ function setEditRestriction(playlistId, newEditRestriction) {
   });
 }
 
-function isEditor(playlistId, userId) {
+function isEditor(playlistId, userId, pos) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/playlists/isEditor`, {
       method: 'POST',
@@ -1052,7 +1051,7 @@ function isEditor(playlistId, userId) {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ playlistId, userId }),
+      body: JSON.stringify({ playlistId, userId, pos }),
     })
       .then(async (response) => {
         const data = await response.json();

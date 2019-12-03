@@ -178,16 +178,16 @@ class PlaylistSettings extends React.Component {
     getEditRestriction(playlistId)
       .then((data) => {
         if (data === 'ALL') {
-          // this.radioForm.updateIsActiveIndex(0);
+          this.radioForm.updateIsActiveIndex(0);
           this.setState({ radioValue: 0 });
         } else if (data === 'USER_RESTRICTED') {
-          // this.radioForm.updateIsActiveIndex(1);
+          this.radioForm.updateIsActiveIndex(1);
           this.setState({ radioValue: 1 });
         } else if (data === 'ADMIN_RESTRICTED') {
-          // this.radioForm.updateIsActiveIndex(2);
+          this.radioForm.updateIsActiveIndex(2);
           this.setState({ radioValue: 2 });
         } else if (data === 'EVENT_RESTRICTED') {
-          // this.radioForm.updateIsActiveIndex(3);
+          this.radioForm.updateIsActiveIndex(3);
           this.setState({ radioValue: 3 });
         }
       })

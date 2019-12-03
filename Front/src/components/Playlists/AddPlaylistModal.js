@@ -17,7 +17,7 @@ export default class AddPlaylistModal extends React.Component {
   state = {
     switchValue: false,
     namePlaylist: '',
-    location: null, // unused afficher car on n'envoie pas encore la location quelque part.
+    location: {},
     type: null,
     startDate: new Date(),
     endDate: new Date(Date.now() + 1000),
@@ -56,12 +56,15 @@ export default class AddPlaylistModal extends React.Component {
     // onValueChange of the switch this function will be called
     // Navigator sort d'ou ?
     const { type } = this.state;
+    // eslint-disable-next-line no-undef
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const MyLocation = JSON.stringify(position);
-        this.setState({ location: MyLocation });
+        // const MyLocation = JSON.stringify(position);
+        this.setState({ location: position });
       },
-      error => Alert.alert(error.message),
+      error => Alert.alert(
+        `${error.message}\nÀ configurer à la main`,
+      ),
       { enableHighAccuracy: false, timeout: 10000 },
     );
     this.setState({ switchValue: value });

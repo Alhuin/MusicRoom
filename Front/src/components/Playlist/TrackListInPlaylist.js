@@ -5,7 +5,6 @@ import TrackInPlaylist from '../../containers/TrackInPlaylist';
 import Player from '../../services/Player';
 
 class TrackListInPlaylist extends React.Component {
-
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
@@ -39,6 +38,7 @@ class TrackListInPlaylist extends React.Component {
       isUserInPlaylist,
       editor,
       onMoveEnd,
+      pos,
     } = this.props;
     let render = (null);
     if (isUserInPlaylist === true && roomType === 'radio') {
@@ -69,6 +69,7 @@ class TrackListInPlaylist extends React.Component {
                 moveEnd={moveEnd}
                 isActive={isActive}
                 editor={editor}
+                pos={pos}
               />
             );
           }}
@@ -105,6 +106,7 @@ class TrackListInPlaylist extends React.Component {
                 roomType={roomType}
                 myVoteValue={myVoteValue}
                 editor={editor}
+                pos={pos}
               />
             );
           }}
