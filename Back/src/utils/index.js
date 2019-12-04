@@ -37,8 +37,6 @@ const getDistanceLongLat = (lat1, lng1, lat2, lng2) => {
 };
 
 const isEditorInPlaylist = (playlist, userId, pos) => {
-  console.log(playlist);
-  console.log(userId);
   console.log(pos);
   if (playlist.editRestriction === 'ALL') {
     return (true);
@@ -62,18 +60,18 @@ const isEditorInPlaylist = (playlist, userId, pos) => {
       let lng1 = 0;
       let lat2 = 0;
       let lng2 = 0;
-      if (pos !== {}) {
+      if (Object.keys(pos).length !== 0) {
         lat1 = pos.coords.latitude;
         lng1 = pos.coords.longitude;
       }
-      if (playlist.location !== {}) {
+      if (Object.keys(playlist.location).length !== 0) {
         lat2 = playlist.location.coords.latitude;
         lng2 = playlist.location.coords.longitude;
       }
       for (let i = 0; i < playlist.users.length; i += 1) {
-        if ((playlist.location === {} && String(playlist.admins[i]._id) === userId)
-          || (playlist.location !== {} && String(playlist.users[i]._id) === userId
-            && pos !== {} && getDistanceLongLat(lat1, lng1, lat2, lng2) <= 100)) {
+        if ((Object.keys(playlist.location).length === 0 && String(playlist.admins[i]._id) === userId)
+          || (Object.keys(playlist.location).length !== 0 && String(playlist.users[i]._id) === userId
+            && Object.keys(pos).length !== 0 && getDistanceLongLat(lat1, lng1, lat2, lng2) <= 100)) {
           return (true);
         }
       }

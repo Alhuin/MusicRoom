@@ -206,7 +206,6 @@ export default class AddPlaylistModal extends React.Component {
                 // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN
                 // DESDOUS ET DE RECUP SUR LES MODAL LES DATE
 */
-                console.log(location);
                 if (startDate < endDate && namePlaylist) {
                   addPlaylist(namePlaylist, switchValue, userId, userId, loggedUser.name,
                     userId, roomType, startDate, endDate, location, this.generatePrivateId())

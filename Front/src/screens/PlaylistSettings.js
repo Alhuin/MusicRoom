@@ -16,7 +16,7 @@ import {
   getAdminsByPlaylistId, getUsersByPlaylistId, getPublicityOfPlaylistById, deleteUserInPlaylist,
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
   getPlaylistDates, setStartDate, setEndDate, getTags, setTags, getEditRestriction,
-  setEditRestriction, deletePlaylistByAdmin, getFriends,
+  setEditRestriction, deletePlaylistByAdmin, getFriends, getPlaylistLocation, setPlaylistLocation,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
@@ -43,6 +43,7 @@ class PlaylistSettings extends React.Component {
       startDate: new Date(),
       endDate: new Date(Date.now() + 1000),
       dateType: 0,
+      location: {},
       tags: {},
       radioValue: 0,
       deletePlaylistState: 'Supprimer la Playlist',
@@ -64,6 +65,7 @@ class PlaylistSettings extends React.Component {
             this.setState({ privateId, delegatedPlayerAdmin });
             this.getEditRestriction(playlistId);
             this.getPublicity(playlistId);
+            this.getLocation(playlistId);
             this.getDates(playlistId);
             this.getTags(playlistId);
             this.updateAdmins()
@@ -213,6 +215,43 @@ class PlaylistSettings extends React.Component {
     }
   };
 
+  getLocation = (playlistId) => {
+    const { navigation } = this.props;
+    const roomType = navigation.getParam('roomType');
+    if (roomType === 'party') {
+      getPlaylistLocation(playlistId)
+        .then((location) => {
+          this.setState({ location });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  setLocation = () => {
+    const { navigation, loggedUser } = this.props;
+    const roomType = navigation.getParam('roomType');
+    const playlistId = navigation.getParam('playlistId');
+    if (roomType === 'party') {
+      navigator.geolocation.getCurrentPosition(
+        (location) => {
+          setPlaylistLocation(playlistId, location, loggedUser._id)
+            .then((newLoc) => {
+              this.setState({ location: newLoc });
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        },
+        error => Alert.alert(
+          `${error.message}\n Position introuvable.`,
+        ),
+        { enableHighAccuracy: false, timeout: 10000 },
+      );
+    }
+  };
+
   _onRefresh = () => {
     const { navigation, loggedUser } = this.props;
     const playlistId = navigation.getParam('playlistId');
@@ -226,6 +265,7 @@ class PlaylistSettings extends React.Component {
           if (isUser) {
             this.getPublicity(playlistId);
             this.getDates(playlistId);
+            this.getLocation(playlistId);
             this.hideLoader();
             getPlaylistPrivateId(playlistId)
               .then((privateId) => {
@@ -487,8 +527,14 @@ class PlaylistSettings extends React.Component {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, collapsedAddFriendToPlaylist,
       startDate, endDate, datePickerModalVisible, tags, radioValue, deletePlaylistState,
-      isUser, friends,
+      isUser, friends, location,
     } = this.state;
+    const loc = location;
+    if (Object.keys(location).length === 0) {
+      loc.coords = {};
+      loc.coords.latitude = 'Indéfinie';
+      loc.coords.longitude = 'Indéfinie';
+    }
     let radioProps = [];
     const { navigation, loggedUser, userChanged } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
@@ -549,10 +595,28 @@ class PlaylistSettings extends React.Component {
               </View>
             </TouchableOpacity>
             <Collapsible collapsed={collapsedSpec}>
-              <View>
-                <Text>
-                  Changer la localisation : (?)
-                </Text>
+              <View style={{ width: '100%', flexDirection: 'row' }}>
+                <View style={{ flex: 6 }}>
+                  <Text>
+                    Localisation :
+                  </Text>
+                  <Text>
+                    {`Latitude : ${loc.coords.latitude}`}
+                  </Text>
+                  <Text>
+                    {`Longitude : ${loc.coords.longitude}`}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setLocation();
+                  }}
+                  style={styles.customizedTouchable}
+                >
+                  <Text>
+                    Utiliser sa position
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={{ width: '100%', flexDirection: 'row' }}>
                 <View style={{ flex: 6 }}>
@@ -860,7 +924,13 @@ class PlaylistSettings extends React.Component {
             </View>
             <View>
               <Text>
-                Localisation : (?)
+                Localisation :
+              </Text>
+              <Text>
+                {`Latitude : ${loc.coords.latitude}`}
+              </Text>
+              <Text>
+                {`Longitude : ${loc.coords.longitude}`}
               </Text>
             </View>
             <Text>

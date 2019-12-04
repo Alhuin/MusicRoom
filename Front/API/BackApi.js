@@ -911,6 +911,51 @@ function getPlaylistDates(playlistId) {
   });
 }
 
+function getPlaylistLocation(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/location/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getPlaylistLocation', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function setPlaylistLocation(playlistId, newLocation, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/setPlaylistLocation`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, newLocation, userId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data.location);
+        } else {
+          reject(new CustomError('setPlaylistLocation', data.msg, response.status));
+          // console.log(data.msg);
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 function getTags(playlistId) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/playlists/getTags/${playlistId}`, {
@@ -1185,4 +1230,6 @@ export {
   addFriend,
   deleteFriend,
   getFriends,
+  getPlaylistLocation,
+  setPlaylistLocation,
 };

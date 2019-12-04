@@ -39,7 +39,6 @@ class UserProfile extends React.Component {
     } = this.state;
     let preferences = '';
     let i = 0;
-    console.log(user);
     Object.keys(user.preferences).forEach((key) => {
       if (Object.prototype.hasOwnProperty.call(user.preferences, key)) {
         if (user.preferences[key] === true) {
@@ -52,7 +51,6 @@ class UserProfile extends React.Component {
         }
       }
     });
-    console.log(user);
     return (
       <ScrollView>
         <View style={styles.main_container}>

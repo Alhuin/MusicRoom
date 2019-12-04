@@ -12,7 +12,6 @@ class TrackInPlaylist extends React.Component {
     const {
       track, playlistId, userId, socket, pos,
     } = this.props;
-    console.log(pos);
     voteMusic(userId, track._id, playlistId, value, pos)
       .then(() => {
         socket.emit('voteMusic', playlistId);
@@ -33,7 +32,6 @@ class TrackInPlaylist extends React.Component {
       editor,
       pos,
     } = this.props;
-    console.log(pos)
     let renderForParty = (null);
     if (roomType === 'party') {
       let arrowUpStyle = { color: 'grey' };

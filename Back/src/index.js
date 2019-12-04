@@ -216,7 +216,7 @@ const seedDatas = async () => {
         delegatedPlayerAdmin: admin._id,
         roomType,
         publicFlag: true,
-        admins: [user2],
+        admins: [admin],
         bans: [],
         privateId: '1234',
         editRestriction: 'EVENT_RESTRICTED',

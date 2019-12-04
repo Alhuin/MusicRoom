@@ -551,6 +551,25 @@ function getPlaylistDates(req, res) {
   }
 }
 
+function getPlaylistLocation(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getPlaylistLocation(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function getTags(req, res) {
   if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
     playlistService.getTags(req.params.playlistId)
@@ -574,6 +593,27 @@ function setTags(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.newTags) {
     playlistService.setTags(req.body.playlistId, req.body.newTags)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function setPlaylistLocation(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && req.body.userId && utils.isValidId(req.body.userId)
+    && req.body.newLocation && Object.keys(req.body.newLocation).length !== 0) {
+    playlistService.setPlaylistLocation(req.body.playlistId, req.body.newLocation, req.body.userId)
       .then((response) => {
         res
           .status(response.status)
@@ -722,4 +762,6 @@ export default {
   getEditRestriction,
   setEditRestriction,
   isEditor,
+  getPlaylistLocation,
+  setPlaylistLocation,
 };

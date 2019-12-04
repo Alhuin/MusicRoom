@@ -862,6 +862,50 @@ function setEditRestriction(playlistId, newEditRestriction) {
   });
 }
 
+function getPlaylistLocation(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('GetPlaylistLocation', 'No playlist with this id found in database', 404));
+      } else {
+        resolve({
+          status: 200,
+          data: playlist.location,
+        });
+      }
+    });
+  });
+}
+
+function setPlaylistLocation(playlistId, newLocation, userId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('SetPlaylistLocation', 'No playlist with this id found in database', 404));
+      } else if (utils.isAdminInPlaylist(playlist, userId)) {
+        const newPlaylist = playlist;
+        Object.assign(newPlaylist.location, newLocation);
+        newPlaylist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
+      } else {
+        reject(new CustomError('SetPlaylistLocation', 'Not authorized', 401));
+      }
+    });
+  });
+}
+
 
 function isEditor(playlistId, userId, pos) {
   return new Promise((resolve, reject) => {
@@ -915,4 +959,6 @@ export default {
   getEditRestriction,
   setEditRestriction,
   isEditor,
+  getPlaylistLocation,
+  setPlaylistLocation,
 };
