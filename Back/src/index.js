@@ -60,6 +60,7 @@ websocket.on('connection', (socket) => {
   socket.on('addMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
   socket.on('deleteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
   socket.on('voteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
+  socket.on('parameterChanged', (playlistId) => websocket.to(playlistId).emit('refreshPermissions'));
 
   // Leaving Playlist room
   socket.on('userLeavedPlaylist', (playlistId) => {

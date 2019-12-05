@@ -10,13 +10,25 @@ export default class DatePickerModal extends React.Component {
     date: new Date(),
   };
 
+  componentDidMount(): void {
+    const { initialDate } = this.props;
+    if (initialDate !== undefined) {
+      this.setState({ date: initialDate });
+    }
+  }
+
   render() {
     const {
       setModalVisible,
       DateModalVisible,
       onDateChanged,
+      initialDate,
     } = this.props;
     const { date } = this.state;
+    let usedDate = date;
+    if (initialDate !== undefined) {
+      usedDate = initialDate;
+    }
     return (
       <Modal
         style={{ flex: 1 }}
@@ -31,7 +43,7 @@ export default class DatePickerModal extends React.Component {
           style={styles.Date}
         >
           <DatePicker
-            date={date}
+            date={usedDate}
             onDateChange={Date => this.setState({ date: Date })}
           />
           <TouchableOpacity

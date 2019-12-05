@@ -124,7 +124,6 @@ class AppSettings extends React.Component {
     } else {
       collapsibleIcon = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
     }
-    console.log(friends);
     return (
       <ScrollView>
         <View style={styles.main_container}>

@@ -25,7 +25,9 @@ class Playlist extends React.Component {
       pos: {},
     };
     this.onRefreshSignal = this._onRefreshSignal.bind(this);
+    this.onRefreshPermissionSignal = this._onRefreshPermissionSignal.bind(this);
     props.socket.on('refresh', this.onRefreshSignal);
+    props.socket.on('refreshPermissions', this.onRefreshPermissionSignal);
   }
 
   componentDidMount(): void {
@@ -34,7 +36,7 @@ class Playlist extends React.Component {
     this._isMounted = true;
 
     socket.emit('userJoinedPlaylist', playlistId);
-    this.isAdminAndisEditor();
+    this.isAdminAndIsEditor();
     this.updateMyVotes()
       .then(() => this.updateTracks())
       .catch(error => console.log(error));
@@ -64,7 +66,7 @@ class Playlist extends React.Component {
   _onRefreshSignal = () => {
     if (this._isMounted) {
       console.log('[Socket Server] : refresh signal recieved');
-      this.isAdminAndisEditor();
+      this.isAdminAndIsEditor();
       this.updateMyVotes()
         .then(() => {
           this.updateTracks();
@@ -72,10 +74,17 @@ class Playlist extends React.Component {
     }
   };
 
+  _onRefreshPermissionSignal = () => {
+    if (this._isMounted) {
+      console.log('[Socket Server] : refresh admin and editor signal recieved');
+      this.isAdminAndIsEditor();
+    }
+  };
+
   _onRefresh = () => {
     const { navigation } = this.props;
     const roomType = navigation.getParam('roomType');
-    this.isAdminAndisEditor();
+    this.isAdminAndIsEditor();
     if (roomType === 'party') {
       this.setState({ refreshing: true });
       this.updateMyVotes()
@@ -138,7 +147,7 @@ class Playlist extends React.Component {
       });
   });
 
-  isAdminAndisEditor = () => {
+  isAdminAndIsEditor = () => {
     const { navigation, loggedUser } = this.props;
     const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');

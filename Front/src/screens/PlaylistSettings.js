@@ -42,6 +42,7 @@ class PlaylistSettings extends React.Component {
       datePickerModalVisible: false,
       startDate: new Date(),
       endDate: new Date(Date.now() + 1000),
+      initialDate: new Date(),
       dateType: 0,
       location: {},
       tags: {},
@@ -230,7 +231,7 @@ class PlaylistSettings extends React.Component {
   };
 
   setLocation = () => {
-    const { navigation, loggedUser } = this.props;
+    const { navigation, loggedUser, socket } = this.props;
     const roomType = navigation.getParam('roomType');
     const playlistId = navigation.getParam('playlistId');
     if (roomType === 'party') {
@@ -238,6 +239,7 @@ class PlaylistSettings extends React.Component {
         (location) => {
           setPlaylistLocation(playlistId, location, loggedUser._id)
             .then((newLoc) => {
+              socket.emit('parameterChanged', playlistId);
               this.setState({ location: newLoc });
             })
             .catch((error) => {
@@ -421,10 +423,14 @@ class PlaylistSettings extends React.Component {
   };
 
   setDatePickerModalVisible = (dateType) => {
-    const { datePickerModalVisible } = this.state;
+    const { datePickerModalVisible, startDate, endDate } = this.state;
     const visible = !datePickerModalVisible;
     if (dateType !== undefined) {
-      this.setState({ dateType, datePickerModalVisible: visible });
+      if (dateType === 'start') {
+        this.setState({ dateType, datePickerModalVisible: visible, initialDate: startDate });
+      } else if (dateType === 'end') {
+        this.setState({ dateType, datePickerModalVisible: visible, initialDate: endDate });
+      }
     } else {
       this.setState({ datePickerModalVisible: visible });
     }
@@ -475,10 +481,16 @@ class PlaylistSettings extends React.Component {
       });
   };
 
-  radioIsPressed = (value) => {
+  radioIsPressed = (val) => {
     const { navigation } = this.props;
     const playlistId = navigation.getParam('playlistId');
+    let value = 0;
     let newEditRestriction = '';
+    if (val.value !== undefined) {
+      ({ value } = val);
+    } else {
+      value = val;
+    }
     if (value === 0) {
       newEditRestriction = 'ALL';
     } else if (value === 1) {
@@ -526,8 +538,8 @@ class PlaylistSettings extends React.Component {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, collapsedAddFriendToPlaylist,
-      startDate, endDate, datePickerModalVisible, tags, radioValue, deletePlaylistState,
-      isUser, friends, location,
+      startDate, endDate, initialDate, datePickerModalVisible, tags, radioValue,
+      deletePlaylistState, isUser, friends, location,
     } = this.state;
     const loc = location;
     if (Object.keys(location).length === 0) {
@@ -585,6 +597,7 @@ class PlaylistSettings extends React.Component {
               setModalVisible={this.setDatePickerModalVisible}
               DateModalVisible={datePickerModalVisible}
               onDateChanged={this.onDateChanged}
+              initialDate={initialDate}
             />
             <TouchableOpacity onPress={this.toggleExpandedSpec}>
               <View style={styles.header}>
@@ -644,7 +657,7 @@ class PlaylistSettings extends React.Component {
                     Date de fin :
                   </Text>
                   <Text>
-                    {String(startDate)}
+                    {String(endDate)}
                   </Text>
                 </View>
                 <TouchableOpacity

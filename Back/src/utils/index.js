@@ -37,7 +37,6 @@ const getDistanceLongLat = (lat1, lng1, lat2, lng2) => {
 };
 
 const isEditorInPlaylist = (playlist, userId, pos) => {
-  console.log(pos);
   if (playlist.editRestriction === 'ALL') {
     return (true);
   }
