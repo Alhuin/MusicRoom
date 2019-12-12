@@ -24,8 +24,8 @@ export const fabIcon = {
 };
 
 export const text = {
-  color: Colors.white,
-  fontSize: Typography.smallestFontSize,
+  color: Colors.baseText,
+  fontSize: Typography.smallFontSize,
   fontWeight: 'bold',
   letterSpacing: 1,
 };
@@ -50,6 +50,8 @@ export const fab = {
 export const largeButton = {
   ...base,
   ...large,
+  ...rounded,
+
   backgroundColor: Colors.button,
   margin: Spacing.small,
 };

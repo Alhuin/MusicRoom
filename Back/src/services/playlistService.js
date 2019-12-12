@@ -378,6 +378,8 @@ function deleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
             break;
           }
         }
+      } else {
+        reject(new CustomError('DeleteUserInPlaylist', 'Not authorized', 401));
       }
     });
   });

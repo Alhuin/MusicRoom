@@ -1,8 +1,10 @@
 import {
-  View, StyleSheet, CheckBox,
+  View, StyleSheet,
 } from 'react-native';
+import CheckBox from 'react-native-check-box';
 import { Text } from 'native-base';
 import React, { Component } from 'react';
+import { Colors } from '../../styles';
 
 export default class SettingsTagCheckbox extends Component {
   render() {
@@ -14,10 +16,11 @@ export default class SettingsTagCheckbox extends Component {
         style={styles.container}
       >
         <CheckBox
-          value={checked}
-          onValueChange={() => {
+          isChecked={checked}
+          onClick={() => {
             tagsChanged(tag);
           }}
+          checkBoxColor={Colors.button}
         />
         <Text
           style={textStyle}

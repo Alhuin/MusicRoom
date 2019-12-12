@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Button, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
+  View, StyleSheet, Text, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -21,6 +21,9 @@ import {
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
 import FriendsInSettings from '../components/Playlist/FriendsInSettings';
+import {
+  Typography, Colors, Buttons, Spacing,
+} from '../styles';
 
 
 class PlaylistSettings extends React.Component {
@@ -138,7 +141,6 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     // const authorId = navigation.getParam('authorId');
     const roomType = navigation.getParam('roomType');
-
     if (String(delegatedPlayerAdmin) !== String(loggedUser._id)) {
       deleteUserInPlaylist(playlistId, loggedUser._id, isAdmin, loggedUser._id)
         .then(() => {
@@ -180,18 +182,20 @@ class PlaylistSettings extends React.Component {
   getEditRestriction = (playlistId) => {
     getEditRestriction(playlistId)
       .then((data) => {
-        if (data === 'ALL') {
-          this.radioForm.updateIsActiveIndex(0);
-          this.setState({ radioValue: 0 });
-        } else if (data === 'USER_RESTRICTED') {
-          this.radioForm.updateIsActiveIndex(1);
-          this.setState({ radioValue: 1 });
-        } else if (data === 'ADMIN_RESTRICTED') {
-          this.radioForm.updateIsActiveIndex(2);
-          this.setState({ radioValue: 2 });
-        } else if (data === 'EVENT_RESTRICTED') {
-          this.radioForm.updateIsActiveIndex(3);
-          this.setState({ radioValue: 3 });
+        if (this.radioForm) {
+          if (data === 'ALL') {
+            this.radioForm.updateIsActiveIndex(0);
+            this.setState({ radioValue: 0 });
+          } else if (data === 'USER_RESTRICTED') {
+            this.radioForm.updateIsActiveIndex(1);
+            this.setState({ radioValue: 1 });
+          } else if (data === 'ADMIN_RESTRICTED') {
+            this.radioForm.updateIsActiveIndex(2);
+            this.setState({ radioValue: 2 });
+          } else if (data === 'EVENT_RESTRICTED') {
+            this.radioForm.updateIsActiveIndex(3);
+            this.setState({ radioValue: 3 });
+          }
         }
       })
       .catch((error) => {
@@ -562,27 +566,28 @@ class PlaylistSettings extends React.Component {
     let collapsibleIconTags = (null);
     let collapsibleIconAddFriendToPlaylist = (null);
     let specificRoomSettings = (null);
+    if (collapsedAddFriendToPlaylist) {
+      collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-up" style={styles.icon} />);
+    } else {
+      collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-down" style={styles.icon} />);
+    }
     if (isAdmin) {
       if (collapsed) {
-        collapsibleIcon = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
+        collapsibleIcon = (<Icon name="ios-arrow-up" style={styles.icon} />);
       } else {
-        collapsibleIcon = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
+        collapsibleIcon = (<Icon name="ios-arrow-down" style={styles.icon} />);
       }
       if (collapsedSpec) {
-        collapsibleIconSpec = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
+        collapsibleIconSpec = (<Icon name="ios-arrow-up" style={styles.icon} />);
       } else {
-        collapsibleIconSpec = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
+        collapsibleIconSpec = (<Icon name="ios-arrow-down" style={styles.icon} />);
       }
       if (collapsedTags) {
-        collapsibleIconTags = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
+        collapsibleIconTags = (<Icon name="ios-arrow-up" style={styles.icon} />);
       } else {
-        collapsibleIconTags = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
+        collapsibleIconTags = (<Icon name="ios-arrow-down" style={styles.icon} />);
       }
-      if (collapsedAddFriendToPlaylist) {
-        collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-up" style={{ marginRight: 5 }} />);
-      } else {
-        collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-down" style={{ marginRight: 5 }} />);
-      }
+
       if (roomType === 'party') {
         radioProps = [
           { label: 'Tout le monde', value: 0 },
@@ -590,7 +595,7 @@ class PlaylistSettings extends React.Component {
           { label: 'Admin.', value: 2 },
           { label: 'Localisation et Date', value: 3 },
         ];
-        editRestrictionString = 'Restriction des droits de vote :';
+        editRestrictionString = 'Droits de vote :';
         specificRoomSettings = (
           <View>
             <DatePickerModal
@@ -599,79 +604,92 @@ class PlaylistSettings extends React.Component {
               onDateChanged={this.onDateChanged}
               initialDate={initialDate}
             />
-            <TouchableOpacity onPress={this.toggleExpandedSpec}>
-              <View style={styles.header}>
-                <Text style={styles.header}>
-                  Option de Party
-                </Text>
-                {collapsibleIconSpec}
-              </View>
-            </TouchableOpacity>
-            <Collapsible collapsed={collapsedSpec}>
-              <View style={{ width: '100%', flexDirection: 'row' }}>
-                <View style={{ flex: 6 }}>
-                  <Text>
-                    Localisation :
+            <View style={styles.section}>
+              <TouchableOpacity onPress={this.toggleExpandedSpec}>
+                <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                  <Text style={styles.sectionHeaderText}>
+                    Option de Party
                   </Text>
-                  <Text>
-                    {`Latitude : ${loc.coords.latitude}`}
-                  </Text>
-                  <Text>
-                    {`Longitude : ${loc.coords.longitude}`}
-                  </Text>
+                  {collapsibleIconSpec}
                 </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setLocation();
-                  }}
-                  style={styles.customizedTouchable}
-                >
-                  <Text>
-                    Utiliser sa position
-                  </Text>
-                </TouchableOpacity>
+              </TouchableOpacity>
+              <View style={styles.sectionContent}>
+                <Collapsible collapsed={collapsedSpec}>
+                  <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                      <Text style={styles.sectionHeaderText}>
+                        Localisation
+                      </Text>
+                    </View>
+                    <View style={styles.sectionContentCenterAligned}>
+                      <Text style={styles.bodyText}>
+                        {`Latitude : ${loc.coords.latitude}`}
+                      </Text>
+                      <Text style={styles.bodyText}>
+                        {`Longitude : ${loc.coords.longitude}`}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setLocation();
+                        }}
+                        style={Buttons.largeButton}
+                      >
+                        <Text style={Buttons.text}>
+                          Définir sur ma position
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={Typography.sectionSeparator} />
+                  <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                      <Text style={styles.sectionHeaderText}>
+                        Début de l&apos;événement
+                      </Text>
+                    </View>
+                    <View style={styles.sectionContentCenterAligned}>
+                      <Text style={styles.bodyText}>
+                        {String(startDate)}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setDatePickerModalVisible('start');
+                        }}
+                        style={Buttons.largeButton}
+                      >
+                        <Text style={Buttons.text}>
+                          Modifier
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={Typography.sectionSeparator} />
+                  <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                      <Text style={styles.sectionHeaderText}>
+                        Fin de l&apos;événement
+                      </Text>
+                    </View>
+                    <View style={styles.sectionContentCenterAligned}>
+                      <Text style={styles.bodyText}>
+                        {String(endDate)}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setDatePickerModalVisible('end');
+                        }}
+                        style={Buttons.largeButton}
+                      >
+                        <Text style={Buttons.text}>
+                          Modifier
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Collapsible>
               </View>
-              <View style={{ width: '100%', flexDirection: 'row' }}>
-                <View style={{ flex: 6 }}>
-                  <Text>
-                    Date de début :
-                  </Text>
-                  <Text>
-                    {String(startDate)}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setDatePickerModalVisible('start');
-                  }}
-                  style={styles.customizedTouchable}
-                >
-                  <Text>
-                    Modifier
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{ width: '100%', flexDirection: 'row' }}>
-                <View style={{ flex: 6 }}>
-                  <Text>
-                    Date de fin :
-                  </Text>
-                  <Text>
-                    {String(endDate)}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setDatePickerModalVisible('end');
-                  }}
-                  style={styles.customizedTouchable}
-                >
-                  <Text>
-                    Modifier
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Collapsible>
+            </View>
+            <View style={Typography.sectionSeparator} />
           </View>
         );
       } else {
@@ -680,328 +698,226 @@ class PlaylistSettings extends React.Component {
           { label: 'Utilisateur + Admin.', value: 1 },
           { label: 'Admin.', value: 2 },
         ];
-        editRestrictionString = "Restriction des droits d'édition :";
+        editRestrictionString = "Droits d'édition :";
         specificRoomSettings = (
           null
         );
       }
       adminOptions = (
         <View>
-          <Text style={styles.subText}>
+          <Text style={styles.bodyText}>
             Les paramètres sont rafraîchis à chaque modification,
             {' '}
             et peuvent être modifiés en même temps
             {' '}
             par d&apos;autres utilisateurs ou administrateurs.
           </Text>
-          <View style={[styles.subContainer, { justifyContent: 'space-between' }]}>
-            <Text style={styles.subContainerFontStyle}>
-              Publique
+          <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+            <Text
+              selectable
+              style={styles.bodyText}
+            >
+              {privateId}
             </Text>
-            <Switch
-              style={styles.switch}
-              onValueChange={this.toggleSwitch}
-              value={switchValue}
-            />
-          </View>
-          <View>
-            <Text>
-              {editRestrictionString}
-            </Text>
-            <RadioForm
-              ref={(r) => { this.radioForm = r; }}
-              radio_props={radioProps}
-              initial={radioValue}
-              animation={false}
-              onPress={(value) => {
-                this.radioIsPressed(value);
-              }}
-            />
-          </View>
-          {specificRoomSettings}
-          <TouchableOpacity onPress={this.toggleExpandedTags}>
-            <View style={styles.header}>
-              <Text style={styles.header}>
-                Tags
-              </Text>
-              {collapsibleIconTags}
-            </View>
-          </TouchableOpacity>
-          <Collapsible collapsed={collapsedTags} align="center">
-            <View style={styles.checkboxesWrapper}>
-              <View style={styles.checkboxRow}>
-                <SettingsTagCheckbox
-                  checked={tags.Rock}
-                  tagsChanged={this.tagsChanged}
-                  tag="Rock"
-                />
-                <SettingsTagCheckbox
-                  checked={tags.Rap}
-                  tagsChanged={this.tagsChanged}
-                  tag="Rap"
-                />
-                <SettingsTagCheckbox
-                  checked={tags.Classic}
-                  tagsChanged={this.tagsChanged}
-                  tag="Classic"
-                />
-              </View>
-              <View style={styles.checkboxRow}>
-                <SettingsTagCheckbox
-                  checked={tags.Electro}
-                  tagsChanged={this.tagsChanged}
-                  tag="Electro"
-                />
-                <SettingsTagCheckbox
-                  checked={tags.Reggae}
-                  tagsChanged={this.tagsChanged}
-                  tag="Reggae"
-                />
-                <SettingsTagCheckbox
-                  checked={tags.Metal}
-                  tagsChanged={this.tagsChanged}
-                  tag="Metal"
-                />
-              </View>
-              <View style={styles.checkboxRow}>
-                <SettingsTagCheckbox
-                  checked={tags.Pop}
-                  tagsChanged={this.tagsChanged}
-                  tag="Pop"
-                />
-                <SettingsTagCheckbox
-                  checked={tags.Dub}
-                  tagsChanged={this.tagsChanged}
-                  tag="Dub"
-                />
-                <SettingsTagCheckbox
-                  checked={tags.Country}
-                  tagsChanged={this.tagsChanged}
-                  tag="Country"
-                />
-              </View>
-            </View>
-          </Collapsible>
-          <TouchableOpacity onPress={this.toggleExpanded}>
-            <View style={styles.header}>
-              <Text style={styles.header}>
-                Légende
-              </Text>
-              {collapsibleIcon}
-            </View>
-          </TouchableOpacity>
-          <Collapsible collapsed={collapsed} align="center">
-            <View style={styles.iconsDescriptionWrapper}>
-              <Icon name="md-school" style={styles.iconsStyle} />
-              <Text> Auteur </Text>
-            </View>
-            <View style={styles.iconsDescriptionWrapper}>
-              <Icon name="musical-notes" style={styles.iconsStyle} />
-              <Text> Délégué au Contrôle du Player</Text>
-            </View>
-            <View style={styles.iconsDescriptionWrapper}>
-              <Icon name="arrow-down" style={styles.iconsStyle} />
-              <Text> Admin. vers Utilisateur </Text>
-            </View>
-            <View style={styles.iconsDescriptionWrapper}>
-              <Icon name="arrow-up" style={styles.iconsStyle} />
-              <Text> Promotion Utilisateur vers Admin. | Unban</Text>
-            </View>
-            <View style={styles.iconsDescriptionWrapper}>
-              <Icon name="md-walk" style={styles.iconsStyle} />
-              <Text> Kick </Text>
-            </View>
-            <View style={styles.iconsDescriptionWrapper}>
-              <Icon name="md-trash" style={styles.iconsStyle} />
-              <Text> Bannissement </Text>
-            </View>
-          </Collapsible>
-          <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
-            Droits Administrateurs
-          </Text>
-          <View
-            style={{
-              borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
-            }}
-          >
-            <AdminListInSettings
-              loggedUser={loggedUser}
-              displayLoader={this.displayLoader}
-              admins={admins}
-              onRefresh={this._onRefresh}
-              authorId={authorId}
-              playlistId={playlistId}
-              isLoading={this.isLoading}
-              roomType={roomType}
-              parent={this}
-              delegatedPlayerAdmin={delegatedPlayerAdmin}
-              navigation={navigation}
-            />
-          </View>
-          <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
-            Utilisateurs
-          </Text>
-          <View
-            style={{
-              borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
-            }}
-          >
-            <UserListInSettings
-              loggedUser={loggedUser}
-              displayLoader={this.displayLoader}
-              users={users}
-              onRefresh={this._onRefresh}
-              playlistId={playlistId}
-              isLoading={this.isLoading}
-              roomType={roomType}
-              parent={this}
-              isAdmin={isAdmin}
-              userChanged={userChanged}
-              navigation={navigation}
-            />
-          </View>
-          <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
-            Bannis
-          </Text>
-          <View
-            style={{
-              borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
-            }}
-          >
-            <BansListInSettings
-              displayLoader={this.displayLoader}
-              bans={bans}
-              onRefresh={this._onRefresh}
-              playlistId={playlistId}
-              isLoading={this.isLoading}
-              navigation={navigation}
-            />
-          </View>
-          <TouchableOpacity onPress={this.toggleExpandedAddFriendToPlaylist}>
-            <View style={styles.header}>
-              <Text style={styles.header}>
-                Ajouter un ami à la playlist
-              </Text>
-              {collapsibleIconAddFriendToPlaylist}
-            </View>
-          </TouchableOpacity>
-          <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
-            <View
-              style={{
-                borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
+            <TouchableOpacity
+              onPress={() => {
+                Clipboard.setString(String(privateId));
+                SimpleToast.show('Code copié dans le Presse-Papier.');
               }}
             >
-              <FriendsInSettings
-                friends={friends}
-                users={users}
+              <Icon name="ios-clipboard" style={styles.icon} />
+            </TouchableOpacity>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                Visibilité
+              </Text>
+            </View>
+            <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+              <Text style={styles.bodyText}>
+                Publique
+              </Text>
+              <Switch
+                style={styles.switch}
+                onValueChange={this.toggleSwitch}
+                value={switchValue}
+                thumbColor={Colors.button}
+              />
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                {editRestrictionString}
+              </Text>
+            </View>
+            <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+              <RadioForm
+                ref={(r) => { this.radioForm = r; }}
+                radio_props={radioProps}
+                initial={radioValue}
+                animation={false}
+                buttonColor={Colors.button}
+                selectedButtonColor={Colors.buttonSelected}
+                selectedLabelColor={Colors.baseText}
+                labelColor={Colors.baseText}
+                onPress={(value) => {
+                  this.radioIsPressed(value);
+                }}
+              />
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          {specificRoomSettings}
+          <View style={styles.section}>
+            <TouchableOpacity onPress={this.toggleExpandedTags}>
+              <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                <Text style={styles.sectionHeaderText}>
+                  Tags
+                </Text>
+                {collapsibleIconTags}
+              </View>
+            </TouchableOpacity>
+            <View style={styles.sectionContent}>
+              <Collapsible collapsed={collapsedTags} align="center">
+                <View style={styles.checkboxesWrapper}>
+                  <View style={styles.checkboxRow}>
+                    <SettingsTagCheckbox
+                      checked={tags.Rock}
+                      tagsChanged={this.tagsChanged}
+                      tag="Rock"
+                      textStyle={styles.bodyText}
+                    />
+                    <SettingsTagCheckbox
+                      checked={tags.Rap}
+                      tagsChanged={this.tagsChanged}
+                      tag="Rap"
+                      textStyle={styles.bodyText}
+                    />
+                    <SettingsTagCheckbox
+                      checked={tags.Classic}
+                      tagsChanged={this.tagsChanged}
+                      tag="Classic"
+                      textStyle={styles.bodyText}
+                    />
+                  </View>
+                  <View style={styles.checkboxRow}>
+                    <SettingsTagCheckbox
+                      checked={tags.Electro}
+                      tagsChanged={this.tagsChanged}
+                      tag="Electro"
+                      textStyle={styles.bodyText}
+                    />
+                    <SettingsTagCheckbox
+                      checked={tags.Reggae}
+                      tagsChanged={this.tagsChanged}
+                      tag="Reggae"
+                      textStyle={styles.bodyText}
+                    />
+                    <SettingsTagCheckbox
+                      checked={tags.Metal}
+                      tagsChanged={this.tagsChanged}
+                      tag="Metal"
+                      textStyle={styles.bodyText}
+                    />
+                  </View>
+                  <View style={styles.checkboxRow}>
+                    <SettingsTagCheckbox
+                      checked={tags.Pop}
+                      tagsChanged={this.tagsChanged}
+                      tag="Pop"
+                      textStyle={styles.bodyText}
+                    />
+                    <SettingsTagCheckbox
+                      checked={tags.Dub}
+                      tagsChanged={this.tagsChanged}
+                      tag="Dub"
+                      textStyle={styles.bodyText}
+                    />
+                    <SettingsTagCheckbox
+                      checked={tags.Country}
+                      tagsChanged={this.tagsChanged}
+                      tag="Country"
+                      textStyle={styles.bodyText}
+                    />
+                  </View>
+                </View>
+              </Collapsible>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <TouchableOpacity onPress={this.toggleExpanded}>
+              <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                <Text style={styles.sectionHeaderText}>
+                  Légende
+                </Text>
+                {collapsibleIcon}
+              </View>
+            </TouchableOpacity>
+            <View style={styles.sectionContent}>
+              <Collapsible collapsed={collapsed} align="center">
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                  <Icon name="md-school" style={styles.icon} />
+                  <Text style={styles.bodyText}> Auteur </Text>
+                </View>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                  <Icon name="musical-notes" style={styles.icon} />
+                  <Text style={styles.bodyText}> Délégué au Contrôle du Player</Text>
+                </View>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                  <Icon name="arrow-down" style={styles.icon} />
+                  <Text style={styles.bodyText}> Admin. vers Utilisateur </Text>
+                </View>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                  <Icon name="arrow-up" style={styles.icon} />
+                  <Text style={styles.bodyText}> Promotion Utilisateur vers Admin. | Unban</Text>
+                </View>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                  <Icon name="md-walk" style={styles.icon} />
+                  <Text style={styles.bodyText}> Kick </Text>
+                </View>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                  <Icon name="md-trash" style={styles.icon} />
+                  <Text style={styles.bodyText}> Bannissement </Text>
+                </View>
+              </Collapsible>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                Droits Administrateurs
+              </Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <AdminListInSettings
+                loggedUser={loggedUser}
+                displayLoader={this.displayLoader}
                 admins={admins}
                 onRefresh={this._onRefresh}
+                authorId={authorId}
                 playlistId={playlistId}
-                displayLoader={this.displayLoader}
                 isLoading={this.isLoading}
+                roomType={roomType}
+                parent={this}
+                delegatedPlayerAdmin={delegatedPlayerAdmin}
                 navigation={navigation}
               />
             </View>
-          </Collapsible>
-          <View style={[styles.subContainer, { justifyContent: 'center' }]}>
-            <Button
-              title="Quitter la playlist"
-              onPress={() => {
-                this.leavingPlaylist();
-              }}
-              style={styles.leavingButton}
-            />
           </View>
-          <View>
-            <TouchableOpacity
-              onPress={this.onDeletePlaylistTouchable}
-              style={styles.deletePlaylistTouchable}
-            >
-              <Text style={{ fontSize: 20 }}>
-                {deletePlaylistState}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    } else {
-      if (roomType === 'party' && !isAdmin) {
-        notAdminOptions = (
-          <View>
-            <View>
-              <Text>
-                La playlist est
-                {' '}
-                {switchValue ? 'publique.' : 'privée.'}
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                Utilisateurs
               </Text>
             </View>
-            <View>
-              <Text>
-                Localisation :
-              </Text>
-              <Text>
-                {`Latitude : ${loc.coords.latitude}`}
-              </Text>
-              <Text>
-                {`Longitude : ${loc.coords.longitude}`}
-              </Text>
-            </View>
-            <Text>
-              Date de début de l&apos;évènement :
-            </Text>
-            <Text>
-              {String(startDate)}
-            </Text>
-            <Text>
-              Date de fin de l&apos;évènement :
-            </Text>
-            <Text>
-              {String(endDate)}
-            </Text>
-          </View>
-        );
-      } else if (roomType === 'radio' && !isAdmin) {
-        notAdminOptions = (
-          <View>
-            <View>
-              <Text>
-                La playlist est
-                {' '}
-                {switchValue ? 'publique.' : 'privée.'}
-              </Text>
-            </View>
-          </View>
-        );
-      }
-      if (isUser) {
-        userOptions = (
-          <View>
-            <View style={[styles.subContainer, { justifyContent: 'space-between' }]}>
-              <Text
-                selectable
-                style={styles.subContainerFontStyle}
-              >
-                Code privé :
-                {' '}
-                {privateId}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  Clipboard.setString(String(privateId));
-                  SimpleToast.show('Code copié dans le Presse-Papier.');
-                }}
-              >
-                <Icon name="ios-clipboard" style={{ marginRight: 10, fontSize: 35 }} />
-              </TouchableOpacity>
-            </View>
-            <Text style={[styles.subContainerFontStyle, { textAlign: 'center' }]}>
-              Utilisateurs
-            </Text>
-            <View
-              style={{
-                borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
-              }}
-            >
+            <View style={styles.sectionContent}>
               <UserListInSettings
                 loggedUser={loggedUser}
                 displayLoader={this.displayLoader}
@@ -1013,22 +929,40 @@ class PlaylistSettings extends React.Component {
                 parent={this}
                 isAdmin={isAdmin}
                 userChanged={userChanged}
+                navigation={navigation}
               />
             </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                Bannis
+              </Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <BansListInSettings
+                displayLoader={this.displayLoader}
+                bans={bans}
+                onRefresh={this._onRefresh}
+                playlistId={playlistId}
+                isLoading={this.isLoading}
+                navigation={navigation}
+              />
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
             <TouchableOpacity onPress={this.toggleExpandedAddFriendToPlaylist}>
-              <View style={styles.header}>
-                <Text style={styles.header}>
+              <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                <Text style={styles.sectionHeaderText}>
                   Ajouter un ami à la playlist
                 </Text>
                 {collapsibleIconAddFriendToPlaylist}
               </View>
             </TouchableOpacity>
-            <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
-              <View
-                style={{
-                  borderTopWidth: 1, borderColor: '#969696', borderBottomWidth: 1, margin: 10, minHeight: 20,
-                }}
-              >
+            <View style={styles.sectionContent}>
+              <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
                 <FriendsInSettings
                   friends={friends}
                   users={users}
@@ -1039,137 +973,281 @@ class PlaylistSettings extends React.Component {
                   isLoading={this.isLoading}
                   navigation={navigation}
                 />
-              </View>
-            </Collapsible>
-            <View style={[styles.subContainer, { justifyContent: 'center' }]}>
-              <Button
-                title="Quitter la playlist"
+              </Collapsible>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionContentCenterAligned}>
+              <TouchableOpacity
                 onPress={() => {
                   this.leavingPlaylist();
                 }}
-                style={styles.leavingButton}
-              />
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                  Quitter la playlist
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.section}>
+            <View style={styles.sectionContentCenterAligned}>
+              <TouchableOpacity
+                onPress={this.onDeletePlaylistTouchable}
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                  {deletePlaylistState}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      );
+    } else {
+      if (roomType === 'party' && !isAdmin) {
+        notAdminOptions = (
+          <View>
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>
+                  Visibilité
+                </Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={styles.bodyText}>
+                  La playlist est
+                  {' '}
+                  {switchValue ? 'publique.' : 'privée.'}
+                </Text>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>
+                  Localisation
+                </Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={styles.bodyText}>
+                  {`Latitude : ${loc.coords.latitude}`}
+                </Text>
+                <Text style={styles.bodyText}>
+                  {`Longitude : ${loc.coords.longitude}`}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>
+                  Début de l&apos;évènement
+                </Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={styles.bodyText}>
+                  {String(startDate)}
+                </Text>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>
+                  Fin de l&apos;évènement
+                </Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={styles.bodyText}>
+                  {String(endDate)}
+                </Text>
+              </View>
+            </View>
+          </View>
+        );
+      } else if (roomType === 'radio' && !isAdmin) {
+        notAdminOptions = (
+          <View>
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>
+                  Visibilité
+                </Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={styles.bodyText}>
+                  La playlist est
+                  {' '}
+                  {switchValue ? 'publique.' : 'privée.'}
+                </Text>
+              </View>
+            </View>
+          </View>
+        );
+      }
+      if (isUser) {
+        userOptions = (
+          <View>
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>
+                  Code privé
+                </Text>
+              </View>
+              <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                <Text
+                  selectable
+                  style={styles.bodyText}
+                >
+                  {privateId}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    Clipboard.setString(String(privateId));
+                    SimpleToast.show('Code copié dans le Presse-Papier.');
+                  }}
+                >
+                  <Icon name="ios-clipboard" style={styles.icon} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>
+                  Utilisateurs
+                </Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <UserListInSettings
+                  loggedUser={loggedUser}
+                  displayLoader={this.displayLoader}
+                  users={users}
+                  onRefresh={this._onRefresh}
+                  playlistId={playlistId}
+                  isLoading={this.isLoading}
+                  roomType={roomType}
+                  parent={this}
+                  isAdmin={isAdmin}
+                  userChanged={userChanged}
+                  navigation={navigation}
+                />
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <TouchableOpacity onPress={this.toggleExpandedAddFriendToPlaylist}>
+                <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                  <Text style={styles.sectionHeaderText}>
+                    Ajouter un ami à la playlist
+                  </Text>
+                  {collapsibleIconAddFriendToPlaylist}
+                </View>
+              </TouchableOpacity>
+              <View style={styles.sectionContent}>
+                <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
+                  <FriendsInSettings
+                    friends={friends}
+                    users={users}
+                    admins={admins}
+                    onRefresh={this._onRefresh}
+                    playlistId={playlistId}
+                    displayLoader={this.displayLoader}
+                    isLoading={this.isLoading}
+                    navigation={navigation}
+                  />
+                </Collapsible>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionContent}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.leavingPlaylist();
+                  }}
+                  style={Buttons.largeButton}
+                >
+                  <Text style={Buttons.text}>
+                    Quitter la playlist
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         );
       }
     }
     const rendering = (
-      <ScrollView style={styles.container}>
-        <Text style={styles.title}>
-          Paramètres de la playlist
-        </Text>
-        {userOptions}
-        {notAdminOptions}
-        {adminOptions}
-        <Loader loading={loading} />
-      </ScrollView>
+      <View style={styles.mainContainer}>
+        <View style={styles.screenHeader}>
+          <Text style={styles.screenHeaderText}>
+            Paramètres de la playlist
+          </Text>
+        </View>
+        <View style={styles.body}>
+          <ScrollView>
+            {userOptions}
+            {notAdminOptions}
+            {adminOptions}
+            <Loader loading={loading} />
+          </ScrollView>
+        </View>
+      </View>
     );
     return (rendering);
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
-    backgroundColor: '#DDDDDD',
-    padding: 5,
+    backgroundColor: Colors.background,
   },
-  title: {
-    fontSize: 25,
-    textAlign: 'center',
+  screenHeader: {
+    ...Typography.screenHeader,
   },
-  leavingButton: {
-    margin: 10,
+  screenHeaderText: {
+    ...Typography.screenHeaderText,
   },
-  subContainer: {
-    height: 60,
-    alignItems: 'center',
-    flexDirection: 'row',
+  sectionHeader: {
+    ...Typography.sectionHeader,
   },
-  iconsStyle: {
-    fontSize: 45,
+  sectionHeaderText: {
+    ...Typography.sectionHeaderText,
   },
-  subContainerFontStyle: {
-    fontSize: 20,
+  body: {
+    ...Typography.body,
   },
-  iconsDescriptionWrapper: {
-    margin: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  bodyText: {
+    ...Typography.bodyText,
   },
-  header: {
-    backgroundColor: '#F5FCFF',
-    padding: 10,
-    margin: 5,
-    borderRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  section: {
+    ...Typography.section,
+  },
+  sectionContent: {
+    ...Typography.sectionContent,
+  },
+  sectionContentCenterAligned: {
+    ...Typography.sectionContent,
     alignItems: 'center',
   },
-  headerText: {
-    // textAlign: 'center',
-    fontSize: 22,
+  sectionContentRow: {
+    ...Typography.sectionContent,
+    flexDirection: 'row',
+  },
+  icon: {
+    ...Typography.icon,
   },
   switch: {
     marginRight: 10,
   },
-  subText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
   checkboxRow: {
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
+    ...Typography.checkboxRow,
   },
   checkboxesWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  deletePlaylistTouchable: {
-    padding: 10,
-    margin: 5,
-    borderRadius: 20,
-    backgroundColor: '#F5FCFF',
-    alignItems: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 5,
-    padding: 5,
-    flex: 1,
-    alignItems: 'center',
-    height: 40,
-    backgroundColor: '#CCCCCC',
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  elementListTitle: {
-    // backgroundColor: '#888888',
-    padding: 10,
-    margin: 5,
-  },
-  touchableWrapper: {
-    height: '100%',
-    flexDirection: 'row',
-  },
-  iconWrapper: {
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  customizedTouchable: {
-    flex: 1,
-    alignItems: 'center',
-    minWidth: 20,
-    backgroundColor: '#F5FCFF',
-    padding: 5,
-    margin: 5,
-    height: 30,
-    borderRadius: 20,
+    ...Typography.checkboxesWrapper,
   },
 });
 
