@@ -7,6 +7,7 @@ import {
   userInPlaylistUpgrade, banUserInPlaylist, deleteUserInPlaylist, addFriend,
 } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
+import {Cards, Typography} from "../../styles";
 
 class UserListInSettings extends React.Component {
   render() {
@@ -50,7 +51,7 @@ class UserListInSettings extends React.Component {
                 }}
                 style={styles.iconWrapper}
               >
-                <Icon name="ios-person-add" style={styles.iconsStyle} />
+                <Icon name="ios-person-add" style={styles.icon} />
               </TouchableOpacity>
             );
             if (userId === loggedUser._id || loggedUser.friends.includes(userId)) {
@@ -58,25 +59,23 @@ class UserListInSettings extends React.Component {
             }
             if (isAdmin !== undefined && isAdmin) {
               element = (
-                <View
-                  style={styles.row}
-                >
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (!isLoading()) {
-                        navigation.navigate('UserProfile', { userProfileId: item._id });
-                      }
-                    }}
-                  >
-                    <Text
-                      style={styles.title}
+                <View style={Cards.smallCard}>
+                  <View style={Cards.cardHeader}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (!isLoading()) {
+                          navigation.navigate('UserProfile', { userProfileId: item._id });
+                        }
+                      }}
                     >
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                  <View
-                    style={styles.touchableWrapper}
-                  >
+                      <Text
+                        style={Cards.cardHeaderText}
+                      >
+                        {item.name}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.cardContent}>
                     <TouchableOpacity
                       onPress={() => {
                         if (!isLoading()) {
@@ -92,7 +91,7 @@ class UserListInSettings extends React.Component {
                       }}
                       style={styles.iconWrapper}
                     >
-                      <Icon name="arrow-up" style={styles.iconsStyle} />
+                      <Icon name="arrow-up" style={styles.icon} />
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
@@ -117,7 +116,7 @@ class UserListInSettings extends React.Component {
                       }}
                       style={styles.iconWrapper}
                     >
-                      <Icon name="md-walk" style={styles.iconsStyle} />
+                      <Icon name="md-walk" style={styles.icon} />
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
@@ -142,7 +141,7 @@ class UserListInSettings extends React.Component {
                       }}
                       style={styles.iconWrapper}
                     >
-                      <Icon name="md-trash" style={styles.iconsStyle} />
+                      <Icon name="md-trash" style={styles.icon} />
                     </TouchableOpacity>
                     {isSameUserOrAlreadyInFriend}
                   </View>
@@ -150,25 +149,23 @@ class UserListInSettings extends React.Component {
               );
             } else {
               element = (
-                <View
-                  style={styles.row}
-                >
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (!isLoading()) {
-                        navigation.navigate('UserProfile', { userProfileId: item._id });
-                      }
-                    }}
-                  >
-                    <Text
-                      style={styles.title}
+                <View style={Cards.smallCard}>
+                  <View style={Cards.cardHeader}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (!isLoading()) {
+                          navigation.navigate('UserProfile', { userProfileId: item._id });
+                        }
+                      }}
                     >
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                  <View
-                    style={styles.touchableWrapper}
-                  >
+                      <Text
+                        style={Cards.cardHeaderText}
+                      >
+                        {item.name}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.cardContent}>
                     {isSameUserOrAlreadyInFriend}
                   </View>
                 </View>
@@ -177,46 +174,26 @@ class UserListInSettings extends React.Component {
             return (element);
           }
         }
-        style={styles.list}
       />
     );
   }
 }
 
-
 const styles = StyleSheet.create({
-  list: {
-    // backgroundColor: '#DDDDDD',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-    marginTop: 5,
-    padding: 5,
-    flex: 1,
-    alignItems: 'center',
-    height: 40,
-    backgroundColor: '#CCCCCC',
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  title: {
-    // backgroundColor: '#888888',
-    padding: 10,
-    margin: 5,
-  },
-  touchableWrapper: {
-    height: '100%',
-    flexDirection: 'row',
-  },
   iconWrapper: {
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...Typography.iconWrapper,
+    flex: 1,
   },
-  iconsStyle: {
-    fontSize: 40,
+  cardContent: {
+    ...Cards.cardContent,
+    justifyContent: 'space-between',
+  },
+  icon: {
+    ...Typography.icon,
+  },
+  iconDisabled: {
+    ...Typography.iconDisabled,
   },
 });
+
 export default UserListInSettings;

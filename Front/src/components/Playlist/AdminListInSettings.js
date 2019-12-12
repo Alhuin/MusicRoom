@@ -7,6 +7,7 @@ import {
   adminInPlaylistDowngrade, banUserInPlaylist, deleteUserInPlaylist, setDelegatedPlayerAdmin,
 } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
+import {Cards, Colors, Typography} from "../../styles";
 
 
 class AdminListInSettings extends React.Component {
@@ -121,7 +122,7 @@ class AdminListInSettings extends React.Component {
                 <View
                   style={styles.iconWrapper}
                 >
-                  <Icon name="md-school" style={styles.authorIconStyle} />
+                  <Icon name="md-school" style={styles.iconDisabled} />
                 </View>
               );
             }
@@ -130,7 +131,7 @@ class AdminListInSettings extends React.Component {
                 <View
                   style={styles.iconWrapper}
                 >
-                  <Icon name="musical-notes" style={styles.iconsStyle} />
+                  <Icon name="musical-notes" style={styles.iconDisabled} />
                 </View>
               );
             } else if (String(loggedUser._id) === String(delegatedPlayerAdmin)) {
@@ -142,14 +143,12 @@ class AdminListInSettings extends React.Component {
                       onRefresh, isLoading, displayLoader);
                   }}
                 >
-                  <Icon name="musical-notes" style={styles.iconsStyleBlank} />
+                  <Icon name="musical-notes" style={styles.icon} />
                 </TouchableOpacity>
               );
             }
             let doNotTouchTheDelegated = (
-              <View
-                style={styles.touchableWrapper}
-              >
+              <View style={Cards.cardContent}>
                 {authorIcon}
                 {playerUserIcon}
                 <TouchableOpacity
@@ -159,7 +158,7 @@ class AdminListInSettings extends React.Component {
                   }}
                   style={styles.iconWrapper}
                 >
-                  <Icon name="arrow-down" style={styles.iconsStyle} />
+                  <Icon name="arrow-down" style={styles.icon} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -168,7 +167,7 @@ class AdminListInSettings extends React.Component {
                   }}
                   style={styles.iconWrapper}
                 >
-                  <Icon name="md-walk" style={styles.iconsStyle} />
+                  <Icon name="md-walk" style={styles.icon} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -177,15 +176,13 @@ class AdminListInSettings extends React.Component {
                   }}
                   style={styles.iconWrapper}
                 >
-                  <Icon name="md-trash" style={styles.iconsStyle} />
+                  <Icon name="md-trash" style={styles.icon} />
                 </TouchableOpacity>
               </View>
             );
             if (String(delegatedPlayerAdmin) === String(item._id)) {
               doNotTouchTheDelegated = (
-                <View
-                  style={styles.touchableWrapper}
-                >
+                <View style={Cards.cardContent}>
                   {authorIcon}
                   {playerUserIcon}
                 </View>
@@ -193,73 +190,45 @@ class AdminListInSettings extends React.Component {
             }
 
             return (
-              <View
-                style={styles.row}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    if (!isLoading()) {
-                      navigation.navigate('UserProfile', { userProfileId: item._id });
-                    }
-                  }}
-                >
-                  <Text
-                    style={styles.title}
+              <View style={Cards.smallCard}>
+                <View style={Cards.cardHeader}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (!isLoading()) {
+                        navigation.navigate('UserProfile', { userProfileId: item._id });
+                      }
+                    }}
                   >
-                    {item.name}
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      style={Cards.cardHeaderText}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
                 {doNotTouchTheDelegated}
               </View>
             );
           }
         }
-        style={styles.list}
       />
     );
   }
 }
 
 const styles = StyleSheet.create({
-  list: {
-    // backgroundColor: '#DDDDDD',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-    marginTop: 5,
-    padding: 5,
-    flex: 1,
-    alignItems: 'center',
-    height: 40,
-    backgroundColor: '#CCCCCC',
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  title: {
-    // backgroundColor: '#888888',
-    padding: 10,
-    margin: 5,
-  },
-  touchableWrapper: {
-    height: '100%',
-    flexDirection: 'row',
-  },
   iconWrapper: {
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...Typography.iconWrapper,
+    flex: 1,
   },
-  iconsStyle: {
-    fontSize: 40,
+  cardContent: {
+    ...Cards.cardContent,
   },
-  iconsStyleBlank: {
-    fontSize: 40,
-    color: 'white',
+  icon: {
+    ...Typography.icon,
   },
-  authorIconStyle: {
-    fontSize: 40,
+  iconDisabled: {
+    ...Typography.iconDisabled,
   },
 });
 

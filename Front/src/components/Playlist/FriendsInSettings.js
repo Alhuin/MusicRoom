@@ -4,6 +4,7 @@ import {
 import React from 'react';
 import { Icon } from 'native-base';
 import { joinPlaylistWithId } from '../../../API/BackApi';
+import {Cards, Typography} from "../../styles";
 
 export default class FriendsInSettings extends React.Component {
   render() {
@@ -42,30 +43,28 @@ export default class FriendsInSettings extends React.Component {
                   }}
                   style={styles.iconWrapper}
                 >
-                  <Icon name="md-add" style={styles.iconsStyle} />
+                  <Icon name="md-add" style={styles.icon} />
                 </TouchableOpacity>
               );
             }
             const element = (
-              <View
-                style={styles.row}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    if (!isLoading()) {
-                      navigation.navigate('UserProfile', { userProfileId: item._id });
-                    }
-                  }}
-                >
-                  <Text
-                    style={styles.title}
+              <View style={styles.smallCard}>
+                <View style={styles.cardHeader}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (!isLoading()) {
+                        navigation.navigate('UserProfile', { userProfileId: item._id });
+                      }
+                    }}
                   >
-                    {item.name}
-                  </Text>
-                </TouchableOpacity>
-                <View
-                  style={styles.touchableWrapper}
-                >
+                    <Text
+                      style={Cards.cardHeaderText}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.cardContent}>
                   {friendInPlaylist}
                 </View>
               </View>
@@ -79,43 +78,24 @@ export default class FriendsInSettings extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  list: {
-    // backgroundColor: '#DDDDDD',
-  },
-  row: {
+  smallCard: {
+    ...Cards.smallCard,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 5,
-    padding: 5,
-    flex: 1,
-    alignItems: 'center',
-    height: 40,
-    backgroundColor: '#CCCCCC',
-    borderRadius: 20,
-    overflow: 'hidden',
   },
-  title: {
-    // backgroundColor: '#888888',
-    padding: 10,
-    margin: 5,
-  },
-  touchableWrapper: {
-    height: '100%',
-    flexDirection: 'row',
+  cardHeader: {
+    ...Cards.cardHeader,
   },
   iconWrapper: {
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...Typography.iconWrapper,
   },
-  iconsStyle: {
-    fontSize: 45,
+  cardContent: {
+    ...Cards.cardContent,
   },
-  iconsStyleBlank: {
-    fontSize: 45,
-    color: 'white',
+  icon: {
+    ...Typography.icon,
   },
-  authorIconStyle: {
-    fontSize: 45,
+  iconDisabled: {
+    ...Typography.iconDisabled,
   },
 });

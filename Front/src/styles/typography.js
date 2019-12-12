@@ -8,7 +8,7 @@ export const baseFontSize = 16;
 export const smallFontSize = 14;
 export const smallestFontSize = 10;
 export const largeHeaderFontSize = largeFontSize;
-export const headerFontSize = 18;
+export const headerFontSize = 20;
 export const iconFontSize = 40;
 export const smallIconFontSize = 30;
 
@@ -79,8 +79,18 @@ export const bodyText = {
   lineHeight: 19,
 };
 
+export const iconWrapper = {
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
 export const icon = {
   color: Colors.baseText,
+  fontSize: iconFontSize,
+};
+
+export const iconDisabled = {
+  color: Colors.darkGrey,
   fontSize: iconFontSize,
 };
 

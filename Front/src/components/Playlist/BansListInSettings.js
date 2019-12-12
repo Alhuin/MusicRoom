@@ -4,6 +4,7 @@ import {
 import React from 'react';
 import { Icon } from 'native-base';
 import { addUserToPlaylistAndUnbanned } from '../../../API/BackApi';
+import {Cards, Typography} from "../../styles";
 
 class BansListInSettings extends React.Component {
   render() {
@@ -23,25 +24,23 @@ class BansListInSettings extends React.Component {
           ({ item }) => {
             const userId = item._id;
             return (
-              <View
-                style={styles.row}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    if (!isLoading()) {
-                      navigation.navigate('UserProfile', { userProfileId: item._id });
-                    }
-                  }}
-                >
-                  <Text
-                    style={styles.title}
+              <View style={Cards.smallCard}>
+                <View style={Cards.cardHeader}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (!isLoading()) {
+                        navigation.navigate('UserProfile', { userProfileId: item._id });
+                      }
+                    }}
                   >
-                    {item.name}
-                  </Text>
-                </TouchableOpacity>
-                <View
-                  style={styles.touchableWrapper}
-                >
+                    <Text
+                      style={Cards.cardHeaderText}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.cardContent}>
                   <TouchableOpacity
                     onPress={() => {
                       if (!isLoading()) {
@@ -57,59 +56,31 @@ class BansListInSettings extends React.Component {
                     }}
                     style={styles.iconWrapper}
                   >
-                    <Icon name="arrow-up" style={styles.iconsStyle} />
+                    <Icon name="arrow-up" style={styles.icon} />
                   </TouchableOpacity>
                 </View>
               </View>
             );
           }
         }
-        style={styles.list}
       />
     );
   }
 }
 
 const styles = StyleSheet.create({
-  list: {
-    // backgroundColor: '#DDDDDD',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-    marginTop: 5,
-    padding: 5,
-    flex: 1,
-    alignItems: 'center',
-    height: 40,
-    backgroundColor: '#CCCCCC',
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  title: {
-    // backgroundColor: '#888888',
-    padding: 10,
-    margin: 5,
-  },
-  touchableWrapper: {
-    height: '100%',
-    flexDirection: 'row',
-  },
   iconWrapper: {
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...Typography.iconWrapper,
+    flex: 1,
   },
-  iconsStyle: {
-    fontSize: 40,
+  cardContent: {
+    ...Cards.cardContent,
   },
-  iconsStyleBlank: {
-    fontSize: 40,
-    color: 'white',
+  icon: {
+    ...Typography.icon,
   },
-  authorIconStyle: {
-    fontSize: 40,
+  iconDisabled: {
+    ...Typography.iconDisabled,
   },
 });
 
