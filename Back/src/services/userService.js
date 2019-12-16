@@ -399,7 +399,7 @@ function _sendEmailToken(user, resolve, reject) {
         to: user.email,
         subject: 'Account Verification',
         text: `Hello,\n\nPlease verify your account by clicking the link below:
-              \n${process.env.SERVER}/api/users/emailToken/${savedToken.token}.\n`,
+              \n${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/emailToken/${savedToken.token}.\n`,
       };
       utils.sendMail(mailOptions, resolve, reject);
     }
