@@ -49,7 +49,7 @@ export default class MiniPlayer extends React.Component {
     this._onSeek = this.seek.bind(this);
 
     return (
-      <TouchableOpacity style={styles.mainContainer} onPress={handlePress}>
+      <TouchableOpacity style={styles.mainContainer} onPress={handlePress} activeOpacity={1}>
         <View style={styles.upContainer}>
           <View style={styles.coverContainer}>
             {cover}
