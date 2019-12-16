@@ -48,7 +48,7 @@ export default class FriendsInSettings extends React.Component {
               );
             }
             const element = (
-              <View style={styles.smallCard}>
+              <View style={styles.card}>
                 <View style={styles.cardHeader}>
                   <TouchableOpacity
                     onPress={() => {
@@ -78,8 +78,8 @@ export default class FriendsInSettings extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  smallCard: {
-    ...Cards.smallCard,
+  card: {
+    ...Cards.card,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

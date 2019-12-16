@@ -28,11 +28,11 @@ export const contentBase = {
 export const screenHeader = {
   ...headerBase,
   flex: 1,
-  minHeight: 15,
   backgroundColor: Colors.darkestGrey,
 };
 
 export const screenHeaderText = {
+  fontFamily: 'Roboto',
   color: Colors.baseText,
   fontSize: largeHeaderFontSize,
   fontWeight: 'bold',
@@ -45,7 +45,6 @@ export const section = {
 
 export const sectionHeader = {
   ...headerBase,
-  minHeight: 15,
   // backgroundColor: Colors.darkGrey,
 };
 
@@ -61,7 +60,7 @@ export const sectionContent = {
 };
 
 export const sectionSeparator = {
-  borderBottomColor: Colors.offWhite,
+  borderBottomColor: Colors.lightGreen,
   borderBottomWidth: 1,
 };
 
@@ -104,16 +103,3 @@ export const checkboxesWrapper = {
   flexDirection: 'row',
   justifyContent: 'space-around',
 };
-
-/* const FontSizes = {
-  lightOpacity: 0.72,
-  strongOpacity: 0.3,
-  bigIcon: 60,
-  icon: 45,
-  smallIcon: 30,
-  screenTitle: 28,
-  sectionTitle: 20,
-  smallTitle: 16,
-  default: 12,
-  note: 10,
-}; */

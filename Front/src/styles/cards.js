@@ -2,39 +2,32 @@ import * as Colors from './colors';
 import * as Spacing from './spacing';
 import * as Typography from './typography';
 
-export const smallCardHeight = 60;
-export const largeCardHeight = 110;
 export const cardBorderRadius = 20;
 
 export const base = {
   alignItems: 'center',
   display: 'flex',
   justifyContent: 'space-around',
-};
-
-export const largeCard = {
-  ...base,
-  flexDirection: 'row',
-  padding: Spacing.smallest,
-  height: largeCardHeight,
-  backgroundColor: Colors.card,
-  borderRadius: cardBorderRadius,
   overflow: 'hidden',
-  justifyContent: 'space-around',
-  marginVertical: Spacing.small,
-
 };
 
-export const smallCard = {
+export const styleBase = {
+  borderRadius: cardBorderRadius,
+  backgroundColor: Colors.card,
+  borderTopWidth: 3,
+  borderRightWidth: 3,
+  borderColor: Colors.lightGreen,
+  borderTopLeftRadius: 0,
+  borderBottomRightRadius: 0,
+};
+
+export const card = {
   ...base,
+  ...styleBase,
   flexDirection: 'column',
-  padding: Spacing.smallest,
-  // height: smallCardHeight,
-  backgroundColor: Colors.card,
-  borderRadius: cardBorderRadius,
-  overflow: 'hidden',
-  justifyContent: 'space-around',
-  marginVertical: Spacing.small,
+  padding: Spacing.small,
+  paddingVertical: Spacing.smallest,
+  marginVertical: Spacing.smallest,
 };
 
 export const cardHeader = {
@@ -51,5 +44,5 @@ export const cardContent = {
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  margin: Spacing.smallest,
+  padding: Spacing.smallest,
 };

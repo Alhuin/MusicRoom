@@ -24,7 +24,7 @@ class BansListInSettings extends React.Component {
           ({ item }) => {
             const userId = item._id;
             return (
-              <View style={Cards.smallCard}>
+              <View style={Cards.card}>
                 <View style={Cards.cardHeader}>
                   <TouchableOpacity
                     onPress={() => {

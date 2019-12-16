@@ -4,6 +4,7 @@ import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 
 export default class Loading extends React.Component {
+
   componentDidMount() {
     const { navigation, loggedUser, setSocket } = this.props;
     // const timer = setTimeout(() => {

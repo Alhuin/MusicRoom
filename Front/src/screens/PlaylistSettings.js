@@ -22,7 +22,7 @@ import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
 import FriendsInSettings from '../components/Playlist/FriendsInSettings';
 import {
-  Typography, Colors, Buttons, Spacing,
+  Typography, Colors, Buttons,
 } from '../styles';
 
 
@@ -716,22 +716,30 @@ class PlaylistSettings extends React.Component {
             {' '}
             par d&apos;autres utilisateurs ou administrateurs.
           </Text>
-          <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
-            <Text
-              selectable
-              style={styles.bodyText}
-            >
-              {privateId}
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                Clipboard.setString(String(privateId));
-                SimpleToast.show('Code copié dans le Presse-Papier.');
-              }}
-            >
-              <Icon name="ios-clipboard" style={styles.icon} />
-            </TouchableOpacity>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                Code privé
+              </Text>
+            </View>
+            <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+              <Text
+                selectable
+                style={styles.bodyText}
+              >
+                {privateId}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Clipboard.setString(String(privateId));
+                  SimpleToast.show('Code copié dans le Presse-Papier.');
+                }}
+              >
+                <Icon name="ios-clipboard" style={styles.icon} />
+              </TouchableOpacity>
+            </View>
           </View>
+
           <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
             <View style={styles.sectionHeader}>

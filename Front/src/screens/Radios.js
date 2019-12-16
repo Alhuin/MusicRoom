@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import Components from '../components';
 import { getPlaylistsFiltered } from '../../API/BackApi';
+import { Colors } from '../styles';
 
 class Radios extends React.Component {
   constructor(props) {
@@ -108,6 +109,7 @@ class Radios extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.background,
   },
 });
 export default Radios;

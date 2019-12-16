@@ -190,7 +190,7 @@ class AdminListInSettings extends React.Component {
             }
 
             return (
-              <View style={Cards.smallCard}>
+              <View style={Cards.card}>
                 <View style={Cards.cardHeader}>
                   <TouchableOpacity
                     onPress={() => {

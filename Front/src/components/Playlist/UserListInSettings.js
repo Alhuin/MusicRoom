@@ -59,7 +59,7 @@ class UserListInSettings extends React.Component {
             }
             if (isAdmin !== undefined && isAdmin) {
               element = (
-                <View style={Cards.smallCard}>
+                <View style={Cards.card}>
                   <View style={Cards.cardHeader}>
                     <TouchableOpacity
                       onPress={() => {
@@ -149,7 +149,7 @@ class UserListInSettings extends React.Component {
               );
             } else {
               element = (
-                <View style={Cards.smallCard}>
+                <View style={Cards.card}>
                   <View style={Cards.cardHeader}>
                     <TouchableOpacity
                       onPress={() => {

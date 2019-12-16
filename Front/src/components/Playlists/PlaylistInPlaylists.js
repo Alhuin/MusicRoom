@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon } from 'native-base';
+import { Cards, Typography, Colors } from '../../styles';
 
 // must create two components PlaylistInParty and PlaylistInRadio or this one need to be modified
 
@@ -29,61 +30,49 @@ export default class PlaylistInPlaylists extends React.Component {
 
   render() {
     const {
-      name, roomType, authorName, users,
+      name, authorName, users,
     } = this.props;
 
-    if (roomType === 'radio') {
-      return (
-        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
-          <Text>{ name }</Text>
-          <View style={styles.Author}>
-            <Text>
+    return (
+      <TouchableOpacity style={Cards.card} onPress={this._pressPlaylist} activeOpacity={1}>
+        <View style={Cards.cardHeader}>
+          <Text
+            style={Cards.cardHeaderText}
+            numberOfLines={1}
+          >
+            {name}
+          </Text>
+        </View>
+        <View style={styles.cardContent}>
+          <View style={{ flex: 5 }}>
+            <Text style={Typography.bodyText}>
               Auteur :
               {' '}
               { authorName }
             </Text>
-            <Icon name="people" />
-            <Text>
+          </View>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+          >
+            <Icon name="people" style={Typography.icon} />
+            <Text style={{ fontSize: Typography.largeFontSize, color: Colors.baseText }}>
               { users.length }
             </Text>
           </View>
-        </TouchableOpacity>
-      );
-    } if (roomType === 'party') {
-      return (
-        <TouchableOpacity style={styles.list} onPress={this._pressPlaylist} activeOpacity={1}>
-          <Text>{ name }</Text>
-          <View style={styles.Author}>
-            <Text>
-              Auteur :
-              {' '}
-              { authorName }
-            </Text>
-            <Icon name="people" />
-            <Text>
-              { users.length }
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    }
-    return (null);
+        </View>
+      </TouchableOpacity>
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  list: {
-    flexDirection: 'column',
-    margin: 5,
-    backgroundColor: 'white',
-    height: 120,
-    justifyContent: 'space-around',
-    padding: 10,
-    elevation: 1,
+  cardContent: {
+    ...Cards.cardContent,
+    flex: 1,
   },
-  Author: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+
 });

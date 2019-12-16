@@ -4,6 +4,8 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
+import { Colors } from '../styles';
+import * as Typography from "../styles/typography";
 
 class Home extends React.Component {
   state = {
@@ -36,16 +38,22 @@ class Home extends React.Component {
           modalVisible={modalVisible}
           userId={loggedUser._id}
         />
-        <TouchableOpacity onPress={this._onPressParty} style={styles.cartes}>
+        <TouchableOpacity
+          onPress={this._onPressParty}
+          style={[styles.card, { marginTop: 20, marginBottom: 10 }]}
+        >
           <View style={styles.place}>
-            <Text style={styles.textcard}>Party</Text>
-            <Icon name="musical-notes" />
+            <Text style={styles.textCard}>Party</Text>
+            <Icon name="musical-notes" style={{ ...Typography.icon }} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this._onPressRadio} style={styles.cartes}>
+        <TouchableOpacity
+          onPress={this._onPressRadio}
+          style={[styles.card, { marginTop: 10, marginBottom: 20 }]}
+        >
           <View style={styles.place}>
-            <Text style={styles.textcard}>Radio</Text>
-            <Icon name="radio" />
+            <Text style={styles.textCard}>Radio</Text>
+            <Icon name="radio" style={{ ...Typography.icon }} />
           </View>
         </TouchableOpacity>
         <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="joinPrivateRoom" />
@@ -56,30 +64,33 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    color: 'white',
-    width: '100%',
+    backgroundColor: Colors.background,
     flexDirection: 'column',
-    // flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'center',
-    flex: 1,
+    height: '100%',
   },
-  cartes: {
-    borderWidth: 3,
-    borderRadius: 3,
-    borderColor: '#000',
-    height: '45%',
-    width: '80%',
-    aspectRatio: 1,
+  card: {
+    flex: 1,
+    width: '90%',
     justifyContent: 'space-around',
+    alignItems: 'center',
+    flexDirection: 'column',
+    marginHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: Colors.darkGrey,
+    borderTopWidth: 3,
+    borderTopLeftRadius: 0,
+    borderRightWidth: 3,
+    borderBottomRightRadius: 0,
+    borderColor: Colors.lightGreen,
   },
   place: {
     alignItems: 'center',
   },
-  textcard: {
-    fontWeight: 'bold',
-    fontSize: 30,
+  textCard: {
+    ...Typography.sectionHeaderText,
+    fontSize: Typography.extraLargeFontSize,
   },
 });
 

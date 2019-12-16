@@ -7,9 +7,9 @@ import {
   createDrawerNavigator,
   NavigationScreenProps,
 } from 'react-navigation';
-import { Colors } from '../styles';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Icon } from 'native-base';
+import { Colors, Typography } from '../styles';
 import Connexion from '../screens/Connexion';
 import Home from '../containers/Home';
 import SendTokens from '../screens/SendTokens';
@@ -32,11 +32,19 @@ const createBurgerMenu = navigation => Platform.select({
     <Icon
       ios="ios-menu"
       android="md-menu"
-      style={{ paddingLeft: 20 }}
+      style={{ paddingLeft: 20, color: Colors.icon }}
       onPress={() => navigation.toggleDrawer()}
     />
   ),
 });
+
+const headerSidesContainerStyle = {
+  flex: 1,
+  alignItems: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'row',
+};
 
 // Auth Navigator Handles Authentication screens by stack
 
@@ -98,7 +106,12 @@ const HomeNavigator = createStackNavigator({
     screen: Home,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Home',
-      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
+      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
+      headerTitleStyle: { ...Typography.screenHeaderText },
+      headerLeftContainerStyle: headerSidesContainerStyle,
+      headerRightContainerStyle: headerSidesContainerStyle,
+      headerRight: (<View />),
       headerLeft: createBurgerMenu(navigation),
     }),
   },
@@ -118,7 +131,12 @@ const PartysNavigator = createStackNavigator({
     screen: Partys,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Parties',
-      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
+      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
+      headerTitleStyle: { ...Typography.screenHeaderText },
+      headerLeftContainerStyle: headerSidesContainerStyle,
+      headerRightContainerStyle: headerSidesContainerStyle,
+      headerRight: (<View />),
       headerLeft: createBurgerMenu(navigation),
     }),
   },
@@ -153,7 +171,12 @@ const RadiosNavigator = createStackNavigator({
     screen: Radios,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Radios',
-      headerTitleStyle: { paddingLeft: 50, fontFamily: 'Roboto' },
+      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
+      headerTitleStyle: { ...Typography.screenHeaderText },
+      headerLeftContainerStyle: headerSidesContainerStyle,
+      headerRightContainerStyle: headerSidesContainerStyle,
+      headerRight: (<View />),
       headerLeft: createBurgerMenu(navigation),
     }),
   },
