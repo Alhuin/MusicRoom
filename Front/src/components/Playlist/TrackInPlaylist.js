@@ -30,7 +30,6 @@ class TrackInPlaylist extends React.Component {
       roomType,
       myVoteValue,
       editor,
-      pos,
     } = this.props;
     let renderForParty = (null);
     if (roomType === 'party') {

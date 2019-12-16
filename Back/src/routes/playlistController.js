@@ -709,7 +709,7 @@ function setEditRestriction(req, res) {
 
 function isEditor(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
-    && req.body.userId && utils.isValidId(req.body.userId) && req.body.pos) {
+    && req.body.userId && utils.isValidId(req.body.userId) && req.body.pos !== undefined) {
     playlistService.isEditor(req.body.playlistId, req.body.userId, req.body.pos)
       .then((response) => {
         res

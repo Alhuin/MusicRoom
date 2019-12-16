@@ -1,6 +1,9 @@
 import React from 'react';
-import { View, SafeAreaView, Button } from 'react-native';
+import {
+  View, SafeAreaView, TouchableOpacity, Text, StyleSheet,
+} from 'react-native';
 import { DrawerItems } from 'react-navigation';
+import { Buttons, Typography, Colors } from '../../styles';
 
 export default class LogoutButton extends React.Component {
   _logout = () => {
@@ -15,15 +18,33 @@ export default class LogoutButton extends React.Component {
     const { drawerProps } = this.props;
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.drawer}>
         <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItems {...drawerProps} />
-          <Button
-            title="Déconnexion"
-            onPress={() => this._logout()}
-          />
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity
+              onPress={() => {
+                this._logout();
+              }}
+              style={Buttons.largeButton}
+            >
+              <Text style={Buttons.text}>
+                Déconnexion
+              </Text>
+            </TouchableOpacity>
+          </View>
         </SafeAreaView>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  drawer: {
+    backgroundColor: Colors.background,
+    height: '100%',
+  },
+  buttonWrapper: {
+    alignItems: 'center',
+  },
+});

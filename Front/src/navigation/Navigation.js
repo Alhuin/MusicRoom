@@ -7,6 +7,7 @@ import {
   createDrawerNavigator,
   NavigationScreenProps,
 } from 'react-navigation';
+import { Colors } from '../styles';
 import { Platform } from 'react-native';
 import { Icon } from 'native-base';
 import Connexion from '../screens/Connexion';
@@ -231,6 +232,11 @@ const MainNavigator = Platform.select({
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
+    contentOptions: {
+      activeTintColor: Colors.active,
+      inactiveTintColor: Colors.baseText,
+      activeBackgroundColor: Colors.darkestGrey,
+    },
   }),
 });
 

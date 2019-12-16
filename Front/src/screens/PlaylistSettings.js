@@ -239,6 +239,7 @@ class PlaylistSettings extends React.Component {
     const roomType = navigation.getParam('roomType');
     const playlistId = navigation.getParam('playlistId');
     if (roomType === 'party') {
+      // eslint-disable-next-line no-undef
       navigator.geolocation.getCurrentPosition(
         (location) => {
           setPlaylistLocation(playlistId, location, loggedUser._id)
@@ -441,7 +442,7 @@ class PlaylistSettings extends React.Component {
   };
 
   onDateChanged = (changedDate) => {
-    const { navigation } = this.props;
+    const { navigation, socket } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const { dateType, startDate, endDate } = this.state;
     if (dateType === 'start') {
@@ -449,6 +450,7 @@ class PlaylistSettings extends React.Component {
         setStartDate(playlistId, changedDate)
           .then(() => {
             this.setState({ startDate: changedDate });
+            socket.emit('parameterChanged', playlistId);
           })
           .catch((error) => {
             console.error(`${error} in setStartDate`);
@@ -461,6 +463,7 @@ class PlaylistSettings extends React.Component {
         setEndDate(playlistId, changedDate)
           .then(() => {
             this.setState({ endDate: changedDate });
+            socket.emit('parameterChanged', playlistId);
           })
           .catch((error) => {
             console.error(`${error} in setEndDate`);
@@ -486,7 +489,7 @@ class PlaylistSettings extends React.Component {
   };
 
   radioIsPressed = (val) => {
-    const { navigation } = this.props;
+    const { navigation, socket } = this.props;
     const playlistId = navigation.getParam('playlistId');
     let value = 0;
     let newEditRestriction = '';
@@ -507,6 +510,7 @@ class PlaylistSettings extends React.Component {
     setEditRestriction(playlistId, newEditRestriction)
       .then(() => {
         this.setState({ radioValue: value });
+        socket.emit('parameterChanged', playlistId);
       })
       .catch((error) => {
         console.error(`${error} in radioIsPressed`);

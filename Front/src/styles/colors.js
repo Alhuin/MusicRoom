@@ -31,3 +31,7 @@ export const sectionBackground = lightWarmGrey;
 export const background = black;
 export const button = lightGreen;
 export const buttonSelected = green;
+export const icon = tan;
+export const iconDisabled = black;
+export const card = darkGrey;
+export const active = lightGreen;

@@ -41,7 +41,6 @@ export default class SignInForm extends React.Component {
           navigation.navigate('app');
         })
         .catch((error) => {
-          // console.log('error');
           // console.log(error);
           if (error.status === 401) {
             Alert.alert('Error, wrong username or password');

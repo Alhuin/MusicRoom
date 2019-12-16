@@ -53,12 +53,16 @@ const isEditorInPlaylist = (playlist, userId, pos) => {
       }
     }
   } else if (playlist.editRestriction === 'EVENT_RESTRICTED') {
+    console.log('EVENT OK');
     const now = new Date(Date.now());
     if (now < playlist.endDate && now > playlist.startDate) {
+      console.log('DATE OK');
       let lat1 = 0;
       let lng1 = 0;
       let lat2 = 0;
       let lng2 = 0;
+      const playlistLocLength = Object.keys(playlist.location).length;
+      const userLocLength = Object.keys(pos).length;
       if (Object.keys(pos).length !== 0) {
         lat1 = pos.coords.latitude;
         lng1 = pos.coords.longitude;
@@ -67,10 +71,13 @@ const isEditorInPlaylist = (playlist, userId, pos) => {
         lat2 = playlist.location.coords.latitude;
         lng2 = playlist.location.coords.longitude;
       }
+      console.log(playlistLocLength);
+      console.log(userLocLength);
+      console.log(getDistanceLongLat(lat1, lng1, lat2, lng2));
       for (let i = 0; i < playlist.users.length; i += 1) {
-        if ((Object.keys(playlist.location).length === 0 && String(playlist.admins[i]._id) === userId)
-          || (Object.keys(playlist.location).length !== 0 && String(playlist.users[i]._id) === userId
-            && Object.keys(pos).length !== 0 && getDistanceLongLat(lat1, lng1, lat2, lng2) <= 100)) {
+        if ((playlistLocLength === 0 && String(playlist.admins[i]._id) === userId)
+          || (playlistLocLength !== 0 && String(playlist.users[i]._id) === userId
+            && userLocLength !== 0 && getDistanceLongLat(lat1, lng1, lat2, lng2) <= 100)) {
           return (true);
         }
       }

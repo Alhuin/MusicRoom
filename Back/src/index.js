@@ -220,7 +220,7 @@ const seedDatas = async () => {
         admins: [admin],
         bans: [],
         privateId: '1234',
-        editRestriction: 'EVENT_RESTRICTED',
+        editRestriction: 'ALL',
         startDate: new Date(Date.now()),
         endDate: new Date(Date.now() + 10000000000),
         location: {

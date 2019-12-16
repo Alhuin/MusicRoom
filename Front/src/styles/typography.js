@@ -85,12 +85,12 @@ export const iconWrapper = {
 };
 
 export const icon = {
-  color: Colors.baseText,
+  color: Colors.icon,
   fontSize: iconFontSize,
 };
 
 export const iconDisabled = {
-  color: Colors.darkGrey,
+  color: Colors.iconDisabled,
   fontSize: iconFontSize,
 };
 

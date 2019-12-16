@@ -9,7 +9,6 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 // Dans le catch du fetch on reject(error) car on connait pas son objet d'erreur => a tester
 
-
 function login(userName, password) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/login`, {
@@ -217,7 +216,7 @@ function addFriend(friendId, userId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('isEditor', data.msg, response.status));
+          reject(new CustomError('addFriend', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -239,7 +238,7 @@ function deleteFriend(friendId, userId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('isEditor', data.msg, response.status));
+          reject(new CustomError('deleteFriend', data.msg, response.status));
         }
       })
       .catch(error => reject(error));

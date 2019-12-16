@@ -22,7 +22,7 @@ class Playlist extends React.Component {
       modalVisible: false,
       myVotes: [],
       playlistLaunched: false,
-      pos: {},
+      pos: 0,
     };
     this.onRefreshSignal = this._onRefreshSignal.bind(this);
     this.onRefreshPermissionSignal = this._onRefreshPermissionSignal.bind(this);
@@ -178,6 +178,8 @@ class Playlist extends React.Component {
                 .then((response) => {
                   if (response === true) {
                     this.setState({ editor: true });
+                  } else {
+                    this.setState({ editor: false });
                   }
                 })
                 .catch((error) => {
@@ -189,6 +191,18 @@ class Playlist extends React.Component {
             ),
             { enableHighAccuracy: false, timeout: 10000 },
           );
+        } else {
+          isEditor(playlistId, userId, 0)
+            .then((response) => {
+              if (response === true) {
+                this.setState({ editor: true });
+              } else {
+                this.setState({ editor: false });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
       })
       .catch((error) => {
@@ -225,6 +239,7 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
+    console.log(editor);
     let settingsIcon = (
       <TouchableOpacity
         onPress={() => {
