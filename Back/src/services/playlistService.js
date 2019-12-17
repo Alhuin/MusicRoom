@@ -908,7 +908,6 @@ function setPlaylistLocation(playlistId, newLocation, userId) {
   });
 }
 
-
 function isEditor(playlistId, userId, pos) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (error, playlist) => {
@@ -921,6 +920,33 @@ function isEditor(playlistId, userId, pos) {
           status: 200,
           data: utils.isEditorInPlaylist(playlist, userId, pos),
         });
+      }
+    });
+  });
+}
+
+function setPlaylistName(playlistId, userId, newName) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('SetPlaylistName', 'No playlist with this id found in database', 404));
+      } else if (utils.isAdminInPlaylist(playlist, userId)) {
+        const newPlaylist = playlist;
+        newPlaylist.name = newName;
+        newPlaylist.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: savedPlaylist,
+            });
+          }
+        });
+      } else {
+        reject(new CustomError('setPlaylistName', 'Not authorized', 401));
       }
     });
   });
@@ -963,4 +989,5 @@ export default {
   isEditor,
   getPlaylistLocation,
   setPlaylistLocation,
+  setPlaylistName,
 };

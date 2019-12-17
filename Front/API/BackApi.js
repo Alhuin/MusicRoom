@@ -1131,6 +1131,30 @@ function deletePlaylistByAdmin(playlistId, userId) {
   });
 }
 
+
+function setPlaylistName(playlistId, userId, newName) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/setPlaylistName`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, userId, newName }),
+    })
+      .then(async (response) => {
+        // savedPlaylist is the response
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('setPlaylistName', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                     Track Player
  */
@@ -1231,4 +1255,5 @@ export {
   getFriends,
   getPlaylistLocation,
   setPlaylistLocation,
+  setPlaylistName,
 };

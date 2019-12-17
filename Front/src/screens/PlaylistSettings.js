@@ -1,5 +1,5 @@
 import {
-  View, StyleSheet, Text, Switch, TouchableOpacity, ScrollView, Clipboard, Alert,
+  View, StyleSheet, Text, Switch, TouchableOpacity, ScrollView, Clipboard, Alert, TextInput,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -17,6 +17,7 @@ import {
   getBansByPlaylistId, getPlaylistPrivateId, setPublicityOfPlaylist, getDelegatedPlayerAdmin,
   getPlaylistDates, setStartDate, setEndDate, getTags, setTags, getEditRestriction,
   setEditRestriction, deletePlaylistByAdmin, getFriends, getPlaylistLocation, setPlaylistLocation,
+  setPlaylistName,
 } from '../../API/BackApi';
 import NavigationUtils from '../navigation/NavigationUtils';
 import DatePickerModal from '../components/Playlists/DatePickerModal';
@@ -29,6 +30,8 @@ import {
 class PlaylistSettings extends React.Component {
   constructor(props) {
     super(props);
+    const { navigation } = this.props;
+    const name = navigation.getParam('name');
     this.state = {
       admins: [],
       users: [],
@@ -55,6 +58,7 @@ class PlaylistSettings extends React.Component {
       radioValue: 0,
       deletePlaylistState: 'Supprimer la Playlist',
       isUser: false,
+      name,
     };
   }
 
@@ -560,12 +564,24 @@ class PlaylistSettings extends React.Component {
     }
   };
 
+  setName = (name) => {
+    const { navigation, loggedUser } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    setPlaylistName(playlistId, loggedUser._id, name)
+      .then(() => {
+        this.setState({ name });
+      })
+      .catch((error) => {
+        console.error(`${error} in setName`);
+      });
+  };
+
   render() {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
       collapsed, collapsedSpec, collapsedTags, collapsedFriends, collapsedUsers,
       collapsedAdmins, collapsedBans, startDate, endDate, initialDate, datePickerModalVisible,
-      tags, radioValue, deletePlaylistState, isUser, friends, location,
+      tags, radioValue, deletePlaylistState, isUser, friends, location, name,
     } = this.state;
     const loc = location;
     if (Object.keys(location).length === 0) {
@@ -757,6 +773,25 @@ class PlaylistSettings extends React.Component {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionHeaderText}>
+                Nom de la playlist
+              </Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <TextInput
+                selectable
+                style={styles.bodyText}
+                placeholder="Nom de la playlist"
+                onEndEditing={(e: any) => {
+                  this.setName(e.nativeEvent.text);
+                }}
+              >
+                {name}
+              </TextInput>
+            </View>
+          </View>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
                 Code privé
               </Text>
             </View>
@@ -777,7 +812,6 @@ class PlaylistSettings extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-
           <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
             <View style={styles.sectionHeader}>

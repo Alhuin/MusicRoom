@@ -89,6 +89,7 @@ router.post('/playlists/setEndDate', playlistController.setEndDate);
 router.post('/playlists/setTags', playlistController.setTags);
 router.post('/playlists/setPlaylistLocation', playlistController.setPlaylistLocation);
 router.post('/playlists/setEditRestriction', playlistController.setEditRestriction);
+router.post('/playlists/setPlaylistName', playlistController.setPlaylistName);
 
 
 /*             Votes                 */

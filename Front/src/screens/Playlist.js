@@ -272,7 +272,7 @@ class Playlist extends React.Component {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('PlaylistSettings', {
-                  playlistId, isAdmin: admin, authorId, roomType,
+                  playlistId, isAdmin: admin, authorId, roomType, name,
                 });
               }}
               style={Typography.iconWrapper}
