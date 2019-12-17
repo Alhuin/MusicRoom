@@ -7,9 +7,14 @@ export const base = {
   justifyContent: 'center',
 };
 
-export const small = {
+export const smallSquare = {
   height: 60,
   width: 60,
+};
+
+export const smallRectangle = {
+  height: 40,
+  width: 80,
 };
 
 export const large = {
@@ -20,7 +25,7 @@ export const large = {
 export const fabIcon = {
   transform: [{ translateX: +2 }],
   fontSize: Typography.smallIconFontSize,
-  color: Colors.white,
+  color: Colors.icon,
 };
 
 export const text = {
@@ -34,6 +39,12 @@ export const rounded = {
   borderRadius: 50,
 };
 
+export const halfRounded = {
+  borderRadius: 20,
+  borderTopLeftRadius: 0,
+  borderBottomRightRadius: 0,
+};
+
 export const bottomRightCorner = {
   position: 'absolute',
   right: 20,
@@ -41,9 +52,10 @@ export const bottomRightCorner = {
 
 export const fab = {
   ...base,
-  ...small,
+  ...smallSquare,
   ...rounded,
   position: 'absolute',
+  backgroundColor: Colors.button,
   right: 20, // va plutôt dans les styles des components
 };
 
@@ -51,7 +63,13 @@ export const largeButton = {
   ...base,
   ...large,
   ...rounded,
-
   backgroundColor: Colors.button,
   margin: Spacing.small,
+};
+
+export const smallSpecialButton = {
+  ...base,
+  ...smallRectangle,
+  ...halfRounded,
+  backgroundColor: Colors.button,
 };

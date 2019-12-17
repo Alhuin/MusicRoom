@@ -4,7 +4,7 @@ import {
 import React from 'react';
 import { Icon } from 'native-base';
 import { joinPlaylistWithId } from '../../../API/BackApi';
-import {Cards, Typography} from "../../styles";
+import { Cards, Typography } from '../../styles';
 
 export default class FriendsInSettings extends React.Component {
   render() {

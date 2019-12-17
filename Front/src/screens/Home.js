@@ -4,8 +4,7 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
-import { Colors } from '../styles';
-import * as Typography from "../styles/typography";
+import { Colors, Typography } from '../styles';
 
 class Home extends React.Component {
   state = {
@@ -39,6 +38,7 @@ class Home extends React.Component {
           userId={loggedUser._id}
         />
         <TouchableOpacity
+          activeOpacity={0.7}
           onPress={this._onPressParty}
           style={[styles.card, { marginTop: 20, marginBottom: 10 }]}
         >
@@ -48,6 +48,7 @@ class Home extends React.Component {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
+          activeOpacity={0.7}
           onPress={this._onPressRadio}
           style={[styles.card, { marginTop: 10, marginBottom: 20 }]}
         >

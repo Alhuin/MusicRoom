@@ -36,3 +36,4 @@ export const icon = tan;
 export const iconDisabled = black;
 export const card = darkGrey;
 export const active = lightGreen;
+export const placeholder = lightGreen;

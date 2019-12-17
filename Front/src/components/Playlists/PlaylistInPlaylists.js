@@ -34,7 +34,7 @@ export default class PlaylistInPlaylists extends React.Component {
     } = this.props;
 
     return (
-      <TouchableOpacity style={Cards.card} onPress={this._pressPlaylist} activeOpacity={1}>
+      <TouchableOpacity style={Cards.card} onPress={this._pressPlaylist} activeOpacity={0.9}>
         <View style={Cards.cardHeader}>
           <Text
             style={Cards.cardHeaderText}
@@ -59,7 +59,7 @@ export default class PlaylistInPlaylists extends React.Component {
           }}
           >
             <Icon name="people" style={Typography.icon} />
-            <Text style={{ fontSize: Typography.largeFontSize, color: Colors.baseText }}>
+            <Text style={{ fontSize: Typography.largerFontSize, color: Colors.baseText }}>
               { users.length }
             </Text>
           </View>

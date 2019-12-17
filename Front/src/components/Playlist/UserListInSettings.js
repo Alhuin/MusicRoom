@@ -7,7 +7,7 @@ import {
   userInPlaylistUpgrade, banUserInPlaylist, deleteUserInPlaylist, addFriend,
 } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
-import {Cards, Typography} from "../../styles";
+import { Cards, Typography } from '../../styles';
 
 class UserListInSettings extends React.Component {
   render() {

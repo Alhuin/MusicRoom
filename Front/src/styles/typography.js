@@ -2,12 +2,13 @@ import * as Colors from './colors';
 import * as Spacing from './spacing';
 
 export const extraLargeFontSize = 32;
-export const largeFontSize = 24;
+export const largerFontSize = 24;
+export const largeFontSize = 20;
 export const buttonFontSize = 18;
 export const baseFontSize = 16;
 export const smallFontSize = 14;
 export const smallestFontSize = 10;
-export const largeHeaderFontSize = largeFontSize;
+export const largeHeaderFontSize = largerFontSize;
 export const headerFontSize = 20;
 export const iconFontSize = 40;
 export const smallIconFontSize = 30;
@@ -27,8 +28,8 @@ export const contentBase = {
 
 export const screenHeader = {
   ...headerBase,
-  flex: 1,
   backgroundColor: Colors.darkestGrey,
+  padding: Spacing.smaller,
 };
 
 export const screenHeaderText = {
@@ -52,6 +53,14 @@ export const sectionHeaderText = {
   color: Colors.lightText,
   fontSize: headerFontSize,
   fontWeight: 'bold',
+};
+
+export const headerSidesContainerStyle = {
+  flex: 1,
+  alignItems: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'row',
 };
 
 export const sectionContent = {
@@ -88,9 +97,14 @@ export const icon = {
   fontSize: iconFontSize,
 };
 
+export const smallIcon = {
+  color: Colors.icon,
+  fontSize: iconFontSize,
+};
+
 export const iconDisabled = {
   color: Colors.iconDisabled,
-  fontSize: iconFontSize,
+  fontSize: smallIconFontSize,
 };
 
 export const checkboxRow = {
@@ -102,4 +116,16 @@ export const checkboxRow = {
 export const checkboxesWrapper = {
   flexDirection: 'row',
   justifyContent: 'space-around',
+};
+
+export const paddingMiniPlayer = {
+  paddingBottom: Spacing.paddingMiniPlayer,
+};
+
+export const textInput = {
+  backgroundColor: Colors.background,
+  borderBottomWidth: 1,
+  borderColor: Colors.lightGreen,
+  margin: Spacing.small,
+  color: Colors.baseText,
 };

@@ -3,6 +3,7 @@ import { FlatList, RefreshControl } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import TrackInPlaylist from '../../containers/TrackInPlaylist';
 import Player from '../../services/Player';
+import { Spacing } from '../../styles';
 
 class TrackListInPlaylist extends React.Component {
   handlePress = (preview) => {
@@ -47,7 +48,7 @@ class TrackListInPlaylist extends React.Component {
           data={tracks}
           keyExtractor={item => String(item._id)}
           renderItem={({
-            item, move, moveEnd, isActive, // Index necessaire ?
+            item, move, moveEnd, isActive,
           }) => {
             let myVoteValue = 0;
             for (let i = 0; i < myVotes.length; i += 1) {
@@ -79,7 +80,7 @@ class TrackListInPlaylist extends React.Component {
           //     this._loadTracks();
           //   }
           // }}
-          contentContainerStyle={{ paddingBottom: 200 }}
+          contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
           onMoveEnd={data => onMoveEnd(data)}
         />
       );
@@ -122,7 +123,7 @@ class TrackListInPlaylist extends React.Component {
           //     this._loadTracks();
           //   }
           // }}
-          contentContainerStyle={{ paddingBottom: 200 }}
+          contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
         />
       );
     }

@@ -38,14 +38,6 @@ const createBurgerMenu = navigation => Platform.select({
   ),
 });
 
-const headerSidesContainerStyle = {
-  flex: 1,
-  alignItems: 'center',
-  display: 'flex',
-  justifyContent: 'center',
-  flexDirection: 'row',
-};
-
 // Auth Navigator Handles Authentication screens by stack
 
 const AuthNavigator = createStackNavigator({
@@ -109,8 +101,8 @@ const HomeNavigator = createStackNavigator({
       headerStyle: { backgroundColor: Colors.darkestGrey },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
-      headerLeftContainerStyle: headerSidesContainerStyle,
-      headerRightContainerStyle: headerSidesContainerStyle,
+      headerLeftContainerStyle: Typography.headerSidesContainerStyle,
+      headerRightContainerStyle: Typography.headerSidesContainerStyle,
       headerRight: (<View />),
       headerLeft: createBurgerMenu(navigation),
     }),
@@ -134,8 +126,8 @@ const PartysNavigator = createStackNavigator({
       headerStyle: { backgroundColor: Colors.darkestGrey },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
-      headerLeftContainerStyle: headerSidesContainerStyle,
-      headerRightContainerStyle: headerSidesContainerStyle,
+      headerLeftContainerStyle: Typography.headerSidesContainerStyle,
+      headerRightContainerStyle: Typography.headerSidesContainerStyle,
       headerRight: (<View />),
       headerLeft: createBurgerMenu(navigation),
     }),
@@ -174,8 +166,8 @@ const RadiosNavigator = createStackNavigator({
       headerStyle: { backgroundColor: Colors.darkestGrey },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
-      headerLeftContainerStyle: headerSidesContainerStyle,
-      headerRightContainerStyle: headerSidesContainerStyle,
+      headerLeftContainerStyle: Typography.headerSidesContainerStyle,
+      headerRightContainerStyle: Typography.headerSidesContainerStyle,
       headerRight: (<View />),
       headerLeft: createBurgerMenu(navigation),
     }),

@@ -6,6 +6,7 @@ import SearchBar from '../SearchBar';
 import Loader from '../Authentication/Loader';
 import TrackListInSearch from './TrackListInSearch';
 import { getTracks } from '../../../API/DeezerApi';
+import { Colors } from '../../styles';
 
 export default class SearchTrack extends React.Component {
   constructor(props) {
@@ -63,7 +64,7 @@ export default class SearchTrack extends React.Component {
     } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={styles.main_container}>
         <SearchBar
           updateSearchedText={this.updateSearchedText}
           searchTracks={this.searchTracks}
@@ -88,11 +89,10 @@ export default class SearchTrack extends React.Component {
 const styles = StyleSheet.create({
   loading: {
     opacity: 1,
-    color: 'white',
+    color: Colors.white,
   },
-  container: {
+  main_container: {
     flex: 1,
-    backgroundColor: 'black',
-    color: 'white',
+    backgroundColor: Colors.background,
   },
 });

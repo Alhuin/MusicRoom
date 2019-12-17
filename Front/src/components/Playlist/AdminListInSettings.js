@@ -7,7 +7,7 @@ import {
   adminInPlaylistDowngrade, banUserInPlaylist, deleteUserInPlaylist, setDelegatedPlayerAdmin,
 } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
-import {Cards, Colors, Typography} from "../../styles";
+import {Cards, Colors, Typography} from '../../styles';
 
 
 class AdminListInSettings extends React.Component {

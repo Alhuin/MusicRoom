@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Dimensions, Alert,
+  StyleSheet, View, Text, TouchableOpacity, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
@@ -8,6 +8,7 @@ import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
   isEditor, moveTrackOrder, deleteTrackFromPlaylist, getEditRestriction,
 } from '../../API/BackApi';
+import { Colors, Typography, Buttons } from '../styles';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -239,21 +240,9 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
-    let settingsIcon = (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('PlaylistSettings', {
-            playlistId, isAdmin: admin, authorId, roomType,
-          });
-        }}
-        style={styles.headerIconWrapper}
-      >
-        <Icon name="musical-notes" />
-      </TouchableOpacity>
-    );
 
     const playButton = (
-      (!playlistLaunched && tracks.length > 0) && (
+      (!playlistLaunched && tracks.length > 0 && admin) && (
         <TouchableOpacity
           onPress={() => {
             getNextTrackByVote(playlistId)
@@ -270,38 +259,38 @@ class Playlist extends React.Component {
               })
               .catch(error => console.log(error));
           }}
-          style={styles.playButton}
         >
-          <Text style={styles.playText}>Play</Text>
+          <Icon name="musical-notes" style={Typography.icon} />
         </TouchableOpacity>
       )
     );
 
-    if (admin === true) {
-      settingsIcon = (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('PlaylistSettings', {
-              playlistId, isAdmin: admin, authorId, roomType,
-            });
-          }}
-          style={styles.headerIconWrapper}
-        >
-          <Icon name="settings" />
-        </TouchableOpacity>
-      );
-    }
-
     return (
-      <View style={{ flex: 1 }}>
-        <View style={styles.headerContainer}>
-          {settingsIcon}
-          <Text
-            style={styles.title}
-            numberOfLines={1}
-          >
-            {name}
-          </Text>
+      <View style={styles.main_container}>
+        <View style={styles.screenHeader}>
+          <View style={Typography.headerSidesContainerStyle}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('PlaylistSettings', {
+                  playlistId, isAdmin: admin, authorId, roomType,
+                });
+              }}
+              style={Typography.iconWrapper}
+            >
+              <Icon name="settings" style={Typography.icon} />
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.screenHeader, { width: 'auto', padding: 0, flex: 8 }]}>
+            <Text
+              style={styles.screenHeaderText}
+              numberOfLines={1}
+            >
+              {name}
+            </Text>
+          </View>
+          <View style={Typography.headerSidesContainerStyle}>
+            { playButton }
+          </View>
         </View>
         <Components.AddMusicModal
           setModalVisible={this.setModalVisible}
@@ -311,40 +300,43 @@ class Playlist extends React.Component {
           userId={userId}
           roomType={roomType}
         />
-        <View style={styles.container}>
+        <View>
           <Components.SearchBar
             updateSearchedText={null}
             searchTracks={this.searchTracks}
             autoSearch
           />
-          <Components.TrackListInPlaylist
-            tracks={tracks}
-            updatePlaying={this.updatePlaying}
-            playing={playing}
-            playlistId={playlistId}
-            updateTracks={this.updateTracks}
-            updateMyVotes={this.updateMyVotes}
-            refreshing={refreshing}
-            onRefresh={this._onRefresh}
-            userId={userId}
-            roomType={roomType}
-            myVotes={myVotes}
-            isUserInPlaylist={isUserInPlaylist}
-            editor={editor}
-            pos={pos}
-            onMoveEnd={(data) => {
-              this.setState({ tracks: data.data });
-              moveTrackOrder(playlistId, data.row._id, data.to)
-                .then(() => {
-                  this._onRefresh();
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-            }}
-          />
         </View>
-        { playButton }
+        <View style={styles.section}>
+          <View style={styles.sectionContent}>
+            <Components.TrackListInPlaylist
+              tracks={tracks}
+              updatePlaying={this.updatePlaying}
+              playing={playing}
+              playlistId={playlistId}
+              updateTracks={this.updateTracks}
+              updateMyVotes={this.updateMyVotes}
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
+              userId={userId}
+              roomType={roomType}
+              myVotes={myVotes}
+              isUserInPlaylist={isUserInPlaylist}
+              editor={editor}
+              pos={pos}
+              onMoveEnd={(data) => {
+                this.setState({ tracks: data.data });
+                moveTrackOrder(playlistId, data.row._id, data.to)
+                  .then(() => {
+                    this._onRefresh();
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }}
+            />
+          </View>
+        </View>
         <Components.AddFloatingButton
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
@@ -355,43 +347,37 @@ class Playlist extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'black',
-    color: 'white',
+  main_container: {
+    backgroundColor: Colors.background,
     flex: 1,
   },
-  headerIconWrapper: {
-    marginLeft: 10,
-  },
-  headerContainer: {
-    width: '90%',
+  screenHeaderWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
     flexDirection: 'row',
-    paddingRight: 10,
+    width: '100%',
+    backgroundColor: Colors.darkestGrey,
   },
-  title: {
-    fontSize: 22,
-    marginLeft: 10,
+  screenHeader: {
+    ...Typography.screenHeader,
+  },
+  screenHeaderText: {
+    ...Typography.screenHeaderText,
+  },
+  section: {
+    ...Typography.section,
+  },
+  sectionContent: {
+    ...Typography.sectionContent,
   },
   playerModal: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
   },
-  playButton: {
-    height: 50,
-    width: 180,
-    bottom: 0,
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#1db954',
-    lineHeight: 1,
-    borderRadius: 25,
-    margin: (Dimensions.get('window').width - 180) / 2,
-  },
   playText: {
-    color: 'white',
-    textTransform: 'uppercase',
+    ...Buttons.text,
   },
 });
 

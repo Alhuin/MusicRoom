@@ -4,7 +4,7 @@ import {
 import React from 'react';
 import { Icon } from 'native-base';
 import { addUserToPlaylistAndUnbanned } from '../../../API/BackApi';
-import {Cards, Typography} from "../../styles";
+import { Cards, Typography } from '../../styles';
 
 class BansListInSettings extends React.Component {
   render() {

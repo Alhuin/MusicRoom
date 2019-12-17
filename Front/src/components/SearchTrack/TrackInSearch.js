@@ -3,6 +3,9 @@ import {
   TouchableOpacity, Image, View, Text, StyleSheet, Alert,
 } from 'react-native';
 import { addMusicToPlaylist } from '../../../API/BackApi';
+import {
+  Cards, Colors, Spacing, Typography,
+} from '../../styles';
 
 class TrackInSearch extends React.Component {
   addMusic = () => {
@@ -27,71 +30,59 @@ class TrackInSearch extends React.Component {
     const { track, handlePress } = this.props;
 
     return (
-      <View style={styles.card}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.card}
+      >
         <TouchableOpacity
-          activeOpacity={1}
-          style={styles.main_container}
+          style={styles.previewCover}
+          onPress={() => {
+            handlePress(track.preview);
+          }}
         >
-          <TouchableOpacity
-            style={styles.previewCover}
-            onPress={() => {
-              handlePress(track.preview);
-            }}
-          >
-            <Image
-              style={styles.image}
-              source={{ uri: track.album.cover }}
-            />
-            <Image
-              source={require('../../assets/images/play.png')}
-              style={{ height: 80, width: 80, position: 'absolute' }}
-            />
-          </TouchableOpacity>
-          <View style={styles.content_container}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>{track.title}</Text>
-            </View>
-            <View style={styles.artist_container}>
-              <Text style={styles.artist_name}>
-                {track.artist.name}
-              </Text>
-            </View>
-            <View style={styles.album_container}>
-              <Text style={styles.album_title} numberOfLines={1}>
-                {track.album.title}
-              </Text>
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.addContainer}
-            onPress={this.addMusic}
-          >
-            <Image
-              source={require('../../assets/images/ic_add_circle_outline_white.png')}
-            />
-          </TouchableOpacity>
+          <Image
+            style={styles.image}
+            source={{ uri: track.album.cover }}
+          />
+          <Image
+            source={require('../../assets/images/play.png')}
+            style={{ height: 80, width: 80, position: 'absolute' }}
+          />
         </TouchableOpacity>
-      </View>
+        <View style={styles.content_container}>
+          <View style={styles.title_container}>
+            <Text style={styles.title_text} numberOfLines={2}>{track.title}</Text>
+          </View>
+          <View style={styles.artist_container}>
+            <Text style={styles.artist_name} numberOfLines={1}>
+              {track.artist.name}
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.album_title} numberOfLines={1}>
+              {track.album.title}
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          style={styles.addContainer}
+          onPress={this.addMusic}
+        >
+          <Image
+            source={require('../../assets/images/ic_add_circle_outline_white.png')}
+          />
+        </TouchableOpacity>
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
   card: {
-    padding: 5,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 120,
-  },
-  main_container: {
-    height: 110,
+    ...Cards.card,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#404040',
-    borderRadius: 20,
-    overflow: 'hidden',
+    padding: Spacing.small,
+    paddingVertical: Spacing.smallest,
   },
   previewCover: {
     justifyContent: 'center',
@@ -100,39 +91,31 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
-    marginLeft: 10,
   },
   content_container: {
     flexDirection: 'column',
     flex: 3,
-    paddingLeft: 10,
-    margin: 5,
+    margin: Spacing.smallest,
     justifyContent: 'center',
   },
   title_container: {
-    flex: 2,
     flexDirection: 'row',
   },
   title_text: {
     flexWrap: 'wrap',
-    fontSize: 20,
+    fontSize: Typography.largeFontSize,
     fontWeight: 'bold',
-    paddingRight: 5,
-    color: 'white',
+    color: Colors.baseText,
   },
   artist_container: {
-    flex: 1,
-    color: 'white',
+    color: Colors.baseText,
   },
   artist_name: {
-    color: 'white',
-  },
-  album_container: {
-    flex: 1,
+    color: Colors.baseText,
   },
   album_title: {
     fontStyle: 'italic',
-    color: 'white',
+    color: Colors.baseText,
   },
   addContainer: {
     flex: 2,

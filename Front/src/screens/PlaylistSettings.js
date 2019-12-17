@@ -633,6 +633,7 @@ class PlaylistSettings extends React.Component {
                         {`Longitude : ${loc.coords.longitude}`}
                       </Text>
                       <TouchableOpacity
+                        activeOpacity={0.7}
                         onPress={() => {
                           this.setLocation();
                         }}
@@ -656,6 +657,7 @@ class PlaylistSettings extends React.Component {
                         {String(startDate)}
                       </Text>
                       <TouchableOpacity
+                        activeOpacity={0.7}
                         onPress={() => {
                           this.setDatePickerModalVisible('start');
                         }}
@@ -679,6 +681,7 @@ class PlaylistSettings extends React.Component {
                         {String(endDate)}
                       </Text>
                       <TouchableOpacity
+                        activeOpacity={0.7}
                         onPress={() => {
                           this.setDatePickerModalVisible('end');
                         }}
@@ -992,6 +995,7 @@ class PlaylistSettings extends React.Component {
           <View style={styles.section}>
             <View style={styles.sectionContentCenterAligned}>
               <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={() => {
                   this.leavingPlaylist();
                 }}
@@ -1006,6 +1010,7 @@ class PlaylistSettings extends React.Component {
           <View style={styles.section}>
             <View style={styles.sectionContentCenterAligned}>
               <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={this.onDeletePlaylistTouchable}
                 style={Buttons.largeButton}
               >
@@ -1176,6 +1181,7 @@ class PlaylistSettings extends React.Component {
             <View style={styles.section}>
               <View style={styles.sectionContent}>
                 <TouchableOpacity
+                  activeOpacity={0.7}
                   onPress={() => {
                     this.leavingPlaylist();
                   }}

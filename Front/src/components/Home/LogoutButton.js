@@ -3,7 +3,7 @@ import {
   View, SafeAreaView, TouchableOpacity, Text, StyleSheet,
 } from 'react-native';
 import { DrawerItems } from 'react-navigation';
-import { Buttons, Typography, Colors } from '../../styles';
+import { Buttons, Colors } from '../../styles';
 
 export default class LogoutButton extends React.Component {
   _logout = () => {
@@ -23,6 +23,7 @@ export default class LogoutButton extends React.Component {
           <DrawerItems {...drawerProps} />
           <View style={styles.buttonWrapper}>
             <TouchableOpacity
+              activeOpacity={0.7}
               onPress={() => {
                 this._logout();
               }}
@@ -43,6 +44,8 @@ const styles = StyleSheet.create({
   drawer: {
     backgroundColor: Colors.background,
     height: '100%',
+    borderRightColor: Colors.lightGreen,
+    borderRightWidth: 3,
   },
   buttonWrapper: {
     alignItems: 'center',

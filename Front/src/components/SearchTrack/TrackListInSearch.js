@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import TrackInSearch from '../../containers/TrackInSearch';
 import Player from '../../services/Player';
+import { Spacing } from '../../styles';
 
 class TrackListInSearch extends React.Component {
   handlePress = (preview) => {
@@ -52,6 +53,7 @@ class TrackListInSearch extends React.Component {
         //   this._loadTracks();
         // }
         // }
+        contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
       />
     );
   }

@@ -47,6 +47,7 @@ export default class DatePickerModal extends React.Component {
             onDateChange={Date => this.setState({ date: Date })}
           />
           <TouchableOpacity
+            activeOpacity={0.7}
             onPress={() => {
               onDateChanged(date);
               setModalVisible();

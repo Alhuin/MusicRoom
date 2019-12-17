@@ -4,13 +4,15 @@ import {
   StyleSheet,
   Text,
   Image,
+  Dimensions,
 } from 'react-native';
-
+import { Buttons } from '../styles';
 
 export default class AddFloatingButton extends React.Component {
   render() {
     const { icon, handlePress } = this.props;
     let image = '';
+    const { height } = Dimensions.get('window');
     if (icon === 'addPlaylist') {
       image = (
         <Image
@@ -36,7 +38,11 @@ export default class AddFloatingButton extends React.Component {
       image = <Text style={styles.fabIcon}>+</Text>;
     }
     return (
-      <TouchableOpacity onPress={handlePress} style={[styles.fab, { bottom: icon === 'addMusic' ? 150 : 70 }]}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={handlePress}
+        style={[styles.fab, { bottom: icon === 'addMusic' ? 150 : 70 }]}
+      >
         {image}
       </TouchableOpacity>
     );
@@ -45,21 +51,11 @@ export default class AddFloatingButton extends React.Component {
 
 const styles = StyleSheet.create({
   fab: {
+    ...Buttons.fab,
     position: 'absolute',
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
     right: 20,
-    // bottom: this.props.icon === 'addMusic' ? 150 : 70,
-    backgroundColor: '#03A9F4',
-    borderRadius: 30,
-    // elevation: 8,
   },
   fabIcon: {
-    transform: [{ translateX: +2 }],
-    height: 30,
-    width: 30,
-    color: 'white',
+    ...Buttons.fabIcon,
   },
 });
