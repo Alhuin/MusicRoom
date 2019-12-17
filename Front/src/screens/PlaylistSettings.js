@@ -41,7 +41,10 @@ class PlaylistSettings extends React.Component {
       collapsed: true,
       collapsedSpec: true,
       collapsedTags: true,
-      collapsedAddFriendToPlaylist: true,
+      collapsedFriends: true,
+      collapsedUsers: true,
+      collapsedAdmins: true,
+      collapsedBans: true,
       datePickerModalVisible: false,
       startDate: new Date(),
       endDate: new Date(Date.now() + 1000),
@@ -423,8 +426,23 @@ class PlaylistSettings extends React.Component {
   };
 
   toggleExpandedAddFriendToPlaylist = () => {
-    const { collapsedAddFriendToPlaylist } = this.state;
-    this.setState({ collapsedAddFriendToPlaylist: !collapsedAddFriendToPlaylist });
+    const { collapsedFriends } = this.state;
+    this.setState({ collapsedFriends: !collapsedFriends });
+  };
+
+  toggleExpandedUsers = () => {
+    const { collapsedUsers } = this.state;
+    this.setState({ collapsedUsers: !collapsedUsers });
+  };
+
+  toggleExpandedAdmins = () => {
+    const { collapsedAdmins } = this.state;
+    this.setState({ collapsedAdmins: !collapsedAdmins });
+  };
+
+  toggleExpandedBans = () => {
+    const { collapsedBans } = this.state;
+    this.setState({ collapsedBans: !collapsedBans });
   };
 
   setDatePickerModalVisible = (dateType) => {
@@ -545,9 +563,9 @@ class PlaylistSettings extends React.Component {
   render() {
     const {
       users, admins, bans, switchValue, loading, privateId, delegatedPlayerAdmin,
-      collapsed, collapsedSpec, collapsedTags, collapsedAddFriendToPlaylist,
-      startDate, endDate, initialDate, datePickerModalVisible, tags, radioValue,
-      deletePlaylistState, isUser, friends, location,
+      collapsed, collapsedSpec, collapsedTags, collapsedFriends, collapsedUsers,
+      collapsedAdmins, collapsedBans, startDate, endDate, initialDate, datePickerModalVisible,
+      tags, radioValue, deletePlaylistState, isUser, friends, location,
     } = this.state;
     const loc = location;
     if (Object.keys(location).length === 0) {
@@ -568,12 +586,20 @@ class PlaylistSettings extends React.Component {
     let collapsibleIcon = (null);
     let collapsibleIconSpec = (null);
     let collapsibleIconTags = (null);
-    let collapsibleIconAddFriendToPlaylist = (null);
+    let collapsibleIconFriends = (null);
+    let collapsibleIconUsers = (null);
+    let collapsibleIconAdmins = (null);
+    let collapsibleIconBans = (null);
     let specificRoomSettings = (null);
-    if (collapsedAddFriendToPlaylist) {
-      collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-up" style={styles.icon} />);
+    if (collapsedFriends) {
+      collapsibleIconFriends = (<Icon name="ios-arrow-up" style={styles.icon} />);
     } else {
-      collapsibleIconAddFriendToPlaylist = (<Icon name="ios-arrow-down" style={styles.icon} />);
+      collapsibleIconFriends = (<Icon name="ios-arrow-down" style={styles.icon} />);
+    }
+    if (collapsedUsers) {
+      collapsibleIconUsers = (<Icon name="ios-arrow-up" style={styles.icon} />);
+    } else {
+      collapsibleIconUsers = (<Icon name="ios-arrow-down" style={styles.icon} />);
     }
     if (isAdmin) {
       if (collapsed) {
@@ -591,7 +617,16 @@ class PlaylistSettings extends React.Component {
       } else {
         collapsibleIconTags = (<Icon name="ios-arrow-down" style={styles.icon} />);
       }
-
+      if (collapsedAdmins) {
+        collapsibleIconAdmins = (<Icon name="ios-arrow-up" style={styles.icon} />);
+      } else {
+        collapsibleIconAdmins = (<Icon name="ios-arrow-down" style={styles.icon} />);
+      }
+      if (collapsedBans) {
+        collapsibleIconBans = (<Icon name="ios-arrow-up" style={styles.icon} />);
+      } else {
+        collapsibleIconBans = (<Icon name="ios-arrow-down" style={styles.icon} />);
+      }
       if (roomType === 'party') {
         radioProps = [
           { label: 'Tout le monde', value: 0 },
@@ -904,67 +939,82 @@ class PlaylistSettings extends React.Component {
           </View>
           <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>
-                Droits Administrateurs
-              </Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <AdminListInSettings
-                loggedUser={loggedUser}
-                displayLoader={this.displayLoader}
-                admins={admins}
-                onRefresh={this._onRefresh}
-                authorId={authorId}
-                playlistId={playlistId}
-                isLoading={this.isLoading}
-                roomType={roomType}
-                parent={this}
-                delegatedPlayerAdmin={delegatedPlayerAdmin}
-                navigation={navigation}
-              />
-            </View>
+            <TouchableOpacity onPress={this.toggleExpandedAdmins}>
+              <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                <Text style={styles.sectionHeaderText}>
+                  Droits Administrateurs
+                </Text>
+                {collapsibleIconAdmins}
+              </View>
+            </TouchableOpacity>
+            <Collapsible collapsed={collapsedAdmins} align="center">
+              <View style={styles.sectionContent}>
+                <AdminListInSettings
+                  loggedUser={loggedUser}
+                  displayLoader={this.displayLoader}
+                  admins={admins}
+                  onRefresh={this._onRefresh}
+                  authorId={authorId}
+                  playlistId={playlistId}
+                  isLoading={this.isLoading}
+                  roomType={roomType}
+                  parent={this}
+                  delegatedPlayerAdmin={delegatedPlayerAdmin}
+                  navigation={navigation}
+                />
+              </View>
+            </Collapsible>
           </View>
           <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>
-                Utilisateurs
-              </Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <UserListInSettings
-                loggedUser={loggedUser}
-                displayLoader={this.displayLoader}
-                users={users}
-                onRefresh={this._onRefresh}
-                playlistId={playlistId}
-                isLoading={this.isLoading}
-                roomType={roomType}
-                parent={this}
-                isAdmin={isAdmin}
-                userChanged={userChanged}
-                navigation={navigation}
-              />
-            </View>
+            <TouchableOpacity onPress={this.toggleExpandedUsers}>
+              <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                <Text style={styles.sectionHeaderText}>
+                  Utilisateurs
+                </Text>
+                {collapsibleIconUsers}
+              </View>
+            </TouchableOpacity>
+            <Collapsible collapsed={collapsedUsers} align="center">
+              <View style={styles.sectionContent}>
+                <UserListInSettings
+                  loggedUser={loggedUser}
+                  displayLoader={this.displayLoader}
+                  users={users}
+                  onRefresh={this._onRefresh}
+                  playlistId={playlistId}
+                  isLoading={this.isLoading}
+                  roomType={roomType}
+                  parent={this}
+                  isAdmin={isAdmin}
+                  userChanged={userChanged}
+                  navigation={navigation}
+                />
+              </View>
+            </Collapsible>
           </View>
           <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>
-                Bannis
-              </Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <BansListInSettings
-                displayLoader={this.displayLoader}
-                bans={bans}
-                onRefresh={this._onRefresh}
-                playlistId={playlistId}
-                isLoading={this.isLoading}
-                navigation={navigation}
-              />
-            </View>
+            <TouchableOpacity onPress={this.toggleExpandedBans}>
+              <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                <Text style={styles.sectionHeaderText}>
+                  Bannis
+                </Text>
+                {collapsibleIconBans}
+              </View>
+            </TouchableOpacity>
+            <Collapsible collapsed={collapsedBans} align="center">
+              <View style={styles.sectionContent}>
+                <BansListInSettings
+                  displayLoader={this.displayLoader}
+                  bans={bans}
+                  onRefresh={this._onRefresh}
+                  playlistId={playlistId}
+                  isLoading={this.isLoading}
+                  navigation={navigation}
+                />
+              </View>
+            </Collapsible>
           </View>
           <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
@@ -973,11 +1023,11 @@ class PlaylistSettings extends React.Component {
                 <Text style={styles.sectionHeaderText}>
                   Ajouter un ami à la playlist
                 </Text>
-                {collapsibleIconAddFriendToPlaylist}
+                {collapsibleIconFriends}
               </View>
             </TouchableOpacity>
             <View style={styles.sectionContent}>
-              <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
+              <Collapsible collapsed={collapsedFriends} align="center">
                 <FriendsInSettings
                   friends={friends}
                   users={users}
@@ -1131,26 +1181,31 @@ class PlaylistSettings extends React.Component {
             </View>
             <View style={Typography.sectionSeparator} />
             <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionHeaderText}>
-                  Utilisateurs
-                </Text>
-              </View>
-              <View style={styles.sectionContent}>
-                <UserListInSettings
-                  loggedUser={loggedUser}
-                  displayLoader={this.displayLoader}
-                  users={users}
-                  onRefresh={this._onRefresh}
-                  playlistId={playlistId}
-                  isLoading={this.isLoading}
-                  roomType={roomType}
-                  parent={this}
-                  isAdmin={isAdmin}
-                  userChanged={userChanged}
-                  navigation={navigation}
-                />
-              </View>
+              <TouchableOpacity onPress={this.toggleExpandedUsers}>
+                <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
+                  <Text style={styles.sectionHeaderText}>
+                    Utilisateurs
+                  </Text>
+                  {collapsibleIconUsers}
+                </View>
+              </TouchableOpacity>
+              <Collapsible collapsed={collapsedBans} align="center">
+                <View style={styles.sectionContent}>
+                  <UserListInSettings
+                    loggedUser={loggedUser}
+                    displayLoader={this.displayLoader}
+                    users={users}
+                    onRefresh={this._onRefresh}
+                    playlistId={playlistId}
+                    isLoading={this.isLoading}
+                    roomType={roomType}
+                    parent={this}
+                    isAdmin={isAdmin}
+                    userChanged={userChanged}
+                    navigation={navigation}
+                  />
+                </View>
+              </Collapsible>
             </View>
             <View style={Typography.sectionSeparator} />
             <View style={styles.section}>
@@ -1159,11 +1214,11 @@ class PlaylistSettings extends React.Component {
                   <Text style={styles.sectionHeaderText}>
                     Ajouter un ami à la playlist
                   </Text>
-                  {collapsibleIconAddFriendToPlaylist}
+                  {collapsibleIconFriends}
                 </View>
               </TouchableOpacity>
               <View style={styles.sectionContent}>
-                <Collapsible collapsed={collapsedAddFriendToPlaylist} align="center">
+                <Collapsible collapsed={collapsedFriends} align="center">
                   <FriendsInSettings
                     friends={friends}
                     users={users}

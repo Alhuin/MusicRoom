@@ -1,14 +1,3 @@
-/* export const background1 = '#000000';
-export const background2 = '#404040';
-export const background3 = '#666666';
-export const background4 = '#CCCCCC';
-export const lightGreen = '#1db954';
-export const lightBlue = '#03A9F4';
-export const lightGrey = '#F5FCFF';
-export const lightFont = 'rgb(255,255,255)';
-export const darkFont = 'rgb(0,0,0)'; */
-
-
 export const black = '#090909';
 export const darkestGrey = '#29292c';
 export const darkGrey = '#4d4e54';
