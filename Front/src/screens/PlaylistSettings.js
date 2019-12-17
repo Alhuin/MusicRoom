@@ -779,7 +779,7 @@ class PlaylistSettings extends React.Component {
             <View style={styles.sectionContent}>
               <TextInput
                 selectable
-                style={styles.bodyText}
+                style={[Typography.textInput, { maxWidth: 200 }]}
                 placeholder="Nom de la playlist"
                 onEndEditing={(e: any) => {
                   this.setName(e.nativeEvent.text);
@@ -795,7 +795,7 @@ class PlaylistSettings extends React.Component {
                 Code privé
               </Text>
             </View>
-            <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+            <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
               <Text
                 selectable
                 style={styles.bodyText}
@@ -819,7 +819,7 @@ class PlaylistSettings extends React.Component {
                 Visibilité
               </Text>
             </View>
-            <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+            <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
               <Text style={styles.bodyText}>
                 Publique
               </Text>
@@ -944,27 +944,27 @@ class PlaylistSettings extends React.Component {
             </TouchableOpacity>
             <View style={styles.sectionContent}>
               <Collapsible collapsed={collapsed} align="center">
-                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="md-school" style={styles.icon} />
                   <Text style={styles.bodyText}> Auteur </Text>
                 </View>
-                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="musical-notes" style={styles.icon} />
                   <Text style={styles.bodyText}> Délégué au Contrôle du Player</Text>
                 </View>
-                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="arrow-down" style={styles.icon} />
                   <Text style={styles.bodyText}> Admin. vers Utilisateur </Text>
                 </View>
-                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="arrow-up" style={styles.icon} />
                   <Text style={styles.bodyText}> Promotion Utilisateur vers Admin. | Unban</Text>
                 </View>
-                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="md-walk" style={styles.icon} />
                   <Text style={styles.bodyText}> Kick </Text>
                 </View>
-                <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+                <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="md-trash" style={styles.icon} />
                   <Text style={styles.bodyText}> Bannissement </Text>
                 </View>
@@ -1196,7 +1196,7 @@ class PlaylistSettings extends React.Component {
                   Code privé
                 </Text>
               </View>
-              <View style={[styles.sectionContentRow, { justifyContent: 'space-between' }]}>
+              <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                 <Text
                   selectable
                   style={styles.bodyText}
