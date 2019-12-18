@@ -21,11 +21,12 @@ export default class SocialLogin extends Component {
     console.log(`asyncType = ${await AsyncStorage.getItem('type')}`);
     if (type === 'Sign Up' && await AsyncStorage.getItem('type') === null) {
       GoogleSignin.configure({
-        webClientId: '1032045608110-eg84lup5g4mpdthvjjl2htmat7g3r1gl.apps.googleusercontent.com',
+        webClientId: '1032045608110-fk8aiqduat8c6oiltm1uneqbuqhumfsn.apps.googleusercontent.com',
       });
       try {
         await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
         const userInfo = await GoogleSignin.signIn();
+        console.log(userInfo);
         addUser(userInfo.user.familyName, userInfo.idToken,
           userInfo.user.givenName, userInfo.user.familyName, userInfo.user.email)
           .then(await AsyncStorage.setItem('userName', userInfo.user.familyName),

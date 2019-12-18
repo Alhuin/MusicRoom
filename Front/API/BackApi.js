@@ -92,6 +92,7 @@ function addUser(userName, password, name, familyName, email) {
     })
       .then(async (response) => {
         const data = await response.json();
+        console.log(response);
         if (response.status === 200) {
           resolve(data);
         } else {
