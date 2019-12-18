@@ -1,17 +1,10 @@
 import React from 'react';
 import {
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Switch,
-  Button,
-  Alert,
+  Modal, StyleSheet, Text, View, TextInput, Switch, Button, Alert, TouchableOpacity,
 } from 'react-native';
 import { addPlaylist } from '../../../API/BackApi';
 import DatePickerModal from './DatePickerModal';
-
+import { Colors, Buttons, Typography } from '../../styles';
 
 export default class AddPlaylistModal extends React.Component {
   state = {
@@ -34,10 +27,6 @@ export default class AddPlaylistModal extends React.Component {
     }
   };
 
-  /* onEndDateChanged = (changedText) => {
-    console.log('This is the changed text: ', changedText);
-  } */
-
   _updatePlaylistName = (text) => {
     this.setState({ namePlaylist: text });
   };
@@ -53,13 +42,10 @@ export default class AddPlaylistModal extends React.Component {
   };
 
   toggleSwitch = (value) => {
-    // onValueChange of the switch this function will be called
-    // Navigator sort d'ou ?
     const { type } = this.state;
     // eslint-disable-next-line no-undef
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        // const MyLocation = JSON.stringify(position);
         this.setState({ location: position });
       },
       error => Alert.alert(
@@ -80,6 +66,35 @@ export default class AddPlaylistModal extends React.Component {
     return randomNumber;
   };
 
+  onPressed = () => {
+    const {
+      setModalVisible, userId, roomType, updatePlaylist, loggedUser, socket,
+    } = this.props;
+    const {
+      switchValue, startDate, endDate, location, namePlaylist,
+    } = this.state;
+    if (startDate < endDate && namePlaylist) {
+      addPlaylist(namePlaylist, switchValue, userId, userId, loggedUser.name,
+        userId, roomType, startDate, endDate, location, this.generatePrivateId())
+        .then(() => {
+          if (roomType === 'party') {
+            socket.emit('addParty');
+          } else {
+            socket.emit('addRadio');
+          }
+          setModalVisible();
+          updatePlaylist();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else if (startDate >= endDate) {
+      Alert.alert('Veuillez choisir deux dates compatibles.');
+    } else if (!namePlaylist) {
+      Alert.alert('Veuillez choisir un nom pour votre playlist.');
+    }
+  };
+
   generatePrivateId() {
     let i = 0;
     let MyId = '';
@@ -92,73 +107,79 @@ export default class AddPlaylistModal extends React.Component {
 
   render() {
     const {
-      setModalVisible,
-      modalVisible,
-      userId,
-      roomType,
-      updatePlaylist,
-      loggedUser,
-      socket,
+      setModalVisible, modalVisible, updatePlaylist, roomType,
     } = this.props;
     const {
-      switchValue, type, startDate, endDate, location, namePlaylist, datePickerModalVisible,
+      switchValue, type, startDate, endDate, datePickerModalVisible,
     } = this.state;
+    let roomCapitalized = 'Party';
+    if (roomType === 'radio') {
+      roomCapitalized = 'Radio';
+    }
     let dateP = (null);
     let datePTwo = (null);
     if (type === 'GeolocOK') {
       dateP = (
-        <View
-          style={{ alignItems: 'center' }}
-        >
-          <View>
-            <Text>
-              Date de début :
-            </Text>
-            <Text>
-              {String(startDate)}
-            </Text>
+        <View>
+          <View style={Typography.section}>
+            <View style={Typography.sectionHeader}>
+              <Text style={Typography.sectionHeaderText}>
+                Début de l&apos;événement
+              </Text>
+            </View>
+            <View style={[Typography.sectionContent, { alignItems: 'center' }]}>
+              <Text style={Typography.bodyText}>
+                {String(startDate)}
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  this.setModalVisible('start');
+                }}
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                  Modifier
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View
-            style={{ width: '40%' }}
-          >
-            <Button
-              title="Date de début"
-              onPress={() => {
-                this.setModalVisible('start');
-              }}
-            />
-          </View>
+          <View style={Typography.sectionSeparator} />
         </View>
       );
       datePTwo = (
-        <View
-          style={{ alignItems: 'center' }}
-        >
-          <View>
-            <Text>
-              Date de fin :
-            </Text>
-            <Text>
-              {String(endDate)}
-            </Text>
+        <View>
+          <View style={Typography.section}>
+            <View style={Typography.sectionHeader}>
+              <Text style={Typography.sectionHeaderText}>
+                Fin de l&apos;événement
+              </Text>
+            </View>
+            <View style={[Typography.sectionContent, { alignItems: 'center' }]}>
+              <Text style={Typography.bodyText}>
+                {String(endDate)}
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  this.setModalVisible('end');
+                }}
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                  Modifier
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View
-            style={{ width: '30%' }}
-          >
-            <Button
-              title="Date de fin"
-              onPress={() => {
-                this.setModalVisible('end');
-              }}
-            />
-          </View>
+          <View style={Typography.sectionSeparator} />
         </View>
       );
     }
 
     return (
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
@@ -172,62 +193,71 @@ export default class AddPlaylistModal extends React.Component {
             DateModalVisible={datePickerModalVisible}
             onDateChanged={this.onDateChanged}
           />
-          <View style={styles.Name}>
-            <TextInput
-              onChangeText={this._updatePlaylistName}
-              autoCorrect={false}
-              autoCapitalize="none"
-              underlineColorAndroid="grey"
-              style={styles.inputBox}
-              placeholder="Nom"
-            />
-            <Text>{switchValue ? 'Publique' : 'Privée'}</Text>
-            <Switch
-              style={styles.switch}
-              onValueChange={this.toggleSwitch}
-              value={switchValue}
-            />
-            <Text>
-              {' '}
-              { switchValue ? 'La géolocalisation est activée pour les Parties' : '' }
+          <View style={Typography.screenHeader}>
+            <Text style={Typography.screenHeaderText}>
+              Créer une playlist
             </Text>
-            {dateP}
-            {datePTwo}
-            <Button
-              style={styles.create}
-              title="Créer la playlist"
-              onPress={() => {
-                /* console.log(this.generatePrivateId());
-                console.log(this.state.startDate);
-                console.log(this.state.endDate);
-                console.log(this.state.switchValue);
-                console.log(this.state.namePlaylist);
-                console.log(this.state.location);
-                // BESOIN D'ADAPTER L'ENVOIE A BACKAPI JUSTE EN
-                // DESDOUS ET DE RECUP SUR LES MODAL LES DATE
-*/
-                if (startDate < endDate && namePlaylist) {
-                  addPlaylist(namePlaylist, switchValue, userId, userId, loggedUser.name,
-                    userId, roomType, startDate, endDate, location, this.generatePrivateId())
-                    .then(() => {
-                      if (roomType === 'party') {
-                        socket.emit('addParty');
-                      } else {
-                        socket.emit('addRadio');
-                      }
-                      setModalVisible();
-                      updatePlaylist();
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                    });
-                } else if (startDate >= endDate) {
-                  Alert.alert('Veuillez choisir deux dates compatibles.');
-                } else if (!namePlaylist) {
-                  Alert.alert('Veuillez choisir un nom pour votre playlist.');
-                }
-              }}
-            />
+          </View>
+          <View styles={Typography.section}>
+            <View style={[Typography.sectionContent, { alignItems: 'center' }]}>
+              <Text style={Typography.bodyText}>
+                La playlist sera une
+                {' '}
+                {roomCapitalized}
+              </Text>
+            </View>
+          </View>
+          <View styles={Typography.section}>
+            <View style={Typography.sectionHeader}>
+              <Text style={Typography.sectionHeaderText}>
+                Nom de la playlist
+              </Text>
+            </View>
+            <View style={Typography.sectionContent}>
+              <TextInput
+                onChangeText={this._updatePlaylistName}
+                style={styles.textInput}
+                placeholder="Écrire ici"
+                placeholderTextColor={Colors.placeholder}
+              />
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={Typography.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                Visibilité
+              </Text>
+            </View>
+            <View style={[Typography.sectionContent, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
+              <Text style={Typography.bodyText}>
+                Publique
+              </Text>
+              <Switch
+                style={styles.switch}
+                onValueChange={this.toggleSwitch}
+                value={switchValue}
+                thumbColor={Colors.button}
+              />
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          {dateP}
+          {datePTwo}
+          <View styles={Typography.section}>
+            <View style={[Typography.sectionContent, { alignItems: 'center' }]}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  this.onPressed();
+                }}
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                  Créer
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -237,19 +267,14 @@ export default class AddPlaylistModal extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    alignItems: 'center',
     flex: 1,
-  },
-  Name: {
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    height: '40%',
+    backgroundColor: Colors.background,
   },
   switch: {
     alignItems: 'center',
     justifyContent: 'space-around',
+  },
+  textInput: {
+    ...Typography.textInput,
   },
 });

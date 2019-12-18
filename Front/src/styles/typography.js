@@ -128,4 +128,5 @@ export const textInput = {
   borderColor: Colors.lightGreen,
   margin: Spacing.small,
   color: Colors.baseText,
+  padding: 0,
 };

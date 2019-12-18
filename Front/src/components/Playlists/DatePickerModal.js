@@ -3,7 +3,7 @@ import {
   Modal, StyleSheet, TouchableOpacity, Text, View,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-
+import { Colors, Buttons } from '../../styles';
 
 export default class DatePickerModal extends React.Component {
   state = {
@@ -39,12 +39,12 @@ export default class DatePickerModal extends React.Component {
           setModalVisible();
         }}
       >
-        <View
-          style={styles.Date}
-        >
+        <View style={styles.Date}>
           <DatePicker
             date={usedDate}
             onDateChange={Date => this.setState({ date: Date })}
+            textColor={Colors.baseText}
+            fadeToColor="none"
           />
           <TouchableOpacity
             activeOpacity={0.7}
@@ -52,8 +52,9 @@ export default class DatePickerModal extends React.Component {
               onDateChanged(date);
               setModalVisible();
             }}
+            style={Buttons.largeButton}
           >
-            <Text style={styles.hide}>Confirmer</Text>
+            <Text style={Buttons.text}>Confirmer</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -64,12 +65,9 @@ export default class DatePickerModal extends React.Component {
 const styles = StyleSheet.create({
   Date: {
     flex: 1,
+    backgroundColor: Colors.background,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-  },
-  hide: {
-    fontSize: 22,
-    marginTop: '5%',
   },
 });

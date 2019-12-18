@@ -7,8 +7,7 @@ import {
   adminInPlaylistDowngrade, banUserInPlaylist, deleteUserInPlaylist, setDelegatedPlayerAdmin,
 } from '../../../API/BackApi';
 import NavigationUtils from '../../navigation/NavigationUtils';
-import {Cards, Colors, Typography} from '../../styles';
-
+import { Cards, Typography } from '../../styles';
 
 class AdminListInSettings extends React.Component {
   _pressSetDelegatedPlayerAdmin = (userId, playlistId, onRefresh, isLoading, displayLoader) => {
@@ -119,18 +118,14 @@ class AdminListInSettings extends React.Component {
             let authorIcon = (null);
             if (String(authorId) === String(item._id)) {
               authorIcon = (
-                <View
-                  style={styles.iconWrapper}
-                >
+                <View style={styles.iconWrapper}>
                   <Icon name="md-school" style={styles.iconDisabled} />
                 </View>
               );
             }
             if (String(userId) === String(delegatedPlayerAdmin)) {
               playerUserIcon = (
-                <View
-                  style={styles.iconWrapper}
-                >
+                <View style={styles.iconWrapper}>
                   <Icon name="musical-notes" style={styles.iconDisabled} />
                 </View>
               );
@@ -199,9 +194,7 @@ class AdminListInSettings extends React.Component {
                       }
                     }}
                   >
-                    <Text
-                      style={Cards.cardHeaderText}
-                    >
+                    <Text style={Cards.cardHeaderText}>
                       {item.name}
                     </Text>
                   </TouchableOpacity>
