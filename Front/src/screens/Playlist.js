@@ -255,7 +255,6 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
-    console.log(name);
     const playButton = (
       (!playlistLaunched && tracks.length > 0 && admin) && (
         <TouchableOpacity

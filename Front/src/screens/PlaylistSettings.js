@@ -28,6 +28,8 @@ import {
 
 
 class PlaylistSettings extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     const { navigation } = this.props;
@@ -64,7 +66,12 @@ class PlaylistSettings extends React.Component {
 
 
   componentDidMount(): void {
+    this._isMounted = true;
     this._onRefresh();
+  }
+
+  componentWillUnmount(): void {
+    this._isMounted = false;
   }
 
   _updateState = (playlistId) => {
@@ -73,7 +80,9 @@ class PlaylistSettings extends React.Component {
       .then((privateId) => {
         getDelegatedPlayerAdmin(playlistId)
           .then((delegatedPlayerAdmin) => {
-            this.setState({ privateId, delegatedPlayerAdmin });
+            if (this._isMounted) {
+              this.setState({ privateId, delegatedPlayerAdmin });
+            }
             this.getEditRestriction(playlistId);
             this.getPublicity(playlistId);
             this.getLocation(playlistId);
@@ -88,7 +97,9 @@ class PlaylistSettings extends React.Component {
                         getFriends(loggedUser._id)
                           .then((friends) => {
                             const newFriends = this.sliceFriends(friends);
-                            this.setState({ friends: newFriends });
+                            if (this._isMounted) {
+                              this.setState({ friends: newFriends });
+                            }
                             this.hideLoader();
                           })
                           .catch((error) => {
@@ -117,12 +128,14 @@ class PlaylistSettings extends React.Component {
   };
 
   displayLoader = () => {
-    this.setState({ loading: true });
+    if (this._isMounted) {
+      this.setState({ loading: true });
+    }
   };
 
   hideLoader = () => {
     const { loading } = this.state;
-    if (loading) this.setState({ loading: false });
+    if (loading && this._isMounted) this.setState({ loading: false });
   };
 
   toggleSwitch = (value) => {
@@ -133,7 +146,9 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       setPublicityOfPlaylist(playlistId, value)
         .then(() => {
-          this.setState({ switchValue: value });
+          if (this._isMounted) {
+            this.setState({ switchValue: value });
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -169,7 +184,9 @@ class PlaylistSettings extends React.Component {
   getPublicity = (playlistId) => {
     getPublicityOfPlaylistById(playlistId)
       .then((val) => {
-        this.setState({ switchValue: val });
+        if (this._isMounted) {
+          this.setState({ switchValue: val });
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -179,7 +196,9 @@ class PlaylistSettings extends React.Component {
   getTags = (playlistId) => {
     getTags(playlistId)
       .then((data) => {
-        this.setState({ tags: data });
+        if (this._isMounted) {
+          this.setState({ tags: data });
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -189,7 +208,7 @@ class PlaylistSettings extends React.Component {
   getEditRestriction = (playlistId) => {
     getEditRestriction(playlistId)
       .then((data) => {
-        if (this.radioForm) {
+        if (this.radioForm && this._isMounted) {
           if (data === 'ALL') {
             this.radioForm.updateIsActiveIndex(0);
             this.setState({ radioValue: 0 });
@@ -216,10 +235,12 @@ class PlaylistSettings extends React.Component {
     if (roomType === 'party') {
       getPlaylistDates(playlistId)
         .then((dates) => {
-          this.setState({
-            startDate: new Date(Date.parse(dates[0])),
-            endDate: new Date(Date.parse(dates[1])),
-          });
+          if (this._isMounted) {
+            this.setState({
+              startDate: new Date(Date.parse(dates[0])),
+              endDate: new Date(Date.parse(dates[1])),
+            });
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -233,7 +254,9 @@ class PlaylistSettings extends React.Component {
     if (roomType === 'party') {
       getPlaylistLocation(playlistId)
         .then((location) => {
-          this.setState({ location });
+          if (this._isMounted) {
+            this.setState({ location });
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -252,7 +275,9 @@ class PlaylistSettings extends React.Component {
           setPlaylistLocation(playlistId, location, loggedUser._id)
             .then((newLoc) => {
               socket.emit('parameterChanged', playlistId);
-              this.setState({ location: newLoc });
+              if (this._isMounted) {
+                this.setState({ location: newLoc });
+              }
             })
             .catch((error) => {
               console.error(error);
@@ -283,11 +308,15 @@ class PlaylistSettings extends React.Component {
             this.hideLoader();
             getPlaylistPrivateId(playlistId)
               .then((privateId) => {
-                this.setState({ privateId });
+                if (this._isMounted) {
+                  this.setState({ privateId });
+                }
                 getFriends(loggedUser._id)
                   .then((friends) => {
                     const newFriends = this.sliceFriends(friends);
-                    this.setState({ friends: newFriends });
+                    if (this._isMounted) {
+                      this.setState({ friends: newFriends });
+                    }
                   })
                   .catch((error) => {
                     console.error(error);
@@ -350,7 +379,9 @@ class PlaylistSettings extends React.Component {
               }
             }
           }
-          this.setState({ admins: response, users });
+          if (this._isMounted) {
+            this.setState({ admins: response, users });
+          }
           resolve();
         })
         .catch((error) => {
@@ -383,7 +414,9 @@ class PlaylistSettings extends React.Component {
             isUser = true;
           }
         }
-        this.setState({ users: response, isUser });
+        if (this._isMounted) {
+          this.setState({ users: response, isUser });
+        }
         resolve();
       })
       .catch((error) => {
@@ -399,7 +432,9 @@ class PlaylistSettings extends React.Component {
     if (isAdmin) {
       getBansByPlaylistId(playlistId)
         .then((response) => {
-          this.setState({ bans: response });
+          if (this._isMounted) {
+            this.setState({ bans: response });
+          }
           resolve();
         })
         .catch((error) => {
@@ -453,12 +488,12 @@ class PlaylistSettings extends React.Component {
     const { datePickerModalVisible, startDate, endDate } = this.state;
     const visible = !datePickerModalVisible;
     if (dateType !== undefined) {
-      if (dateType === 'start') {
+      if (dateType === 'start' && this._isMounted) {
         this.setState({ dateType, datePickerModalVisible: visible, initialDate: startDate });
-      } else if (dateType === 'end') {
+      } else if (dateType === 'end' && this._isMounted) {
         this.setState({ dateType, datePickerModalVisible: visible, initialDate: endDate });
       }
-    } else {
+    } else if (this._isMounted) {
       this.setState({ datePickerModalVisible: visible });
     }
   };
@@ -471,7 +506,9 @@ class PlaylistSettings extends React.Component {
       if (changedDate < endDate) {
         setStartDate(playlistId, changedDate)
           .then(() => {
-            this.setState({ startDate: changedDate });
+            if (this._isMounted) {
+              this.setState({ startDate: changedDate });
+            }
             socket.emit('parameterChanged', playlistId);
           })
           .catch((error) => {
@@ -484,7 +521,9 @@ class PlaylistSettings extends React.Component {
       if (changedDate > startDate) {
         setEndDate(playlistId, changedDate)
           .then(() => {
-            this.setState({ endDate: changedDate });
+            if (this._isMounted) {
+              this.setState({ endDate: changedDate });
+            }
             socket.emit('parameterChanged', playlistId);
           })
           .catch((error) => {
@@ -503,7 +542,9 @@ class PlaylistSettings extends React.Component {
     tags[tag] = !tags[tag];
     setTags(playlistId, tags)
       .then((data) => {
-        this.setState({ tags: data });
+        if (this._isMounted) {
+          this.setState({ tags: data });
+        }
       })
       .catch((error) => {
         console.error(`${error} in tagsChanged`);
@@ -534,7 +575,9 @@ class PlaylistSettings extends React.Component {
     if (!initCall) {
       setEditRestriction(playlistId, newEditRestriction)
         .then(() => {
-          this.setState({ radioValue: value });
+          if (this._isMounted) {
+            this.setState({ radioValue: value });
+          }
           socket.emit('parameterChanged', playlistId);
         })
         .catch((error) => {
@@ -549,11 +592,11 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
 
-    if (deletePlaylistState === 'Supprimer la Playlist') {
+    if (deletePlaylistState === 'Supprimer la Playlist' && this._isMounted) {
       this.setState({ deletePlaylistState: 'Vous êtes certain.e ?' });
-    } else if (deletePlaylistState === 'Vous êtes certain.e ?') {
+    } else if (deletePlaylistState === 'Vous êtes certain.e ?' && this._isMounted) {
       this.setState({ deletePlaylistState: 'Dernière chance !' });
-    } else if (deletePlaylistState === 'Dernière chance !') {
+    } else if (deletePlaylistState === 'Dernière chance !' && this._isMounted) {
       deletePlaylistByAdmin(playlistId, loggedUser._id)
         .then(() => {
           if (roomType === 'party') {
@@ -573,7 +616,9 @@ class PlaylistSettings extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     setPlaylistName(playlistId, loggedUser._id, name)
       .then(() => {
-        this.setState({ name });
+        if (this._isMounted) {
+          this.setState({ name });
+        }
         socket.emit('parameterChanged', playlistId);
       })
       .catch((error) => {
