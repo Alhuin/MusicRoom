@@ -1,10 +1,10 @@
 {
   "web": {
-    "client_id": "1032045608110-eg84lup5g4mpdthvjjl2htmat7g3r1gl.apps.googleusercontent.com",
+    "client_id": "1032045608110-fk8aiqduat8c6oiltm1uneqbuqhumfsn.apps.googleusercontent.com",
     "project_id": "musicroom-1576672690680",
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_secret": "kqxX0yJPwR2ZfVLsVdm2C99H"
+    "client_secret": "9RBpiXExFQPVxcaOq4G0MDp2"
   }
 }
