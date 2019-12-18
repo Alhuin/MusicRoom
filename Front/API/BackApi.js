@@ -81,6 +81,7 @@ function getUserByIdByPreferences(userId, requesterId) {
 
 function addUser(userName, password, name, familyName, email) {
   return new Promise((resolve, reject) => {
+    console.log(`POST ${api}/users`);
     fetch(`${api}/users`, {
       method: 'POST',
       headers: {

@@ -124,7 +124,7 @@ connectDb().then(async () => {
       models.Vote.deleteMany({}),
     ]);
   }
-  seedDatas();
+  // seedDatas();
   app.listen(process.env.EXPRESS_PORT, () => console.log(`App listening on port ${process.env.EXPRESS_PORT}!`));
 });
 

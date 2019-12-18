@@ -21,7 +21,7 @@ export default class SocialLogin extends Component {
     console.log(`asyncType = ${await AsyncStorage.getItem('type')}`);
     if (type === 'Sign Up' && await AsyncStorage.getItem('type') === null) {
       GoogleSignin.configure({
-        webClientId: '846991476431-n04g8tt0rlgqlf40n93j93ehapdh6rtm.apps.googleusercontent.com',
+        webClientId: '1032045608110-eg84lup5g4mpdthvjjl2htmat7g3r1gl.apps.googleusercontent.com',
       });
       try {
         await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
