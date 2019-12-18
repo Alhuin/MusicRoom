@@ -35,6 +35,25 @@ function getPlaylistById(req, res) {
   }
 }
 
+function getPlaylistName(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getPlaylistName(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function getPublicityOfPlaylistById(req, res) {
   if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
     playlistService.getPublicityOfPlaylistById(req.params.playlistId)
@@ -786,4 +805,5 @@ export default {
   getPlaylistLocation,
   setPlaylistLocation,
   setPlaylistName,
+  getPlaylistName,
 };

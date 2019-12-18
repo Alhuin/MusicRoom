@@ -29,7 +29,8 @@ class Radios extends React.Component {
       .catch((error) => {
         if (error.status !== 400) {
           console.error(error);
-        }      });
+        }
+      });
   }
 
   componentWillUnmount(): void {
@@ -40,7 +41,7 @@ class Radios extends React.Component {
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
-      console.log('[Socket Server] : refresh signal for playlist list recieved');
+      console.log('[Socket Server] : refresh signal for playlist list received');
       this.updatePlaylist();
     }
   };

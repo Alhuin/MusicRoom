@@ -45,8 +45,6 @@ function getUserById(userId) {
       },
     })
       .then(async (response) => {
-        // console.log('GetUserById reponse from fetch');
-        // console.log(response);
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
@@ -341,28 +339,50 @@ function getPlaylistsFiltered(roomType, userId) {
   });
 }
 
-// Fonction pas utilisée
+/*
 
-// function getPlaylistById(playlistId) {
-//   return new Promise((resolve, reject) => {
-//     fetch(`${api}/playlists/${playlistId}`, {
-//       method: 'GET',
-//       headers: {
-//         Accept: 'application/json, text/plain, */*',
-//         'Content-Type': 'application/json',
-//       },
-//     })
-//       .then(async (response) => {
-//         const data = await response.json();
-//         if (response.status === 200) {
-//           resolve(data);
-//         } else {
-//           reject(new CustomError('PlaylistsById', data.msg, response.status));
-//         }
-//       })
-//       .catch(error => reject(error));
-//   });
-// }
+function getPlaylistById(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, *!/!*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('PlaylistsById', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+} */
+
+function getPlaylistName(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/name/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        /* this whole playlist is received */
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data.name);
+        } else if (response.status === 404) {
+          reject(new CustomError('GetPlaylistName', data.msg, 404));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
 
 function getMusicsByVote(playlistId, roomType) {
   return new Promise((resolve, reject) => {
@@ -1257,4 +1277,5 @@ export {
   getPlaylistLocation,
   setPlaylistLocation,
   setPlaylistName,
+  getPlaylistName,
 };

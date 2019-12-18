@@ -37,6 +37,23 @@ function getPlaylistById(playlistId) {
   });
 }
 
+function getPlaylistName(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('GetPlaylistName', 'No playlist with this id found in database', 404));
+      } else {
+        resolve({
+          status: 200,
+          data: playlist,
+        });
+      }
+    });
+  });
+}
+
 function getPublicityOfPlaylistById(playlistId) {
   return new Promise((resolve, reject) => {
     PlaylistModel.findById(playlistId, (findError, playlist) => {
@@ -990,4 +1007,5 @@ export default {
   getPlaylistLocation,
   setPlaylistLocation,
   setPlaylistName,
+  getPlaylistName,
 };

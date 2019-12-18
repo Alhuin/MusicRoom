@@ -513,10 +513,12 @@ class PlaylistSettings extends React.Component {
   radioIsPressed = (val) => {
     const { navigation, socket } = this.props;
     const playlistId = navigation.getParam('playlistId');
+    let initCall = false;
     let value = 0;
     let newEditRestriction = '';
     if (val.value !== undefined) {
       ({ value } = val);
+      initCall = true;
     } else {
       value = val;
     }
@@ -529,14 +531,16 @@ class PlaylistSettings extends React.Component {
     } else if (value === 3) {
       newEditRestriction = 'EVENT_RESTRICTED';
     }
-    setEditRestriction(playlistId, newEditRestriction)
-      .then(() => {
-        this.setState({ radioValue: value });
-        socket.emit('parameterChanged', playlistId);
-      })
-      .catch((error) => {
-        console.error(`${error} in radioIsPressed`);
-      });
+    if (!initCall) {
+      setEditRestriction(playlistId, newEditRestriction)
+        .then(() => {
+          this.setState({ radioValue: value });
+          socket.emit('parameterChanged', playlistId);
+        })
+        .catch((error) => {
+          console.error(`${error} in radioIsPressed`);
+        });
+    }
   };
 
   onDeletePlaylistTouchable = () => {
@@ -565,11 +569,12 @@ class PlaylistSettings extends React.Component {
   };
 
   setName = (name) => {
-    const { navigation, loggedUser } = this.props;
+    const { navigation, loggedUser, socket } = this.props;
     const playlistId = navigation.getParam('playlistId');
     setPlaylistName(playlistId, loggedUser._id, name)
       .then(() => {
         this.setState({ name });
+        socket.emit('parameterChanged', playlistId);
       })
       .catch((error) => {
         console.error(`${error} in setName`);
@@ -590,7 +595,9 @@ class PlaylistSettings extends React.Component {
       loc.coords.longitude = 'Indéfinie';
     }
     let radioProps = [];
-    const { navigation, loggedUser, userChanged } = this.props;
+    const {
+      navigation, loggedUser, userChanged,
+    } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
     const authorId = navigation.getParam('authorId');

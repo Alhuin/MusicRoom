@@ -44,7 +44,7 @@ class Partys extends React.Component {
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
-      console.log('[Socket Server] : refresh signal for playlist list recieved');
+      console.log('[Socket Server] : refresh signal for playlist list received');
       this.updatePlaylist();
     }
   };

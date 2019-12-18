@@ -6,7 +6,7 @@ import { Icon } from 'native-base';
 import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
-  isEditor, moveTrackOrder, deleteTrackFromPlaylist, getEditRestriction,
+  isEditor, moveTrackOrder, deleteTrackFromPlaylist, getEditRestriction, getPlaylistName,
 } from '../../API/BackApi';
 import { Colors, Typography, Buttons } from '../styles';
 
@@ -14,6 +14,7 @@ class Playlist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: '',
       admin: false,
       editor: false,
       stockedTracks: [],
@@ -38,6 +39,7 @@ class Playlist extends React.Component {
 
     socket.emit('userJoinedPlaylist', playlistId);
     this.isAdminAndIsEditor();
+    this.getName();
     this.updateMyVotes()
       .then(() => this.updateTracks())
       .catch(error => console.log(error));
@@ -66,18 +68,20 @@ class Playlist extends React.Component {
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
-      console.log('[Socket Server] : refresh signal recieved');
+      console.log('[Socket Server] : refresh signal received');
       this.isAdminAndIsEditor();
       this.updateMyVotes()
         .then(() => {
           this.updateTracks();
-        });
+        })
+        .catch(error => console.log(error));
     }
   };
 
   _onRefreshPermissionSignal = () => {
     if (this._isMounted) {
-      console.log('[Socket Server] : refresh admin and editor signal recieved');
+      console.log('[Socket Server] : refresh because a change of parameters received');
+      this.getName();
       this.isAdminAndIsEditor();
     }
   };
@@ -86,6 +90,7 @@ class Playlist extends React.Component {
     const { navigation } = this.props;
     const roomType = navigation.getParam('roomType');
     this.isAdminAndIsEditor();
+    this.getName();
     if (roomType === 'party') {
       this.setState({ refreshing: true });
       this.updateMyVotes()
@@ -211,6 +216,16 @@ class Playlist extends React.Component {
       });
   };
 
+  getName = () => {
+    const { navigation } = this.props;
+    const playlistId = navigation.getParam('playlistId');
+    getPlaylistName(playlistId)
+      .then((name) => {
+        this.setState({ name });
+      })
+      .catch(error => console.log(error));
+  };
+
   updatePlaying = (playing) => {
     this.setState({ playing });
   };
@@ -230,17 +245,17 @@ class Playlist extends React.Component {
   render() {
     const {
       tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched, pos,
+      name,
     } = this.state;
     const {
       navigation, changeTrack, changePlaylist, loggedUser, socket,
     } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
-    const name = navigation.getParam('name');
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
-
+    console.log(name);
     const playButton = (
       (!playlistLaunched && tracks.length > 0 && admin) && (
         <TouchableOpacity
