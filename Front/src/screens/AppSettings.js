@@ -340,6 +340,7 @@ class AppSettings extends React.Component {
                               onPress={() => {
                                 navigation.navigate('UserProfile', { userProfileId: item._id });
                               }}
+                              style={{ flex: 6 }}
                             >
                               <Text style={styles.cardHeaderText}>
                                 {item.name}
@@ -363,7 +364,7 @@ class AppSettings extends React.Component {
                               }}
                               style={styles.iconWrapper}
                             >
-                              <Icon name="ios-remove" style={{ fontSize: 45 }} />
+                              <Icon name="ios-remove" style={styles.icon} />
                             </TouchableOpacity>
                           </View>
                         </View>

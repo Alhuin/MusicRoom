@@ -1,6 +1,6 @@
 export const black = '#090909';
 export const darkestGrey = '#29292c';
-export const darkGrey = '#4d4e54';
+export const darkGrey = '#404147';
 export const darkPurple = '#282b36';
 export const mediumGrey = '#9b9aa1';
 export const lightGrey = '#DBDBDB';
