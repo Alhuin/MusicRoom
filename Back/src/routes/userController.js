@@ -290,6 +290,27 @@ function confirmPasswordToken(req, res) {
   }
 }
 
+function getDeezerCode(req, res) {
+  console.log(req.query);
+  if (req.query.code) {
+    userService.getDeezerCode(req.query.code)
+      .then(async (response) => {
+        const data = await response.data;
+        res
+          .status(response.status)
+          .redirect(`musicroom://music/home/AppSettings/${data}`);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getUserById,
   getUserByIdByPreferences,
@@ -305,4 +326,5 @@ export default {
   addFriend,
   deleteFriend,
   getFriends,
+  getDeezerCode,
 };

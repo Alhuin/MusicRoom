@@ -209,6 +209,7 @@ const MainNavigator = Platform.select({
       navigationOptions: {
         drawerLabel: 'Paramètres',
       },
+      path: 'AppSettings/:DeezCode',
     },
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
@@ -223,6 +224,7 @@ const MainNavigator = Platform.select({
       navigationOptions: {
         drawerLabel: 'Paramètres',
       },
+      path: 'AppSettings/:DeezCode',
     },
     Parties: PartysNavigator,
     Radios: RadiosNavigator,

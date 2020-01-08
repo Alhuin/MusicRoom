@@ -23,8 +23,9 @@ router.post('/login', loginController.login);
 
 /*             Users                 */
 
-router.get('/users', userController.getUsers);
+router.get('/users/deezer', userController.getDeezerCode);
 router.get('/users/:userId', userController.getUserById);
+router.get('/users', userController.getUsers);
 router.get('/users/getByPreferences/:userId&:requesterId', userController.getUserByIdByPreferences);
 router.get('/users/getFriends/:userId', userController.getFriends);
 router.delete('/users/:userId', userController.deleteUserById);

@@ -9,6 +9,7 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 // Dans le catch du fetch on reject(error) car on connait pas son objet d'erreur => a tester
 
+
 function login(userName, password) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/login`, {

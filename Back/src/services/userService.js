@@ -441,6 +441,20 @@ function confirmEmailToken(tokenString) {
   });
 }
 
+function getDeezerCode(DeezerCode) {
+  console.log(DeezerCode);
+  return new Promise((resolve, reject) => {
+    if (DeezerCode !== '') {
+      resolve({
+        status: 200,
+        data: DeezerCode,
+      });
+    } else {
+      reject(new CustomError('GetDeezerCode', 'Empty code', 404));
+    }
+  });
+}
+
 export default {
   getUsers,
   getUserById,
@@ -456,4 +470,5 @@ export default {
   addFriend,
   deleteFriend,
   getFriends,
+  getDeezerCode,
 };
