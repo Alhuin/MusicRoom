@@ -48,9 +48,13 @@ class Radios extends React.Component {
 
   _onRefresh = () => {
     this.setState({ refreshing: true });
-    this.updatePlaylist().then(() => {
-      this.setState({ refreshing: false });
-    });
+    this.updatePlaylist()
+      .then(() => {
+        this.setState({ refreshing: false });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
