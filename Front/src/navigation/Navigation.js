@@ -15,7 +15,6 @@ import Home from '../containers/Home';
 import SendTokens from '../screens/SendTokens';
 import UpdatePass from '../screens/UpdatePass';
 import Inscription from '../containers/Inscription';
-import UserSettings from '../screens/UserSettings';
 import UserProfile from '../containers/UserProfile';
 import AppSettings from '../containers/AppSettings';
 import PlaylistSettings from '../containers/PlaylistSettings';
@@ -106,12 +105,6 @@ const HomeNavigator = createStackNavigator({
       headerRight: (<View />),
       headerLeft: createBurgerMenu(navigation),
     }),
-  },
-  UserSettings: {
-    screen: UserSettings,
-    navigationOptions: {
-      header: null,
-    },
   },
   // Content ( Radios, Playlists, Favoris ) ou sur Home direct ?
 });
@@ -229,6 +222,7 @@ const MainNavigator = Platform.select({
   },
   {
     contentComponent: props => (
+      // eslint-disable-next-line react/destructuring-assignment
       <LogoutButton drawerProps={props} navigation={props.navigation} />
       // <View style={{ flex: 1 }}>
       //   <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>

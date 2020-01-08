@@ -12,20 +12,25 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
+    default: '',
   },
   familyName: {
     type: String,
+    default: '',
   },
   password: {
     type: String,
+    default: '',
   },
   phoneNumber: {
     type: String,
+    default: '',
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    default: '',
   },
   preferences: {
     type: {},
@@ -65,7 +70,6 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: {
     type: Date,
   },
-  roles: [String],
 });
 
 userSchema.statics.findByLoginOrEmail = async function (login) {

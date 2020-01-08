@@ -1,12 +1,14 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, Button, TextInput, Alert, TouchableOpacity, ScrollView, FlatList,
+  StyleSheet, View, Text, TextInput, Alert, TouchableOpacity, ScrollView, FlatList,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Collapsible from 'react-native-collapsible';
 import { updateUser, deleteFriend, getFriends } from '../../API/BackApi';
 import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
-import { Colors, Typography, Cards, Buttons } from '../styles';
+import {
+  Colors, Typography, Cards, Buttons,
+} from '../styles';
 
 class AppSettings extends React.Component {
   constructor(props) {
@@ -22,7 +24,6 @@ class AppSettings extends React.Component {
       visibilityTable: props.loggedUser.visibilityTable,
       collapsed: true,
       friends: [],
-      // friends: props.loggedUser.friends,
     };
   }
 
@@ -72,7 +73,6 @@ class AppSettings extends React.Component {
     } else if (visibilityTable[key] === 'PRIVATE') {
       visibilityTable[key] = 'ALL';
     }
-    // console.log(visibilityTable);
     this.setState({ visibilityTable });
   };
 
@@ -83,8 +83,8 @@ class AppSettings extends React.Component {
     } = this.state;
     if (!(name.length && familyName.length && email.length
         && login.length && phoneNumber.length)) {
-      Alert.alert('error: empty field.');
-      console.log('error, empty field');
+      Alert.alert('Erreur : entrée vide');
+      console.log('Erreur : entrée vide');
     } else {
       updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
         visibilityTable)

@@ -32,8 +32,8 @@ export default class SocialLogin extends Component {
           .then(await AsyncStorage.setItem('userName', userInfo.user.familyName),
             await AsyncStorage.setItem('password', userInfo.idToken),
             await AsyncStorage.setItem('type', 'SignIn'))
-          .catch((errror) => {
-            console.log('caught', errror.message);
+          .catch((error) => {
+            console.log('caught', error.message);
           });
       } catch (error) {
         console.log(`4 :${error.code}`);
@@ -41,15 +41,12 @@ export default class SocialLogin extends Component {
     } else if (await AsyncStorage.getItem('type') === 'SignIn') {
       login(loginSocial, passSocial)
         .then((user) => {
-          console.log('ALLER');
           userChanged(user);
           if (user.isAdmin) {
             admin(true);
           }
           setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
-          console.log('ALLER');
           navigation.navigate('app');
-          console.log('ALLERRRRR');
         })
         .catch((error) => {
           if (error.status === 401) {
