@@ -11,6 +11,7 @@ class Connexion extends React.Component {
   render() {
     const { navigation } = this.props;
     const type = 'Sign In';
+
     return (
       <KeyboardAvoidingView
         style={styles.container}

@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TextInput, Alert, TouchableOpacity, ScrollView, FlatList,
+  StyleSheet, View, Text, TextInput, Alert, TouchableOpacity, ScrollView, FlatList, Linking,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Collapsible from 'react-native-collapsible';
 import { updateUser, deleteFriend, getFriends } from '../../API/BackApi';
 import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
+import { getDeezerToken } from '../../API/DeezerApi';
 import {
   Colors, Typography, Cards, Buttons,
 } from '../styles';
@@ -24,6 +25,7 @@ class AppSettings extends React.Component {
       visibilityTable: props.loggedUser.visibilityTable,
       collapsed: true,
       friends: [],
+      DeezerToken: '',
     };
   }
 
@@ -101,12 +103,26 @@ class AppSettings extends React.Component {
     this.setState({ collapsed: !collapsed });
   };
 
+  getDeez = () => {
+    Linking.openURL('https://connect.deezer.com/oauth/auth.php?app_id=385364&redirect_uri=http://10.3.1.1:3000/api/users/deezer')
+      .catch(err => console.error("Couldn't load page", err));
+  }
+
   render() {
     const { navigation } = this.props;
+    const { DeezerToken } = this.state;
+    const DeezerCode = navigation.getParam('DeezCode');
     const {
       user, preferences, visibilityTable, collapsed, friends,
     } = this.state;
     const iconFromVisibilityTable = {};
+    if (DeezerCode !== undefined && DeezerToken === '') {
+      getDeezerToken(DeezerCode)
+        .then((response) => {
+          this.setState({ DeezerToken: response });
+        })
+        .catch(error => console.log(error));
+    }
     Object.assign(iconFromVisibilityTable, visibilityTable);
     Object.keys(iconFromVisibilityTable).forEach((key) => {
       if (Object.prototype.hasOwnProperty.call(iconFromVisibilityTable, key)) {
@@ -376,6 +392,23 @@ class AppSettings extends React.Component {
               </Collapsible>
             </View>
           </View>
+          <View style={styles.section}>
+            <View style={[styles.sectionContent, { alignItems: 'center' }]}>
+              <TouchableOpacity
+                onPress={this.getDeez}
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                  Connection a Deezer
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Text style={Buttons.text}>
+            Ton token de connexion Deezer est :
+            {' '}
+            {this.state.DeezerToken}
+          </Text>
           <View style={styles.section}>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity
