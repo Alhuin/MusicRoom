@@ -1274,7 +1274,7 @@ class PlaylistSettings extends React.Component {
                   {collapsibleIconUsers}
                 </View>
               </TouchableOpacity>
-              <Collapsible collapsed={collapsedBans} align="center">
+              <Collapsible collapsed={collapsedUsers} align="center">
                 <View style={styles.sectionContent}>
                   <UserListInSettings
                     loggedUser={loggedUser}
@@ -1319,7 +1319,7 @@ class PlaylistSettings extends React.Component {
             </View>
             <View style={Typography.sectionSeparator} />
             <View style={styles.section}>
-              <View style={styles.sectionContent}>
+              <View style={styles.sectionContentCenterAligned}>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
@@ -1346,8 +1346,8 @@ class PlaylistSettings extends React.Component {
         </View>
         <View style={styles.body}>
           <ScrollView>
-            {userOptions}
             {notAdminOptions}
+            {userOptions}
             {adminOptions}
             <Loader loading={loading} />
           </ScrollView>

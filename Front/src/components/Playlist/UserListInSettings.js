@@ -32,30 +32,30 @@ class UserListInSettings extends React.Component {
             const userId = item._id;
             let element = (null);
             const { userChanged } = this.props;
-            let isSameUserOrAlreadyInFriend = (
-              <TouchableOpacity
-                onPress={() => {
-                  if (!isLoading()) {
-                    displayLoader();
-                    addFriend(userId, loggedUser._id)
-                      .then((newUser) => {
-                        if (userChanged !== undefined) {
-                          userChanged(newUser);
-                        }
-                        onRefresh();
-                      })
-                      .catch((error) => {
-                        if (error.status !== 401) console.error(error);
-                      });
-                  }
-                }}
-                style={styles.iconWrapper}
-              >
-                <Icon name="ios-person-add" style={styles.icon} />
-              </TouchableOpacity>
-            );
-            if (userId === loggedUser._id || loggedUser.friends.includes(userId)) {
-              isSameUserOrAlreadyInFriend = (null);
+            let isSameUserOrAlreadyInFriend = (null);
+            if (!(userId === loggedUser._id || loggedUser.friends.includes(userId))) {
+              isSameUserOrAlreadyInFriend = (
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!isLoading()) {
+                      displayLoader();
+                      addFriend(userId, loggedUser._id)
+                        .then((newUser) => {
+                          if (userChanged !== undefined) {
+                            userChanged(newUser);
+                          }
+                          onRefresh();
+                        })
+                        .catch((error) => {
+                          if (error.status !== 401) console.error(error);
+                        });
+                    }
+                  }}
+                  style={styles.iconWrapper}
+                >
+                  <Icon name="ios-person-add" style={styles.icon} />
+                </TouchableOpacity>
+              );
             }
             if (isAdmin !== undefined && isAdmin) {
               element = (

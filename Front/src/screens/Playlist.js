@@ -17,7 +17,6 @@ class Playlist extends React.Component {
       name: '',
       admin: false,
       editor: false,
-      // stockedTracks: [],  pas compris l'utilisation
       tracks: [],
       playing: null,
       refreshing: false,
@@ -130,16 +129,9 @@ class Playlist extends React.Component {
   };
 
   updateTracks = (roomType, playlistId) => new Promise((resolve, reject) => {
-    // vraiment besoin d'async ? ...
-    console.log('updateTracks');
-    console.log(`getMusicsByVote(${playlistId}, ${roomType})`);
-    // on a deja le roomtype depuis onRefresh
     getMusicsByVote(playlistId, roomType)
       .then((response) => {
-        console.log(response);
-        console.log('musicsByVote .then, should setState');
         this.setState({ tracks: response });
-        // pourquoi on le stocke 2 fois ?
         resolve();
       })
       .catch((error) => {
@@ -243,13 +235,10 @@ class Playlist extends React.Component {
 
   searchTracks = (text) => {
     let { tracks } = this.state;
-    // const { stockedTracks } = this.state;
     if (text !== '') {
       tracks = tracks.filter(track => track.title.search(new RegExp(text, 'i')) > -1
         || track.artist.search(new RegExp(text, 'i')) > -1);
-    } /* else {
-      tracks = stockedTracks;
-    } */
+    }
     this.setState({ tracks });
   };
 
