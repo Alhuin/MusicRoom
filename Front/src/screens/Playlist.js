@@ -17,7 +17,7 @@ class Playlist extends React.Component {
       name: '',
       admin: false,
       editor: false,
-      stockedTracks: [],
+      // stockedTracks: [],  pas compris l'utilisation
       tracks: [],
       playing: null,
       refreshing: false,
@@ -26,14 +26,15 @@ class Playlist extends React.Component {
       playlistLaunched: false,
       pos: 0,
     };
-    this.onRefreshSignal = this._onRefreshSignal.bind(this);
+    this.onRefresh = this._onRefresh.bind(this);
     this.onRefreshPermissionSignal = this._onRefreshPermissionSignal.bind(this);
-    props.socket.on('refresh', this.onRefreshSignal);
+    props.socket.on('refresh', this.onRefresh);
     props.socket.on('refreshPermissions', this.onRefreshPermissionSignal);
   }
 
   componentDidMount(): void {
     const { navigation, socket } = this.props;
+    const roomType = navigation.getParam('roomType');
     const playlistId = navigation.getParam('playlistId');
     this._isMounted = true;
 
@@ -41,7 +42,7 @@ class Playlist extends React.Component {
     this.isAdminAndIsEditor();
     this.getName();
     this.updateMyVotes()
-      .then(() => this.updateTracks())
+      .then(() => this.updateTracks(roomType, playlistId))
       .catch(error => console.log(error));
     getNextTrackByVote(playlistId)
       .then((track) => {
@@ -66,17 +67,17 @@ class Playlist extends React.Component {
     }
   };
 
-  _onRefreshSignal = () => {
-    if (this._isMounted) {
-      console.log('[Socket Server] : refresh signal received');
-      this.isAdminAndIsEditor();
-      this.updateMyVotes()
-        .then(() => {
-          this.updateTracks();
-        })
-        .catch(error => console.log(error));
-    }
-  };
+  // _onRefreshSignal = () => {
+  //   if (this._isMounted) {
+  //     console.log('[Socket Server] : refresh signal received');
+  //     this.isAdminAndIsEditor();
+  //     this.updateMyVotes()
+  //       .then(() => {
+  //         this.updateTracks();
+  //       })
+  //       .catch(error => console.log(error));
+  //   }
+  // };
 
   _onRefreshPermissionSignal = () => {
     if (this._isMounted) {
@@ -87,32 +88,38 @@ class Playlist extends React.Component {
   };
 
   _onRefresh = () => {
-    const { navigation } = this.props;
-    const roomType = navigation.getParam('roomType');
-    this.isAdminAndIsEditor();
-    this.getName();
-    if (roomType === 'party') {
+    console.log('if did not manually refresh, [Socket Server] : refresh signal received');
+    if (this._isMounted) {
+      const { navigation } = this.props;
+      const roomType = navigation.getParam('roomType');
+      const playlistId = navigation.getParam('playlistId');
+      this.isAdminAndIsEditor();
+      this.getName();
+      console.log('_onRefresh');
       this.setState({ refreshing: true });
-      this.updateMyVotes()
-        .then(() => {
-          this.updateTracks()
-            .then(() => {
-              this.setState({ refreshing: false });
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else if (roomType === 'radio') {
-      this.updateTracks()
-        .then(() => {
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      if (roomType === 'party') {
+        this.updateMyVotes()
+          .then(() => {
+            this.updateTracks(roomType, playlistId)
+              .then(() => {
+                this.setState({ refreshing: false });
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else if (roomType === 'radio') {
+        this.updateTracks(roomType, playlistId)
+          .then(() => {
+            this.setState({ refreshing: false });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     }
   };
 
@@ -122,14 +129,17 @@ class Playlist extends React.Component {
     this.setState({ modalVisible: visible });
   };
 
-  updateTracks = () => new Promise((resolve, reject) => {
-    const { navigation } = this.props;
-    // console.log( this.props );
-    const playlistId = navigation.getParam('playlistId');
-    const roomType = navigation.getParam('roomType');
+  updateTracks = (roomType, playlistId) => new Promise((resolve, reject) => {
+    // vraiment besoin d'async ? ...
+    console.log('updateTracks');
+    console.log(`getMusicsByVote(${playlistId}, ${roomType})`);
+    // on a deja le roomtype depuis onRefresh
     getMusicsByVote(playlistId, roomType)
       .then((response) => {
-        this.setState({ tracks: response, stockedTracks: response });
+        console.log(response);
+        console.log('musicsByVote .then, should setState');
+        this.setState({ tracks: response });
+        // pourquoi on le stocke 2 fois ?
         resolve();
       })
       .catch((error) => {
@@ -139,6 +149,7 @@ class Playlist extends React.Component {
   });
 
   updateMyVotes = () => new Promise((resolve, reject) => {
+    // vraiment besoin d'async ? ...
     const { navigation, loggedUser } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const userId = loggedUser._id;
@@ -232,13 +243,13 @@ class Playlist extends React.Component {
 
   searchTracks = (text) => {
     let { tracks } = this.state;
-    const { stockedTracks } = this.state;
+    // const { stockedTracks } = this.state;
     if (text !== '') {
-      tracks = stockedTracks.filter(track => track.title.search(new RegExp(text, 'i')) > -1
+      tracks = tracks.filter(track => track.title.search(new RegExp(text, 'i')) > -1
         || track.artist.search(new RegExp(text, 'i')) > -1);
-    } else {
+    } /* else {
       tracks = stockedTracks;
-    }
+    } */
     this.setState({ tracks });
   };
 
@@ -310,7 +321,7 @@ class Playlist extends React.Component {
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
           playlistId={playlistId}
-          updateTracks={this.updateTracks}
+          updateTracks={() => this.updateTracks(roomType, playlistId)}
           userId={userId}
           roomType={roomType}
         />
@@ -328,7 +339,7 @@ class Playlist extends React.Component {
               updatePlaying={this.updatePlaying}
               playing={playing}
               playlistId={playlistId}
-              updateTracks={this.updateTracks}
+              updateTracks={() => this.updateTracks(roomType, playlistId)}
               updateMyVotes={this.updateMyVotes}
               refreshing={refreshing}
               onRefresh={this._onRefresh}

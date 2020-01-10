@@ -6,6 +6,7 @@ import Player from '../../services/Player';
 import { Spacing } from '../../styles';
 
 class TrackListInPlaylist extends React.Component {
+
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
@@ -41,6 +42,9 @@ class TrackListInPlaylist extends React.Component {
       onMoveEnd,
       pos,
     } = this.props;
+    console.log('TrackListInPlaylist');
+    console.log(tracks);
+
     let render = (null);
     if (isUserInPlaylist === true && roomType === 'radio') {
       render = (
@@ -50,12 +54,13 @@ class TrackListInPlaylist extends React.Component {
           renderItem={({
             item, move, moveEnd, isActive,
           }) => {
-            let myVoteValue = 0;
-            for (let i = 0; i < myVotes.length; i += 1) {
-              if (String(myVotes[i].music) === String(item._id)) {
-                myVoteValue = myVotes[i].value;
-              }
-            }
+            // Votes dans les radios ?
+            // let myVoteValue = 0;
+            // for (let i = 0; i < myVotes.length; i += 1) {
+            //   if (String(myVotes[i].music) === String(item._id)) {
+            //     myVoteValue = myVotes[i].value;
+            //   }
+            // }
             return (
               <TrackInPlaylist
                 userId={userId}
@@ -65,7 +70,7 @@ class TrackListInPlaylist extends React.Component {
                 updateTracks={updateTracks}
                 updateMyVotes={updateMyVotes}
                 roomType={roomType}
-                myVoteValue={myVoteValue}
+                myVoteValue={0}
                 move={move}
                 moveEnd={moveEnd}
                 isActive={isActive}
@@ -74,12 +79,6 @@ class TrackListInPlaylist extends React.Component {
               />
             );
           }}
-          // onEndReachThreashold={0.5}
-          // onEndReached={() => {
-          //   if (this.page < this.totalPages) {
-          //     this._loadTracks();
-          //   }
-          // }}
           contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
           onMoveEnd={data => onMoveEnd(data)}
         />
