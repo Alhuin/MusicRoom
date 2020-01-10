@@ -37,48 +37,38 @@ class TrackListInPlaylist extends React.Component {
       roomType,
       myVotes,
       updateMyVotes,
-      isUserInPlaylist,
+      // isUserInPlaylist,
       editor,
       onMoveEnd,
       pos,
     } = this.props;
-    console.log('TrackListInPlaylist');
-    console.log(tracks);
-
     let render = (null);
-    if (isUserInPlaylist === true && roomType === 'radio') {
+    if (/*
+    isUserInPlaylist === true && */ roomType === 'radio') {
       render = (
-        <DraggableFlatList
+        <FlatList
+        // <DraggableFlatList
           data={tracks}
           keyExtractor={item => String(item._id)}
           renderItem={({
             item, move, moveEnd, isActive,
-          }) => {
-            // Votes dans les radios ?
-            // let myVoteValue = 0;
-            // for (let i = 0; i < myVotes.length; i += 1) {
-            //   if (String(myVotes[i].music) === String(item._id)) {
-            //     myVoteValue = myVotes[i].value;
-            //   }
-            // }
-            return (
-              <TrackInPlaylist
-                userId={userId}
-                track={item}
-                handlePress={this.handlePress}
-                playlistId={playlistId}
-                updateTracks={updateTracks}
-                updateMyVotes={updateMyVotes}
-                roomType={roomType}
-                myVoteValue={0}
-                move={move}
-                moveEnd={moveEnd}
-                isActive={isActive}
-                editor={editor}
-                pos={pos}
-              />
-            );
-          }}
+          }) => (
+            <TrackInPlaylist
+              userId={userId}
+              track={item}
+              handlePress={this.handlePress}
+              playlistId={playlistId}
+              updateTracks={updateTracks}
+              updateMyVotes={updateMyVotes}
+              roomType={roomType}
+              myVoteValue={0}
+              move={move}
+              moveEnd={moveEnd}
+              isActive={isActive}
+              editor={editor}
+              pos={pos}
+            />
+          )}
           contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
           onMoveEnd={data => onMoveEnd(data)}
         />

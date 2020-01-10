@@ -8,8 +8,6 @@ import {
   Cards, Colors, Spacing, Typography,
 } from '../../styles';
 
-// must create two components TrackInRadio and TrackInParty or this one need to be modified
-
 class TrackInPlaylist extends React.Component {
   _vote = (value) => {
     const {
@@ -87,7 +85,6 @@ class TrackInPlaylist extends React.Component {
       moveDraggable = move;
       moveEndDraggable = moveEnd;
     }
-    console.log(track);
     return (
       <TouchableOpacity
         activeOpacity={activeOpacityCard}
