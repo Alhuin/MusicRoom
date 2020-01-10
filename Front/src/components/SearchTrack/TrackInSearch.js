@@ -8,6 +8,7 @@ import {
 } from '../../styles';
 
 class TrackInSearch extends React.Component {
+
   addMusic = () => {
     const {
       track, playlistId, userId, setModalVisible, displayLoader, socket,

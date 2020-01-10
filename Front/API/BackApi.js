@@ -7,8 +7,6 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
                     Users & Login
  */
 
-// Dans le catch du fetch on reject(error) car on connait pas son objet d'erreur => a tester
-
 
 function login(userName, password) {
   return new Promise((resolve, reject) => {
@@ -30,27 +28,6 @@ function login(userName, password) {
           resolve(data);
         } else {
           reject(new CustomError('LoginError', data.msg, response.status));
-        }
-      })
-      .catch(error => reject(error));
-  });
-}
-
-function getUserById(userId) {
-  return new Promise((resolve, reject) => {
-    fetch(`${api}/users/${userId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else if (response.status === 404) {
-          reject(new CustomError('GetUser', data.msg, 404));
         }
       })
       .catch(error => reject(error));
@@ -121,12 +98,10 @@ function sendEmailToken(loginOrEmail) {
           // alert('An email has been sent');
         } else {
           reject(new CustomError('EmailToken', data.msg, response.status));
-          // alert(`error ${data.status}: ${data.msg}`);
         }
       })
       .catch((error) => {
         reject(error);
-        // console.error(error);
       });
   });
 }
@@ -145,10 +120,8 @@ function sendPasswordToken(loginOrEmail) {
         const data = await response.json();
         if (response.status === 200 || response.status === 202) {
           resolve(data);
-          // alert('An email has been sent');
         } else {
           reject(new CustomError('PasswordToken', data.msg, response.status));
-          // alert(`error ${data.status}: ${data.msg}`);
         }
       })
       .catch(error => reject(error));
@@ -271,52 +244,6 @@ function getFriends(userId) {
                       Musics, Playlists & Votes
  */
 
-// Unused Function
-
-// function getPlaylists() {
-//   return new Promise((resolve, reject) => {
-//     fetch(`${api}/playlists`, {
-//       method: 'GET',
-//       headers: {
-//         Accept: 'application/json, text/plain, */*',
-//         'Content-Type': 'application/json',
-//       },
-//     })
-//       .then(async (response) => {
-//         const data = await response.json();
-//         if (response.status === 200) {
-//           // alert('GetAllPlaylists is success');
-//           resolve(data);
-//         } else {
-//           reject(new CustomError('GetPlaylists', data.msg, response.status));
-//           // alert(`error ${data.status}: ${data.msg}`);
-//         }
-//       })
-//       .catch(error => reject(error));
-//   });
-// }
-
-function getPlaylistsFilteredByRoom(roomType) {
-  return new Promise((resolve, reject) => {
-    fetch(`${api}/playlists/${roomType}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          reject(new CustomError('PlaylistsFilteredByRoom', data.msg, response.status));
-        }
-      })
-      .catch(error => reject(error));
-  });
-}
-
 function getPlaylistsFiltered(roomType, userId) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/playlists/filtered`, {
@@ -341,28 +268,6 @@ function getPlaylistsFiltered(roomType, userId) {
   });
 }
 
-/*
-
-function getPlaylistById(playlistId) {
-  return new Promise((resolve, reject) => {
-    fetch(`${api}/playlists/${playlistId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, *!/!*',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          reject(new CustomError('PlaylistsById', data.msg, response.status));
-        }
-      })
-      .catch(error => reject(error));
-  });
-} */
 
 function getPlaylistName(playlistId) {
   return new Promise((resolve, reject) => {
@@ -559,7 +464,6 @@ function joinPlaylistWithId(userId, playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('joinPlaylistWithId', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -584,7 +488,6 @@ function isAdmin(userId, playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('isAdmin', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -606,7 +509,6 @@ function getAdminsByPlaylistId(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getAdmins', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -628,7 +530,6 @@ function getUsersByPlaylistId(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('UsersByPlaylist', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -650,7 +551,6 @@ function getBansByPlaylistId(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getBans', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -675,7 +575,6 @@ function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
           resolve(data);
         } else {
           reject(new CustomError('AdminDowngrade', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -700,7 +599,6 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
           resolve(data);
         } else {
           reject(new CustomError('UserUpgrade', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -725,7 +623,6 @@ function banUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
           resolve(data);
         } else {
           reject(new CustomError('BanUser', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -750,7 +647,6 @@ function deleteUserInPlaylist(playlistId, userId, isItAdmin, requesterId) {
           resolve(data);
         } else {
           reject(new CustomError('deleteUserInPlaylist', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -772,7 +668,6 @@ function getPublicityOfPlaylistById(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('PlaylistIsPlublic', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -794,7 +689,6 @@ function getPlaylistPrivateId(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getPlaylistPrivateId', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -816,7 +710,6 @@ function getDelegatedPlayerAdmin(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('delegatedPlayerAdmin', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -926,7 +819,6 @@ function getPlaylistDates(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getPlaylistDates', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -948,7 +840,6 @@ function getPlaylistLocation(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getPlaylistLocation', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -971,7 +862,6 @@ function setPlaylistLocation(playlistId, newLocation, userId) {
           resolve(data.location);
         } else {
           reject(new CustomError('setPlaylistLocation', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -1098,7 +988,6 @@ function setEditRestriction(playlistId, newEditRestriction) {
       body: JSON.stringify({ playlistId, newEditRestriction }),
     })
       .then(async (response) => {
-        // savedPlaylist is the response
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
@@ -1166,7 +1055,6 @@ function setPlaylistName(playlistId, userId, newName) {
       body: JSON.stringify({ playlistId, userId, newName }),
     })
       .then(async (response) => {
-        // savedPlaylist is the response
         const data = await response.json();
         if (response.status === 200) {
           resolve(data);
@@ -1197,7 +1085,6 @@ function getNextTrackByVote(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getNextTrackByVote', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -1234,12 +1121,8 @@ export {
   sendEmailToken,
   sendPasswordToken,
   updatePassword,
-  // getPlaylists,
-  getPlaylistsFilteredByRoom,
   getPlaylistsFiltered,
   getMusicsByVote,
-  // getPlaylistById,
-  getUserById,
   getUserByIdByPreferences,
   voteMusic,
   addMusicToPlaylist,

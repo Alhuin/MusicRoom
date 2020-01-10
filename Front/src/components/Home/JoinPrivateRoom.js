@@ -12,7 +12,7 @@ export default class JoinPrivateRoom extends React.Component {
     };
   }
 
-  _joinRoom = () => {
+  joinRoom = () => {
     const { userId, setModalVisible } = this.props;
     const { text } = this.state;
     setModalVisible();
@@ -54,7 +54,7 @@ export default class JoinPrivateRoom extends React.Component {
             style={styles.textInput}
             placeholder="Entrez le code ici"
             onChangeText={text => this.setState({ text })}
-            onSubmitEditing={this._joinRoom}
+            onSubmitEditing={this.joinRoom}
             keyboardType="numeric"
           />
         </View>

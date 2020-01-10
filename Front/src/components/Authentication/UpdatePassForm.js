@@ -11,29 +11,30 @@ export default class UpdatePassForm extends React.Component {
     newPassConfirm: '',
   };
 
-  _updateNewPass = (text) => {
+  updateNewPass = (text) => {
     this.setState({ newPass: text });
   };
 
-  _updateNewPassConfirm = (text) => {
+  updateNewPassConfirm = (text) => {
     this.setState({ newPassConfirm: text });
   };
 
-  _updatePassword() {
+  updatePassword() {
     const { newPass, newPassConfirm } = this.state;
     const { userId } = this.props;
     if (!(newPass.length && newPassConfirm.length)) {
-      Alert.alert('error: Empty input');
+      Alert.alert('Mise à jour du mot de passe', 'Veuillez entrer et confirmer votre nouveau mot de passe.');
     } else if (newPass !== newPassConfirm) {
-      Alert.alert('error: Passwords don\'t match');
+      Alert.alert('Mise à jour du mot de passe', 'Le mot de passe et sa confirmation doivent être identiques.');
     } else if (userId === undefined) {
-      Alert.alert('Could not update your password, please ask for a new link.');
+      Alert.alert('Mise à jour du mot de passe', 'Votre token a expiré, veuillez demander un nouveau lien.');
     } else {
       updatePassword(userId, newPass)
         .then(() => NavigationUtils.resetStack(this, 'Connexion', { toast: 'Password Updated' }))
         .catch((error) => {
           console.error(error);
           NavigationUtils.resetStack(this, 'Connexion', { toast: 'An error occured, please try again later' });
+          // TODO: toujours utile si on gere bien la stack ?
         });
     }
   }
@@ -43,7 +44,7 @@ export default class UpdatePassForm extends React.Component {
       <View style={styles.container}>
         <TextInput
           secureTextEntry
-          onChangeText={this._updateNewPass}
+          onChangeText={this.updateNewPass}
           autoCorrect={false}
           autoCapitalize="none"
           underlineColorAndroid="grey"
@@ -52,7 +53,7 @@ export default class UpdatePassForm extends React.Component {
         />
         <TextInput
           secureTextEntry
-          onChangeText={this._updateNewPassConfirm}
+          onChangeText={this.updateNewPassConfirm}
           autoCorrect={false}
           autoCapitalize="none"
           underlineColorAndroid="grey"
@@ -64,7 +65,7 @@ export default class UpdatePassForm extends React.Component {
             title="Update Password"
             onPress={() => {
               Keyboard.dismiss();
-              this._updatePassword();
+              this.updatePassword();
             }}
           />
         </View>
@@ -76,12 +77,9 @@ export default class UpdatePassForm extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
     width: 300,
-    // borderWidth: 1,                LAISSEZ LES
-    // borderColor: 'red',
   },
   inputBox: {
     width: 300,

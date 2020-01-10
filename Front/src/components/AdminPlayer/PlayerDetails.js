@@ -7,7 +7,7 @@ import AlbumArt from './AlbumArt';
 import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
-import { getNextTrackByVote, deleteTrackFromPlaylist } from '../../../API/BackApi';
+import { getNextTrackByVote } from '../../../API/BackApi';
 
 export default class PlayerDetails extends Component {
   onBack() {

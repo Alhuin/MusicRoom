@@ -143,8 +143,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   upContainer: {
-    // borderWidth: 1,
-    // borderColor: 'blue',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -156,8 +154,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   downContainer: {
-    // borderWidth: 1,
-    // borderColor: 'red',
     width: '100%',
   },
 });

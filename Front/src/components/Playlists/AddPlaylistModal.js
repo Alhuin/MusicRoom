@@ -64,10 +64,7 @@ export default class AddPlaylistModal extends React.Component {
     this.setState({ switchValue: value });
   };
 
-  generateRandomNumber = () => {
-    const randomNumber = Math.floor(Math.random() * 1000) + 1;
-    return randomNumber;
-  };
+  generateRandomNumber = () => Math.floor(Math.random() * 1000) + 1;
 
   onPressed = () => {
     const {
