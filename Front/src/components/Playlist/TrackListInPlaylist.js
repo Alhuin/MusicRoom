@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList, RefreshControl } from 'react-native';
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import SortableList from 'react-native-sortable-list';
 import TrackInPlaylist from '../../containers/TrackInPlaylist';
 import Player from '../../services/Player';
 import { Spacing } from '../../styles';
@@ -44,33 +44,42 @@ class TrackListInPlaylist extends React.Component {
     } = this.props;
     let render = (null);
     if (/*
-    isUserInPlaylist === true && */ roomType === 'radio') {
+      isUserInPlaylist === true && */ roomType === 'radio') {
+      const sortableListMapping = {};
+      for (let i = 0; i < tracks.length; i += 1) {
+        sortableListMapping[`${i}`] = tracks[i]._id;
+      }
+      console.log(tracks.map(a => a._id));
+      console.log(sortableListMapping);
       render = (
-        <FlatList
-        // <DraggableFlatList
+        <SortableList
           data={tracks}
-          keyExtractor={item => String(item._id)}
-          renderItem={({
-            item, move, moveEnd, isActive,
-          }) => (
+          renderRow={({ key, index, data, disabled, active }) => (
             <TrackInPlaylist
+              active={active}
               userId={userId}
-              track={item}
+              track={data}
               handlePress={this.handlePress}
               playlistId={playlistId}
               updateTracks={updateTracks}
               updateMyVotes={updateMyVotes}
               roomType={roomType}
               myVoteValue={0}
-              move={move}
-              moveEnd={moveEnd}
-              isActive={isActive}
               editor={editor}
               pos={pos}
             />
           )}
           contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
-          onMoveEnd={data => onMoveEnd(data)}
+          onReleaseRow={(key, currentOrder) => {
+            let newPosition;
+            for (newPosition = 0; newPosition < currentOrder.length; newPosition += 1) {
+              if (currentOrder[newPosition] === `${key}`) {
+                break;
+              }
+            }
+            const id = sortableListMapping[`${key}`];
+            onMoveEnd(id, newPosition);
+          }}
         />
       );
     } else {
@@ -106,12 +115,6 @@ class TrackListInPlaylist extends React.Component {
               onRefresh={onRefresh}
             />
           )}
-          // onEndReachThreashold={0.5}
-          // onEndReached={() => {
-          //   if (this.page < this.totalPages) {
-          //     this._loadTracks();
-          //   }
-          // }}
           contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
         />
       );

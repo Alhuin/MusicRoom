@@ -387,7 +387,6 @@ function getPlaylistName(playlistId) {
 }
 
 function getMusicsByVote(playlistId, roomType) {
-  console.log('musicsByVote');
   return new Promise((resolve, reject) => {
     fetch(`${api}/musicsByVote/${playlistId}&${roomType}`, {
       method: 'GET',

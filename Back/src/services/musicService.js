@@ -65,9 +65,10 @@ function getMusicsByVote(playlistId, roomType) {
               } else {
                 const order = playlist.musics;
                 const res = [];
+                let musicsTmp = musics;
                 order.forEach((key) => {
                   let found = false;
-                  musics = musics.filter((item) => {
+                  musicsTmp = musicsTmp.filter((item) => {
                     if (!found && String(item._id) === String(key)) {
                       res.push(item);
                       found = true;
@@ -115,6 +116,7 @@ function deleteMusicById(musicId) {
 
 function downloadMusic(musicUrl) {
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line global-require
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TouchableOpacity, Image, View, Text, StyleSheet, Alert,
+  TouchableOpacity, Image, View, Text, StyleSheet, Alert, Animated, Easing, Platform,
 } from 'react-native';
 import { Icon } from 'native-base';
 import { voteMusic } from '../../../API/BackApi';
@@ -9,6 +9,54 @@ import {
 } from '../../styles';
 
 class TrackInPlaylist extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this._active = new Animated.Value(0);
+
+    this._style = {
+      ...Platform.select({
+        ios: {
+          transform: [{
+            scale: this._active.interpolate({
+              inputRange: [0, 1], // not active or active, 0 or 1
+              outputRange: [1, 1.1], // it will scale from 1 to 1.1
+            }),
+          }],
+          shadowRadius: this._active.interpolate({
+            inputRange: [0, 1],
+            outputRange: [2, 10],
+          }),
+        },
+
+        android: {
+          transform: [{
+            scale: this._active.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 1.07],
+            }),
+          }],
+          elevation: this._active.interpolate({
+            inputRange: [0, 1],
+            outputRange: [2, 6],
+          }),
+        },
+      }),
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { active } = this.props;
+    if (active !== nextProps.active) {
+      Animated.timing(this._active, {
+        duration: 300,
+        easing: Easing.bounce,
+        toValue: Number(nextProps.active),
+      }).start();
+    }
+  }
+
   _vote = (value) => {
     const {
       track, playlistId, userId, socket, pos,
@@ -76,22 +124,8 @@ class TrackInPlaylist extends React.Component {
         </View>
       );
     }
-    let moveDraggable = null;
-    let moveEndDraggable = null;
-    let activeOpacityCard = 1;
-    if (roomType === 'radio' && editor) {
-      const { move, moveEnd } = this.props;
-      activeOpacityCard = 0.9;
-      moveDraggable = move;
-      moveEndDraggable = moveEnd;
-    }
     return (
-      <TouchableOpacity
-        activeOpacity={activeOpacityCard}
-        style={styles.card}
-        onLongPress={moveDraggable}
-        onPressOut={moveEndDraggable}
-      >
+      <Animated.View style={[styles.card, this._style]}>
         <TouchableOpacity
           style={styles.previewCover}
           onPress={() => {
@@ -123,7 +157,7 @@ class TrackInPlaylist extends React.Component {
           </View>
         </View>
         {renderForParty}
-      </TouchableOpacity>
+      </Animated.View>
     );
   }
 }
