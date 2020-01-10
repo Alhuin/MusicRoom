@@ -43,22 +43,25 @@ export default class AddPlaylistModal extends React.Component {
 
   toggleSwitch = (value) => {
     const { type } = this.state;
-    // eslint-disable-next-line no-undef
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({ location: position });
-      },
-      error => Alert.alert(
-        `${error.message}\nÀ configurer à la main`,
-      ),
-      { enableHighAccuracy: false, timeout: 10000 },
-    );
-    this.setState({ switchValue: value });
-    if (type === null) {
-      this.setState({ type: 'GeolocOK' });
-    } else {
-      this.setState({ type: null });
+    const { roomType } = this.props;
+    if (roomType === 'party') {
+      // eslint-disable-next-line no-undef
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.setState({ location: position });
+        },
+        error => Alert.alert(
+          `${error.message}\nÀ configurer à la main`,
+        ),
+        { enableHighAccuracy: false, timeout: 10000 },
+      );
+      if (type === null) {
+        this.setState({ type: 'GeolocOK' });
+      } else {
+        this.setState({ type: null });
+      }
     }
+    this.setState({ switchValue: value });
   };
 
   generateRandomNumber = () => {
@@ -118,7 +121,7 @@ export default class AddPlaylistModal extends React.Component {
     }
     let dateP = (null);
     let datePTwo = (null);
-    if (type === 'GeolocOK') {
+    if (type === 'GeolocOK' && roomType === 'party') {
       dateP = (
         <View>
           <View style={Typography.section}>
