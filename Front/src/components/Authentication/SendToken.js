@@ -70,12 +70,9 @@ export default class SendToken extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
     width: 300,
-    // borderWidth: 1,                LAISSEZ LES
-    // borderColor: 'red',
   },
   inputBox: {
     width: 300,

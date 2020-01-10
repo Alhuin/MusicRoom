@@ -11,7 +11,6 @@ import {
 // must create two components TrackInRadio and TrackInParty or this one need to be modified
 
 class TrackInPlaylist extends React.Component {
-
   _vote = (value) => {
     const {
       track, playlistId, userId, socket, pos,

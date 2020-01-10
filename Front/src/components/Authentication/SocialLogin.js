@@ -42,21 +42,14 @@ export default class SocialLogin extends Component {
             console.log('Alert'),
             Alert.alert(
               'Validation de compte',
-              'Un email de validation vous a été envoyé, si vous ne l\'avez pas reçu veuillez cliquer sur \'Renvoyer\'',
-              [
-                {
-                  text: 'Renvoyer',
-                  onPress: () => Alert.alert('revoyer un mail'),
-                },
-                { text: 'OK' },
-              ],
+              'Un email de vérification vous a été envoyé.',
             ),
           )
           .catch((error) => {
             console.log('caught', error.message);
           });
       } catch (error) {
-        console.log(`4 :${error.code}`);
+        console.error(error);
       }
     } else if (await AsyncStorage.getItem('type') === 'SignIn') {
       login(loginSocial, passSocial)

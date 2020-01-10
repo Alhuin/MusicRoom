@@ -123,9 +123,9 @@ function deleteUserById(userId) {
 }
 
 function addUser(login, password, name, familyName, email) {
-  return new Promise(async (resolve, reject) => {
-    const salt = await bcrypt.genSaltSync(10); // checker la doc si besoin de les laisser en async
-    const hash = await bcrypt.hashSync(password, salt);
+  return new Promise( (resolve, reject) => {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
     const user = new UserModel({
       login,
       password: hash,
@@ -331,8 +331,7 @@ function sendPasswordToken(loginOrEmail) {
               from: '"MusicRoom Team" <team@musicroom.com>',
               to: user.email,
               subject: 'New Password Request',
-              text: `Hello,\n\nYou can reset your password by clicking the link below:
-              \n${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/passToken/${savedToken.token}\n`,
+              html: `Bonjour !,\n\nTu peux réinitialiser ton mot de passe en cliquant sur <a href='${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/passToken/${savedToken.token}'>ce lien</a>.`,
             };
             utils.sendMail(mailOptions, resolve, reject);
           }
@@ -398,8 +397,7 @@ function _sendEmailToken(user, resolve, reject) {
         from: '"MusicRoom Team" <team@musicroom.com>',
         to: user.email,
         subject: 'Account Verification',
-        text: `Hello,\n\nPlease verify your account by clicking the link below:
-              \n${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/emailToken/${savedToken.token}.\n`,
+        html: `Bonjour !,\n\nVérifie ton compte en cliquant sur <a href='${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/mailToken/${savedToken.token}'>ce lien</a>.`,
       };
       utils.sendMail(mailOptions, resolve, reject);
     }

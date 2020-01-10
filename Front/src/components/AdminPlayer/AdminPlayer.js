@@ -47,10 +47,8 @@ export default class AdminPlayer extends Component {
               style={styles.playerModal}
               ref={(r) => { this.player = r; }}
               isOpen={false}
-              // onOpened={Alert.alert('opened')}
               swipeToClose
               backButtonClose
-              // coverScreen={false}
             >
               <PlayerDetails track={track} playlistId={playlistId} />
             </Modal>
@@ -66,6 +64,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    // zIndex: 1000,
   },
 });
