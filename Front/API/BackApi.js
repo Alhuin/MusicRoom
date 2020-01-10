@@ -103,33 +103,33 @@ function addUser(userName, password, name, familyName, email) {
       .catch(error => reject(error));
   });
 }
-//
-// function sendEmailToken(loginOrEmail) {
-//   return new Promise((resolve, reject) => {
-//     fetch(`${api}/users/emailToken/`, {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json, text/plain, */*',
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ loginOrEmail }),
-//     })
-//       .then(async (response) => {
-//         const data = await response.json();
-//         if (response.status === 200) {
-//           resolve(data);
-//           // alert('An email has been sent');
-//         } else {
-//           reject(new CustomError('EmailToken', data.msg, response.status));
-//           // alert(`error ${data.status}: ${data.msg}`);
-//         }
-//       })
-//       .catch((error) => {
-//         reject(error);
-//         // console.error(error);
-//       });
-//   });
-// }
+
+function sendEmailToken(loginOrEmail) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/emailToken/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ loginOrEmail }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200 || response.status === 202) {
+          resolve(data);
+          // alert('An email has been sent');
+        } else {
+          reject(new CustomError('EmailToken', data.msg, response.status));
+          // alert(`error ${data.status}: ${data.msg}`);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+        // console.error(error);
+      });
+  });
+}
 
 function sendPasswordToken(loginOrEmail) {
   return new Promise((resolve, reject) => {
@@ -143,7 +143,7 @@ function sendPasswordToken(loginOrEmail) {
     })
       .then(async (response) => {
         const data = await response.json();
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 202) {
           resolve(data);
           // alert('An email has been sent');
         } else {
@@ -387,6 +387,7 @@ function getPlaylistName(playlistId) {
 }
 
 function getMusicsByVote(playlistId, roomType) {
+  console.log('musicsByVote');
   return new Promise((resolve, reject) => {
     fetch(`${api}/musicsByVote/${playlistId}&${roomType}`, {
       method: 'GET',
@@ -1231,7 +1232,7 @@ export {
   login,
   addUser,
   updateUser,
-  // sendEmailToken,
+  sendEmailToken,
   sendPasswordToken,
   updatePassword,
   // getPlaylists,

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, TextInput, Button, Keyboard, Alert,
 } from 'react-native';
-import { sendPasswordToken } from '../../../API/BackApi';
+import { sendPasswordToken, sendEmailToken } from '../../../API/BackApi';
 
 export default class SendToken extends React.Component {
   state = {
@@ -15,16 +15,30 @@ export default class SendToken extends React.Component {
 
   _submitAction = () => {
     const { type } = this.props;
-    if (type === 'Forgot Pass') {
-      const { loginOrEmail } = this.state;
+    const { loginOrEmail } = this.state;
 
-      if (!loginOrEmail.length) {
-        Alert.alert('Please enter your email or login');
-      } else {
-        sendPasswordToken(loginOrEmail);
-      }
-    } else {
-      //  coucou
+    if (!loginOrEmail.length) {
+      Alert.alert('Votre login ou votre email est requis.');
+    } else if (type === 'password') {
+      sendPasswordToken(loginOrEmail)
+        .then(() => Alert.alert(
+          'Mot de passe perdu',
+          'Un email contenant les instructions de réinitialisation du mot de passe vous a été envoyé.',
+        ))
+        .catch(() => Alert.alert(
+          'Mot de passe perdu',
+          'Une erreur est survenue lors de l\'envoi du mail, veuillez réessayer plus tard.',
+        ));
+    } else if (type === 'mail') {
+      sendEmailToken(loginOrEmail)
+        .then(() => Alert.alert(
+          'Validation du compte',
+          'Un email de validation vous a été envoyé.',
+        ))
+        .catch(() => Alert.alert(
+          'Validation du compte',
+          'Une erreur est survenue lors de l\'envoi du mail, veuillez réessayer plus tard.',
+        ));
     }
   };
 

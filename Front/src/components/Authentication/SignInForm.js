@@ -43,15 +43,20 @@ export default class SignInForm extends React.Component {
         .catch((error) => {
           // console.log(error);
           if (error.status === 401) {
-            Alert.alert('Error, wrong username or password');
+            Alert.alert('Erreur d\'authentification', 'Mauvais identifiant ou mot de passe.');
+          } else if (error.status === 403) {
+            Alert.alert(
+              'Erreur d\'authentification',
+              'Votre adresse email n\'a pas été vérifiée.',
+            );
           }
         });
     }
   };
 
-  ForgotPassPage = () => {
+  sendTokensPage = (type) => {
     const { navigation } = this.props;
-    navigation.navigate('SendTokens');
+    navigation.navigate('SendTokens', { type });
   };
 
   render() {
@@ -85,9 +90,15 @@ export default class SignInForm extends React.Component {
         </View>
         <TouchableOpacity
           style={styles.forgotPass}
-          onPress={this.ForgotPassPage}
+          onPress={() => this.sendTokensPage('password')}
         >
           <Text>Mot de passe oublié ?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.forgotPass}
+          onPress={() => this.sendTokensPage('mail')}
+        >
+          <Text>Compte non vérifié ?</Text>
         </TouchableOpacity>
       </View>
     );

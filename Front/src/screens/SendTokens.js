@@ -5,15 +5,9 @@ import {
 import Components from '../components';
 
 class SendTokens extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      type: 'Forgot Pass',
-    };
-  }
-
   render() {
-    const { type } = this.state;
+    const { type } = this.props.navigation.state.params;
+
     return (
       <View style={styles.container}>
         <Components.Logo />
