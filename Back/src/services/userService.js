@@ -332,7 +332,7 @@ function sendPasswordToken(loginOrEmail) {
               to: user.email,
               subject: 'New Password Request',
               text: `Hello,\n\nYou can reset your password by clicking the link below:
-              \n${process.env.SERVER}/api/users/passToken/${savedToken.token}\n`,
+              \n${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/passToken/${savedToken.token}\n`,
             };
             utils.sendMail(mailOptions, resolve, reject);
           }

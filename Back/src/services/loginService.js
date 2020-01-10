@@ -11,7 +11,7 @@ function login(userName, password) {
         reject(new CustomError('LoginError', 'Unknown login', 401));
       } else if (bcrypt.compareSync(password, users[0].password)) {
         if (!(users[0].isVerified)) {
-          reject(new CustomError('LoginError', 'User not verified', 401)); // UserError ?
+          reject(new CustomError('LoginError', 'User not verified', 403));
         } else {
           resolve({
             status: 200,
@@ -19,6 +19,7 @@ function login(userName, password) {
           });
         }
       } else {
+        // Wrong credentials
         reject(new CustomError('LoginError', 'Incorrect password', 401));
       }
     });

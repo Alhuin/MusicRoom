@@ -53,7 +53,7 @@ export default class CustomForm extends React.Component {
     } else {
       addUser(userName, password, name, familyName, email)
         .then((res) => {
-          Alert.alert(res)
+          Alert.alert(res);
         })
         .catch(error => console.error(error));
     }

@@ -37,8 +37,8 @@ router.post('/users/newPass/', userController.updatePassword);
 
 // Mail Tokens
 router.post('/users/emailToken/', userController.sendEmailToken);
-router.get('/users/emailToken/:token', userController.confirmEmailToken);
 router.post('/users/passToken/', userController.sendPasswordToken);
+router.get('/users/emailToken/:token', userController.confirmEmailToken);
 router.get('/users/passToken/:token', userController.confirmPasswordToken);
 
 

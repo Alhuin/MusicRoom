@@ -10,15 +10,21 @@ import { addUser, login } from '../../../API/BackApi';
 
 
 export default class SocialLogin extends Component {
+
   signIn = async () => {
-    console.log('CHECKER');
     const {
-      type, navigation, userChanged, setSocket, admin,
+      type,
+      navigation,
+      userChanged,
+      setSocket,
+      admin,
     } = this.props;
     const loginSocial = await AsyncStorage.getItem('userName');
     const passSocial = await AsyncStorage.getItem('password');
+
     console.log(`propsType = ${type}`);
     console.log(`asyncType = ${await AsyncStorage.getItem('type')}`);
+
     if (type === 'Sign Up' && await AsyncStorage.getItem('type') === null) {
       GoogleSignin.configure({
         webClientId: '1032045608110-fk8aiqduat8c6oiltm1uneqbuqhumfsn.apps.googleusercontent.com',
@@ -26,12 +32,26 @@ export default class SocialLogin extends Component {
       try {
         await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
         const userInfo = await GoogleSignin.signIn();
-        console.log(userInfo);
+
         addUser(userInfo.user.familyName, userInfo.idToken,
           userInfo.user.givenName, userInfo.user.familyName, userInfo.user.email)
-          .then(await AsyncStorage.setItem('userName', userInfo.user.familyName),
+          .then(
+            await AsyncStorage.setItem('userName', userInfo.user.familyName),
             await AsyncStorage.setItem('password', userInfo.idToken),
-            await AsyncStorage.setItem('type', 'SignIn'))
+            await AsyncStorage.setItem('type', 'SignIn'),
+            console.log('Alert'),
+            Alert.alert(
+              'Validation de compte',
+              'Un email de validation vous a été envoyé, si vous ne l\'avez pas reçu veuillez cliquer sur \'Renvoyer\'',
+              [
+                {
+                  text: 'Renvoyer',
+                  onPress: () => Alert.alert('revoyer un mail'),
+                },
+                { text: 'OK' },
+              ],
+            ),
+          )
           .catch((error) => {
             console.log('caught', error.message);
           });
