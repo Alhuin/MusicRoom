@@ -87,6 +87,11 @@ export const bodyText = {
   lineHeight: 19,
 };
 
+export const smallText = {
+  color: Colors.baseText,
+  fontSize: smallestFontSize,
+};
+
 export const iconWrapper = {
   alignItems: 'center',
   justifyContent: 'center',

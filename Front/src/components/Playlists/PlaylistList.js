@@ -33,6 +33,7 @@ class PlaylistList extends React.Component {
                 authorName={item.authorName}
                 playlistId={item._id}
                 users={item.users}
+                tags={item.tags}
                 navigation={navigation}
                 userId={userId}
                 roomType={roomType}

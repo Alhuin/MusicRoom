@@ -45,12 +45,12 @@ class UserProfile extends React.Component {
     Object.keys(user.preferences).forEach((key) => {
       if (Object.prototype.hasOwnProperty.call(user.preferences, key)) {
         if (user.preferences[key] === true) {
-          if (i > 0) {
-            preferences += `, ${key}`;
-            i += 1;
-          } else {
+          if (i === 0) {
             preferences += key;
+          } else {
+            preferences += `, ${key}`;
           }
+          i += 1;
         }
       }
     });
