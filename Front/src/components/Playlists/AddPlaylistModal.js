@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, Text, View, TextInput, Switch, Button, Alert, TouchableOpacity,
+  Modal, StyleSheet, Text, View, TextInput, Switch, Alert, TouchableOpacity,
 } from 'react-native';
 import { addPlaylist } from '../../../API/BackApi';
 import DatePickerModal from './DatePickerModal';
@@ -8,7 +8,7 @@ import { Colors, Buttons, Typography } from '../../styles';
 
 export default class AddPlaylistModal extends React.Component {
   state = {
-    switchValue: false,
+    switchValue: true,
     namePlaylist: '',
     location: {},
     type: null,
@@ -237,7 +237,7 @@ export default class AddPlaylistModal extends React.Component {
                 style={styles.switch}
                 onValueChange={this.toggleSwitch}
                 value={switchValue}
-                thumbColor={Colors.button}
+                thumbColor={switchValue ? Colors.button : Colors.buttonDisabled}
               />
             </View>
           </View>

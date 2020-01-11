@@ -878,7 +878,7 @@ class PlaylistSettings extends React.Component {
                 style={styles.switch}
                 onValueChange={this.toggleSwitch}
                 value={switchValue}
-                thumbColor={Colors.button}
+                thumbColor={switchValue ? Colors.button : Colors.buttonDisabled}
               />
             </View>
           </View>
