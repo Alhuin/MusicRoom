@@ -123,7 +123,7 @@ function deleteUserById(userId) {
 }
 
 function addUser(login, password, name, familyName, email) {
-  return new Promise( (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
     const user = new UserModel({
