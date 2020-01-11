@@ -338,9 +338,8 @@ class Playlist extends React.Component {
               isUserInPlaylist={isUserInPlaylist}
               editor={editor}
               pos={pos}
-              onMoveEnd={(data) => {
-                this.setState({ tracks: data.data });
-                moveTrackOrder(playlistId, data.row._id, data.to)
+              onMoveEnd={(id, newPosition) => {
+                moveTrackOrder(playlistId, id, newPosition)
                   .then(() => {
                     this._onRefresh();
                   })
