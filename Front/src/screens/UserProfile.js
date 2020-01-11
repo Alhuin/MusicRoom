@@ -1,10 +1,13 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TextInput, ScrollView,
+  StyleSheet, View, Text, ScrollView,
 } from 'react-native';
 import {
   getUserByIdByPreferences,
 } from '../../API/BackApi';
+import {
+  Colors, Typography,
+} from '../styles';
 
 class UserProfile extends React.Component {
   constructor(props) {
@@ -52,73 +55,70 @@ class UserProfile extends React.Component {
       }
     });
     return (
-      <ScrollView>
-        <View style={styles.main_container}>
-          <Text style={styles.title_set}>
-            Profil utilisateur
+      <View style={styles.main_container}>
+        <View style={Typography.screenHeader}>
+          <Text style={Typography.screenHeaderText}>
+            Profil
+            { !user.name ? ' d\'un Anonyme' : ` de ${user.name}` }
           </Text>
-          <View style={styles.card}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>Nom :</Text>
-            </View>
-            <View style={styles.content_container}>
-              <View style={styles.content}>
-                <Text style={styles.textStyle}>
-                  { !user.name ? 'Anonyme' : user.name }
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>Nom de famille :</Text>
-            </View>
-            <View style={styles.content_container}>
-              <View style={styles.content}>
-                <TextInput style={styles.textStyle}>
-                  { !user.familyName ? 'Anonyme' : user.familyName }
-                </TextInput>
-              </View>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>Email :</Text>
-            </View>
-            <View style={styles.content_container}>
-              <View style={styles.content}>
-                <Text style={styles.textStyle}>
-                  { !user.email ? 'Privé' : user.email}
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>Tél :</Text>
-            </View>
-            <View style={styles.content_container}>
-              <View style={styles.content}>
-                <Text style={styles.textStyle}>
-                  { !user.phoneNumber ? 'Privé' : user.phoneNumber}
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.title_container}>
-              <Text style={styles.title_text}>Préférences :</Text>
-            </View>
-            <View style={styles.content_container}>
-              <View style={styles.content}>
-                <Text style={styles.textStyle}>
-                  { !preferences ? 'Privé' : preferences }
-                </Text>
-              </View>
-            </View>
-          </View>
         </View>
-      </ScrollView>
+        <ScrollView>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Nom</Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <Text style={Typography.bodyText}>
+                { !user.name ? 'Anonyme' : user.name }
+              </Text>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Nom de famille</Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <Text style={Typography.bodyText}>
+                { !user.familyName ? 'Anonyme' : user.familyName }
+              </Text>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Email</Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <Text style={Typography.bodyText}>
+                { !user.email ? 'Privé' : user.email}
+              </Text>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Tél</Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <Text style={Typography.bodyText}>
+                { !user.phoneNumber ? 'Privé' : user.phoneNumber}
+              </Text>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Préférences</Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <Text style={Typography.bodyText}>
+                { !preferences ? 'Privé' : preferences }
+              </Text>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -126,44 +126,19 @@ class UserProfile extends React.Component {
 let styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    // height: 120,
+    backgroundColor: Colors.background,
   },
-  card: {
-    minHeight: 110,
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    // alignItems: 'center',
-    backgroundColor: '#404040',
-    borderRadius: 20,
-    padding: 10,
-    margin: 10,
+  section: {
+    ...Typography.section,
   },
-  content_container: {
-    flexDirection: 'row',
-    margin: 5,
-    flex: 2,
-    justifyContent: 'space-around',
+  sectionHeader: {
+    ...Typography.sectionHeader,
   },
-  title_container: {
-    flex: 1,
+  sectionHeaderText: {
+    ...Typography.sectionHeaderText,
   },
-  title_text: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  content: {
-    flex: 6,
-  },
-  textStyle: {
-    // width: '60%',
-    color: 'white',
-  },
-  title_set: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    paddingRight: 5,
-    textAlign: 'center',
+  sectionContent: {
+    ...Typography.sectionContent,
   },
 });
 

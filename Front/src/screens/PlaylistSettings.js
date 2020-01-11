@@ -830,7 +830,7 @@ class PlaylistSettings extends React.Component {
             </View>
             <View style={styles.sectionContent}>
               <TextInput
-                style={[Typography.textInput, { maxWidth: 200 }]}
+                style={[Typography.textInput, { maxWidth: 250 }]}
                 placeholder="Nom de la playlist"
                 onEndEditing={(e: any) => {
                   this.setName(e.nativeEvent.text);
