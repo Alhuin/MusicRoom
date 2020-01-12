@@ -152,7 +152,7 @@ function deletePlaylistById(playlistId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('DeletePlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('DeletePlaylist', 'No playlist with this id in database', 404));
       } else {
         playlist.remove((removeError, removedPlaylist) => {
           if (removeError) {
@@ -176,7 +176,7 @@ function deletePlaylistByAdmin(playlistId, userId) {
         if (error) {
           reject(new CustomError('MongoError', error.message, 500));
         } else if (!playlist) {
-          reject(new CustomError('DeletePlaylistByAdmin', 'No playlist with this id in database', 400));
+          reject(new CustomError('DeletePlaylistByAdmin', 'No playlist with this id in database', 404));
         } else {
           playlist.remove((removeError, removedPlaylist) => {
             if (removeError) {
@@ -202,7 +202,7 @@ function isAdmin(userId, playlistId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('IsAdmin', 'No playlist with this id in database', 400));
+        reject(new CustomError('IsAdmin', 'No playlist with this id in database', 404));
       } else {
         resolve({
           status: 200,
@@ -219,7 +219,7 @@ function getAdminsByPlaylistId(playlistId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('GetAdminsByPlaylistId', 'No playlist with this id in database', 400));
+        reject(new CustomError('GetAdminsByPlaylistId', 'No playlist with this id in database', 404));
       } else {
         UserModel.find({
           _id: {
@@ -296,7 +296,7 @@ function adminInPlaylistDowngrade(playlistId, userId, requesterId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('AdminInPlaylistDowngrade', 'No playlist with this id in database', 400));
+        reject(new CustomError('AdminInPlaylistDowngrade', 'No playlist with this id in database', 404));
       } else if (utils.isAdminInPlaylist(playlist, requesterId)
           && utils.isAdminInPlaylist(playlist, userId)) {
         for (let i = 0; i < playlist.admins.length; i += 1) {
@@ -326,7 +326,7 @@ function userInPlaylistUpgrade(playlistId, userId, requesterId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('UserInPlaylistUpgrade', 'No playlist with this id in database', 400));
+        reject(new CustomError('UserInPlaylistUpgrade', 'No playlist with this id in database', 404));
       } else if (utils.isAdminInPlaylist(playlist, requesterId)) {
         if (!utils.isAdminInPlaylist(playlist, userId)) {
           for (let i = 0; i < playlist.users.length; i += 1) {
@@ -359,7 +359,7 @@ function deleteUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('deleteUserInPlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('deleteUserInPlaylist', 'No playlist with this id in database', 404));
       } else if ((String(requesterId) === String(userId))
         || utils.isAdminInPlaylist(playlist, requesterId)) {
         for (let i = 0; i < playlist.users.length; i += 1) {
@@ -401,7 +401,7 @@ function banUserInPlaylist(playlistId, userId, isUserAdmin, requesterId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('banUserInPlaylist', 'No playlist with this id in database', 400));
+        reject(new CustomError('banUserInPlaylist', 'No playlist with this id in database', 404));
       } else if (utils.isAdminInPlaylist(playlist, requesterId)) {
         for (let i = 0; i < playlist.users.length; i += 1) {
           if (String(playlist.users[i]._id) === String(userId)
@@ -443,7 +443,7 @@ function addUserToPlaylistAndUnbanned(playlistId, userId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('addUserToPlaylistAndUnbanned', 'No playlist with this id in database', 400));
+        reject(new CustomError('addUserToPlaylistAndUnbanned', 'No playlist with this id in database', 404));
       } else {
         for (let i = 0; i < playlist.bans.length; i += 1) {
           if (String(playlist.bans[i]) === String(userId)) {
@@ -503,7 +503,7 @@ function joinPlaylistWithCode(userId, playlistCode) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlists[0]) {
-        reject(new CustomError('JoinPlaylistWithCode', 'No playlist with this id in database', 400));
+        reject(new CustomError('JoinPlaylistWithCode', 'No playlist with this id in database', 404));
       } else {
         const newPlaylist = playlists[0];
         if (!newPlaylist.bans.includes(userId)
@@ -532,7 +532,7 @@ function joinPlaylistWithId(userId, playlistId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('JoinPlaylistWithId', 'No playlist with this id in database', 400));
+        reject(new CustomError('JoinPlaylistWithId', 'No playlist with this id in database', 404));
       } else {
         const newPlaylist = playlist;
         if (!newPlaylist.bans.includes(userId)
@@ -561,7 +561,7 @@ function getPlaylistPrivateId(playlistId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('getPlaylistPrivateId', 'No playlist with this id in database', 400));
+        reject(new CustomError('getPlaylistPrivateId', 'No playlist with this id in database', 404));
       } else {
         resolve({
           status: 200,
@@ -578,7 +578,7 @@ function getDelegatedPlayerAdmin(playlistId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('getDelegatedPlayerAdmin', 'No playlist with this id in database', 400));
+        reject(new CustomError('getDelegatedPlayerAdmin', 'No playlist with this id in database', 404));
       } else {
         resolve({
           status: 200,
@@ -620,7 +620,7 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('SetDelegatedPlayerAdmin', 'No playlist with this id in database', 400));
+        reject(new CustomError('SetDelegatedPlayerAdmin', 'No playlist with this id in database', 404));
       } else {
         let isRequesterAdmin = false;
         if (String(requesterId) !== String(userId)) {
@@ -663,7 +663,7 @@ function deleteTrackFromPlaylist(playlistId, musicId) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!musics[0]) {
-        reject(new CustomError('DeleteTrackFromPlaylist', 'No Music with this id in database', 400));
+        reject(new CustomError('DeleteTrackFromPlaylist', 'No Music with this id in database', 404));
       } else {
         musics[0].remove((removeError, removedMusic) => {
           if (removeError) {
@@ -686,7 +686,7 @@ function moveTrackOrder(playlistId, musicId, newIndex) {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('moveTrackOrder', 'No playlist with this id in database', 400));
+        reject(new CustomError('moveTrackOrder', 'No playlist with this id in database', 404));
       } else if (playlist.musics.length <= newIndex) {
         reject(new CustomError('moveTrackOrder', 'Error on newIndex parameter', 400));
       } else {

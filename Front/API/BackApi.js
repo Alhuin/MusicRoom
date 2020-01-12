@@ -8,29 +8,27 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
  */
 
 function login(userName, password) {
-  return new Promise((resolve, reject) => {
-    fetch(`${api}/login`, {
+  return new Promise((resolve, reject) => fetch(
+    `${api}/login`,
+    {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        login: userName, password,
+        login: userName,
+        password,
       }),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        // console.log('login response from fetch');
-        // console.log(response);
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          reject(new CustomError('LoginError', data.msg, response.status));
-        }
-      })
-      .catch(error => reject(error));
-  });
+    },
+  ).then(async (response) => {
+    const data = await response.json();
+    if (response.status === 200) {
+      resolve(data);
+    } else {
+      reject(new CustomError('LoginError', data.msg, response.status));
+    }
+  }).catch(error => reject(error)));
 }
 
 function getUserByIdByPreferences(userId, requesterId) {

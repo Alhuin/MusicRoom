@@ -3,8 +3,9 @@ import CustomError from './errorHandler';
 import UserModel from '../models/userModel';
 
 function login(userName, password) {
-  return new Promise((resolve, reject) => {
-    UserModel.find({ login: userName }, (error, users) => {
+  return new Promise((resolve, reject) => UserModel.find(
+    { login: userName },
+    (error, users) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!users.length) {
@@ -18,12 +19,10 @@ function login(userName, password) {
             data: users[0],
           });
         }
-      } else {
-        // Wrong credentials
-        reject(new CustomError('LoginError', 'Incorrect password', 401));
       }
-    });
-  });
+      reject(new CustomError('LoginError', 'Incorrect password', 401));
+    },
+  ));
 }
 
 export default {
