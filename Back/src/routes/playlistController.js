@@ -393,6 +393,7 @@ function getNextTrackByVote(req, res) {
 }
 
 function joinPlaylistWithCode(req, res) {
+  // console.log(req);
   if (utils.isValidId(req.body.userId) && req.body.playlistCode) {
     playlistService.joinPlaylistWithCode(req.body.userId, req.body.playlistCode)
       .then((response) => {

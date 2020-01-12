@@ -61,7 +61,6 @@ describe('User Model Tests', () => {
     expect(savedUser.passwordResetToken).toBe(userData.passwordResetToken);
     expect(savedUser.passwordResetExpires).toBe(userData.passwordResetExpires);
     expect(savedUser.preview).toBe(userData.preview);
-    expect(savedUser.roles).toContain(userData.roles[0]);
   });
 
   // Test Schema is working!!!

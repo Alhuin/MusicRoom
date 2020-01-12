@@ -31,13 +31,21 @@ class Playlist extends React.Component {
     props.socket.on('refreshPermissions', this.onRefreshPermissionSignal);
   }
 
+
   componentDidMount(): void {
     const { navigation, socket } = this.props;
     const roomType = navigation.getParam('roomType');
     const playlistId = navigation.getParam('playlistId');
     this._isMounted = true;
 
-    socket.emit('userJoinedPlaylist', playlistId);
+    this._focusListener = navigation.addListener('didFocus', () => {
+      socket.emit('userJoinedPlaylist', playlistId);
+    });
+
+    this._blurListener = navigation.addListener('willBlur', () => {
+      socket.emit('userLeavedPlaylist', playlistId);
+    });
+
     this.isAdminAndIsEditor();
     this.getName();
     this.updateMyVotes()
@@ -51,11 +59,9 @@ class Playlist extends React.Component {
   }
 
   componentWillUnmount(): void {
-    const { navigation, socket } = this.props;
-    const playlistId = navigation.getParam('playlistId');
     this._isMounted = false;
-
-    socket.emit('userLeavedPlaylist', playlistId);
+    this._focusListener.remove();
+    this._blurListener.remove();
     this._onChangedPage();
   }
 
@@ -65,18 +71,6 @@ class Playlist extends React.Component {
       playing.stop();
     }
   };
-
-  // _onRefreshSignal = () => {
-  //   if (this._isMounted) {
-  //     console.log('[Socket Server] : refresh signal received');
-  //     this.isAdminAndIsEditor();
-  //     this.updateMyVotes()
-  //       .then(() => {
-  //         this.updateTracks();
-  //       })
-  //       .catch(error => console.log(error));
-  //   }
-  // };
 
   _onRefreshPermissionSignal = () => {
     if (this._isMounted) {
@@ -95,13 +89,13 @@ class Playlist extends React.Component {
       this.isAdminAndIsEditor();
       this.getName();
       console.log('_onRefresh');
-      this.setState({ refreshing: true });
+      // this.setState({ refreshing: true });
       if (roomType === 'party') {
         this.updateMyVotes()
           .then(() => {
             this.updateTracks(roomType, playlistId)
               .then(() => {
-                this.setState({ refreshing: false });
+                // this.setState({ refreshing: false });
               })
               .catch((error) => {
                 console.error(error);
@@ -113,7 +107,7 @@ class Playlist extends React.Component {
       } else if (roomType === 'radio') {
         this.updateTracks(roomType, playlistId)
           .then(() => {
-            this.setState({ refreshing: false });
+            // this.setState({ refreshing: false });
           })
           .catch((error) => {
             console.error(error);
@@ -141,7 +135,6 @@ class Playlist extends React.Component {
   });
 
   updateMyVotes = () => new Promise((resolve, reject) => {
-    // vraiment besoin d'async ? ...
     const { navigation, loggedUser } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const userId = loggedUser._id;

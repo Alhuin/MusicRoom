@@ -23,17 +23,17 @@ router.post('/login', loginController.login);
 
 /*             Users                 */
 
-router.get('/users/deezer', userController.getDeezerCode);
-router.get('/users/:userId', userController.getUserById);
-router.get('/users', userController.getUsers);
 router.get('/users/getByPreferences/:userId&:requesterId', userController.getUserByIdByPreferences);
-router.get('/users/getFriends/:userId', userController.getFriends);
-router.delete('/users/:userId', userController.deleteUserById);
-router.post('/users', userController.addUser);
+router.get('/users/deezer', userController.getDeezerCode);
 router.post('/users/update', userController.updateUser);
 router.post('/users/addFriend', userController.addFriend);
 router.post('/users/deleteFriend', userController.deleteFriend);
 router.post('/users/newPass/', userController.updatePassword);
+router.get('/users', userController.getUsers);
+router.post('/users', userController.addUser);
+router.get('/users/getFriends/:userId', userController.getFriends);
+router.get('/users/:userId', userController.getUserById);
+router.delete('/users/:userId', userController.deleteUserById);
 
 // Mail Tokens
 router.post('/users/emailToken/', userController.sendEmailToken);
@@ -45,19 +45,17 @@ router.get('/users/passToken/:token', userController.confirmPasswordToken);
 /*             Musics                 */
 
 router.get('/musics', musicController.getMusics);
-router.get('/musics/:musicId', musicController.getMusicById);
-router.get('/musicsByVote/:playlistId&:roomType', musicController.getMusicsByVote);
-router.delete('/musics/:musicId', musicController.deleteMusicById);
 router.post('/musics/add', musicController.addMusicToPlaylist);
+router.get('/musics/:musicId', musicController.getMusicById);
+router.delete('/musics/:musicId', musicController.deleteMusicById);
+router.get('/musicsByVote/:playlistId&:roomType', musicController.getMusicsByVote);
 router.post('/deezPy', musicController.downloadMusic);
 
 
 /*             Playlists                 */
 
 router.get('/playlists', playlistController.getPlaylists);
-router.get('/playlists/:roomType', playlistController.getPlaylistsFilteredByRoom);
 router.post('/playlists/filtered', playlistController.getPlaylistsFiltered);
-router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 router.get('/playlists/name/:playlistId', playlistController.getPlaylistName);
 router.get('/playlists/admins/:playlistId', playlistController.getAdminsByPlaylistId);
 router.get('/playlists/bans/:playlistId', playlistController.getBansByPlaylistId);
@@ -79,7 +77,6 @@ router.post('/playlists/add', playlistController.addPlaylist);
 router.post('/playlists/user/unbanned', playlistController.addUserToPlaylistAndUnbanned);
 router.post('/playlists/isAdmin', playlistController.isAdmin);
 router.post('/playlists/isEditor', playlistController.isEditor);
-router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 router.delete('/playlists/deletePlaylistByAdmin', playlistController.deletePlaylistByAdmin);
 router.post('/playlists/joinPlaylistWithCode', playlistController.joinPlaylistWithCode);
 router.post('/playlists/joinPlaylistWithId', playlistController.joinPlaylistWithId);
@@ -92,6 +89,9 @@ router.post('/playlists/setTags', playlistController.setTags);
 router.post('/playlists/setPlaylistLocation', playlistController.setPlaylistLocation);
 router.post('/playlists/setEditRestriction', playlistController.setEditRestriction);
 router.post('/playlists/setPlaylistName', playlistController.setPlaylistName);
+router.get('/playlists/:roomType', playlistController.getPlaylistsFilteredByRoom);
+router.get('/playlists/:playlistId', playlistController.getPlaylistById);
+router.delete('/playlists/:playlistId', playlistController.deletePlaylistById);
 
 
 /*             Votes                 */

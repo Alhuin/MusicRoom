@@ -419,8 +419,9 @@ function addPlaylist(name, publicFlag, userId, author, authorName,
 }
 
 function joinPlaylistWithCode(userId, playlistCode) {
-  return new Promise((resolve, reject) => {
-    fetch(`${api}/playlists/joinWithCode`, {
+  return new Promise((resolve, reject) => fetch(
+    `${api}/playlists/joinPlaylistWithCode`,
+    {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -429,18 +430,15 @@ function joinPlaylistWithCode(userId, playlistCode) {
       body: JSON.stringify({
         userId, playlistCode,
       }),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          reject(new CustomError('joinPlaylistWithCode', data.msg, response.status));
-          // console.log(data.msg);
-        }
-      })
-      .catch(error => reject(error));
-  });
+    },
+  ).then(async (response) => {
+    const data = await response.json();
+    if (response.status === 200) {
+      resolve(data);
+    } else {
+      reject(new CustomError('joinPlaylistWithCode', data.msg, response.status));
+    }
+  }).catch(error => reject(error)));
 }
 
 function joinPlaylistWithId(userId, playlistId) {

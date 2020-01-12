@@ -19,33 +19,38 @@ class Partys extends React.Component {
   }
 
   componentDidMount(): void {
-    const { loggedUser, socket } = this.props;
+    const { socket } = this.props;
+    console.log('componentDidmount');
 
-    socket.emit('userJoinedPartysList');
+    this.updatePlaylist()
+      .catch(error => console.error(error));
+
     this._isMounted = true;
-    getPlaylistsFiltered('party', loggedUser._id)
-      .then((playlists) => {
-        this.setState({ playlists });
-      })
-      .catch((error) => {
-        if (error.status !== 400) {
-          console.error(error);
-        }
-      });
+    this._focusListener = this.props.navigation.addListener('didFocus', () => {
+      socket.emit('userJoinedPartysList');
+      console.log(this.props.shouldUpdate);
+      if (this.props.shouldUpdate) {
+        this.updatePlaylist()
+          .then(this.props.shouldUpdatePlaylist(false))
+          .catch(error => console.error(error));
+      }
+    });
+    this._blurListener = this.props.navigation.addListener('willBlur', () => {
+      socket.emit('userLeavedPartysList');
+    });
   }
 
   componentWillUnmount(): void {
-    const { socket } = this.props;
-
     this._isMounted = false;
-
-    socket.emit('userLeavedPartysList');
+    this._focusListener.remove();
+    this._blurListener.remove();
   }
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
       console.log('[Socket Server] : refresh signal for playlist list received');
-      this.updatePlaylist();
+      this.updatePlaylist()
+        .catch(error => console.error(error));
     }
   };
 

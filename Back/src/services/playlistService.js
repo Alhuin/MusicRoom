@@ -6,8 +6,9 @@ import MusicModel from '../models/musicModel';
 import utils from '../utils';
 
 function getPlaylists() {
-  return new Promise((resolve, reject) => {
-    PlaylistModel.find({}, (findError, playlists) => {
+  return new Promise((resolve, reject) => PlaylistModel.find(
+    {},
+    (findError, playlists) => {
       if (findError) {
         reject(new CustomError('MongoError', findError.message, 500));
       } else {
@@ -16,64 +17,68 @@ function getPlaylists() {
           data: playlists,
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function getPlaylistById(playlistId) {
-  return new Promise((resolve, reject) => {
-    PlaylistModel.findById(playlistId, (findError, playlist) => {
+  return new Promise((resolve, reject) => PlaylistModel.findById(
+    playlistId,
+    (findError, playlist) => {
       if (findError) {
         reject(new CustomError('MongoError', findError.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('GetPlaylist', 'No playlist with this id found in database', 404));
+        reject(new CustomError('GetPlaylist', 'No playlist with this id in database', 404));
       } else {
         resolve({
           status: 200,
           data: playlist,
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function getPlaylistName(playlistId) {
-  return new Promise((resolve, reject) => {
-    PlaylistModel.findById(playlistId, (findError, playlist) => {
+  return new Promise((resolve, reject) => PlaylistModel.findById(
+    playlistId,
+    (findError, playlist) => {
       if (findError) {
         reject(new CustomError('MongoError', findError.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('GetPlaylistName', 'No playlist with this id found in database', 404));
+        reject(new CustomError('GetPlaylistName', 'No playlist with this id in database', 404));
       } else {
         resolve({
           status: 200,
           data: playlist,
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function getPublicityOfPlaylistById(playlistId) {
-  return new Promise((resolve, reject) => {
-    PlaylistModel.findById(playlistId, (findError, playlist) => {
+  return new Promise((resolve, reject) => PlaylistModel.findById(
+    playlistId,
+    (findError, playlist) => {
       if (findError) {
         reject(new CustomError('MongoError', findError.message, 500));
       } else if (!playlist) {
-        reject(new CustomError('GetPlaylist', 'No playlist with this id found in database', 404));
+        reject(new CustomError('IsPlaylistPublic', 'No playlist with this id in database', 404));
       } else {
         resolve({
           status: 200,
           data: playlist.publicFlag,
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function getPlaylistsFilteredByRoom(roomType) {
-  return new Promise((resolve, reject) => {
-    PlaylistModel.find({ roomType }, (error, playlists) => {
+  return new Promise((resolve, reject) => PlaylistModel.find(
+    { roomType },
+    (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else {
@@ -82,37 +87,42 @@ function getPlaylistsFilteredByRoom(roomType) {
           data: playlists,
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function getPlaylistsFiltered(roomType, userId) {
-  return new Promise((resolve, reject) => {
-    PlaylistModel.find({ roomType }, (error, playlists) => {
-      if (error) {
-        reject(new CustomError('MongoError', error.message, 500));
+  return new Promise((resolve, reject) => PlaylistModel.find(
+    { roomType },
+    (findError, playlists) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
       } else {
-        for (let i = 0; i < playlists.length; i += 1) {
-          if (!playlists[i].publicFlag) {
-            let flag = false;
-            for (let j = 0; j < playlists[i].users.length; j += 1) {
-              if (String(playlists[i].users[j]._id) === userId) {
-                flag = true;
-              }
-            }
-            if (flag === false) {
-              playlists.splice(i, 1);
-              i -= 1;
-            }
-          }
-        }
+        const isPublicOrIncludesUser = (playlist) => playlist.publicFlag
+          || playlist.users.includes(userId);
+        const filteredPlaylists = playlists.filter(isPublicOrIncludesUser);
+
         resolve({
           status: 200,
-          data: playlists,
+          data: filteredPlaylists,
         });
+        // for (let i = 0; i < playlists.length; i += 1) {
+        // if (!playlists[i].publicFlag) {
+        //   let flag = false;
+        //   for (let j = 0; j < playlists[i].users.length; j += 1) {
+        //     if (String(playlists[i].users[j]._id) === userId) {
+        //       flag = true;
+        //     }
+        //   }
+        //   if (flag === false) {
+        //     playlists.splice(i, 1);
+        //     i -= 1;
+        //   }
+        // }
+        // }
       }
-    });
-  });
+    },
+  ));
 }
 
 function addPlaylist(name, publicFlag, userId, author, authorName,
@@ -498,8 +508,9 @@ function getNextTrackByVote(playlistId) {
 }
 
 function joinPlaylistWithCode(userId, playlistCode) {
-  return new Promise((resolve, reject) => {
-    PlaylistModel.find({ privateId: playlistCode }, (error, playlists) => {
+  return new Promise((resolve, reject) => PlaylistModel.find(
+    { privateId: playlistCode },
+    (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!playlists[0]) {
@@ -522,8 +533,8 @@ function joinPlaylistWithCode(userId, playlistCode) {
           }
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function joinPlaylistWithId(userId, playlistId) {

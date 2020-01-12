@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
+import JoinPrivateRoom from '../containers/JoinPrivateRoom';
 import { Colors, Typography } from '../styles';
 
 class Home extends React.Component {
@@ -32,7 +33,7 @@ class Home extends React.Component {
     const { loggedUser } = this.props;
     return (
       <View style={styles.container}>
-        <Components.JoinPrivateRoom
+        <JoinPrivateRoom
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
           userId={loggedUser._id}

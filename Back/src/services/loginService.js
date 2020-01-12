@@ -19,8 +19,9 @@ function login(userName, password) {
             data: users[0],
           });
         }
+      } else {
+        reject(new CustomError('LoginError', 'Incorrect password', 401));
       }
-      reject(new CustomError('LoginError', 'Incorrect password', 401));
     },
   ));
 }

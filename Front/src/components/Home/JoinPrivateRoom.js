@@ -13,18 +13,24 @@ export default class JoinPrivateRoom extends React.Component {
   }
 
   joinRoom = () => {
-    const { userId, setModalVisible } = this.props;
+    const { userId, setModalVisible, shouldUpdatePlaylist } = this.props;
     const { text } = this.state;
-    setModalVisible();
     joinPlaylistWithCode(userId, text)
-      .then(() => {
+      .then((playlist) => {
+        shouldUpdatePlaylist(true);
         setModalVisible();
-        Alert.alert('Vous avez maintenant accès a une nouvelle playlist');
+        Alert.alert(
+          'Rejoindre une playlist',
+          `Vous avez désormais accès à la ${playlist.roomType} ${playlist.name} !`,
+        );
       })
       .catch((error) => {
         setModalVisible();
-        Alert.alert('La demande a rencontrée une erreur.');
-        console.error(error);
+        if (error.status === 404) {
+          Alert.alert('Code inconnu', 'Ce code ne correspond à aucune playlist !');
+        } else {
+          Alert.alert('Rejoindre une playlist', 'La demande a rencontré une erreur.');
+        }
       });
   };
 
@@ -49,7 +55,6 @@ export default class JoinPrivateRoom extends React.Component {
         <View
           style={styles.container}
         >
-
           <TextInput
             style={styles.textInput}
             placeholder="Entrez le code ici"
