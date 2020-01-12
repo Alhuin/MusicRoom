@@ -17,7 +17,7 @@ then
 	echo -e '\033[32mRequests is installed\033[0m'
 else
 	echo -e '\033[33mRequests is not installed\033[0m'
-	pip3 install requests
+	pip3 install --user requests
 fi
 
 if pip3 list | grep -F cryptography &>/dev/null ;
@@ -25,7 +25,7 @@ then
 	echo -e '\033[32mCryptography is installed\033[0m'
 else
 	echo -e '\033[33mCryptography is not installed\033[0m'
-	pip3 install cryptography
+	pip3 install --user cryptography
 fi
 
 if pip3 list | grep -F mutagen &>/dev/null ;
@@ -33,7 +33,7 @@ then
 	echo -e '\033[32mMutagen is installed\033[0m'
 else
 	echo -e '\033[33mMutagen is not installed\033[0m'
-	pip3 install mutagen
+	pip3 install --user mutagen
 fi
 
 echo -e '\033[32mDependecies successfully installed.\033[0m'

@@ -91,8 +91,6 @@ function getPlaylistsFiltered(roomType, userId) {
     PlaylistModel.find({ roomType }, (error, playlists) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
-      } else if (!playlists[0]) {
-        reject(new CustomError('PlaylistFiltered', 'No available playlist in database', 400));
       } else {
         for (let i = 0; i < playlists.length; i += 1) {
           if (!playlists[i].publicFlag) {
@@ -108,15 +106,10 @@ function getPlaylistsFiltered(roomType, userId) {
             }
           }
         }
-        if (!playlists[0]) {
-          reject(new CustomError('PlaylistFiltered', 'No available playlist in database', 400));
-        } else {
-          // console.log(playlists);
-          resolve({
-            status: 200,
-            data: playlists,
-          });
-        }
+        resolve({
+          status: 200,
+          data: playlists,
+        });
       }
     });
   });

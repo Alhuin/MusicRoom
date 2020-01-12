@@ -136,8 +136,10 @@ function downloadMusic(musicUrl) {
         let path = stdout.replace('\n', '').match(/^Downloading: (.*)\.\.\.Done!$/);
         if (path === null) {
           path = stdout.replace('\n', '').match(/^(.*) already exists!$/);
+          if (path === null) {
+            reject(new CustomError('DeezPy', stdout, 500));
+          }
         }
-        // CATCHER USER TOKEN EXPIRE
         resolve({
           status: 200,
           data: path[1],
