@@ -1,6 +1,6 @@
 
-# MusicModel Room
-A MusicModel playlist sharing crossplatform app in react-native & nodeJs 
+# Music Room
+A Music playlist sharing crossplatform app in react-native & nodeJs 
 
 ## Set Up de l'environnement
 
@@ -37,9 +37,9 @@ doc de l’Api https://documenter.getpostman.com/view/6579841/S1a7UQAv?version=l
  - Connexion ( premiere visite )
  - Connexion ( visites futures )
  - Choix du service 
-	 - **MusicModel Track VoteModel** : Génération live d’enchainement de musiques par vote. 
-	 - **MusicModel Control Delegation** : Délégation du contrôle de l’écoute. 
-	 -  **MusicModel PlaylistModel Editor** : Édition de playlists à plusieurs en temps réel.
+	 - **Music Track VoteModel** : Génération live d’enchainement de musiques par vote. 
+	 - **Music Control Delegation** : Délégation du contrôle de l’écoute. 
+	 -  **Music PlaylistModel Editor** : Édition de playlists à plusieurs en temps réel.
  - Page de profil
  - Page modification des comptes liés
  - Page de reset de mot de passe
@@ -65,8 +65,8 @@ A[Home] --> B[Choix du service]
 A -->F[Page de Profil]
 F -->G[Modifier comptes liés]
 F -->H[Changer de mot de passe]
-B --> C[MusicModel Track VoteModel]
-B --> D[MusicModel Control Delegation]
-B --> E[MusicModel PlaylistModel Editor]
+B --> C[Music Track VoteModel]
+B --> D[Music Control Delegation]
+B --> E[Music PlaylistModel Editor]
 
 ```

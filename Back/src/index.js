@@ -134,7 +134,7 @@ connectDb().then(async () => {
     familyName: 'Janin-R',
     email: 'julien.janinre@gmail.com',
     phoneNumber: '00',
-    // isVerified: true,
+    isVerified: true,
   });
   user1.save();
   app.listen(process.env.EXPRESS_PORT, () => console.log(`App listening on port ${process.env.EXPRESS_PORT}!`));
