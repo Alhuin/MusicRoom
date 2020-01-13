@@ -1,7 +1,7 @@
 import {
   CHANGE_TRACK, CHANGE_PLAYLIST, SET_TIME, SET_TOTAL_LENGTH, ADMIN, SET_SOCKET,
   SET_DURATION, PAUSED, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION, USER_CHANGED,
-  SHOULD_UPDATE_PLAYLIST,
+  SHOULD_UPDATE_PLAYLIST, LOG_OUT,
 } from './types';
 
 export function changeTrack(payload) {
@@ -54,4 +54,8 @@ export function setSocket(payload) {
 
 export function shouldUpdatePlaylist(payload) {
   return ({ type: SHOULD_UPDATE_PLAYLIST, payload });
+}
+
+export function logOut(payload) {
+  return ({ type: LOG_OUT, payload });
 }

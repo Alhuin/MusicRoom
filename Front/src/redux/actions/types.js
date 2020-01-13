@@ -11,3 +11,4 @@ export const USER_CHANGED = 'USER_CHANGED';
 export const ADMIN = 'ADMIN';
 export const SET_SOCKET = 'SET_SOCKET';
 export const SHOULD_UPDATE_PLAYLIST = 'SHOULD_UPDATE_PLAYLIST';
+export const LOG_OUT = 'LOG_OUT';

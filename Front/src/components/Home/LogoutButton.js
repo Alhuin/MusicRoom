@@ -7,10 +7,16 @@ import { Buttons, Colors } from '../../styles';
 
 export default class LogoutButton extends React.Component {
   _logout = () => {
-    const { setSocket, socket, navigation } = this.props;
+    const {
+      setSocket,
+      socket,
+      navigation,
+      logOut,
+    } = this.props;
 
     socket.disconnect();
     setSocket(null);
+    logOut();
     navigation.navigate('auth');
   };
 
