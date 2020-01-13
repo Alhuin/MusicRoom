@@ -11,7 +11,7 @@ export default class AddPlaylistModal extends React.Component {
     switchValue: true,
     namePlaylist: '',
     location: {},
-    type: null,
+    type: 'GeolocOK',
     startDate: new Date(),
     endDate: new Date(Date.now() + 1000),
     datePickerModalVisible: false,
@@ -45,18 +45,18 @@ export default class AddPlaylistModal extends React.Component {
     const { type } = this.state;
     const { roomType } = this.props;
     if (roomType === 'party') {
-      // eslint-disable-next-line no-undef
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.setState({ location: position });
-        },
-        error => Alert.alert(
-          `${error.message}\nÀ configurer à la main`,
-        ),
-        { enableHighAccuracy: false, timeout: 10000 },
-      );
       if (type === null) {
         this.setState({ type: 'GeolocOK' });
+        // eslint-disable-next-line no-undef
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.setState({ location: position });
+          },
+          error => Alert.alert(
+            `${error.message}\nÀ configurer à la main`,
+          ),
+          { enableHighAccuracy: false, timeout: 10000 },
+        );
       } else {
         this.setState({ type: null });
       }
