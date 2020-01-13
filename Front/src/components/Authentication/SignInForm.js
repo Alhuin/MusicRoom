@@ -28,8 +28,10 @@ export default class SignInForm extends React.Component {
       navigation, userChanged, admin, setSocket,
     } = this.props;
     if (!(userName.length && password.length)) {
-      Alert.alert('Error, empty field.');
-      console.log('error, empty field');
+      Alert.alert(
+        'Connexion',
+        'Veuillez remplir tous les champs.',
+      );
     } else {
       login(userName, password)
         .then((user) => {
@@ -37,13 +39,10 @@ export default class SignInForm extends React.Component {
           if (user.isAdmin) {
             admin(true);
           }
-          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`);
-          // console.log(socket);
-          setSocket(socket);
+          setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
           navigation.navigate('app');
         })
         .catch((error) => {
-          // console.log(error);
           if (error.status === 401) {
             Alert.alert('Erreur d\'authentification', 'Mauvais identifiant ou mot de passe.');
           } else if (error.status === 403) {

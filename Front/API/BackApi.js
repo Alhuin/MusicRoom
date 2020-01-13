@@ -54,7 +54,6 @@ function getUserByIdByPreferences(userId, requesterId) {
 
 function addUser(userName, password, name, familyName, email) {
   return new Promise((resolve, reject) => {
-    console.log(`POST ${api}/users`);
     fetch(`${api}/users`, {
       method: 'POST',
       headers: {
@@ -67,11 +66,10 @@ function addUser(userName, password, name, familyName, email) {
     })
       .then(async (response) => {
         const data = await response.json();
-        console.log(response);
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 202) {
           resolve(data);
-        } else {
-          reject(new CustomError('AddUser', data.msg, response.status));
+        } else if (response.status === 400) {
+          reject(new CustomError('AddUser', data.msg, 400));
         }
       })
       .catch(error => reject(error));

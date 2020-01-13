@@ -28,7 +28,6 @@ const clients = {};
 
 // Handle socket connection & events
 websocket.on('connection', (socket) => {
-  console.log('socket connection');
   console.log('[Socket Server] : user logged in');
   clients[socket.id] = socket;
 
@@ -146,7 +145,7 @@ connectDb().then(async () => {
     name: 'JulB',
     familyName: 'Janin-R',
     email: 'ju@gmail.com',
-    phoneNumber: '00',
+    phoneNumber: '01',
     isVerified: true,
   });
   user2.save();
@@ -255,7 +254,8 @@ connectDb().then(async () => {
 //       });
 //     } else {
 //       playlist = new models.Playlist({
-//         name: `${i} - AweSome Playlist of heaven before the rise of Jesus and after the death of all haflings in Middle-Earth`,
+//         name: `${i} - AweSome Playlist of heaven
+//         before the rise of Jesus and after the death of all haflings in Middle-Earth`,
 //         users: [admin, user3],
 //         author: admin._id,
 //         authorName: admin.name,

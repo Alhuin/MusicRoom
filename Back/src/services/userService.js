@@ -137,7 +137,7 @@ function addUser(login, password, name, familyName, email) {
     user.save((error, savedUser) => {
       if (error) {
         if (error.name === 'ValidationError') {
-          reject(new CustomError(error.name, error.message.split(':')[1], 422));
+          reject(new CustomError('AddUser', error.message.split(':')[1], 400)); // duplicate
         } else {
           reject(new CustomError('MongoError', error.message, 500));
         }
@@ -206,7 +206,7 @@ function addFriend(friendId, userId) {
                 if (!updatedFriend.friends.includes(userId)) {
                   updatedFriend.friends.push(userId);
                 }
-                // eslint-disable-next-line no-unused-vars
+                // eslint-disable-next-line no-unused-vars //
                 updatedUser.save((saveErrorFriend, newFriend) => {
                   if (saveErrorFriend) {
                     reject(new CustomError('MongoError', saveErrorFriend.message, 500));
