@@ -39,12 +39,17 @@ export default class SignInForm extends React.Component {
           if (user.isAdmin) {
             admin(true);
           }
-          setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
+          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`);
+          socket.connect();
+          setSocket(socket);
           navigation.navigate('app');
         })
         .catch((error) => {
           if (error.status === 401) {
-            Alert.alert('Erreur d\'authentification', 'Mauvais identifiant ou mot de passe.');
+            Alert.alert(
+              'Erreur d\'authentification',
+              'Mauvais identifiant ou mot de passe.',
+            );
           } else if (error.status === 403) {
             Alert.alert(
               'Erreur d\'authentification',

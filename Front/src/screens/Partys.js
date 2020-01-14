@@ -22,6 +22,7 @@ class Partys extends React.Component {
     const { socket, navigation } = this.props;
 
     this.updatePlaylist()
+      .then(() => console.log('playlist list updated'))
       .catch(error => console.error(error));
 
     this._isMounted = true;
@@ -31,7 +32,7 @@ class Partys extends React.Component {
       socket.emit('userJoinedPartysList');
       if (shouldUpdate) {
         this.updatePlaylist()
-          .then(shouldUpdatePlaylist(false))
+          .then(() => shouldUpdatePlaylist(false))
           .catch(error => console.error(error));
       }
     });
@@ -50,6 +51,7 @@ class Partys extends React.Component {
     if (this._isMounted) {
       console.log('[Socket Server] : refresh signal for playlist list received');
       this.updatePlaylist()
+        .then(res => console.log(res))
         .catch(error => console.error(error));
     }
   };
@@ -66,14 +68,18 @@ class Partys extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
+    console.log('1');
     const { loggedUser } = this.props;
     // console.log(loggedUser);
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
+        console.log('2');
         this.setState({ playlists });
-        resolve();
+        console.log('3');
+        resolve(true);
       })
       .catch((error) => {
+        console.log('3');
         if (error.status !== 400) {
           console.error(error);
         }
@@ -103,7 +109,6 @@ class Partys extends React.Component {
           modalVisible={modalVisible}
           userId={loggedUser._id}
           roomType="party"
-          updatePlaylist={this.updatePlaylist}
         />
         <View style={styles.container}>
           <Components.PlaylistList

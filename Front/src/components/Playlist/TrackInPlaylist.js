@@ -9,7 +9,6 @@ import {
 } from '../../styles';
 
 class TrackInPlaylist extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -79,9 +78,12 @@ class TrackInPlaylist extends React.Component {
       roomType,
       myVoteValue,
       editor,
+      currentTrack,
     } = this.props;
-    let renderForParty = (null);
-    if (roomType === 'party') {
+    let renderForParty = null;
+    if (currentTrack && currentTrack.id === track._id) {
+      renderForParty = (<Text>Now playing</Text>);
+    } else if (roomType === 'party') {
       let arrowUpStyle = { color: 'grey' };
       let arrowDownStyle = { color: 'grey' };
       if (myVoteValue > 0) arrowUpStyle = { color: 'green' };

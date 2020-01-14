@@ -6,27 +6,31 @@ import {
   Text, Image,
 } from 'react-native';
 import SeekBar from '../AdminPlayer/SeekBar';
-import { getNextTrackByVote } from '../../../API/BackApi';
+import { deleteTrackFromPlaylist, getNextTrackByVote } from '../../../API/BackApi';
 
 export default class MiniPlayer extends React.Component {
   onForward() {
     const {
       playlistId, audioElement, changing, setCurrentPosition,
-      setTotalLength, paused, changeTrack,
+      setTotalLength, paused, changeTrack, track, socket,
     } = this.props;
 
-
-    getNextTrackByVote(playlistId)
-      .then((nextTrack) => {
-        audioElement && audioElement.seek(0);
-        changing(true);
-        setTimeout(() => {
-          setCurrentPosition(0);
-          paused(false);
-          setTotalLength(1);
-          changing(false);
-          changeTrack(nextTrack);
-        }, 0);
+    deleteTrackFromPlaylist(track.id, playlistId)
+      .then(() => {
+        socket.emit('deleteMusic', playlistId);
+        getNextTrackByVote(playlistId)
+          .then((nextTrack) => {
+            audioElement && audioElement.seek(0);
+            changing(true);
+            setTimeout(() => {
+              setCurrentPosition(0);
+              paused(false);
+              setTotalLength(1);
+              changing(false);
+              changeTrack(nextTrack);
+            }, 0);
+          })
+          .catch(error => console.log(error));
       })
       .catch(error => console.log(error));
   }

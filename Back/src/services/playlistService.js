@@ -488,7 +488,7 @@ function getNextTrackByVote(playlistId) {
         if (error) {
           reject(new CustomError('MongoError', error.message, 500));
         } else {
-          let formatedTrack = null;
+          let formatedTrack = {};
           if (tracks[0]) {
             formatedTrack = {
               id: tracks[0]._id,

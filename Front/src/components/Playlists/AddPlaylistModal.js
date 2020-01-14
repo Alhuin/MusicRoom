@@ -68,7 +68,7 @@ export default class AddPlaylistModal extends React.Component {
 
   onPressed = () => {
     const {
-      setModalVisible, userId, roomType, updatePlaylist, loggedUser, socket,
+      setModalVisible, userId, roomType, loggedUser, socket,
     } = this.props;
     const {
       switchValue, startDate, endDate, location, namePlaylist,
@@ -83,7 +83,6 @@ export default class AddPlaylistModal extends React.Component {
             socket.emit('addRadio');
           }
           setModalVisible();
-          updatePlaylist();
         })
         .catch((error) => {
           console.error(error);
@@ -116,8 +115,8 @@ export default class AddPlaylistModal extends React.Component {
     if (roomType === 'radio') {
       roomCapitalized = 'Radio';
     }
-    let dateP = (null);
-    let datePTwo = (null);
+    let dateP = null;
+    let datePTwo = null;
     if (type === 'GeolocOK' && roomType === 'party') {
       dateP = (
         <View>
