@@ -1,8 +1,12 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View,
+  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View, Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Components from '../components';
+import DeezerLogin from '../components/Authentication/DeezerLogin';
+import { addUser } from '../../API/BackApi';
+import { getDeezerTokenLogin } from '../../API/DeezerApi';
 
 class Inscription extends React.Component {
   render() {
@@ -10,6 +14,26 @@ class Inscription extends React.Component {
     const { navigation, userChanged, admin } = this.props;
     userChanged(null);
     admin(false);
+    const DeezerCode = navigation.getParam('DeezCode');
+    getDeezerTokenLogin(DeezerCode)
+      .then((response) => {
+        // this.setState({ DeezerToken: response });
+        addUser(response.firstname, response.id.toString(),
+          response.firstname, response.lastname, response.email)
+          .then(async () => {
+            Alert.alert(
+              'Validation de compte',
+              'Un email de vérification vous a été envoyé.',
+            );
+            await AsyncStorage.setItem('log', 'autoLog');
+            await AsyncStorage.setItem('pass', response.id.toString());
+            await AsyncStorage.setItem('login', response.firstname);
+          })
+          .catch((error) => {
+            console.log('caught', error.message);
+          });
+      })
+      .catch(error => console.log(error));
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -25,6 +49,10 @@ class Inscription extends React.Component {
             <Components.Logo />
             <Components.SignUpForm />
             <Components.SocialLogin type={type} />
+            <DeezerLogin
+              type={type}
+              navigation={navigation}
+            />
             <Components.LoginContext
               navigation={navigation}
               type={type}
