@@ -830,7 +830,7 @@ class PlaylistSettings extends React.Component {
             </View>
             <View style={styles.sectionContent}>
               <TextInput
-                style={[Typography.textInput, { maxWidth: 200 }]}
+                style={[Typography.textInput, { maxWidth: 250 }]}
                 placeholder="Nom de la playlist"
                 onEndEditing={(e: any) => {
                   this.setName(e.nativeEvent.text);
@@ -878,7 +878,7 @@ class PlaylistSettings extends React.Component {
                 style={styles.switch}
                 onValueChange={this.toggleSwitch}
                 value={switchValue}
-                thumbColor={Colors.button}
+                thumbColor={switchValue ? Colors.button : Colors.buttonDisabled}
               />
             </View>
           </View>

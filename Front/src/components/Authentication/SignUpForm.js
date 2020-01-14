@@ -43,19 +43,36 @@ export default class CustomForm extends React.Component {
     const {
       userName, password, name, familyName, email, confirmPassword,
     } = this.state;
-    if (!(name.length && familyName.length && email.length && confirmPassword.length
-      && userName.length && password.length)) {
-      Alert.alert('error: empty field.');
-      console.log('error, empty field');
+
+    if (!(name.length && familyName.length && email.length
+      && confirmPassword.length && userName.length && password.length)) {
+      Alert.alert(
+        'Inscription',
+        'Veuillez remplir tous les champs.',
+      );
     } else if (password !== confirmPassword) {
-      Alert.alert('error: passwords don\'t match');
-      console.log('error, passwords don\'t match');
+      Alert.alert(
+        'Inscription',
+        'Les deux mots de passes ne correspondent pas',
+      );
     } else {
       addUser(userName, password, name, familyName, email)
-        .then((res) => {
-          Alert.alert(res);
+        .then(() => {
+          Alert.alert(
+            'Bienvenue !',
+            'Un email de validation vous a été envoyé.',
+          );
         })
-        .catch(error => console.error(error));
+        .catch((error) => {
+          if (error.status === 400) { // validation error
+            Alert.alert(
+              'Inscription',
+              `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
+            );
+          } else {
+            console.error(error);
+          }
+        });
     }
   };
 

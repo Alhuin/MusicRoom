@@ -8,6 +8,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setSocket: payload => dispatch(actions.setSocket(payload)),
+  logOut: payload => dispatch(actions.logOut(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogoutButton);

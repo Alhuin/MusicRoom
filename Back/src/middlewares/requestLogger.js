@@ -8,7 +8,7 @@
  * @returns {requestLogger}
  */
 
-module.exports = function (dateOptions) {
+module.exports = (dateOptions) => {
   if (dateOptions !== undefined) {
     return function requestLogger(req, res, next) {
       try {
@@ -32,4 +32,5 @@ module.exports = function (dateOptions) {
       }
     };
   }
+  return null;
 };

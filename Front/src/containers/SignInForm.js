@@ -12,6 +12,7 @@ const mapDispatchToProps = dispatch => ({
   userChanged: payload => dispatch(actions.userChanged(payload)),
   admin: payload => dispatch(actions.admin(payload)),
   setSocket: payload => dispatch(actions.setSocket(payload)),
+  shouldUpdatePlaylist: payload => dispatch(actions.shouldUpdatePlaylist(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);

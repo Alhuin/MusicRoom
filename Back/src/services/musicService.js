@@ -5,8 +5,9 @@ import playlistService from './playlistService';
 import PlaylistModel from '../models/playlistModel';
 
 function getMusics() {
-  return new Promise((resolve, reject) => {
-    MusicModel.find({}, (error, musics) => {
+  return new Promise((resolve, reject) => MusicModel.find(
+    {},
+    (error, musics) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else {
@@ -15,25 +16,26 @@ function getMusics() {
           data: musics,
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function getMusicById(musicId) {
-  return new Promise((resolve, reject) => {
-    MusicModel.findById(musicId, (error, music) => {
+  return new Promise((resolve, reject) => MusicModel.findById(
+    musicId,
+    (error, music) => {
       if (error) {
         reject(new CustomError('MongoError', error.message, 500));
       } else if (!music) {
-        reject(new CustomError('GetMusic', 'No music with this id found in database', 404));
+        reject(new CustomError('GetMusicById', 'No music with this id in database', 404));
       } else {
         resolve({
           status: 200,
           data: music,
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function getMusicsByVote(playlistId, roomType) {
@@ -51,7 +53,7 @@ function getMusicsByVote(playlistId, roomType) {
             });
           }
         });
-    } else if (roomType === 'radio') {
+    } else {
       MusicModel.find({ playlist: playlistId })
         .exec((error, musics) => {
           if (error) {
@@ -85,19 +87,18 @@ function getMusicsByVote(playlistId, roomType) {
             });
           }
         });
-    } else {
-      reject(new CustomError('getMusicsByVote', 'Wrong roomType', 500));
     }
   });
 }
 
 function deleteMusicById(musicId) {
-  return new Promise((resolve, reject) => {
-    MusicModel.findById(musicId, (error, music) => {
-      if (error) {
-        reject(new CustomError('MongoError', error.message, 500));
+  return new Promise((resolve, reject) => MusicModel.findById(
+    musicId,
+    (findError, music) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
       } else if (!music) {
-        reject(new CustomError('DeleteMusic', 'No music with this id found in database', 404));
+        reject(new CustomError('DeleteMusic', 'No music with this id in database', 404));
       } else {
         music.remove((removeError, musicRemoved) => {
           if (removeError) {
@@ -110,8 +111,8 @@ function deleteMusicById(musicId) {
           }
         });
       }
-    });
-  });
+    },
+  ));
 }
 
 function downloadMusic(musicUrl) {
@@ -121,6 +122,7 @@ function downloadMusic(musicUrl) {
     let stdout = '';
     let stderr = '';
     const deezpy = spawn('python3', [process.env.DEEZPY_PATH, '-l', musicUrl]);
+
     deezpy.stdout.on('data', (data) => {
       stdout += data;
     });
@@ -136,8 +138,10 @@ function downloadMusic(musicUrl) {
         let path = stdout.replace('\n', '').match(/^Downloading: (.*)\.\.\.Done!$/);
         if (path === null) {
           path = stdout.replace('\n', '').match(/^(.*) already exists!$/);
+          if (path === null) {
+            reject(new CustomError('DeezPy', stdout, 500));
+          }
         }
-        // CATCHER USER TOKEN EXPIRE
         resolve({
           status: 200,
           data: path[1],
@@ -146,42 +150,6 @@ function downloadMusic(musicUrl) {
     });
   });
 }
-
-/*
-function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link) {
-  return new Promise((resolve, reject) => {
-    downloadMusic(link)
-      .then((path) => {
-        const music = new MusicModel({
-          user: userId,
-          playlist: playlistId,
-          artist,
-          date: Date.now(),
-          title,
-          album,
-          albumCover,
-          preview,
-          link,
-          path: path.data,
-          votes: 0,
-        });
-        music.save((saveError, savedMusic) => {
-          if (saveError) {
-            reject(new CustomError(saveError, 500));
-          } else {
-            resolve({
-              status: 200,
-              data: savedMusic,
-            });
-          }
-        });
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
-*/
 
 // si une musique existe deja, il y a un warning UnhandledPromiseRejectionWarning,
 // mais la musique n'est pas add, as intended

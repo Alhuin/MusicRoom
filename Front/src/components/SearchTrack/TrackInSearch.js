@@ -8,7 +8,6 @@ import {
 } from '../../styles';
 
 class TrackInSearch extends React.Component {
-
   addMusic = () => {
     const {
       track, playlistId, userId, setModalVisible, displayLoader, socket,
@@ -18,6 +17,7 @@ class TrackInSearch extends React.Component {
     addMusicToPlaylist(playlistId, userId, track.title, track.artist.name,
       track.album.title, track.album.cover, track.preview, track.link)
       .then(() => {
+        console.log(`emitting addMusic for playlist ${playlistId}`);
         socket.emit('addMusic', playlistId);
         setModalVisible();
       })

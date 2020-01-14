@@ -6,8 +6,9 @@ import { Icon } from 'native-base';
 import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
-  isEditor, moveTrackOrder, deleteTrackFromPlaylist, getEditRestriction, getPlaylistName,
+  isEditor, moveTrackOrder, getEditRestriction, getPlaylistName,
 } from '../../API/BackApi';
+import TrackListInPlaylist from '../containers/TrackListInPlaylist';
 import { Colors, Typography, Buttons } from '../styles';
 
 class Playlist extends React.Component {
@@ -27,9 +28,16 @@ class Playlist extends React.Component {
     };
     this.onRefresh = this._onRefresh.bind(this);
     this.onRefreshPermissionSignal = this._onRefreshPermissionSignal.bind(this);
-    props.socket.on('refresh', this.onRefresh);
-    props.socket.on('refreshPermissions', this.onRefreshPermissionSignal);
+    props.socket.on('refresh', () => {
+      console.log('refresh signal recieved');
+      this.onRefresh();
+    });
+    props.socket.on('refreshPermissions', () => {
+      console.log('refreshPermissions recieved');
+      this.onRefreshPermissionSignal();
+    });
   }
+
 
   componentDidMount(): void {
     const { navigation, socket } = this.props;
@@ -37,25 +45,40 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     this._isMounted = true;
 
-    socket.emit('userJoinedPlaylist', playlistId);
+    this._focusListener = navigation.addListener('didFocus', () => {
+      console.log(`emited userJoindedPlaylist ${playlistId}`);
+      socket.emit('userJoinedPlaylist', playlistId);
+    });
+
+    this._blurListener = navigation.addListener('willBlur', () => {
+      console.log(`emited userLeeavedPlaylist ${playlistId}`);
+      socket.emit('userLeavedPlaylist', playlistId);
+    });
+
     this.isAdminAndIsEditor();
     this.getName();
     this.updateMyVotes()
-      .then(() => this.updateTracks(roomType, playlistId))
+      .then(() => {
+        this.updateTracks(roomType, playlistId)
+          .then(res => console.log(res))
+          .catch((error) => {
+            console.log(error);
+          });
+      })
       .catch(error => console.log(error));
     getNextTrackByVote(playlistId)
       .then((track) => {
         this.setState(track);
       })
-      .catch(error => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   componentWillUnmount(): void {
-    const { navigation, socket } = this.props;
-    const playlistId = navigation.getParam('playlistId');
     this._isMounted = false;
-
-    socket.emit('userLeavedPlaylist', playlistId);
+    this._focusListener.remove();
+    this._blurListener.remove();
     this._onChangedPage();
   }
 
@@ -65,18 +88,6 @@ class Playlist extends React.Component {
       playing.stop();
     }
   };
-
-  // _onRefreshSignal = () => {
-  //   if (this._isMounted) {
-  //     console.log('[Socket Server] : refresh signal received');
-  //     this.isAdminAndIsEditor();
-  //     this.updateMyVotes()
-  //       .then(() => {
-  //         this.updateTracks();
-  //       })
-  //       .catch(error => console.log(error));
-  //   }
-  // };
 
   _onRefreshPermissionSignal = () => {
     if (this._isMounted) {
@@ -94,15 +105,11 @@ class Playlist extends React.Component {
       const playlistId = navigation.getParam('playlistId');
       this.isAdminAndIsEditor();
       this.getName();
-      console.log('_onRefresh');
-      this.setState({ refreshing: true });
       if (roomType === 'party') {
         this.updateMyVotes()
           .then(() => {
             this.updateTracks(roomType, playlistId)
-              .then(() => {
-                this.setState({ refreshing: false });
-              })
+              .then()
               .catch((error) => {
                 console.error(error);
               });
@@ -112,9 +119,7 @@ class Playlist extends React.Component {
           });
       } else if (roomType === 'radio') {
         this.updateTracks(roomType, playlistId)
-          .then(() => {
-            this.setState({ refreshing: false });
-          })
+          .then()
           .catch((error) => {
             console.error(error);
           });
@@ -132,7 +137,7 @@ class Playlist extends React.Component {
     getMusicsByVote(playlistId, roomType)
       .then((response) => {
         this.setState({ tracks: response });
-        resolve();
+        resolve(true);
       })
       .catch((error) => {
         console.error(error);
@@ -141,14 +146,13 @@ class Playlist extends React.Component {
   });
 
   updateMyVotes = () => new Promise((resolve, reject) => {
-    // vraiment besoin d'async ? ...
     const { navigation, loggedUser } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const userId = loggedUser._id;
     getMyVotesInPlaylist(userId, playlistId)
       .then((votes) => {
         this.setState({ myVotes: votes });
-        resolve();
+        resolve('true');
       })
       .catch((error) => {
         console.error(error);
@@ -248,7 +252,7 @@ class Playlist extends React.Component {
       name,
     } = this.state;
     const {
-      navigation, changeTrack, changePlaylist, loggedUser, socket,
+      navigation, changeTrack, changePlaylist, loggedUser,
     } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
@@ -264,12 +268,12 @@ class Playlist extends React.Component {
                 changePlaylist(playlistId);
                 changeTrack(nextTrack);
                 // console.log(nextTrack);
-                deleteTrackFromPlaylist(nextTrack.id, playlistId)
-                  .then(() => {
-                    this.setState({ playlistLaunched: true });
-                    socket.emit('deleteMusic', playlistId);
-                  })
-                  .catch(error => console.error(error));
+                // deleteTrackFromPlaylist(nextTrack.id, playlistId)
+                //   .then(() => {
+                this.setState({ playlistLaunched: true });
+                // socket.emit('deleteMusic', playlistId);
+                // })
+                // .catch(error => console.error(error));
               })
               .catch(error => console.log(error));
           }}
@@ -323,7 +327,7 @@ class Playlist extends React.Component {
         </View>
         <View style={styles.section}>
           <View style={styles.sectionContent}>
-            <Components.TrackListInPlaylist
+            <TrackListInPlaylist
               tracks={tracks}
               updatePlaying={this.updatePlaying}
               playing={playing}

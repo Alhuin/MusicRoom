@@ -19,30 +19,38 @@ class Radios extends React.Component {
   }
 
   componentDidMount(): void {
-    const { loggedUser, socket } = this.props;
+    const { socket, navigation } = this.props;
 
-    socket.emit('userJoinedRadiosList');
-    getPlaylistsFiltered('radio', loggedUser._id)
-      .then((playlists) => {
-        this.setState({ playlists });
-      })
-      .catch((error) => {
-        if (error.status !== 400) {
-          console.error(error);
-        }
-      });
+    this.updatePlaylist()
+      .catch(error => console.error(error));
+
+    this._focusListener = navigation.addListener('didFocus', () => {
+      const { shouldUpdate, shouldUpdatePlaylist } = this.props;
+
+      socket.emit('userJoinedRadiosList');
+      // console.log(shouldUpdate);
+      if (shouldUpdate) {
+        this.updatePlaylist()
+          .then(shouldUpdatePlaylist(false))
+          .catch(error => console.error(error));
+      }
+    });
+
+    this._blurListener = navigation.addListener('willBlur', () => {
+      socket.emit('userLeavedRadiosList');
+    });
   }
 
   componentWillUnmount(): void {
-    const { socket } = this.props;
-
-    socket.emit('userLeavedRadiosList');
+    this._focusListener.remove();
+    this._blurListener.remove();
   }
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
       console.log('[Socket Server] : refresh signal for playlist list received');
-      this.updatePlaylist();
+      this.updatePlaylist()
+        .catch(error => console.log(error));
     }
   };
 

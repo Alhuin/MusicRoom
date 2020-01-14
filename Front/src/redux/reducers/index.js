@@ -4,10 +4,20 @@ import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import playerReducer from './playerReducer';
 
-// Redux: Root Reducer
-const rootReducer = combineReducers({
+// Combine reducers
+const appReducer = combineReducers({
   authReducer,
   playerReducer,
 });
+
+const initialState = appReducer({}, {});
+
+// Catch logOut action to reinitialise state
+const rootReducer = (state, action) => {
+  if (action.type === 'LOG_OUT') {
+    return appReducer(initialState, action);
+  }
+  return appReducer(state, action);
+};
 
 export default rootReducer;

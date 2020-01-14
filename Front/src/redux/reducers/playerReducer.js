@@ -1,6 +1,15 @@
 import {
-  CHANGE_PLAYLIST, CHANGE_TRACK, SET_DURATION, SET_TOTAL_LENGTH, SET_SOCKET,
-  PAUSED, SET_TIME, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION,
+  CHANGE_PLAYLIST,
+  CHANGE_TRACK,
+  SET_DURATION,
+  SET_TOTAL_LENGTH,
+  SET_SOCKET,
+  PAUSED,
+  SET_TIME,
+  SET_AUDIO_ELEMENT,
+  IS_CHANGING,
+  SET_CURRENT_POSITION,
+  SHOULD_UPDATE_PLAYLIST,
 } from '../actions/types';
 
 const initialState = {
@@ -12,6 +21,7 @@ const initialState = {
   currentPosition: 0,
   isChanging: false,
   socket: null,
+  shouldUpdatePlaylist: false,
 };
 
 const playerReducer = (state = initialState, action) => {
@@ -56,6 +66,10 @@ const playerReducer = (state = initialState, action) => {
     case SET_SOCKET:
       return {
         ...state, socket: action.payload,
+      };
+    case SHOULD_UPDATE_PLAYLIST:
+      return {
+        ...state, shouldUpdatePlaylist: action.payload,
       };
     default:
       return state;

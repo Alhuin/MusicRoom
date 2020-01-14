@@ -28,10 +28,10 @@ export default class AdminPlayer extends Component {
 
     return (
       <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
-        <AudioPlayer />
         {loggedUser !== null && track !== null && playlistId !== ''
         && (
           <>
+            <AudioPlayer />
             <MiniPlayer
               handlePress={() => this.player.open()}
               onPressPlay={() => {

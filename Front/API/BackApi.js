@@ -7,31 +7,28 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
                     Users & Login
  */
 
-
 function login(userName, password) {
-  return new Promise((resolve, reject) => {
-    fetch(`${api}/login`, {
+  return new Promise((resolve, reject) => fetch(
+    `${api}/login`,
+    {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        login: userName, password,
+        login: userName,
+        password,
       }),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        // console.log('login response from fetch');
-        // console.log(response);
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          reject(new CustomError('LoginError', data.msg, response.status));
-        }
-      })
-      .catch(error => reject(error));
-  });
+    },
+  ).then(async (response) => {
+    const data = await response.json();
+    if (response.status === 200) {
+      resolve(data);
+    } else {
+      reject(new CustomError('LoginError', data.msg, response.status));
+    }
+  }).catch(error => reject(error)));
 }
 
 function getUserByIdByPreferences(userId, requesterId) {
@@ -57,7 +54,6 @@ function getUserByIdByPreferences(userId, requesterId) {
 
 function addUser(userName, password, name, familyName, email) {
   return new Promise((resolve, reject) => {
-    console.log(`POST ${api}/users`);
     fetch(`${api}/users`, {
       method: 'POST',
       headers: {
@@ -70,11 +66,10 @@ function addUser(userName, password, name, familyName, email) {
     })
       .then(async (response) => {
         const data = await response.json();
-        console.log(response);
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 202) {
           resolve(data);
-        } else {
-          reject(new CustomError('AddUser', data.msg, response.status));
+        } else if (response.status === 400) {
+          reject(new CustomError('AddUser', data.msg, 400));
         }
       })
       .catch(error => reject(error));
@@ -422,8 +417,9 @@ function addPlaylist(name, publicFlag, userId, author, authorName,
 }
 
 function joinPlaylistWithCode(userId, playlistCode) {
-  return new Promise((resolve, reject) => {
-    fetch(`${api}/playlists/joinWithCode`, {
+  return new Promise((resolve, reject) => fetch(
+    `${api}/playlists/joinPlaylistWithCode`,
+    {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -432,18 +428,15 @@ function joinPlaylistWithCode(userId, playlistCode) {
       body: JSON.stringify({
         userId, playlistCode,
       }),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (response.status === 200) {
-          resolve(data);
-        } else {
-          reject(new CustomError('joinPlaylistWithCode', data.msg, response.status));
-          // console.log(data.msg);
-        }
-      })
-      .catch(error => reject(error));
-  });
+    },
+  ).then(async (response) => {
+    const data = await response.json();
+    if (response.status === 200) {
+      resolve(data);
+    } else {
+      reject(new CustomError('joinPlaylistWithCode', data.msg, response.status));
+    }
+  }).catch(error => reject(error)));
 }
 
 function joinPlaylistWithId(userId, playlistId) {

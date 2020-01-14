@@ -29,9 +29,22 @@ export default class PlaylistInPlaylists extends React.Component {
 
   render() {
     const {
-      name, authorName, users,
+      name, authorName, users, tags,
     } = this.props;
-
+    let tagsStr = '';
+    let i = 0;
+    Object.keys(tags).forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(tags, key)) {
+        if (tags[key] === true) {
+          if (i === 0) {
+            tagsStr += key;
+          } else {
+            tagsStr += `, ${key}`;
+          }
+          i += 1;
+        }
+      }
+    });
     return (
       <TouchableOpacity style={Cards.card} onPress={this._pressPlaylist} activeOpacity={0.9}>
         <View style={Cards.cardHeader}>
@@ -63,6 +76,12 @@ export default class PlaylistInPlaylists extends React.Component {
             </Text>
           </View>
         </View>
+        <View style={[styles.cardContent, { justifyContent: 'flex-start', alignItems: 'center', width: '100%' }]}>
+          <Text style={Typography.smallText}>
+            Tags :
+            {` ${tagsStr}`}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   }
@@ -73,5 +92,4 @@ const styles = StyleSheet.create({
     ...Cards.cardContent,
     flex: 1,
   },
-
 });
