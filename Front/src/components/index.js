@@ -24,6 +24,7 @@ import DatePickerModal from './Playlists/DatePickerModal';
 import MiniPlayer from './Playlist/MiniPlayer';
 import SettingsTagCheckbox from './Playlist/SettingsTagCheckbox';
 import FriendsInSettings from './Playlist/FriendsInSettings';
+import DeezerLogin from './Authentication/DeezerLogin';
 
 export default {
   SignInForm,
@@ -52,4 +53,5 @@ export default {
   MiniPlayer,
   SettingsTagCheckbox,
   FriendsInSettings,
+  DeezerLogin,
 };

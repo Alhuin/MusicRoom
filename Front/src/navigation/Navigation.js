@@ -10,7 +10,7 @@ import {
 import { Platform, View } from 'react-native';
 import { Icon } from 'native-base';
 import { Colors, Typography } from '../styles';
-import Connexion from '../screens/Connexion';
+import Connexion from '../containers/Connexion';
 import Home from '../containers/Home';
 import SendTokens from '../screens/SendTokens';
 import UpdatePass from '../screens/UpdatePass';
@@ -45,7 +45,7 @@ const AuthNavigator = createStackNavigator({
     navigationOptions: {
       header: null,
     },
-    path: 'signUp',
+    path: 'signUp/:DeezCode',
   },
   Inscription_noTransition: {
     screen: Inscription,

@@ -106,7 +106,7 @@ describe('Playlist Model Tests', () => {
 
   // Test Validation is working!!!
   // It should us told us the errors in on gender field.
-  it('create playlist without required field should fail', async () => {
+  it('create playlist without required field should failed', async () => {
     const playlistWithoutNameField = new PlaylistModel({
       allowVotes: true,
       users: [mongoose.Types.ObjectId()],

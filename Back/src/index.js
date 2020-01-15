@@ -19,18 +19,17 @@ const socketio = require('socket.io');
  *          WebSocket Server for live reloading
  */
 
-const socketServer = http.Server(app);
-const websocket = socketio(socketServer);
+const server = http.Server(app);
+const io = socketio(server);
 
-socketServer.listen(process.env.WEBSOCKET_PORT, () => console.log(`[Socket Server] : listening on port ${process.env.WEBSOCKET_PORT} at ${process.env.SERVER}`));
 
-const clients = {};
+const clients = [];
 
 // Handle socket connection & events
-websocket.on('connection', (socket) => {
-  console.log('[Socket Server] : user logged in');
-  clients[socket.id] = socket;
-
+io.on('connection', (socket) => {
+  const { id } = socket.client;
+  console.log(`[Socket Server] : user ${id} logged in`);
+  clients.push(socket);
 
   // Joining radiosList room
   socket.on('userJoinedRadiosList', () => {
@@ -51,16 +50,41 @@ websocket.on('connection', (socket) => {
   });
 
   // Refresh signal sent to PlaylistList on removePlaylist & addPlaylsit
-  socket.on('addRadio', () => websocket.to('radiosList').emit('refresh'));
-  socket.on('addParty', () => websocket.to('partysList').emit('refresh'));
-  socket.on('removeParty', () => websocket.to('partysList').emit('refresh'));
-  socket.on('removeRadio', () => websocket.to('radiosList').emit('refresh'));
+  socket.on('addRadio', () => {
+    console.log('[SocketServer] : Radio added, Emitting refresh for radiosList');
+    io.sockets.in('radiosList').emit('refresh');
+  });
+  socket.on('addParty', () => {
+    console.log('[Socket Server] : Party added, Emitting refresh for radiosList');
+    io.sockets.in('partysList').emit('refresh');
+  });
+  socket.on('removeParty', () => {
+    console.log('[Socket Server] : Party deleted, Emitting refresh for radiosList');
+    io.sockets.in('partysList').emit('refresh');
+  });
+  socket.on('removeRadio', () => {
+    console.log('[Socket Server] : Radio removed, Emitting refresh for radiosList');
+    io.sockets.in('radiosList').emit('refresh');
+  });
 
   // Refresh signal sent to a specific playlist on addMusic, deleteMusic & voteMusic
-  socket.on('addMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
-  socket.on('deleteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
-  socket.on('voteMusic', (playlistId) => websocket.to(playlistId).emit('refresh'));
-  socket.on('parameterChanged', (playlistId) => websocket.to(playlistId).emit('refreshPermissions'));
+  socket.on('addMusic', (playlistId) => {
+    console.log(`[Socket Server] : music added, Emitting refresh for playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('refresh');
+  });
+
+  socket.on('deleteMusic', (playlistId) => {
+    console.log(`[Socket Server] : music deleted, Emitting refresh for playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('refresh');
+  });
+  socket.on('voteMusic', (playlistId) => {
+    console.log(`[Socket Server] : music voted, Emitting refresh for playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('refresh');
+  });
+  socket.on('parameterChanged', (playlistId) => {
+    console.log(`[Socket Server] : parameters changed ? Emitting refreshPermissions for playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('refreshPermissions');
+  });
 
   // Leaving Playlist room
   socket.on('userLeavedPlaylist', (playlistId) => {
@@ -79,11 +103,17 @@ websocket.on('connection', (socket) => {
     console.log('[Socket Server] : user leaved partysList');
     socket.leave('partysList');
   });
+
+  // Handle socket disconnection
+  socket.on('disconnect', () => {
+    const index = clients.indexOf(socket);
+    clients.splice(index, 1);
+    console.log('[Socket Server] : user logged Out ');
+  });
 });
 
-// Handle socket disconnection
-websocket.on('disconnect', () => { console.log('[Socket Server] : user logged Out '); });
 
+server.listen(process.env.WEBSOCKET_PORT, () => console.log(`[Socket Server] : listening on port ${process.env.WEBSOCKET_PORT} at ${process.env.SERVER}`));
 /**
  *          Core Express Server
  */
@@ -145,7 +175,7 @@ connectDb().then(async () => {
     name: 'JulB',
     familyName: 'Janin-R',
     email: 'ju@gmail.com',
-    phoneNumber: '01',
+    phoneNumber: '00',
     isVerified: true,
   });
   user2.save();

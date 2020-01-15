@@ -98,6 +98,7 @@ function deleteUserById(req, res) {
 
 function addUser(req, res) {
   // checker email valide et les champs uniques
+  console.log(req);
   if ((req.body.login && req.body.password && req.body.name
     && req.body.familyName && req.body.email)) {
     userService.addUser(req.body.login, req.body.password, req.body.name,
@@ -310,6 +311,27 @@ function getDeezerCode(req, res) {
   }
 }
 
+function getDeezerCodeForLogin(req, res) {
+  console.log(req.query);
+  if (req.query.code) {
+    userService.getDeezerCode(req.query.code)
+      .then(async (response) => {
+        const data = await response.data;
+        res
+          .status(response.status)
+          .redirect(`musicroom://music/auth/signUp/${data}`);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
   getUserById,
   getUserByIdByPreferences,
@@ -326,4 +348,5 @@ export default {
   deleteFriend,
   getFriends,
   getDeezerCode,
+  getDeezerCodeForLogin,
 };

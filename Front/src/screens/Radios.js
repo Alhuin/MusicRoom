@@ -28,7 +28,7 @@ class Radios extends React.Component {
       const { shouldUpdate, shouldUpdatePlaylist } = this.props;
 
       socket.emit('userJoinedRadiosList');
-      console.log(shouldUpdate);
+      // console.log(shouldUpdate);
       if (shouldUpdate) {
         this.updatePlaylist()
           .then(shouldUpdatePlaylist(false))

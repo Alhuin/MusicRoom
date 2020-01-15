@@ -1,13 +1,49 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, View, ScrollView,
+  StyleSheet, KeyboardAvoidingView, Platform, View, ScrollView, Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import SocketIOClient from 'socket.io-client';
+import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import Logo from '../components/Authentication/Logo';
 import LoginContext from '../components/Authentication/LoginContext';
 import SignInForm from '../containers/SignInForm';
 import SocialLogin from '../containers/SocialLogin';
+import { login } from '../../API/BackApi';
+
 
 class Connexion extends React.Component {
+  async componentDidMount(): void {
+    const {
+      navigation, userChanged, admin, setSocket,
+    } = this.props;
+    const pass = await AsyncStorage.getItem('pass');
+    const log = await AsyncStorage.getItem('log');
+    const loging = await AsyncStorage.getItem('login');
+    if (log === 'autoLog') {
+      login(loging, pass)
+        .then((user) => {
+          userChanged(user);
+          if (user.isAdmin) {
+            admin(true);
+          }
+          setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
+          navigation.navigate('app');
+        })
+        .catch((error) => {
+          // console.log(error);
+          if (error.status === 401) {
+            Alert.alert('Erreur d\'authentification', 'Mauvais identifiant ou mot de passe.');
+          } else if (error.status === 403) {
+            Alert.alert(
+              'Erreur d\'authentification',
+              'Votre adresse email n\'a pas été vérifiée.',
+            );
+          }
+        });
+    }
+  }
+
   render() {
     const { navigation } = this.props;
     const type = 'Sign In';

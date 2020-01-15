@@ -6,7 +6,6 @@ import Player from '../../services/Player';
 import { Spacing } from '../../styles';
 
 class TrackListInPlaylist extends React.Component {
-
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
@@ -41,20 +40,30 @@ class TrackListInPlaylist extends React.Component {
       editor,
       onMoveEnd,
       pos,
+      currentTrack,
     } = this.props;
-    let render = (null);
+    let render;
+    let sortedTracks = tracks;
+    if (currentTrack) {
+      const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
+      sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
+      sortedTracks.unshift(currentTrackInPlaylist);
+      // TODO fix out > in
+    }
+
     if (/*
       isUserInPlaylist === true && */ roomType === 'radio') {
       const sortableListMapping = {};
       for (let i = 0; i < tracks.length; i += 1) {
         sortableListMapping[`${i}`] = tracks[i]._id;
       }
-      console.log(tracks.map(a => a._id));
-      console.log(sortableListMapping);
+      // console.log(tracks.map(a => a._id));
+      // console.log(sortableListMapping);
       render = (
         <SortableList
-          data={tracks}
+          data={sortedTracks}
           renderRow={({ key, index, data, disabled, active }) => (
+            // TODO check necessary parameters ?
             <TrackInPlaylist
               active={active}
               userId={userId}
@@ -85,7 +94,7 @@ class TrackListInPlaylist extends React.Component {
     } else {
       render = (
         <FlatList
-          data={tracks}
+          data={sortedTracks}
           keyExtractor={item => item._id.toString()}
           renderItem={({ item }) => {
             let myVoteValue = 0;
