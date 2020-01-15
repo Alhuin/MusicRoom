@@ -44,7 +44,7 @@ class TrackListInPlaylist extends React.Component {
     } = this.props;
     let render;
     let sortedTracks = tracks;
-    if (currentTrack) {
+    if (currentTrack && tracks.length) {
       const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
       sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
       sortedTracks.unshift(currentTrackInPlaylist);
