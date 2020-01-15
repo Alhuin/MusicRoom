@@ -41,6 +41,8 @@ class TrackListInPlaylist extends React.Component {
       onMoveEnd,
       pos,
       currentTrack,
+      admin,
+      deleteTrackInPlaylist,
     } = this.props;
     let render;
     let sortedTracks = tracks;
@@ -48,9 +50,7 @@ class TrackListInPlaylist extends React.Component {
       const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
       sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
       sortedTracks.unshift(currentTrackInPlaylist);
-      // TODO fix out > in
     }
-
     if (/*
       isUserInPlaylist === true && */ roomType === 'radio') {
       const sortableListMapping = {};
@@ -62,7 +62,7 @@ class TrackListInPlaylist extends React.Component {
       render = (
         <SortableList
           data={sortedTracks}
-          renderRow={({ key, index, data, disabled, active }) => (
+          renderRow={({ data, active }) => (
             // TODO check necessary parameters ?
             <TrackInPlaylist
               active={active}
@@ -72,10 +72,12 @@ class TrackListInPlaylist extends React.Component {
               playlistId={playlistId}
               updateTracks={updateTracks}
               updateMyVotes={updateMyVotes}
+              deleteTrackInPlaylist={deleteTrackInPlaylist}
               roomType={roomType}
               myVoteValue={0}
               editor={editor}
               pos={pos}
+              admin={admin}
             />
           )}
           contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
@@ -111,10 +113,12 @@ class TrackListInPlaylist extends React.Component {
                 playlistId={playlistId}
                 updateTracks={updateTracks}
                 updateMyVotes={updateMyVotes}
+                deleteTrackInPlaylist={deleteTrackInPlaylist}
                 roomType={roomType}
                 myVoteValue={myVoteValue}
                 editor={editor}
                 pos={pos}
+                admin={admin}
               />
             );
           }}

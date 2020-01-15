@@ -7,6 +7,7 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
                     Users & Login
  */
 
+
 function login(userName, password) {
   return new Promise((resolve, reject) => fetch(
     `${api}/login`,
@@ -1029,13 +1030,12 @@ function deletePlaylistByAdmin(playlistId, userId) {
         if (response.status === 200) {
           resolve(data);
         } else {
-          reject(new CustomError('isEditor', data.msg, response.status));
+          reject(new CustomError('deletePlaylistByAdmin', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
   });
 }
-
 
 function setPlaylistName(playlistId, userId, newName) {
   return new Promise((resolve, reject) => {
@@ -1106,6 +1106,28 @@ function deleteTrackFromPlaylist(musicId, playlistId) {
   });
 }
 
+function deleteTrackFromPlaylistRight(musicId, playlistId, userId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/deleteTrackRight`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ musicId, playlistId, userId }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('RemoveTrackFromPlaylist', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 
 export {
   login,
@@ -1156,4 +1178,5 @@ export {
   setPlaylistLocation,
   setPlaylistName,
   getPlaylistName,
+  deleteTrackFromPlaylistRight,
 };

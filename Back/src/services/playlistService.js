@@ -669,25 +669,89 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
 
 function deleteTrackFromPlaylist(playlistId, musicId) {
   return new Promise((resolve, reject) => {
-    MusicModel.find({ playlist: playlistId, _id: musicId }, (error, musics) => {
-      // console.log(musics);
-      if (error) {
-        reject(new CustomError('MongoError', error.message, 500));
-      } else if (!musics[0]) {
-        reject(new CustomError('DeleteTrackFromPlaylist', 'No Music with this id in database', 404));
-      } else {
-        musics[0].remove((removeError, removedMusic) => {
-          if (removeError) {
-            reject(new CustomError('MongoError', removeError, 500));
+    getPlaylistById(playlistId)
+      .then((dataPlaylist) => {
+        for (let i = 0; i < dataPlaylist.data.musics.length; i += 1) {
+          if (dataPlaylist.data.musics[i] === musicId) dataPlaylist.data.musics.splice(i, 1);
+        }
+        // eslint-disable-next-line no-unused-vars
+        dataPlaylist.data.save((saveError, savedPlaylist) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
           } else {
-            resolve({
-              status: 200,
-              data: removedMusic,
+            MusicModel.find({ playlist: playlistId, _id: musicId }, (error, musics) => {
+              if (error) {
+                reject(new CustomError('MongoError', error.message, 500));
+              } else if (!musics[0]) {
+                reject(new CustomError('DeleteTrackFromPlaylist', 'No Music with this id in database', 404));
+              } else {
+                musics[0].remove((removeError, removedMusic) => {
+                  if (removeError) {
+                    reject(new CustomError('MongoError', removeError, 500));
+                  } else {
+                    resolve({
+                      status: 200,
+                      data: removedMusic,
+                    });
+                  }
+                });
+              }
             });
           }
         });
-      }
-    });
+      })
+      .catch((saveError) => {
+        console.error(saveError);
+      });
+  });
+}
+
+function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
+  return new Promise((resolve, reject) => {
+    getPlaylistById(playlistId)
+      .then((response) => {
+        const playlist = response.data;
+        let flag = false;
+        if ((playlist.roomType === 'radio' && utils.isEditorInPlaylist(playlist, userId, null))
+        || (playlist.roomType === 'party' && utils.isAdminInPlaylist(playlist, userId))) {
+          flag = true;
+        }
+        if (flag) {
+          for (let i = 0; i < playlist.musics.length; i += 1) {
+            if (playlist.musics[i] === musicId) playlist.musics.splice(i, 1);
+          }
+          // eslint-disable-next-line no-unused-vars
+          playlist.save((saveError, savedPlaylist) => {
+            if (saveError) {
+              reject(new CustomError('MongoError', saveError.message, 500));
+            } else {
+              MusicModel.find({ playlist: playlistId, _id: musicId }, (error, musics) => {
+                if (error) {
+                  reject(new CustomError('MongoError', error.message, 500));
+                } else if (!musics[0]) {
+                  reject(new CustomError('DeleteTrackFromPlaylistRight', 'No Music with this id in database', 404));
+                } else {
+                  musics[0].remove((removeError, removedMusic) => {
+                    if (removeError) {
+                      reject(new CustomError('MongoError', removeError, 500));
+                    } else {
+                      resolve({
+                        status: 200,
+                        data: removedMusic,
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        } else {
+          reject(new CustomError('DeleteTrackFromPlaylistRight', 'Not Authorized', 401));
+        }
+      })
+      .catch((saveError) => {
+        console.error(saveError);
+      });
   });
 }
 
@@ -999,6 +1063,7 @@ export default {
   setPublicityOfPlaylist,
   setDelegatedPlayerAdmin,
   deleteTrackFromPlaylist,
+  deleteTrackFromPlaylistRight,
   moveTrackOrder,
   getPlaylistDates,
   setStartDate,

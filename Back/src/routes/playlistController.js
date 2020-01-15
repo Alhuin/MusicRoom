@@ -531,6 +531,29 @@ function deleteTrackFromPlaylist(req, res) {
   }
 }
 
+function deleteTrackFromPlaylistRight(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+  && req.body.musicId && utils.isValidId(req.body.musicId)
+  && req.body.userId && utils.isValidId(req.body.userId)) {
+    playlistService.deleteTrackFromPlaylistRight(
+      req.body.playlistId, req.body.musicId, req.body.userId,
+    )
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 function moveTrackOrder(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
   && req.body.musicId && utils.isValidId(req.body.musicId)
@@ -794,6 +817,7 @@ export default {
   setPublicityOfPlaylist,
   setDelegatedPlayerAdmin,
   deleteTrackFromPlaylist,
+  deleteTrackFromPlaylistRight,
   moveTrackOrder,
   getPlaylistDates,
   setStartDate,

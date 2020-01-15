@@ -52,7 +52,7 @@ const isEditorInPlaylist = (playlist, userId, pos) => {
         return (true);
       }
     }
-  } else if (playlist.editRestriction === 'EVENT_RESTRICTED') {
+  } else if (playlist.editRestriction === 'EVENT_RESTRICTED' && pos) {
     const now = new Date(Date.now());
     if (now < playlist.endDate && now > playlist.startDate) {
       let lat1 = 0;

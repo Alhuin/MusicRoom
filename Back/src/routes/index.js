@@ -86,6 +86,7 @@ router.post('/playlists/joinPlaylistWithCode', playlistController.joinPlaylistWi
 router.post('/playlists/joinPlaylistWithId', playlistController.joinPlaylistWithId);
 router.post('/playlists/setPublicity', playlistController.setPublicityOfPlaylist);
 router.post('/playlists/deleteTrack', playlistController.deleteTrackFromPlaylist);
+router.post('/playlists/deleteTrackRight', playlistController.deleteTrackFromPlaylistRight);
 router.post('/playlists/moveTrackOrder', playlistController.moveTrackOrder);
 router.post('/playlists/setStartDate', playlistController.setStartDate);
 router.post('/playlists/setEndDate', playlistController.setEndDate);

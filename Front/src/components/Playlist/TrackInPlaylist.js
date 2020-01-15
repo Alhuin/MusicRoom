@@ -79,10 +79,14 @@ class TrackInPlaylist extends React.Component {
       myVoteValue,
       editor,
       currentTrack,
+      admin,
+      active,
+      deleteTrackInPlaylist,
     } = this.props;
     let renderForParty = null;
-    if (currentTrack && currentTrack.id === track._id) {
-      renderForParty = (<Text>Now playing</Text>);
+    let deletionMod = null;
+    if (currentTrack && track && currentTrack.id === track._id) {
+      renderForParty = (<Text style={Typography.bodyText}>Now playing</Text>);
     } else if (roomType === 'party') {
       let arrowUpStyle = { color: 'grey' };
       let arrowDownStyle = { color: 'grey' };
@@ -125,6 +129,40 @@ class TrackInPlaylist extends React.Component {
           </TouchableOpacity>
         </View>
       );
+      if (admin) {
+        deletionMod = (
+          <TouchableOpacity
+            style={Typography.iconWrapper}
+            onPress={() => {
+              deleteTrackInPlaylist(track._id);
+            }}
+          >
+            <Icon
+              name="ios-remove-circle-outline"
+              style={Typography.icon}
+            />
+          </TouchableOpacity>
+        );
+      }
+    } else if (roomType === 'radio' && editor) {
+      let disabled = false;
+      if (!active) {
+        disabled = true;
+      }
+      deletionMod = (
+        <TouchableOpacity
+          style={Typography.iconWrapper}
+          onPress={() => {
+            deleteTrackInPlaylist(track._id);
+          }}
+          disabled={disabled}
+        >
+          <Icon
+            name="ios-remove-circle-outline"
+            style={Typography.icon}
+          />
+        </TouchableOpacity>
+      );
     }
     return (
       <Animated.View style={[styles.card, this._style]}>
@@ -159,6 +197,7 @@ class TrackInPlaylist extends React.Component {
           </View>
         </View>
         {renderForParty}
+        {deletionMod}
       </Animated.View>
     );
   }
@@ -168,8 +207,8 @@ let styles = StyleSheet.create({
   card: {
     ...Cards.card,
     flexDirection: 'row',
-    padding: Spacing.small,
-    paddingVertical: Spacing.smallest,
+    padding: 0,
+    paddingVertical: 0,
   },
   previewCover: {
     justifyContent: 'center',
@@ -184,6 +223,8 @@ let styles = StyleSheet.create({
     flex: 3,
     margin: Spacing.smallest,
     justifyContent: 'center',
+    paddingRight: Spacing.small,
+    paddingVertical: Spacing.smallest,
   },
   title_container: {
     flexDirection: 'row',

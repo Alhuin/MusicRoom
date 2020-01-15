@@ -110,10 +110,9 @@ class AppSettings extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { DeezerToken } = this.state;
     const DeezerCode = navigation.getParam('DeezCode');
     const {
-      user, preferences, visibilityTable, collapsed, friends,
+      user, preferences, visibilityTable, collapsed, friends, DeezerToken,
     } = this.state;
     const iconFromVisibilityTable = {};
     if (DeezerCode !== undefined && DeezerToken === '') {
@@ -392,23 +391,28 @@ class AppSettings extends React.Component {
               </Collapsible>
             </View>
           </View>
+          <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>
+                Deezer
+              </Text>
+            </View>
+            <Text style={Typography.bodyText}>
+              {DeezerToken ? `Votre token de connexion Deezer est : ${DeezerToken}` : 'Votre compte n\'est pas lié à Deezer. C\'est triste.'}
+            </Text>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity
                 onPress={this.getDeez}
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                  Connection a Deezer
+                  Connexion
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={Buttons.text}>
-            Ton token de connexion Deezer est :
-            {' '}
-            {this.state.DeezerToken}
-          </Text>
+
           <View style={styles.section}>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity
