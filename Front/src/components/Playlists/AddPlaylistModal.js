@@ -106,7 +106,7 @@ export default class AddPlaylistModal extends React.Component {
 
   render() {
     const {
-      setModalVisible, modalVisible, updatePlaylist, roomType,
+      setModalVisible, modalVisible, roomType,
     } = this.props;
     const {
       switchValue, type, startDate, endDate, datePickerModalVisible,
@@ -183,7 +183,6 @@ export default class AddPlaylistModal extends React.Component {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible();
-          updatePlaylist();
         }}
       >
         <View style={styles.container}>

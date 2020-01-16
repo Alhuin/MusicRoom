@@ -43,10 +43,11 @@ class TrackListInPlaylist extends React.Component {
       currentTrack,
       admin,
       deleteTrackInPlaylist,
+      currentPlaylistId,
     } = this.props;
     let render;
     let sortedTracks = tracks;
-    if (currentTrack && tracks.length) {
+    if (playlistId === currentPlaylistId && tracks[0] && currentTrack) {
       const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
       sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
       sortedTracks.unshift(currentTrackInPlaylist);
@@ -62,7 +63,7 @@ class TrackListInPlaylist extends React.Component {
       render = (
         <SortableList
           data={sortedTracks}
-          renderRow={({ data, active }) => (
+          renderRow={({ key, index, data, disabled, active }) => (
             // TODO check necessary parameters ?
             <TrackInPlaylist
               active={active}
