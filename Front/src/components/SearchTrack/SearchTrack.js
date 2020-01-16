@@ -45,12 +45,14 @@ export default class SearchTrack extends React.Component {
     const { searchedText } = this.state;
     // if (text.length > 0) {
     this.setState({ loading: true });
-    getTracks(searchedText).then((data) => {
-      this.setState({
-        tracks: data,
-        loading: false,
-      });
-    });
+    getTracks(searchedText)
+      .then((data) => {
+        this.setState({
+          tracks: data,
+          loading: false,
+        });
+      })
+      .catch(error => console.log(error));
     // }
   };
 

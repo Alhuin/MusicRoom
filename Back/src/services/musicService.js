@@ -156,56 +156,52 @@ function downloadMusic(musicUrl) {
 
 function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link) {
   return new Promise((resolve, reject) => {
-    isMusicInPlaylist(playlistId, artist, title, album, albumCover, preview, link)
-      .then((data) => {
-        if (!data.data.length) {
-          downloadMusic(link)
-            .then((path) => {
-              const staticMusicPath = path.data.replace('downloads', `${process.env.SERVER}:${process.env.EXPRESS_PORT}/tracks`);
-              const staticCoverPath = staticMusicPath.replace(staticMusicPath.split('/')[6], 'cover.png');
-              const music = new MusicModel({
-                user: userId,
-                playlist: playlistId,
-                artist,
-                date: Date.now(),
-                title,
-                album,
-                albumCover: staticCoverPath,
-                preview,
-                link,
-                path: staticMusicPath,
-                votes: 0,
-              });
-              music.save((saveError, savedMusic) => {
-                if (saveError) {
-                  reject(new CustomError('MongoError', saveError.message, 500));
-                } else {
-                  playlistService.getPlaylistById(playlistId)
-                    .then((response) => {
-                      response.data.musics.push(savedMusic._id);
-                      response.data.save((saveError2, savedPlaylist) => {
-                        if (saveError2) {
-                          reject(new CustomError('MongoError', saveError2.message, 500));
-                        } else {
-                          resolve({
-                            status: 200,
-                            data: [savedMusic, savedPlaylist],
-                          });
-                        }
-                      });
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                    });
-                }
-              });
-            })
-            .catch((error) => {
-              reject(error);
+    isNotInPlaylist(playlistId, link)
+      .then(() => {
+        downloadMusic(link)
+          .then((path) => {
+            const staticMusicPath = path.data.replace('downloads', `${process.env.SERVER}:${process.env.EXPRESS_PORT}/tracks`);
+            const staticCoverPath = staticMusicPath.replace(staticMusicPath.split('/')[6], 'cover.png');
+            const music = new MusicModel({
+              user: userId,
+              playlist: playlistId,
+              artist,
+              date: Date.now(),
+              title,
+              album,
+              albumCover: staticCoverPath,
+              preview,
+              link,
+              path: staticMusicPath,
+              votes: 0,
             });
-        } else {
-          reject(new CustomError('MusicService', `Strange, but it appears that a music exist in this playlist ${data.data}`, 500));
-        }
+            music.save((saveError, savedMusic) => {
+              if (saveError) {
+                reject(new CustomError('MongoError', saveError.message, 500));
+              } else {
+                playlistService.getPlaylistById(playlistId)
+                  .then((response) => {
+                    response.data.musics.push(savedMusic._id);
+                    response.data.save((saveError2, savedPlaylist) => {
+                      if (saveError2) {
+                        reject(new CustomError('MongoError', saveError2.message, 500));
+                      } else {
+                        resolve({
+                          status: 200,
+                          data: [savedMusic, savedPlaylist],
+                        });
+                      }
+                    });
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }
+            });
+          })
+          .catch((error) => {
+            reject(error);
+          });
       })
       .catch((error) => {
         reject(error);
@@ -213,15 +209,17 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
   });
 }
 
-function isMusicInPlaylist(playlistId, artist, title, album, albumCover, preview, link) {
+function isNotInPlaylist(playlistId, link) {
   return new Promise((resolve, reject) => {
-    MusicModel.find({ link, playlistId }, (findError, musics) => {
+    MusicModel.find({ link, playlist: playlistId }, (findError, musics) => {
       if (findError) {
         reject(new CustomError('MongoError', findError.message, 500));
+      } else if (musics[0]) {
+        reject(new CustomError('isNotInPlayist', 'This music is already in the playlist !', 400));
       } else {
         resolve({
           status: 200,
-          data: musics,
+          data: { isNotInPlaylist: true },
         });
       }
     });

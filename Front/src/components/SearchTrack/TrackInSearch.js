@@ -22,8 +22,16 @@ class TrackInSearch extends React.Component {
         setModalVisible();
       })
       .catch((error) => {
-        console.error(error);
-        Alert.alert('An error occured, please try again later.');
+        if (error.status === 400) {
+          Alert.alert(
+            'Ajout d\'une musique',
+            'Cette musique existe déjà dans la playlist !',
+          );
+          setModalVisible();
+        } else {
+          console.error(error);
+          Alert.alert('An error occured, please try again later.');
+        }
       });
   };
 
