@@ -35,18 +35,24 @@ export default class SocialLogin extends Component {
 
         addUser(userInfo.user.familyName, userInfo.idToken,
           userInfo.user.givenName, userInfo.user.familyName, userInfo.user.email)
-          .then(
-            await AsyncStorage.setItem('userName', userInfo.user.familyName),
-            await AsyncStorage.setItem('password', userInfo.idToken),
-            await AsyncStorage.setItem('type', 'SignIn'),
-            console.log('Alert'),
+          .then(async () => {
+            await AsyncStorage.setItem('userName', userInfo.user.familyName);
+            await AsyncStorage.setItem('password', userInfo.idToken);
+            await AsyncStorage.setItem('type', 'SignIn');
             Alert.alert(
               'Validation de compte',
               'Un email de vérification vous a été envoyé.',
-            ),
-          )
+            );
+          })
           .catch((error) => {
-            console.log('caught', error.message);
+            if (error.status === 400 && error.msg === ' email') {
+              Alert.alert(
+                'Validation de compte',
+                'Un utilisateur avec l\'adresse email de votre compte google existe déjà !\n'
+                + 'Vous pouvez lier votre compte google dans les paramètres de votre compte.',
+              );
+            }
+            console.log(error);
           });
       } catch (error) {
         console.error(error);
