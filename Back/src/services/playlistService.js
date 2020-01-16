@@ -667,11 +667,14 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
   });
 }
 
+/* return the index of the deleted music */
+
 function deleteTrackFromPlaylist(playlistId, musicId) {
   return new Promise((resolve, reject) => {
     getPlaylistById(playlistId)
       .then((dataPlaylist) => {
-        for (let i = 0; i < dataPlaylist.data.musics.length; i += 1) {
+        let i = 0;
+        for (i = 0; i < dataPlaylist.data.musics.length; i += 1) {
           if (dataPlaylist.data.musics[i] === musicId) dataPlaylist.data.musics.splice(i, 1);
         }
         // eslint-disable-next-line no-unused-vars
@@ -685,13 +688,14 @@ function deleteTrackFromPlaylist(playlistId, musicId) {
               } else if (!musics[0]) {
                 reject(new CustomError('DeleteTrackFromPlaylist', 'No Music with this id in database', 404));
               } else {
+                // eslint-disable-next-line no-unused-vars
                 musics[0].remove((removeError, removedMusic) => {
                   if (removeError) {
                     reject(new CustomError('MongoError', removeError, 500));
                   } else {
                     resolve({
                       status: 200,
-                      data: removedMusic,
+                      data: i,
                     });
                   }
                 });
@@ -706,6 +710,8 @@ function deleteTrackFromPlaylist(playlistId, musicId) {
   });
 }
 
+/* return the index of the deleted music */
+
 function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
   return new Promise((resolve, reject) => {
     getPlaylistById(playlistId)
@@ -717,7 +723,8 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
           flag = true;
         }
         if (flag) {
-          for (let i = 0; i < playlist.musics.length; i += 1) {
+          let i = 0;
+          for (i; i < playlist.musics.length; i += 1) {
             if (playlist.musics[i] === musicId) playlist.musics.splice(i, 1);
           }
           // eslint-disable-next-line no-unused-vars
@@ -731,13 +738,14 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
                 } else if (!musics[0]) {
                   reject(new CustomError('DeleteTrackFromPlaylistRight', 'No Music with this id in database', 404));
                 } else {
+                  // eslint-disable-next-line no-unused-vars
                   musics[0].remove((removeError, removedMusic) => {
                     if (removeError) {
                       reject(new CustomError('MongoError', removeError, 500));
                     } else {
                       resolve({
                         status: 200,
-                        data: removedMusic,
+                        data: i,
                       });
                     }
                   });

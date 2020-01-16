@@ -80,7 +80,6 @@ class TrackInPlaylist extends React.Component {
       editor,
       currentTrack,
       admin,
-      active,
       deleteTrackInPlaylist,
     } = this.props;
     let renderForParty = null;
@@ -132,33 +131,28 @@ class TrackInPlaylist extends React.Component {
       if (admin) {
         deletionMod = (
           <TouchableOpacity
-            style={Typography.iconWrapper}
+            style={[Typography.iconWrapper, { marginRight: Spacing.small }]}
             onPress={() => {
               deleteTrackInPlaylist(track._id);
             }}
           >
             <Icon
-              name="ios-remove-circle-outline"
+              name="md-close-circle-outline"
               style={Typography.icon}
             />
           </TouchableOpacity>
         );
       }
     } else if (roomType === 'radio' && editor) {
-      let disabled = false;
-      if (!active) {
-        disabled = true;
-      }
       deletionMod = (
         <TouchableOpacity
-          style={Typography.iconWrapper}
+          style={[Typography.iconWrapper, { marginRight: Spacing.small }]}
           onPress={() => {
             deleteTrackInPlaylist(track._id);
           }}
-          disabled={disabled}
         >
           <Icon
-            name="ios-remove-circle-outline"
+            name="md-close-circle-outline"
             style={Typography.icon}
           />
         </TouchableOpacity>
@@ -223,7 +217,6 @@ let styles = StyleSheet.create({
     flex: 3,
     margin: Spacing.smallest,
     justifyContent: 'center',
-    paddingRight: Spacing.small,
     paddingVertical: Spacing.smallest,
   },
   title_container: {
