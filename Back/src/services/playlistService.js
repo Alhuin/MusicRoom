@@ -775,7 +775,7 @@ function moveTrackOrder(playlistId, musicId, newIndex) {
         for (let i = 0; i < playlist.musics.length; i += 1) {
           if (String(playlist.musics[i]._id) === String(musicId)) {
             playlist.musics.splice(i, 1);
-            i -= 1;
+            break;
           }
         }
         playlist.musics.splice(newIndex, 0, musicId);

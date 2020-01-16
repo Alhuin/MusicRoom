@@ -47,7 +47,7 @@ class TrackListInPlaylist extends React.Component {
     } = this.props;
     let render;
     let sortedTracks = tracks;
-    if (playlistId === currentPlaylistId && tracks[0] && currentTrack) {
+    if (roomType === 'party' && playlistId === currentPlaylistId && tracks[0] && currentTrack) {
       const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
       sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
       sortedTracks.unshift(currentTrackInPlaylist);
@@ -62,7 +62,7 @@ class TrackListInPlaylist extends React.Component {
       // console.log(sortableListMapping);
       render = (
         <SortableList
-          data={sortedTracks}
+          data={tracks}
           renderRow={({ key, index, data, disabled, active }) => (
             // TODO check necessary parameters ?
             <TrackInPlaylist
@@ -83,6 +83,7 @@ class TrackListInPlaylist extends React.Component {
           )}
           contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
           onReleaseRow={(key, currentOrder) => {
+            // console.log(key, currentOrder);
             let newPosition;
             for (newPosition = 0; newPosition < currentOrder.length; newPosition += 1) {
               if (currentOrder[newPosition] === `${key}`) {
@@ -90,6 +91,7 @@ class TrackListInPlaylist extends React.Component {
               }
             }
             const id = sortableListMapping[`${key}`];
+            // console.log(`id : ${id}, newPosition : ${newPosition}`);
             onMoveEnd(id, newPosition);
           }}
         />
