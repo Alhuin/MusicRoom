@@ -62,8 +62,8 @@ class TrackListInPlaylist extends React.Component {
       // console.log(sortableListMapping);
       render = (
         <SortableList
-          data={sortedTracks}
-          renderRow={({key, index, data, disabled, active }) => (
+          data={tracks}
+          renderRow={({ key, index, data, disabled, active }) => (
             // TODO check necessary parameters ?
             <TrackInPlaylist
               active={active}
