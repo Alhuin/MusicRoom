@@ -6,7 +6,7 @@ import { Icon } from 'native-base';
 import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
-  isEditor, moveTrackOrder, getEditRestriction, getPlaylistName,
+  isEditor, moveTrackOrder, getEditRestriction, getPlaylistName, deleteTrackFromPlaylistRight,
 } from '../../API/BackApi';
 import TrackListInPlaylist from '../containers/TrackListInPlaylist';
 import { Colors, Typography, Buttons } from '../styles';
@@ -246,6 +246,15 @@ class Playlist extends React.Component {
     this.setState({ tracks });
   };
 
+  deleteTrack = (trackId, playlistId, userId) => {
+    const { socket } = this.props;
+    deleteTrackFromPlaylistRight(trackId, playlistId, userId)
+      .then(() => {
+        socket.emit('deleteMusic', playlistId);
+      })
+      .catch(error => console.log(error));
+  };
+
   render() {
     const {
       tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched, pos,
@@ -277,7 +286,6 @@ class Playlist extends React.Component {
         </TouchableOpacity>
       )
     );
-
     return (
       <View style={styles.main_container}>
         <View style={styles.screenHeader}>
@@ -325,6 +333,7 @@ class Playlist extends React.Component {
             <TrackListInPlaylist
               tracks={tracks}
               updatePlaying={this.updatePlaying}
+              deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, playlistId, userId)}
               playing={playing}
               playlistId={playlistId}
               updateTracks={() => this.updateTracks(roomType, playlistId)}
@@ -337,6 +346,7 @@ class Playlist extends React.Component {
               isUserInPlaylist={isUserInPlaylist}
               editor={editor}
               pos={pos}
+              admin={admin}
               onMoveEnd={(id, newPosition) => {
                 moveTrackOrder(playlistId, id, newPosition)
                   .then(() => {

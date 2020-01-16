@@ -68,18 +68,18 @@ class Partys extends React.Component {
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
-    console.log('1');
+    // console.log('1');
     const { loggedUser } = this.props;
     // console.log(loggedUser);
     getPlaylistsFiltered('party', loggedUser._id)
       .then((playlists) => {
-        console.log('2');
+        // console.log('2');
         this.setState({ playlists });
-        console.log('3');
+        // console.log('3');
         resolve(true);
       })
       .catch((error) => {
-        console.log('3');
+        // console.log('3');
         if (error.status !== 400) {
           console.error(error);
         }
