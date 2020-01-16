@@ -263,17 +263,12 @@ class Playlist extends React.Component {
       (!playlistLaunched && tracks.length > 0 && admin) && (
         <TouchableOpacity
           onPress={() => {
+            changeTrack(null);
             getNextTrackByVote(playlistId)
               .then((nextTrack) => {
                 changePlaylist(playlistId);
                 changeTrack(nextTrack);
-                // console.log(nextTrack);
-                // deleteTrackFromPlaylist(nextTrack.id, playlistId)
-                //   .then(() => {
                 this.setState({ playlistLaunched: true });
-                // socket.emit('deleteMusic', playlistId);
-                // })
-                // .catch(error => console.error(error));
               })
               .catch(error => console.log(error));
           }}
