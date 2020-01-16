@@ -24,7 +24,14 @@ export default class AudioPlayer extends Component {
           resizeMode="cover" // Fill the whole screen at aspect ratio.
           // onLoadStart={this.loadStart} // Callback when video starts to load
           onLoad={this._setDuration} // Callback when video loads
-          onProgress={this._setTime} // Callback every ~250ms with currentTime
+          onProgress={(data) => {
+            console.log(`currentTIme = ${data.currentTime}`);
+            console.log('truncate = ');
+            console.log(Math.trunc(data.currentTime));
+            console.log('floor = ');
+            console.log(parseInt(data.currentTime));
+            this._setTime(data);
+          }} // Callback every ~250ms with currentTime
           // onEnd={this.onEnd} // Callback when playback finishes
           // onError={this.videoError} // Callback when video cannot be loaded
           playWhenInactive
