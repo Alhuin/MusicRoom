@@ -137,7 +137,7 @@ class TrackInPlaylist extends React.Component {
             }}
           >
             <Icon
-              name="md-close-circle-outline"
+              name="md-close"
               style={Typography.icon}
             />
           </TouchableOpacity>
@@ -152,7 +152,7 @@ class TrackInPlaylist extends React.Component {
           }}
         >
           <Icon
-            name="md-close-circle-outline"
+            name="md-close"
             style={Typography.icon}
           />
         </TouchableOpacity>

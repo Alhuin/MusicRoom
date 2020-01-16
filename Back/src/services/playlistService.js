@@ -688,14 +688,13 @@ function deleteTrackFromPlaylist(playlistId, musicId) {
               } else if (!musics[0]) {
                 reject(new CustomError('DeleteTrackFromPlaylist', 'No Music with this id in database', 404));
               } else {
-                // eslint-disable-next-line no-unused-vars
                 musics[0].remove((removeError, removedMusic) => {
                   if (removeError) {
                     reject(new CustomError('MongoError', removeError, 500));
                   } else {
                     resolve({
                       status: 200,
-                      data: i,
+                      data: { index: i },
                     });
                   }
                 });
@@ -745,7 +744,7 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
                     } else {
                       resolve({
                         status: 200,
-                        data: i,
+                        data: { index: i },
                       });
                     }
                   });
