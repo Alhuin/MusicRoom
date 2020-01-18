@@ -3,6 +3,9 @@ import {
   Modal, StyleSheet, TextInput, View, Text, Alert,
 } from 'react-native';
 import { joinPlaylistWithCode } from '../../../API/BackApi';
+import {
+  Colors, Typography,
+} from '../../styles';
 
 export default class JoinPrivateRoom extends React.Component {
   constructor(props) {
@@ -21,7 +24,7 @@ export default class JoinPrivateRoom extends React.Component {
         setModalVisible();
         Alert.alert(
           'Rejoindre une playlist',
-          `Vous avez désormais accès à la ${playlist.roomType} ${playlist.name} !`,
+          `Vous avez désormais accès à la playlist ${playlist.name}, c'est une ${playlist.roomType} !`,
         );
       })
       .catch((error) => {
@@ -47,21 +50,27 @@ export default class JoinPrivateRoom extends React.Component {
           setModalVisible();
         }}
       >
-        <Text
-          style={styles.title}
-        >
-          Rejoindre une Playlist Privée
-        </Text>
-        <View
-          style={styles.container}
-        >
-          <TextInput
-            style={styles.textInput}
-            placeholder="Entrez le code ici"
-            onChangeText={text => this.setState({ text })}
-            onSubmitEditing={this.joinRoom}
-            keyboardType="numeric"
-          />
+        <View style={styles.main_container}>
+          <View style={Typography.screenHeader}>
+            <Text style={Typography.screenHeaderText}>
+              Rejoindre une Playlist Privée
+            </Text>
+          </View>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionHeaderText, { marginTop: 20 }]}>Code Privé</Text>
+            </View>
+            <View style={styles.sectionContent}>
+              <TextInput
+                style={Typography.textInput}
+                placeholder="Entrez le code ici"
+                placeholderTextColor={Colors.baseText}
+                onChangeText={text => this.setState({ text })}
+                onSubmitEditing={this.joinRoom}
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
         </View>
       </Modal>
     );
@@ -69,6 +78,22 @@ export default class JoinPrivateRoom extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  main_container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  section: {
+    ...Typography.section,
+  },
+  sectionHeader: {
+    ...Typography.sectionHeader,
+  },
+  sectionHeaderText: {
+    ...Typography.sectionHeaderText,
+  },
+  sectionContent: {
+    ...Typography.sectionContent,
+  },
   container: {
     flex: 1,
     flexDirection: 'column',

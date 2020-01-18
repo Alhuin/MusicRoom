@@ -22,8 +22,10 @@ class Radios extends React.Component {
     const { socket, navigation } = this.props;
 
     this.updatePlaylist()
+      .then(() => console.log('radiosList updated'))
       .catch(error => console.error(error));
 
+    this._isMounted = true;
     this._focusListener = navigation.addListener('didFocus', () => {
       const { shouldUpdate, shouldUpdatePlaylist } = this.props;
 
@@ -42,14 +44,16 @@ class Radios extends React.Component {
   }
 
   componentWillUnmount(): void {
+    this._isMounted = false;
     this._focusListener.remove();
     this._blurListener.remove();
   }
 
   _onRefreshSignal = () => {
     if (this._isMounted) {
-      console.log('[Socket Server] : refresh signal for playlist list received');
+      console.log('[Socket Server] : refresh signal radiosList received');
       this.updatePlaylist()
+        .then(res => console.log(res))
         .catch(error => console.log(error));
     }
   };
@@ -70,7 +74,7 @@ class Radios extends React.Component {
     getPlaylistsFiltered('radio', loggedUser._id)
       .then((playlists) => {
         this.setState({ playlists });
-        resolve();
+        resolve(true);
       })
       .catch((error) => {
         if (error.status !== 400) {

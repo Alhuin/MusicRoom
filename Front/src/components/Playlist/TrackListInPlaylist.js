@@ -41,16 +41,17 @@ class TrackListInPlaylist extends React.Component {
       onMoveEnd,
       pos,
       currentTrack,
+      admin,
+      deleteTrackInPlaylist,
+      currentPlaylistId,
     } = this.props;
     let render;
     let sortedTracks = tracks;
-    if (currentTrack) {
+    if (roomType === 'party' && playlistId === currentPlaylistId && tracks[0] && currentTrack) {
       const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
       sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
       sortedTracks.unshift(currentTrackInPlaylist);
-      // TODO fix out > in
     }
-
     if (/*
       isUserInPlaylist === true && */ roomType === 'radio') {
       const sortableListMapping = {};
@@ -61,7 +62,7 @@ class TrackListInPlaylist extends React.Component {
       // console.log(sortableListMapping);
       render = (
         <SortableList
-          data={sortedTracks}
+          data={tracks}
           renderRow={({ key, index, data, disabled, active }) => (
             // TODO check necessary parameters ?
             <TrackInPlaylist
@@ -72,10 +73,12 @@ class TrackListInPlaylist extends React.Component {
               playlistId={playlistId}
               updateTracks={updateTracks}
               updateMyVotes={updateMyVotes}
+              deleteTrackInPlaylist={deleteTrackInPlaylist}
               roomType={roomType}
               myVoteValue={0}
               editor={editor}
               pos={pos}
+              admin={admin}
             />
           )}
           contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
@@ -111,10 +114,12 @@ class TrackListInPlaylist extends React.Component {
                 playlistId={playlistId}
                 updateTracks={updateTracks}
                 updateMyVotes={updateMyVotes}
+                deleteTrackInPlaylist={deleteTrackInPlaylist}
                 roomType={roomType}
                 myVoteValue={myVoteValue}
                 editor={editor}
                 pos={pos}
+                admin={admin}
               />
             );
           }}

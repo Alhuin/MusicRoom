@@ -16,9 +16,7 @@ export default class LoginContext extends Component {
       route = 'Connexion_noTransition';
     } else {
       contextText = (
-        <Text style={styles.contextText}>
-          Vous n&apos;avez pas encore de compte ?
-        </Text>
+        <Text style={styles.contextText}>Vous n&apos;avez pas encore de compte ?</Text>
       );
       other = 'Sign Up !';
       route = 'Inscription_noTransition';

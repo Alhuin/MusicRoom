@@ -293,7 +293,6 @@ function confirmPasswordToken(req, res) {
 }
 
 function getDeezerCode(req, res) {
-  console.log(req.query);
   if (req.query.code) {
     userService.getDeezerCode(req.query.code)
       .then(async (response) => {
