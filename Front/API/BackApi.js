@@ -7,7 +7,6 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
                     Users & Login
  */
 
-
 function login(userName, password) {
   return new Promise((resolve, reject) => fetch(
     `${api}/login`,
@@ -53,17 +52,24 @@ function getUserByIdByPreferences(userId, requesterId) {
   });
 }
 
-function addUser(userName, password, name, familyName, email) {
+function addUser(userName, password, name, familyName, email, idDeezer, idGoogle) {
   return new Promise((resolve, reject) => {
+    let body = {
+      login: userName, password, name, familyName, email,
+    };
+    if (idDeezer) {
+      body = { ...body, ...idDeezer };
+    }
+    if (idGoogle) {
+      body = { ...body, ...idGoogle };
+    }
     fetch(`${api}/users`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        login: userName, password, name, familyName, email,
-      }),
+      body: JSON.stringify(body),
     })
       .then(async (response) => {
         const data = await response.json();
@@ -125,7 +131,7 @@ function sendPasswordToken(loginOrEmail) {
 }
 
 function updateUser(userId, newLogin, name, familyName,
-  email, phoneNumber, preferences, visibilityTable) {
+  email, phoneNumber, preferences, visibilityTable, idDeezer, idGoogle) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/users/update`, {
       method: 'POST',
@@ -134,7 +140,16 @@ function updateUser(userId, newLogin, name, familyName,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId, newLogin, name, familyName, email, phoneNumber, preferences, visibilityTable,
+        userId,
+        newLogin,
+        name,
+        familyName,
+        email,
+        phoneNumber,
+        preferences,
+        visibilityTable,
+        idDeezer,
+        idGoogle,
       }),
     })
       .then(async (response) => {
@@ -1128,6 +1143,27 @@ function deleteTrackFromPlaylistRight(musicId, playlistId, userId) {
   });
 }
 
+function findUserByidSocial(DeezerId, SocialType) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/findDeezer/${DeezerId}&${SocialType}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('findUserByidSocial', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 
 export {
   login,
@@ -1178,5 +1214,6 @@ export {
   setPlaylistLocation,
   setPlaylistName,
   getPlaylistName,
+  findUserByidSocial,
   deleteTrackFromPlaylistRight,
 };
