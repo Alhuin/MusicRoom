@@ -41,7 +41,17 @@ function getDeezerToken(DeezerCode) {
       })
         .then(async (response) => {
           const data = await response.text();
-          resolve(data);
+          const token = data.split('=');
+          console.log(token[1]);
+          fetch(`https://api.deezer.com/user/me?access_token=${token[1]}`)
+            .then(async (user) => {
+              const returnedUser = await user.json();
+              resolve(returnedUser);
+            })
+            .catch((error) => {
+              console.error(error);
+              reject(error);
+            });
         })
         .catch((error) => {
           reject(error);

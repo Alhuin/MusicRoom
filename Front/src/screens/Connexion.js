@@ -8,7 +8,6 @@ import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import Logo from '../components/Authentication/Logo';
 import LoginContext from '../components/Authentication/LoginContext';
 import SignInForm from '../containers/SignInForm';
-import SocialLogin from '../containers/SocialLogin';
 import { login } from '../../API/BackApi';
 
 
@@ -63,10 +62,6 @@ class Connexion extends React.Component {
           <View style={styles.content}>
             <Logo />
             <SignInForm navigation={navigation} />
-            <SocialLogin
-              type={type}
-              navigation={navigation}
-            />
             <LoginContext
               type={type}
               navigation={navigation}

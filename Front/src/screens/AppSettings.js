@@ -3,6 +3,7 @@ import {
   StyleSheet, View, Text, TextInput, Alert, TouchableOpacity, ScrollView, FlatList, Linking,
 } from 'react-native';
 import { Icon } from 'native-base';
+import { GoogleSignin } from 'react-native-google-signin';
 import Collapsible from 'react-native-collapsible';
 import { updateUser, deleteFriend, getFriends } from '../../API/BackApi';
 import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
@@ -108,18 +109,48 @@ class AppSettings extends React.Component {
       .catch(err => console.error("Couldn't load page", err));
   };
 
+  getGoogle = async () => {
+    const {
+      user, login, name, familyName, email, phoneNumber, preferences, visibilityTable,
+    } = this.state;
+    const { userChanged } = this.props;
+    GoogleSignin.configure({
+      webClientId: '1032045608110-fk8aiqduat8c6oiltm1uneqbuqhumfsn.apps.googleusercontent.com',
+    });
+    try {
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
+        visibilityTable, '', userInfo.user.id)
+        .then((newUser) => {
+          userChanged(newUser);
+          Alert.alert('Votre compte google est maintenant associé');
+        })
+        .catch(error => console.log(error));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
   render() {
     const { navigation } = this.props;
     const { DeezerToken } = this.state;
     const DeezerCode = navigation.getParam('DeezCode');
     const {
       user, preferences, visibilityTable, collapsed, friends,
+      login, name, familyName, email, phoneNumber,
     } = this.state;
     const iconFromVisibilityTable = {};
     if (DeezerCode !== undefined && DeezerToken === '') {
       getDeezerToken(DeezerCode)
         .then((response) => {
-          this.setState({ DeezerToken: response });
+          this.setState({ DeezerToken: response.firstname });
+          updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
+            visibilityTable, response.id.toString(), '')
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
         })
         .catch(error => console.log(error));
     }
@@ -145,7 +176,7 @@ class AppSettings extends React.Component {
       <View style={styles.main_container}>
         <View style={Typography.screenHeader}>
           <Text style={Typography.screenHeaderText}>
-            Paramètres
+                Paramètres
           </Text>
         </View>
         <ScrollView>
@@ -158,7 +189,7 @@ class AppSettings extends React.Component {
                 style={styles.inputStyle}
                 onChangeText={this.updateLogin}
               >
-                { user.login }
+                {user.login}
               </TextInput>
             </View>
           </View>
@@ -171,7 +202,7 @@ class AppSettings extends React.Component {
                 style={styles.inputStyle}
                 onChangeText={this.updateName}
               >
-                { user.name }
+                {user.name}
               </TextInput>
             </View>
           </View>
@@ -184,7 +215,7 @@ class AppSettings extends React.Component {
                 style={styles.inputStyle}
                 onChangeText={this.updateFamilyName}
               >
-                { user.familyName }
+                {user.familyName}
               </TextInput>
               <TouchableOpacity
                 style={styles.iconWrapper}
@@ -208,7 +239,7 @@ class AppSettings extends React.Component {
                 style={styles.inputStyle}
                 onChangeText={this.updateEmail}
               >
-                { user.email }
+                {user.email}
               </TextInput>
               <TouchableOpacity
                 style={styles.iconWrapper}
@@ -232,7 +263,7 @@ class AppSettings extends React.Component {
                 style={styles.inputStyle}
                 onChangeText={this.updatePhoneNumber}
               >
-                { user.phoneNumber }
+                {user.phoneNumber}
               </TextInput>
               <TouchableOpacity
                 style={styles.iconWrapper}
@@ -331,7 +362,7 @@ class AppSettings extends React.Component {
             <TouchableOpacity onPress={this.toggleExpanded}>
               <View style={[styles.sectionHeader, { justifyContent: 'space-between', alignItems: 'center' }]}>
                 <Text style={styles.sectionHeaderText}>
-                  Amis
+                      Amis
                 </Text>
                 {collapsibleIcon}
               </View>
@@ -342,54 +373,66 @@ class AppSettings extends React.Component {
                   data={friends}
                   keyExtractor={item => item._id.toString()}
                   renderItem={
-                    ({ item }) => {
-                      const friendId = item._id;
-                      const element = (
-                        <View style={styles.card}>
-                          <View
-                            style={[
-                              styles.cardContentRow,
-                              { justifyContent: 'space-between', alignItems: 'center' },
-                            ]}
-                          >
-                            <TouchableOpacity
-                              onPress={() => {
-                                navigation.navigate('UserProfile', { userProfileId: item._id });
-                              }}
-                              style={{ flex: 6 }}
-                            >
-                              <Text style={styles.cardHeaderText}>
-                                {item.name}
-                              </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              onPress={() => {
-                                deleteFriend(friendId, user._id)
-                                  .then(() => {
-                                    getFriends(user._id)
-                                      .then((newFriends) => {
-                                        this.setState({ friends: newFriends });
-                                      })
-                                      .catch((error) => {
-                                        console.error(error);
-                                      });
-                                  })
-                                  .catch((error) => {
-                                    console.error(error);
-                                  });
-                              }}
-                              style={styles.iconWrapper}
-                            >
-                              <Icon name="ios-remove" style={styles.icon} />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      );
-                      return (element);
-                    }
-                  }
+                          ({ item }) => {
+                            const friendId = item._id;
+                            const element = (
+                              <View style={styles.card}>
+                                <View
+                                  style={[
+                                    styles.cardContentRow,
+                                    { justifyContent: 'space-between', alignItems: 'center' },
+                                  ]}
+                                >
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      navigation.navigate('UserProfile', { userProfileId: item._id });
+                                    }}
+                                    style={{ flex: 6 }}
+                                  >
+                                    <Text style={styles.cardHeaderText}>
+                                      {item.name}
+                                    </Text>
+                                  </TouchableOpacity>
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      deleteFriend(friendId, user._id)
+                                        .then(() => {
+                                          getFriends(user._id)
+                                            .then((newFriends) => {
+                                              this.setState({ friends: newFriends });
+                                            })
+                                            .catch((error) => {
+                                              console.error(error);
+                                            });
+                                        })
+                                        .catch((error) => {
+                                          console.error(error);
+                                        });
+                                    }}
+                                    style={styles.iconWrapper}
+                                  >
+                                    <Icon name="ios-remove" style={styles.icon} />
+                                  </TouchableOpacity>
+                                </View>
+                              </View>
+                            );
+                            return (element);
+                          }
+                        }
                 />
               </Collapsible>
+            </View>
+          </View>
+          <View style={styles.section}>
+            <View style={[styles.sectionContent, { alignItems: 'center' }]}>
+              <TouchableOpacity
+                onPress={this.getGoogle}
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                      Connection a Google
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.section}>
@@ -399,13 +442,13 @@ class AppSettings extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                  Connection a Deezer
+                      Connection a Deezer
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
           <Text style={Buttons.text}>
-            Ton token de connexion Deezer est :
+                Votre compte est associé au compte Deezer de :
             {' '}
             {this.state.DeezerToken}
           </Text>
@@ -416,7 +459,7 @@ class AppSettings extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                  Confirmer
+                      Confirmer
                 </Text>
               </TouchableOpacity>
             </View>

@@ -122,11 +122,11 @@ function deleteUserById(userId) {
   });
 }
 
-function addUser(login, password, name, familyName, email) {
+function addUser(login, password, name, familyName, email, idDeezer, idGoogle) {
   return new Promise((resolve, reject) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
-    const user = new UserModel({
+    let user = new UserModel({
       login,
       password: hash,
       name,
@@ -134,6 +134,12 @@ function addUser(login, password, name, familyName, email) {
       email,
       isVerified: false,
     });
+    if (idDeezer) {
+      user = { ...user, ...idDeezer };
+    }
+    if (idGoogle) {
+      user = { ...user, ...idGoogle };
+    }
     user.save((error, savedUser) => {
       if (error) {
         if (error.name === 'ValidationError') {
@@ -149,7 +155,7 @@ function addUser(login, password, name, familyName, email) {
 }
 
 function updateUser(userId, login, name, familyName, email, phoneNumber, preferences,
-  visibilityTable) {
+  visibilityTable, idDeezer, idGoogle) {
   return new Promise((resolve, reject) => {
     UserModel.findById(userId, (error, user) => {
       if (error) {
@@ -157,6 +163,7 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
       } else if (!user) {
         reject(new CustomError('UpdateUser', 'No user with this id found in database', 404));
       } else {
+        console.log(idDeezer);
         const updatedUser = user;
         updatedUser.login = login;
         updatedUser.name = name;
@@ -165,6 +172,9 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
         updatedUser.phoneNumber = phoneNumber;
         updatedUser.preferences = preferences;
         updatedUser.visibilityTable = visibilityTable;
+        updatedUser.idDeezer = idDeezer;
+        updatedUser.idGoogle = idGoogle;
+        console.log(updatedUser);
         updatedUser.save((saveError, newUser) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
@@ -206,7 +216,7 @@ function addFriend(friendId, userId) {
                 if (!updatedFriend.friends.includes(userId)) {
                   updatedFriend.friends.push(userId);
                 }
-                // eslint-disable-next-line no-unused-vars //
+                // eslint-disable-next-line no-unused-vars
                 updatedUser.save((saveErrorFriend, newFriend) => {
                   if (saveErrorFriend) {
                     reject(new CustomError('MongoError', saveErrorFriend.message, 500));
@@ -453,6 +463,41 @@ function getDeezerCode(DeezerCode) {
   });
 }
 
+// REFAIRE LA RECHERCHE SINON LOGIC OK
+
+function findUserByidSocial(idSocial, SocialType) {
+  return new Promise((resolve, reject) => {
+    if (SocialType === 'Google') {
+      UserModel.find({ idGoogle: idSocial }, (error, userByIdGoogle) => {
+        if (error) {
+          reject(new CustomError('MongoError', error.message, 500));
+        } else if (!userByIdGoogle[0]) {
+          reject(new CustomError('findUserByGoogleToken', 'no user with this social token in database', 404));
+        } else {
+          resolve({
+            status: 200,
+            data: userByIdGoogle[0],
+          });
+        }
+      });
+    } else {
+      UserModel.find({ idDeezer: idSocial }, (error, userByIdDeezer) => {
+        if (error) {
+          reject(new CustomError('MongoError', error.message, 500));
+        } else if (!userByIdDeezer[0]) {
+          reject(new CustomError('findUserByDeezerToken', 'no user with this social token in database', 404));
+        } else {
+          resolve({
+            status: 200,
+            data: userByIdDeezer[0],
+          });
+        }
+      });
+    }
+  });
+}
+
+
 export default {
   getUsers,
   getUserById,
@@ -469,4 +514,5 @@ export default {
   deleteFriend,
   getFriends,
   getDeezerCode,
+  findUserByidSocial,
 };

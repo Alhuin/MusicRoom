@@ -25,6 +25,7 @@ router.post('/login', loginController.login);
 
 router.get('/users/deezer', userController.getDeezerCode);
 router.get('/users/deezerlogin', userController.getDeezerCodeForLogin);
+router.get('/users/findDeezer/:idSocial&:SocialType', userController.findUserByidSocial);
 router.get('/users/:userId', userController.getUserById);
 router.get('/users', userController.getUsers);
 router.get('/users/getByPreferences/:userId&:requesterId', userController.getUserByIdByPreferences);

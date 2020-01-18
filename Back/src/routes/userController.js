@@ -99,10 +99,12 @@ function deleteUserById(req, res) {
 function addUser(req, res) {
   // checker email valide et les champs uniques
   console.log(req);
+  const idDeezer = req.body.idDeezer ? req.body.idDeezer : null;
+  const idGoogle = req.body.idGoogle ? req.body.idGoogle : null;
   if ((req.body.login && req.body.password && req.body.name
     && req.body.familyName && req.body.email)) {
     userService.addUser(req.body.login, req.body.password, req.body.name,
-      req.body.familyName, req.body.email)
+      req.body.familyName, req.body.email, idDeezer, idGoogle)
       .then((response) => {
         res
           .status(response.status)
@@ -123,11 +125,11 @@ function updateUser(req, res) {
   // checker email valide et les champs uniques
   if ((req.body.userId && utils.isValidId(req.body.userId)
     && req.body.newLogin && req.body.name && req.body.familyName
-    && req.body.email && req.body.phoneNumber && req.body.preferences
-    && req.body.visibilityTable)) {
+    && req.body.email && (req.body.phoneNumber || req.body.phoneNumber === '') && req.body.preferences
+    && req.body.visibilityTable && (req.body.idDeezer || req.body.idDeezer === '') && (req.body.idGoogle || req.body.idGoogle === ''))) {
     userService.updateUser(req.body.userId, req.body.newLogin, req.body.name,
       req.body.familyName, req.body.email, req.body.phoneNumber, req.body.preferences,
-      req.body.visibilityTable)
+      req.body.visibilityTable, req.body.idDeezer, req.body.idGoogle)
       .then((response) => {
         res
           .status(response.status)
@@ -332,6 +334,26 @@ function getDeezerCodeForLogin(req, res) {
   }
 }
 
+function findUserByidSocial(req, res) {
+  console.log(req.params);
+  if (req.params.idSocial) {
+    userService.findUserByidSocial(req.params.idSocial, req.params.SocialType)
+      .then(async (response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(404).send({ msg: 'User not found' });
+  }
+}
+
 export default {
   getUserById,
   getUserByIdByPreferences,
@@ -349,4 +371,5 @@ export default {
   getFriends,
   getDeezerCode,
   getDeezerCodeForLogin,
+  findUserByidSocial,
 };
