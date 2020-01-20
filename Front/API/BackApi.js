@@ -8,6 +8,7 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
  */
 
 function login(userName, password) {
+  console.log('login');
   return new Promise((resolve, reject) => fetch(
     `${api}/login`,
     {

@@ -7,7 +7,6 @@ import AlbumArt from './AlbumArt';
 import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
-import { getNextTrackByVote } from '../../../API/BackApi';
 
 export default class PlayerDetails extends Component {
   onBack() {
@@ -30,32 +29,12 @@ export default class PlayerDetails extends Component {
     }
   }
 
+  // TODO downPress usage
   // onDownPress() {
   //   const { navigation, playlistId } = this.props;
   //
   //   navigation.navigate('Parties', { playlistId });
   // }
-
-  onForward() {
-    const {
-      playlistId, audioElement, changing, setCurrentPosition,
-      setTotalLength, paused, changeTrack,
-    } = this.props;
-
-    getNextTrackByVote(playlistId)
-      .then((nextTrack) => {
-        audioElement && audioElement.seek(0);
-        changing(true);
-        setTimeout(() => {
-          setCurrentPosition(0);
-          paused(false);
-          setTotalLength(1);
-          changing(false);
-          changeTrack(nextTrack);
-        }, 0);
-      })
-      .catch(error => console.log(error));
-  }
 
 
   seek(time) {
@@ -69,12 +48,11 @@ export default class PlayerDetails extends Component {
 
   render() {
     const {
-      onDownPress, currentPosition, track, paused, totalLength, isPaused,
+      onDownPress, currentPosition, track, paused, totalLength, isPaused, onForward,
     } = this.props;
 
     this._onSeek = this.seek.bind(this);
     this._onBack = this.onBack.bind(this);
-    this._onForward = this.onForward.bind(this);
 
     // console.log(currentPosition);
     // console.log('length = ');
@@ -100,7 +78,7 @@ export default class PlayerDetails extends Component {
             paused(true);
           }}
           onBack={this._onBack}
-          onForward={this._onForward}
+          onForward={onForward}
           paused={isPaused}
         />
       </View>

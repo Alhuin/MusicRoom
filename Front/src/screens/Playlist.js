@@ -3,11 +3,12 @@ import {
   StyleSheet, View, Text, TouchableOpacity, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
-import Components from '../components';
 import MusicControl from 'react-native-music-control';
+import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
   isEditor, moveTrackOrder, getEditRestriction, getPlaylistName, deleteTrackFromPlaylistRight,
+  deleteTrackFromPlaylist,
 } from '../../API/BackApi';
 import TrackListInPlaylist from '../containers/TrackListInPlaylist';
 import { Colors, Typography, Buttons } from '../styles';
@@ -27,16 +28,29 @@ class Playlist extends React.Component {
       playlistLaunched: false,
       pos: 0,
     };
-    this.onRefresh = this._onRefresh.bind(this);
-    this.onRefreshPermissionSignal = this._onRefreshPermissionSignal.bind(this);
+
+    // this.onRefresh = this._onRefresh.bind(this);
+    // this.onRefreshPermissionSignal = this._onRefreshPermissionSignal.bind(this);
+
     props.socket.on('refresh', () => {
       console.log('refresh signal recieved');
-      this.onRefresh();
+      this._onRefresh();
     });
     props.socket.on('refreshPermissions', () => {
       console.log('refreshPermissions recieved');
-      this.onRefreshPermissionSignal();
+      this._onRefreshPermissionSignal();
     });
+
+    props.socket.on('playlistEnd', () => {
+      console.log('playlist End recieved');
+      if (this._isMounted) {
+        this.setState({ playlistLaunched: false });
+      }
+    });
+
+    this.onForward = this._onForward.bind(this);
+    this.setBackGroundTrack = this._setBackGroundTrack.bind(this);
+    this.nextTrackByVote = this._nextTrackByVote.bind(this);
   }
 
 
@@ -47,11 +61,6 @@ class Playlist extends React.Component {
     this._isMounted = true;
 
     this._focusListener = navigation.addListener('didFocus', () => {
-      // console.log(`track = ${track}`);
-      // console.log(`playlistLaunched = ${playlistLaunched}`);
-      // if (!track && !playlistLaunched) {
-      //   this.setState({ playlistLaunched: false });
-      // }
       console.log(`emited userJoindedPlaylist ${playlistId}`);
       socket.emit('userJoinedPlaylist', playlistId);
     });
@@ -88,24 +97,6 @@ class Playlist extends React.Component {
     this._onChangedPage();
   }
 
-  setBackGroundTrack = (backgroundTrack) => {
-    console.log(backgroundTrack);
-    MusicControl.setNowPlaying({
-      title: backgroundTrack.title,
-      artwork: backgroundTrack.albumArtUrl, // URL or RN's image require()
-      artist: backgroundTrack.artist,
-      album: backgroundTrack.album,
-    //   genre: 'Post-disco, Rhythm and Blues, Funk, Dance-pop',
-    //   duration: 294, // (Seconds)
-    //   description: '', // Android Only
-    //   color: 0xFFFFFF, // Notification Color - Android Only
-    //   date: '1983-01-02T00:00:00Z', // Release Date (RFC 3339) - Android Only
-    //   rating: 84, // Android Only (Boolean or Number depending on the type)
-    // eslint-disable-next-line max-len
-    //   notificationIcon: 'my_custom_icon' // Android Only (String), Android Drawable resource name for a custom notification icon
-    });
-  };
-
   _onChangedPage = () => {
     const { playing } = this.state;
     if (playing !== null) {
@@ -122,12 +113,7 @@ class Playlist extends React.Component {
   };
 
   _onRefresh = () => {
-    const { track } = this.props;
-    const { playlistLaunched } = this.state;
     if (this._isMounted) {
-      if (!track && playlistLaunched) {
-        this.setState({ playlistLaunched: false });
-      }
       const { navigation } = this.props;
       const roomType = navigation.getParam('roomType');
       const playlistId = navigation.getParam('playlistId');
@@ -283,6 +269,98 @@ class Playlist extends React.Component {
       .catch(error => console.log(error));
   };
 
+  _onForward = () => {
+    const { playlistId, socket, track } = this.props;
+
+    if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
+      console.log('onForward : playlist already launched, del + nextTrack');
+      deleteTrackFromPlaylist(track.id, playlistId)
+        .then(() => {
+          socket.emit('deleteMusic', playlistId);
+          this.nextTrackByVote(playlistId);
+        })
+        .catch(error => console.log(error));
+    } else {
+      console.log('onForward : playlist not launched yet, just nextTrack');
+      this.nextTrackByVote(playlistId);
+    }
+  };
+
+  _nextTrackByVote = (playlistId) => {
+    const {
+      audioElement,
+      changing,
+      changeTrack,
+      changePlaylist,
+      setTotalLength,
+      setCurrentPosition,
+      paused,
+      socket,
+    } = this.props;
+
+    getNextTrackByVote(playlistId)
+      .then((nextTrack) => { // Not last track in playlist
+        paused(true);
+        if (Object.keys(nextTrack).length) {
+          audioElement && audioElement.seek(0);
+          changing(true);
+          setTimeout(() => {
+            setCurrentPosition(0);
+            setTotalLength(1);
+            changing(false);
+            changeTrack(nextTrack);
+            this.setBackGroundTrack(nextTrack);
+          }, 0);
+        } else { // playlist end reached
+          MusicControl.resetNowPlaying();
+          changeTrack(null);
+          changePlaylist('');
+          setTotalLength(1);
+          setCurrentPosition(0);
+          socket.emit('playlistEnd', playlistId);
+        }
+      })
+      .catch(error => console.log(error));
+  };
+
+  _setBackGroundTrack = (backgroundTrack) => {
+    const { paused } = this.props;
+
+    // Enable buttons
+    MusicControl.enableBackgroundMode(true);
+    MusicControl.enableControl('play', true);
+    MusicControl.enableControl('pause', true);
+    MusicControl.enableControl('nextTrack', true);
+    MusicControl.enableControl('closeNotification', true, { when: 'always' });
+    // Paused by default
+    MusicControl.updatePlayback({
+      state: MusicControl.STATE_PAUSED,
+    });
+
+    // Background events
+    MusicControl.on('play', () => {
+      MusicControl.updatePlayback({
+        state: MusicControl.STATE_PLAYING,
+      });
+      paused(false);
+    });
+    MusicControl.on('pause', () => {
+      MusicControl.updatePlayback({
+        state: MusicControl.STATE_PAUSED,
+      });
+      paused(true);
+    });
+    MusicControl.on('nextTrack', () => this._onForward());
+
+    // Displayed infos
+    MusicControl.setNowPlaying({
+      title: backgroundTrack.title,
+      artwork: backgroundTrack.albumArtUrl,
+      artist: backgroundTrack.artist,
+      album: backgroundTrack.album,
+    });
+  };
+
   render() {
     const {
       tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched, pos,
@@ -296,17 +374,40 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
+    // console.log(`launched = ${playlistLaunched}; length = ${tracks.length}; admin = ${admin}`);
     const playButton = (
       (!playlistLaunched && tracks.length > 0 && admin) && (
         <TouchableOpacity
           onPress={() => {
-            changeTrack(null);
+            const {
+              changing,
+              setTotalLength,
+              setCurrentPosition,
+              paused,
+            } = this.props;
+
             getNextTrackByVote(playlistId)
               .then((nextTrack) => {
-                changePlaylist(playlistId);
-                changeTrack(nextTrack);
-                this.setBackGroundTrack(nextTrack);
-                this.setState({ playlistLaunched: true });
+                paused(true);
+                if (Object.keys(nextTrack).length) {
+                  changing(true);
+                  setTimeout(() => {
+                    setCurrentPosition(0);
+                    setTotalLength(1);
+                    changing(false);
+                    changeTrack(nextTrack);
+                    changePlaylist(playlistId);
+                    this._setBackGroundTrack(nextTrack);
+                    this.setState({ playlistLaunched: true });
+                  }, 0);
+                } else {
+                  MusicControl.resetNowPlaying();
+                  changeTrack(null);
+                  changePlaylist('');
+                  setTotalLength(1);
+                  setCurrentPosition(0);
+                  // this.setState({ playlistLaunched: false });
+                }
               })
               .catch(error => console.log(error));
           }}

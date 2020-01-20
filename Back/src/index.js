@@ -21,8 +21,6 @@ const socketio = require('socket.io');
 
 const server = http.Server(app);
 const io = socketio(server);
-
-
 const clients = [];
 
 // Handle socket connection & events
@@ -77,13 +75,20 @@ io.on('connection', (socket) => {
     console.log(`[Socket Server] : music deleted, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
   });
+
   socket.on('voteMusic', (playlistId) => {
     console.log(`[Socket Server] : music voted, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
   });
+
   socket.on('parameterChanged', (playlistId) => {
     console.log(`[Socket Server] : parameters changed ? Emitting refreshPermissions for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refreshPermissions');
+  });
+
+  socket.on('playlistEnd', (playlistId) => {
+    console.log(`end playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('playlistEnd');
   });
 
   // Leaving Playlist room
