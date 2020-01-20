@@ -9,6 +9,8 @@ import Logo from '../components/Authentication/Logo';
 import LoginContext from '../components/Authentication/LoginContext';
 import SignInForm from '../containers/SignInForm';
 import { login } from '../../API/BackApi';
+import Components from '../components';
+import DeezerLogin from '../components/Authentication/DeezerLogin';
 
 
 class Connexion extends React.Component {
@@ -44,7 +46,9 @@ class Connexion extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const {
+      navigation, userChanged, setSocket, admin,
+    } = this.props;
     const type = 'Sign In';
 
     return (
@@ -62,6 +66,20 @@ class Connexion extends React.Component {
           <View style={styles.content}>
             <Logo />
             <SignInForm navigation={navigation} />
+            <Components.SocialLogin
+              type={type}
+              navigation={navigation}
+              userChanged={userChanged}
+              setSocket={setSocket}
+              admin={admin}
+            />
+            <DeezerLogin
+              type={type}
+              navigation={navigation}
+              userChanged={userChanged}
+              setSocket={setSocket}
+              admin={admin}
+            />
             <LoginContext
               type={type}
               navigation={navigation}
