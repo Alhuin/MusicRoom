@@ -496,6 +496,7 @@ function getNextTrackByVote(playlistId) {
               albumArtUrl: tracks[0].albumCover,
               artist: tracks[0].artist,
               title: tracks[0].title,
+              album: tracks[0].album,
             };
           }
           resolve({

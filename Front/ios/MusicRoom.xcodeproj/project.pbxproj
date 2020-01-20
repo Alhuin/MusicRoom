@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -70,6 +69,8 @@
 		EE7E88066AF54DD0A1598E2C /* libLRDRCTSimpleToast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E05146DE4A142D284B3A7F5 /* libLRDRCTSimpleToast.a */; };
 		F1285AEB27C7491A820E53FD /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA3BFCC3324C47CB920C8C05 /* EvilIcons.ttf */; };
 		FF195FE64E5D4C2FB53F7F6B /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF96539F27354E8282B2ADEB /* Roboto.ttf */; };
+		4AC910301FA74800AFAA061E /* libMusicControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 825E54C20F9749CFBD29DFF1 /* libMusicControl.a */; };
+		EF582D636360418A8A0F7CB9 /* libMusicControl-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F2469C83AD43FE9281DF1F /* libMusicControl-tvOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -474,6 +475,9 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EE6EB748A2CF41C59DFCAAAE /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
+		CCC91A7F032D49F8926C1B52 /* MusicControl.xcodeproj */ = {isa = PBXFileReference; name = "MusicControl.xcodeproj"; path = "../node_modules/react-native-music-control/ios/MusicControl.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		825E54C20F9749CFBD29DFF1 /* libMusicControl.a */ = {isa = PBXFileReference; name = "libMusicControl.a"; path = "libMusicControl.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		D8F2469C83AD43FE9281DF1F /* libMusicControl-tvOS.a */ = {isa = PBXFileReference; name = "libMusicControl-tvOS.a"; path = "libMusicControl-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +513,7 @@
 				276E199E9F1E43C29F38BC08 /* libRCTVideo.a in Frameworks */,
 				EE7E88066AF54DD0A1598E2C /* libLRDRCTSimpleToast.a in Frameworks */,
 				51BAF5427F4D4A0AAE6E6D68 /* libRNGoogleSignin.a in Frameworks */,
+				4AC910301FA74800AFAA061E /* libMusicControl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +531,12 @@
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
 				C3D5717C99D5499B8999E1BA /* libRNGestureHandler-tvOS.a in Frameworks */,
+				3002820326E6405D937C8FD6 /* libMusicControl-tvOS.a in Frameworks */,
+				A35CC9DB1C204A869D387FA1 /* libMusicControl-tvOS.a in Frameworks */,
+				AC6FF4EDE1DC43078FB719B5 /* libMusicControl-tvOS.a in Frameworks */,
+				FF08EFF9062C45DFAC0E663C /* libMusicControl-tvOS.a in Frameworks */,
+				A99DD392717F4D13A95C7511 /* libMusicControl-tvOS.a in Frameworks */,
+				EF582D636360418A8A0F7CB9 /* libMusicControl-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -780,6 +791,7 @@
 				5B0CC09BCA804BD0B9CD30FC /* RCTVideo.xcodeproj */,
 				19B91F68093849F9A5E747DD /* LRDRCTSimpleToast.xcodeproj */,
 				BEF1997F2022499CB7AD0A84 /* RNGoogleSignin.xcodeproj */,
+				CCC91A7F032D49F8926C1B52 /* MusicControl.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1544,6 +1556,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = MusicRoomTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1578,6 +1591,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = MusicRoomTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1613,6 +1627,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = MusicRoom/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1642,6 +1657,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = MusicRoom/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1678,6 +1694,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = "MusicRoom-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1720,6 +1737,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = "MusicRoom-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1761,6 +1779,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = "MusicRoom-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1802,6 +1821,7 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin",
+					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
 				);
 				INFOPLIST_FILE = "MusicRoom-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
+import MusicControl from 'react-native-music-control';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
   isEditor, moveTrackOrder, getEditRestriction, getPlaylistName, deleteTrackFromPlaylistRight,
@@ -46,6 +47,11 @@ class Playlist extends React.Component {
     this._isMounted = true;
 
     this._focusListener = navigation.addListener('didFocus', () => {
+      // console.log(`track = ${track}`);
+      // console.log(`playlistLaunched = ${playlistLaunched}`);
+      // if (!track && !playlistLaunched) {
+      //   this.setState({ playlistLaunched: false });
+      // }
       console.log(`emited userJoindedPlaylist ${playlistId}`);
       socket.emit('userJoinedPlaylist', playlistId);
     });
@@ -82,6 +88,24 @@ class Playlist extends React.Component {
     this._onChangedPage();
   }
 
+  setBackGroundTrack = (backgroundTrack) => {
+    console.log(backgroundTrack);
+    MusicControl.setNowPlaying({
+      title: backgroundTrack.title,
+      artwork: backgroundTrack.albumArtUrl, // URL or RN's image require()
+      artist: backgroundTrack.artist,
+      album: backgroundTrack.album,
+    //   genre: 'Post-disco, Rhythm and Blues, Funk, Dance-pop',
+    //   duration: 294, // (Seconds)
+    //   description: '', // Android Only
+    //   color: 0xFFFFFF, // Notification Color - Android Only
+    //   date: '1983-01-02T00:00:00Z', // Release Date (RFC 3339) - Android Only
+    //   rating: 84, // Android Only (Boolean or Number depending on the type)
+    // eslint-disable-next-line max-len
+    //   notificationIcon: 'my_custom_icon' // Android Only (String), Android Drawable resource name for a custom notification icon
+    });
+  };
+
   _onChangedPage = () => {
     const { playing } = this.state;
     if (playing !== null) {
@@ -98,8 +122,12 @@ class Playlist extends React.Component {
   };
 
   _onRefresh = () => {
-    console.log('if did not manually refresh, [Socket Server] : refresh signal received');
+    const { track } = this.props;
+    const { playlistLaunched } = this.state;
     if (this._isMounted) {
+      if (!track && playlistLaunched) {
+        this.setState({ playlistLaunched: false });
+      }
       const { navigation } = this.props;
       const roomType = navigation.getParam('roomType');
       const playlistId = navigation.getParam('playlistId');
@@ -277,6 +305,7 @@ class Playlist extends React.Component {
               .then((nextTrack) => {
                 changePlaylist(playlistId);
                 changeTrack(nextTrack);
+                this.setBackGroundTrack(nextTrack);
                 this.setState({ playlistLaunched: true });
               })
               .catch(error => console.log(error));
