@@ -26,7 +26,6 @@ export default class AdminPlayer extends Component {
     const { playlistId, socket, track } = this.props;
 
     if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
-      console.log('onForward : playlist already launched, del + nextTrack');
       deleteTrackFromPlaylist(track.id, playlistId)
         .then(() => {
           socket.emit('deleteMusic', playlistId);
@@ -34,7 +33,6 @@ export default class AdminPlayer extends Component {
         })
         .catch(error => console.log(error));
     } else {
-      console.log('onForward : playlist not launched yet, just nextTrack');
       this.nextTrackByVote(playlistId);
     }
   };
@@ -53,20 +51,17 @@ export default class AdminPlayer extends Component {
 
     getNextTrackByVote(playlistId)
       .then((nextTrack) => { // Not last track in playlist
-        console.log('onForward : not last track in playlist');
         if (Object.keys(nextTrack).length) {
           audioElement && audioElement.seek(0);
           changing(true);
           setTimeout(() => {
             setCurrentPosition(0);
-            // paused(false);
             setTotalLength(1);
             changing(false);
             changeTrack(nextTrack);
             this.setBackGroundTrack(nextTrack);
           }, 0);
         } else { // playlist end reached
-          console.log('onForward : last track in playlist');
           MusicControl.resetNowPlaying();
           changeTrack(null);
           changePlaylist('');
@@ -80,8 +75,6 @@ export default class AdminPlayer extends Component {
   };
 
   _setBackGroundTrack = (backgroundTrack) => {
-    console.log('setting background track for lockscrEen');
-    console.log(backgroundTrack);
     MusicControl.setNowPlaying({
       title: backgroundTrack.title,
       artwork: backgroundTrack.albumArtUrl,

@@ -25,6 +25,8 @@ import Radios from '../containers/Radios';
 import Partys from '../containers/Partys';
 import LogoutButton from '../containers/LogoutButton';
 
+// Menu creation on Android
+
 const createBurgerMenu = navigation => Platform.select({
   ios: null,
   android: (
@@ -106,10 +108,9 @@ const HomeNavigator = createStackNavigator({
       headerLeft: createBurgerMenu(navigation),
     }),
   },
-  // Content ( Radios, Playlists, Favoris ) ou sur Home direct ?
 });
 
-// Main Navigator Handles HomeNavigator + Settings by drawer or tab
+// Radios & Partys stack navigators
 
 const PartysNavigator = createStackNavigator({
   PartysList: {
@@ -191,6 +192,8 @@ const RadiosNavigator = createStackNavigator({
   },
 });
 
+// Main Navigator Handles HomeNavigator + Settings by drawer or tab
+
 const MainNavigator = Platform.select({
   ios: createBottomTabNavigator({
     Home: {
@@ -223,23 +226,7 @@ const MainNavigator = Platform.select({
     Radios: RadiosNavigator,
   },
   {
-    contentComponent: props => (
-      // eslint-disable-next-line react/destructuring-assignment
-      <LogoutButton drawerProps={props} navigation={props.navigation} />
-      // <View style={{ flex: 1 }}>
-      //   <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
-      //     <DrawerItems {...props} />
-      //     <Button
-      //       title="Logout"
-      //       onPress={() => {
-      //         const { navigation } = props;
-      //         // onSignOut();
-      //         navigation.navigate('auth');
-      //       }}
-      //     />
-      //   </SafeAreaView>
-      // </View>
-    ),
+    contentComponent: props => <LogoutButton drawerProps={props} navigation={props.navigation} />,
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
@@ -267,7 +254,6 @@ const RootSwitch = createSwitchNavigator(
       path: 'auth',
     },
   },
-  // { initialRouteName: 'auth' },
 );
 
 const prefix = 'musicroom://music/';

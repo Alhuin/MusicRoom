@@ -10,18 +10,20 @@ export default class LoginContext extends Component {
     let other;
     let route;
     const { type } = this.props;
+
     if (type === 'Sign Up') {
-      contextText = <Text style={styles.contextText}>Vous possédez déjà un compte ? </Text>;
+      contextText = <Text>Vous possédez déjà un compte ? </Text>;
       other = 'Sign In !';
       route = 'Connexion_noTransition';
     } else {
       contextText = (
-        <Text style={styles.contextText}>Vous n&apos;avez pas encore de compte ?</Text>
+        <Text>Vous n&apos;avez pas encore de compte ?</Text>
       );
       other = 'Sign Up !';
       route = 'Inscription_noTransition';
     }
 
+    // TODO resetStack nécessaire ?
     return (
       <View style={styles.container}>
         {contextText}
@@ -41,7 +43,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 10,
   },
-  contextText: {},
   contextLink: {
     fontWeight: 'bold',
   },

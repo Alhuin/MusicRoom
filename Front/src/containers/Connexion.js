@@ -4,7 +4,6 @@ import Connexion from '../screens/Connexion';
 import * as actions from '../redux/actions';
 
 const mapStateToProps = state => ({
-  loggedUser: state.authReducer.loggedUser,
   socket: state.authReducer.socket,
 });
 

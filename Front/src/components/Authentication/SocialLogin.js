@@ -19,6 +19,7 @@ export default class SocialLogin extends Component {
     GoogleSignin.configure({
       webClientId: '1032045608110-fk8aiqduat8c6oiltm1uneqbuqhumfsn.apps.googleusercontent.com',
     });
+
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const userInfo = await GoogleSignin.signIn();
@@ -44,14 +45,21 @@ export default class SocialLogin extends Component {
                 );
               })
               .catch((error) => {
-                console.log('caught', error.message);
+                if (error.status === 400) { // validation error
+                  Alert.alert(
+                    'Inscription',
+                    `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
+                  );
+                } else {
+                  console.log(error);
+                }
               });
           } else {
             console.log(idGoogleerror);
           }
         });
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 

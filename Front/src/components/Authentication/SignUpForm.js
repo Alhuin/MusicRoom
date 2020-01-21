@@ -70,7 +70,7 @@ export default class CustomForm extends React.Component {
               `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
             );
           } else {
-            console.error(error);
+            console.log(error);
           }
         });
     }

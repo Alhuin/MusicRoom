@@ -98,7 +98,6 @@ function deleteUserById(req, res) {
 
 function addUser(req, res) {
   // checker email valide et les champs uniques
-  console.log(req);
   const idDeezer = req.body.idDeezer ? req.body.idDeezer : null;
   const idGoogle = req.body.idGoogle ? req.body.idGoogle : null;
   if ((req.body.login && req.body.password && req.body.name
@@ -111,7 +110,6 @@ function addUser(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });
@@ -313,7 +311,6 @@ function getDeezerCode(req, res) {
 }
 
 function getDeezerCodeForLogin(req, res) {
-  console.log(req.query);
   if (req.query.code) {
     userService.getDeezerCode(req.query.code)
       .then(async (response) => {
@@ -334,8 +331,8 @@ function getDeezerCodeForLogin(req, res) {
 }
 
 function findUserByidSocial(req, res) {
-  console.log(req.params);
-  if (req.params.idSocial) {
+  if (req.params.idSocial
+    && (req.params.SocialType === 'Google' || req.params.SocialType === 'Deezer')) {
     userService.findUserByidSocial(req.params.idSocial, req.params.SocialType)
       .then(async (response) => {
         res

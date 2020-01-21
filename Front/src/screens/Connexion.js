@@ -5,19 +5,17 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
-import Logo from '../components/Authentication/Logo';
-import LoginContext from '../components/Authentication/LoginContext';
 import SignInForm from '../containers/SignInForm';
 import { login } from '../../API/BackApi';
 import Components from '../components';
-import DeezerLogin from '../components/Authentication/DeezerLogin';
-
 
 class Connexion extends React.Component {
   async componentDidMount(): void {
+    // passer dans redux les globales comme ca on esquive l'async sur CDM
     const {
       navigation, userChanged, admin, setSocket,
     } = this.props;
+
     const pass = await AsyncStorage.getItem('pass');
     const log = await AsyncStorage.getItem('log');
     const loging = await AsyncStorage.getItem('login');
@@ -64,7 +62,7 @@ class Connexion extends React.Component {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
-            <Logo />
+            <Components.Logo />
             <SignInForm navigation={navigation} />
             <Components.SocialLogin
               type={type}
@@ -73,14 +71,14 @@ class Connexion extends React.Component {
               setSocket={setSocket}
               admin={admin}
             />
-            <DeezerLogin
+            <Components.DeezerLogin
               type={type}
               navigation={navigation}
               userChanged={userChanged}
               setSocket={setSocket}
               admin={admin}
             />
-            <LoginContext
+            <Components.LoginContext
               type={type}
               navigation={navigation}
               style={styles.loginContext}

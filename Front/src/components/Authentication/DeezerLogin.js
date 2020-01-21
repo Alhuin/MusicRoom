@@ -3,12 +3,13 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 
+const redirectUri = 'https://connect.deezer.com/oauth/auth.php?app_id=389504&redirect_uri=http://10.3.1.1:3000/api/users/deezerlogin&perms=basic_access,email';
 
 export default class DeezerLogin extends Component {
-    callDeez = async () => {
-      Linking.openURL('https://connect.deezer.com/oauth/auth.php?app_id=389504&redirect_uri=http://10.3.1.1:3000/api/users/deezerlogin&perms=basic_access,email')
+    callDeez = () => {
+      Linking.openURL(redirectUri)
         .catch(err => console.error("Couldn't load page", err));
-    }
+    };
 
     render() {
       return (

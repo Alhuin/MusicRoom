@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import Components from '../components';
-import DeezerLogin from '../components/Authentication/DeezerLogin';
 import { addUser, findUserByidSocial } from '../../API/BackApi';
 import { getDeezerTokenLogin } from '../../API/DeezerApi';
 
@@ -16,17 +15,16 @@ class Inscription extends React.Component {
     const {
       navigation, userChanged, setSocket, admin,
     } = this.props;
+    const DeezerCode = navigation.getParam('DeezCode');
 
     userChanged(null);
     admin(false);
-    const DeezerCode = navigation.getParam('DeezCode');
     if (DeezerCode) {
       getDeezerTokenLogin(DeezerCode)
         .then((response) => {
           findUserByidSocial(response.id.toString(), 'Deezer')
             .then((res) => {
               const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`);
-              console.log('socketlog ok');
               socket.connect();
               setSocket(socket);
               userChanged(res);
@@ -46,7 +44,17 @@ class Inscription extends React.Component {
                     await AsyncStorage.setItem('login', response.firstname);
                   })
                   .catch((error) => {
-                    console.log('caught', error.message);
+                    if (error.status === 400) { // validation error
+                      Alert.alert(
+                        'Inscription',
+                        `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
+                      );
+                      // TODO Si ca pète (eg validation error),
+                      //  pouvoir resélectionner un compte, pas tenter a nouveau le addUser
+                      //  sinon on est kéblo
+                    } else {
+                      console.log(error);
+                    }
                   });
               } else {
                 console.log(idDeezerror);
@@ -76,7 +84,7 @@ class Inscription extends React.Component {
               setSocket={setSocket}
               admin={admin}
             />
-            <DeezerLogin
+            <Components.DeezerLogin
               type={type}
               navigation={navigation}
               userChanged={userChanged}

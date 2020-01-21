@@ -472,7 +472,7 @@ function findUserByidSocial(idSocial, SocialType) {
         if (error) {
           reject(new CustomError('MongoError', error.message, 500));
         } else if (!userByIdGoogle[0]) {
-          reject(new CustomError('findUserByGoogleToken', 'no user with this social token in database', 404));
+          reject(new CustomError('findUserByGoogleToken', 'no user with this Google token in database', 404));
         } else {
           resolve({
             status: 200,
@@ -485,7 +485,7 @@ function findUserByidSocial(idSocial, SocialType) {
         if (error) {
           reject(new CustomError('MongoError', error.message, 500));
         } else if (!userByIdDeezer[0]) {
-          reject(new CustomError('findUserByDeezerToken', 'no user with this social token in database', 404));
+          reject(new CustomError('findUserByDeezerToken', 'no user with this Deezer token in database', 404));
         } else {
           resolve({
             status: 200,

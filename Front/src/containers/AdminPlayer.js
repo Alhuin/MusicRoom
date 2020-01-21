@@ -11,8 +11,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setTime: payload => dispatch(actions.setTime(payload)),
-  setDuration: payload => dispatch(actions.setDuration(payload)),
   paused: payload => dispatch(actions.paused(payload)),
   changing: payload => dispatch(actions.isChanging(payload)),
   setCurrentPosition: payload => dispatch(actions.setCurrentPosition(payload)),

@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
-
 import Inscription from '../screens/Inscription';
 import * as actions from '../redux/actions';
 
-// const mapStateToProps = state => ({
-//   loggedUser: state.authReducer.loggedUser,
-// });
 const mapStateToProps = state => ({
   socket: state.authReducer.socket,
 });
