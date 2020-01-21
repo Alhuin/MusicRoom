@@ -8,6 +8,7 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   // console.log(action.type, action.payload);
   switch (action.type) {
+    // TODO Check isAdmin nécessaire
     case ADMIN:
       return {
         ...state, isAdmin: action.payload,

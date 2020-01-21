@@ -30,8 +30,8 @@ class Inscription extends React.Component {
               userChanged(res);
               navigation.navigate('app');
             })
-            .catch((idDeezerror) => {
-              if (idDeezerror.status === 404) {
+            .catch((idDeezError) => {
+              if (idDeezError.status === 404) {
                 addUser(response.firstname, response.id.toString() + response.lastname,
                   response.firstname, response.lastname, response.email, response.id.toString())
                   .then(async () => {
@@ -57,12 +57,13 @@ class Inscription extends React.Component {
                     }
                   });
               } else {
-                console.log(idDeezerror);
+                console.log(idDeezError);
               }
             });
         })
         .catch(error => console.log(error));
     }
+
     return (
       <KeyboardAvoidingView
         style={styles.container}
