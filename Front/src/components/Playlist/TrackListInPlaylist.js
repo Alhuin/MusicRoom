@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl, Dimensions } from 'react-native';
 import SortableList from 'react-native-sortable-list';
 import TrackInPlaylist from '../../containers/TrackInPlaylist';
 import Player from '../../services/Player';
@@ -81,7 +81,8 @@ class TrackListInPlaylist extends React.Component {
               admin={admin}
             />
           )}
-          contentContainerStyle={{ paddingBottom: Spacing.paddingMiniPlayer }}
+          contentContainerStyle={{ paddingBottom: Dimensions.get('window').height / 2 }}
+          style={{ maxHeight: (Dimensions.get('window').height / 100) * 80}}
           onReleaseRow={(key, currentOrder) => {
             let newPosition;
             for (newPosition = 0; newPosition < currentOrder.length; newPosition += 1) {
@@ -92,6 +93,7 @@ class TrackListInPlaylist extends React.Component {
             const id = sortableListMapping[`${key}`];
             onMoveEnd(id, newPosition);
           }}
+          rowActivationTime={150}
         />
       );
     } else {
