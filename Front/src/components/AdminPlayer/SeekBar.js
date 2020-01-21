@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 16,
+    paddingTop: 12,
   },
   track: {
     height: 2,

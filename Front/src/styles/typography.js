@@ -28,7 +28,7 @@ export const contentBase = {
 
 export const screenHeader = {
   ...headerBase,
-  backgroundColor: Colors.darkestGrey,
+  backgroundColor: Colors.screenHeader,
   padding: Spacing.smaller,
 };
 
