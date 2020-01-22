@@ -48,7 +48,7 @@ export default class MiniPlayer extends React.Component {
     const { active } = this.state;
     this._onSeek = this.seek.bind(this);
     let reduceArrow = 'ios-arrow-down';
-    if (active) reduceArrow = 'ios-arrow-up';
+    if (!active) reduceArrow = 'ios-arrow-up';
     return (
       <Animated.View style={[styles.mainContainer, { transform: [{ translateY: this._reduced }] }]}>
         <TouchableOpacity
