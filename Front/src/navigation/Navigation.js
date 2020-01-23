@@ -99,7 +99,7 @@ const HomeNavigator = createStackNavigator({
     screen: Home,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Home',
-      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerStyle: { backgroundColor: Colors.screenHeader },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
       headerLeftContainerStyle: Typography.headerSidesContainerStyle,
@@ -117,7 +117,7 @@ const PartysNavigator = createStackNavigator({
     screen: Partys,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Parties',
-      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerStyle: { backgroundColor: Colors.screenHeader },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
       headerLeftContainerStyle: Typography.headerSidesContainerStyle,
@@ -157,7 +157,7 @@ const RadiosNavigator = createStackNavigator({
     screen: Radios,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Radios',
-      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerStyle: { backgroundColor: Colors.screenHeader },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
       headerLeftContainerStyle: Typography.headerSidesContainerStyle,
