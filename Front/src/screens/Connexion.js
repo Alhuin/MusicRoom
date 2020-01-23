@@ -21,12 +21,15 @@ class Connexion extends React.Component {
     const loging = await AsyncStorage.getItem('login');
     if (log === 'autoLog') {
       login(loging, pass)
-        .then((user) => {
+        .then(async (user) => {
           userChanged(user);
           if (user.isAdmin) {
             admin(true);
           }
           setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
+          await AsyncStorage.setItem('log', '');
+          await AsyncStorage.setItem('pass', '');
+          await AsyncStorage.setItem('login', '');
           navigation.navigate('app');
         })
         .catch((error) => {

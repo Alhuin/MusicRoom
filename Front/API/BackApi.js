@@ -9,27 +9,31 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 function login(userName, password) {
   console.log('login');
-  return new Promise((resolve, reject) => fetch(
-    `${api}/login`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
+  console.log(`${SERVER}:${EXPRESS_PORT}`);
+  return new Promise((resolve, reject) => {
+    console.log('in login promise before fetch');
+    fetch(
+      `${api}/login`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login: userName,
+          password,
+        }),
       },
-      body: JSON.stringify({
-        login: userName,
-        password,
-      }),
-    },
-  ).then(async (response) => {
-    const data = await response.json();
-    if (response.status === 200) {
-      resolve(data);
-    } else {
-      reject(new CustomError('LoginError', data.msg, response.status));
-    }
-  }).catch(error => reject(error)));
+    ).then(async (response) => {
+      const data = await response.json();
+      if (response.status === 200) {
+        resolve(data);
+      } else {
+        reject(new CustomError('LoginError', data.msg, response.status));
+      }
+    }).catch(error => reject(error));
+  });
 }
 
 function getUserByIdByPreferences(userId, requesterId) {
@@ -1081,7 +1085,7 @@ function setPlaylistName(playlistId, userId, newName) {
 
 function getNextTrackByVote(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${api}/playlists/nextTrack/${playlistId}`, {
+    fetch(`${api}/playlists/nextPartyTrack/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -1094,6 +1098,51 @@ function getNextTrackByVote(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getNextTrackByVote', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function getNextRadioTrack(playlistId, currentTrackId, nextIndex) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/nextRadioTrack/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, currentTrackId, nextIndex }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getNextRadioTrack', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+
+function getPrevRadioTrack(playlistId, currentTrackId, prevIndex) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/prevRadioTrack/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, currentTrackId, prevIndex }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getPrevRadioTrack', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -1217,4 +1266,6 @@ export {
   getPlaylistName,
   findUserByidSocial,
   deleteTrackFromPlaylistRight,
+  getNextRadioTrack,
+  getPrevRadioTrack,
 };

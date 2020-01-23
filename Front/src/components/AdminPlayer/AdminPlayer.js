@@ -5,7 +5,11 @@ import MusicControl from 'react-native-music-control';
 import AudioPlayer from '../../containers/AudioPlayer';
 import PlayerDetails from '../../containers/PlayerDetails';
 import MiniPlayer from '../../containers/MiniPlayer';
-import { deleteTrackFromPlaylist, getNextTrackByVote } from '../../../API/BackApi';
+import {
+  deleteTrackFromPlaylist,
+  getNextRadioTrack,
+  getNextTrackByVote,
+} from '../../../API/BackApi';
 
 export default class AdminPlayer extends Component {
   constructor(props) {
@@ -14,27 +18,65 @@ export default class AdminPlayer extends Component {
     this.onForward = this._onForward.bind(this);
     this.setBackGroundTrack = this._setBackGroundTrack.bind(this);
     this.nextTrackByVote = this._nextTrackByVote.bind(this);
+    this.nextRadioTrack = this._nextRadioTrack.bind(this);
   }
 
   componentWillUnmount(): void {
     this.onForward.remove();
     this.setBackGroundTrack.remove();
     this.nextTrackByVote.remove();
+    this.nextRadioTrack.remove();
   }
 
   _onForward = () => {
-    const { playlistId, socket, track } = this.props;
+    const {
+      playlistId,
+      socket,
+      track,
+      playlistType,
+    } = this.props;
 
-    if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
-      deleteTrackFromPlaylist(track.id, playlistId)
-        .then(() => {
-          socket.emit('deleteMusic', playlistId);
-          this.nextTrackByVote(playlistId);
-        })
-        .catch(error => console.log(error));
+    console.log('playlistType', playlistType);
+    if (playlistType === 'party') {
+      if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
+        console.log('onForward : playlist already launched, del + nextTrack');
+        deleteTrackFromPlaylist(track.id, playlistId)
+          .then(() => {
+            socket.emit('deleteMusic', playlistId);
+            this.nextTrackByVote(playlistId);
+          })
+          .catch(error => console.log(error));
+      } else {
+        console.log('onForward : playlist not launched yet, just nextTrack');
+        this.nextTrackByVote(playlistId);
+      }
     } else {
-      this.nextTrackByVote(playlistId);
+      this.nextRadioTrack(playlistId);
     }
+  };
+
+  _nextRadioTrack = (playlistId) => {
+    const {
+      track,
+      changing,
+      setCurrentPosition,
+      setTotalLength,
+      changeTrack,
+    } = this.props;
+    const currentTrackId = track === null ? null : track.id;
+    console.log(`nextRadioTrack('${playlistId}, ${track === null ? null : track.id}, -1');`);
+    getNextRadioTrack(playlistId, currentTrackId, -1)
+      .then((nextTrack) => {
+        changing(true);
+        setTimeout(() => {
+          setCurrentPosition(0);
+          setTotalLength(1);
+          changing(false);
+          changeTrack(nextTrack);
+          this.setBackGroundTrack(nextTrack);
+        });
+      })
+      .catch(error => console.log(error));
   };
 
   _nextTrackByVote = (playlistId) => {
@@ -43,14 +85,16 @@ export default class AdminPlayer extends Component {
       changing,
       changeTrack,
       changePlaylist,
+      changePlaylistType,
       setTotalLength,
       setCurrentPosition,
-      socket,
       paused,
+      socket,
     } = this.props;
 
     getNextTrackByVote(playlistId)
       .then((nextTrack) => { // Not last track in playlist
+        paused(true);
         if (Object.keys(nextTrack).length) {
           audioElement && audioElement.seek(0);
           changing(true);
@@ -59,15 +103,16 @@ export default class AdminPlayer extends Component {
             setTotalLength(1);
             changing(false);
             changeTrack(nextTrack);
+            paused(false);
             this.setBackGroundTrack(nextTrack);
           }, 0);
         } else { // playlist end reached
           MusicControl.resetNowPlaying();
           changeTrack(null);
           changePlaylist('');
+          changePlaylistType('');
           setTotalLength(1);
           setCurrentPosition(0);
-          paused(true);
           socket.emit('playlistEnd', playlistId);
         }
       })
@@ -75,6 +120,35 @@ export default class AdminPlayer extends Component {
   };
 
   _setBackGroundTrack = (backgroundTrack) => {
+    // const { paused } = this.props;
+    //
+    // // Enable buttons
+    // MusicControl.enableBackgroundMode(true);
+    // MusicControl.enableControl('play', true);
+    // MusicControl.enableControl('pause', true);
+    // MusicControl.enableControl('nextTrack', true);
+    // MusicControl.enableControl('closeNotification', true, { when: 'always' });
+    // // Paused by default
+    // MusicControl.updatePlayback({
+    //   state: MusicControl.STATE_PAUSED,
+    // });
+    //
+    // // Background events
+    // MusicControl.on('play', () => {
+    //   MusicControl.updatePlayback({
+    //     state: MusicControl.STATE_PLAYING,
+    //   });
+    //   paused(false);
+    // });
+    // MusicControl.on('pause', () => {
+    //   MusicControl.updatePlayback({
+    //     state: MusicControl.STATE_PAUSED,
+    //   });
+    //   paused(true);
+    // });
+    // MusicControl.on('nextTrack', () => this._onForward());
+    //
+    // // Displayed infos
     MusicControl.setNowPlaying({
       title: backgroundTrack.title,
       artwork: backgroundTrack.albumArtUrl,
@@ -98,7 +172,6 @@ export default class AdminPlayer extends Component {
       nowPlayingDetails = {
         title: track.title,
         artist: track.artist,
-        album: 'Test',
       };
     }
 

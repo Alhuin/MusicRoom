@@ -5,6 +5,7 @@ import * as actions from '../redux/actions';
 const mapStateToProps = state => ({
   track: state.playerReducer.track,
   playlistId: state.playerReducer.playlistId,
+  playlistType: state.playerReducer.playlistType,
   loggedUser: state.authReducer.loggedUser,
   audioElement: state.playerReducer.audioElement,
   socket: state.playerReducer.socket,
@@ -17,6 +18,7 @@ const mapDispatchToProps = dispatch => ({
   setTotalLength: payload => dispatch(actions.setTotalLength(payload)),
   changeTrack: payload => dispatch(actions.changeTrack(payload)),
   changePlaylist: payload => dispatch(actions.changePlaylist(payload)),
+  changePlaylistType: payload => dispatch(actions.changePlaylistType(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminPlayer);

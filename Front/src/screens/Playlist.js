@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Alert,
+  StyleSheet, View, Text, TouchableOpacity, Alert, AppState,
 } from 'react-native';
 import { Icon } from 'native-base';
 import MusicControl from 'react-native-music-control';
@@ -8,7 +8,7 @@ import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
   isEditor, moveTrackOrder, getEditRestriction, getPlaylistName, deleteTrackFromPlaylistRight,
-  deleteTrackFromPlaylist,
+  deleteTrackFromPlaylist, getNextRadioTrack,
 } from '../../API/BackApi';
 import TrackListInPlaylist from '../containers/TrackListInPlaylist';
 import { Colors, Typography, Buttons } from '../styles';
@@ -27,6 +27,7 @@ class Playlist extends React.Component {
       myVotes: [],
       playlistLaunched: false,
       pos: 0,
+      appState: AppState.currentState,
     };
 
     // this.onRefresh = this._onRefresh.bind(this);
@@ -48,9 +49,11 @@ class Playlist extends React.Component {
       }
     });
 
-    this.onForward = this._onForward.bind(this);
-    this.setBackGroundTrack = this._setBackGroundTrack.bind(this);
-    this.nextTrackByVote = this._nextTrackByVote.bind(this);
+    props.socket.on('deleted', (trackId, nextIndex) => {
+      if (props.playlistType === 'radio' && props.track.id === trackId) {
+        props.setNextIndex(nextIndex);
+      }
+    });
   }
 
 
@@ -69,6 +72,9 @@ class Playlist extends React.Component {
       console.log(`emited userLeeavedPlaylist ${playlistId}`);
       socket.emit('userLeavedPlaylist', playlistId);
     });
+
+    // Follow Appstate changes
+    AppState.addEventListener('change', this._handleAppStateChange);
 
     this.isAdminAndIsEditor();
     this.getName();
@@ -94,8 +100,23 @@ class Playlist extends React.Component {
     this._isMounted = false;
     this._focusListener.remove();
     this._blurListener.remove();
+    AppState.removeEventListener('change', this._handleAppStateChange);
     this._onChangedPage();
   }
+
+  _handleAppStateChange = (nextAppState) => {
+    const { appState } = this.state;
+    if (appState.match(/inactive|background/) && nextAppState === 'active') {
+      console.log(this.props);
+      const { socket, navigation } = this.props;
+      const { playlistId } = navigation.state.params;
+
+      socket.emit('userJoinedPlaylist', playlistId);
+      console.log(`emited userJoindedPlaylist ${playlistId}`);
+      this._onRefresh();
+    }
+    this.setState({ appState: nextAppState });
+  };
 
   _onChangedPage = () => {
     const { playing } = this.state;
@@ -197,7 +218,6 @@ class Playlist extends React.Component {
     getEditRestriction(playlistId)
       .then((data) => {
         if (data === 'EVENT_RESTRICTED') {
-          // eslint-disable-next-line no-undef
           navigator.geolocation.getCurrentPosition(
             (position) => {
               this.setState({ pos: position });
@@ -263,27 +283,67 @@ class Playlist extends React.Component {
   deleteTrack = (trackId, playlistId, userId) => {
     const { socket } = this.props;
     deleteTrackFromPlaylistRight(trackId, playlistId, userId)
-      .then(() => {
-        socket.emit('deleteMusic', playlistId);
+      .then((data) => {
+        socket.emit('deleteMusic', playlistId, trackId, data.index);
       })
       .catch(error => console.log(error));
   };
 
   _onForward = () => {
-    const { playlistId, socket, track } = this.props;
+    const {
+      playlistId,
+      socket,
+      track,
+      playlistType,
+      nextIndex,
+      setNextIndex,
+    } = this.props;
 
-    if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
-      console.log('onForward : playlist already launched, del + nextTrack');
-      deleteTrackFromPlaylist(track.id, playlistId)
-        .then(() => {
-          socket.emit('deleteMusic', playlistId);
-          this.nextTrackByVote(playlistId);
-        })
-        .catch(error => console.log(error));
+    console.log('playlistType', playlistType);
+    if (playlistType === 'party') {
+      if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
+        console.log('onForward : playlist already launched, del + nextTrack');
+        deleteTrackFromPlaylist(track.id, playlistId)
+          .then(() => {
+            socket.emit('deleteMusic', playlistId);
+            this._nextTrackByVote(playlistId);
+          })
+          .catch(error => console.log(error));
+      } else {
+        console.log('onForward : playlist not launched yet, just nextTrack');
+        this._nextTrackByVote(playlistId);
+      }
     } else {
-      console.log('onForward : playlist not launched yet, just nextTrack');
-      this.nextTrackByVote(playlistId);
+      this._nextRadioTrack(playlistId, nextIndex);
+      setNextIndex(-1);
     }
+  };
+
+  _nextRadioTrack = (playlistId, nextIndex) => {
+    const {
+      track,
+      changing,
+      setCurrentPosition,
+      setTotalLength,
+      changeTrack,
+      setNextIndex,
+    } = this.props;
+    const currentTrackId = track === null ? null : track.id;
+
+    getNextRadioTrack(playlistId, currentTrackId, nextIndex)
+      .then((nextTrack) => {
+        changing(true);
+        console.log(nextTrack);
+        setTimeout(() => {
+          setCurrentPosition(0);
+          setTotalLength(1);
+          changing(false);
+          changeTrack(nextTrack);
+          setNextIndex(-1);
+          this._setBackGroundTrack(nextTrack);
+        });
+      })
+      .catch(error => console.log(error));
   };
 
   _nextTrackByVote = (playlistId) => {
@@ -292,15 +352,14 @@ class Playlist extends React.Component {
       changing,
       changeTrack,
       changePlaylist,
+      changePlaylistType,
       setTotalLength,
       setCurrentPosition,
-      paused,
       socket,
     } = this.props;
 
     getNextTrackByVote(playlistId)
       .then((nextTrack) => { // Not last track in playlist
-        paused(true);
         if (Object.keys(nextTrack).length) {
           audioElement && audioElement.seek(0);
           changing(true);
@@ -309,12 +368,13 @@ class Playlist extends React.Component {
             setTotalLength(1);
             changing(false);
             changeTrack(nextTrack);
-            this.setBackGroundTrack(nextTrack);
+            this._setBackGroundTrack(nextTrack);
           }, 0);
         } else { // playlist end reached
           MusicControl.resetNowPlaying();
           changeTrack(null);
           changePlaylist('');
+          changePlaylistType('');
           setTotalLength(1);
           setCurrentPosition(0);
           socket.emit('playlistEnd', playlistId);
@@ -324,17 +384,19 @@ class Playlist extends React.Component {
   };
 
   _setBackGroundTrack = (backgroundTrack) => {
-    const { paused } = this.props;
+    const { paused, isPaused, playlistType } = this.props;
 
     // Enable buttons
     MusicControl.enableBackgroundMode(true);
     MusicControl.enableControl('play', true);
     MusicControl.enableControl('pause', true);
     MusicControl.enableControl('nextTrack', true);
+    MusicControl.enableControl('previousTrack', playlistType === 'radio');
     MusicControl.enableControl('closeNotification', true, { when: 'always' });
-    // Paused by default
+
+    console.log('isPaused', isPaused);
     MusicControl.updatePlayback({
-      state: MusicControl.STATE_PAUSED,
+      state: isPaused === true ? MusicControl.STATE_PAUSED : MusicControl.STATE_PLAYING,
     });
 
     // Background events
@@ -367,14 +429,13 @@ class Playlist extends React.Component {
       name,
     } = this.state;
     const {
-      navigation, changeTrack, changePlaylist, loggedUser,
+      navigation, changeTrack, changePlaylist, loggedUser, changePlaylistType,
     } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
-    // console.log(`launched = ${playlistLaunched}; length = ${tracks.length}; admin = ${admin}`);
     const playButton = (
       (!playlistLaunched && tracks.length > 0 && admin) && (
         <TouchableOpacity
@@ -385,31 +446,38 @@ class Playlist extends React.Component {
               setCurrentPosition,
               paused,
             } = this.props;
-
-            getNextTrackByVote(playlistId)
-              .then((nextTrack) => {
-                paused(true);
-                if (Object.keys(nextTrack).length) {
-                  changing(true);
-                  setTimeout(() => {
-                    setCurrentPosition(0);
+            if (roomType === 'party') {
+              getNextTrackByVote(playlistId)
+                .then((nextTrack) => {
+                  paused(true);
+                  if (Object.keys(nextTrack).length) {
+                    changing(true);
+                    setTimeout(() => {
+                      setCurrentPosition(0);
+                      setTotalLength(1);
+                      changing(false);
+                      changeTrack(nextTrack);
+                      changePlaylist(playlistId);
+                      changePlaylistType(roomType);
+                      this._setBackGroundTrack(nextTrack);
+                      this.setState({ playlistLaunched: true });
+                    }, 0);
+                  } else {
+                    MusicControl.resetNowPlaying();
+                    changeTrack(null);
+                    changePlaylist('');
+                    changePlaylistType('');
                     setTotalLength(1);
-                    changing(false);
-                    changeTrack(nextTrack);
-                    changePlaylist(playlistId);
-                    this._setBackGroundTrack(nextTrack);
-                    this.setState({ playlistLaunched: true });
-                  }, 0);
-                } else {
-                  MusicControl.resetNowPlaying();
-                  changeTrack(null);
-                  changePlaylist('');
-                  setTotalLength(1);
-                  setCurrentPosition(0);
-                  // this.setState({ playlistLaunched: false });
-                }
-              })
-              .catch(error => console.log(error));
+                    setCurrentPosition(0);
+                  }
+                })
+                .catch(error => console.log(error));
+            } else {
+              this._nextRadioTrack(playlistId, 0);
+              this.setState({ playlistLaunched: true });
+              changePlaylist(playlistId);
+              changePlaylistType(roomType);
+            }
           }}
         >
           <Icon name="musical-notes" style={Typography.icon} />

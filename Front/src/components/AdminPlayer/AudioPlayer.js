@@ -9,6 +9,7 @@ export default class AudioPlayer extends Component {
     } = this.props;
 
     let video = null;
+    console.log('yoyoyoyoooooo');
     if (!isChanging && track != null) {
       video = (
         <Video

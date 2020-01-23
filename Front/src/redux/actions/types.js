@@ -12,3 +12,5 @@ export const ADMIN = 'ADMIN';
 export const SET_SOCKET = 'SET_SOCKET';
 export const SHOULD_UPDATE_PLAYLIST = 'SHOULD_UPDATE_PLAYLIST';
 export const LOG_OUT = 'LOG_OUT';
+export const CHANGE_PLAYLIST_TYPE = 'CHANGE_PLAYLIST_TYPE';
+export const SET_NEXT_INDEX = 'SET_NEXT_INDEX';

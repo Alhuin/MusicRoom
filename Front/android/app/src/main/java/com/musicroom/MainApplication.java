@@ -3,6 +3,7 @@ package com.musicroom;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.tanguyantoine.react.MusicControl;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
             new MusicControl(),
             new RNGoogleSigninPackage(),
             new ReactVideoPackage(),

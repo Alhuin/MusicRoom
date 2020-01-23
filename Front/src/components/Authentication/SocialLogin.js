@@ -44,12 +44,13 @@ export default class SocialLogin extends Component {
                   'Un email de vérification vous a été envoyé.',
                 );
               })
-              .catch((error) => {
+              .catch(async (error) => {
                 if (error.status === 400) { // validation error
                   Alert.alert(
                     'Inscription',
                     `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
                   );
+                  await GoogleSignin.signOut();
                 } else {
                   console.log(error);
                 }
