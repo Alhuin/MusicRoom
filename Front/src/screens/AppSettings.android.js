@@ -12,7 +12,7 @@ import {
   Colors, Typography, Cards, Buttons,
 } from '../styles';
 
-class AppSettings extends React.Component {
+class AppSettingsAndroid extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -527,4 +527,4 @@ let styles = StyleSheet.create({
   },
 });
 
-export default AppSettings;
+export default AppSettingsAndroid;
