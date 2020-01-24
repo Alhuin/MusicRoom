@@ -241,7 +241,7 @@ const MainNavigator = Platform.select({
       },
     }),
     tabBarComponent: props => (
-      <CustomTabNavigator tabProps={props} />
+      <CustomTabNavigator tabProps={props} navigation={props.navigation} />
     ),
   }),
   android: createDrawerNavigator({
