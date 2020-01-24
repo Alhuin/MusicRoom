@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
-import LogoutButton from '../components/Home/LogoutButton';
+import CustomTabNavigator from '../components/Home/CustomTabNavigator';
 
 const mapStateToProps = state => ({
   socket: state.playerReducer.socket,
@@ -11,4 +11,4 @@ const mapDispatchToProps = dispatch => ({
   logOut: payload => dispatch(actions.logOut(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogoutButton);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomTabNavigator);

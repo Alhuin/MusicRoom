@@ -23,7 +23,8 @@ import SearchTrack from '../components/SearchTrack/SearchTrack';
 import Playlist from '../containers/Playlist';
 import Radios from '../containers/Radios';
 import Partys from '../containers/Partys';
-import LogoutButton from '../containers/LogoutButton';
+import CustomDrawer from '../containers/CustomDrawer';
+import CustomTabNavigator from '../containers/CustomTabNavigator';
 
 // Menu creation on Android
 
@@ -203,12 +204,45 @@ const MainNavigator = Platform.select({
     Settings: {
       screen: AppSettings,
       navigationOptions: {
-        drawerLabel: 'Paramètres',
+        title: 'Paramètres',
       },
       path: 'AppSettings/:DeezCode',
     },
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      // eslint-disable-next-line no-unused-vars
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = 'ios-home';
+        } else if (routeName === 'Settings') {
+          iconName = 'md-build';
+        } else if (routeName === 'Parties') {
+          iconName = 'musical-notes';
+        } else if (routeName === 'Radios') {
+          iconName = 'radio';
+        }
+        return (
+          <Icon
+            name={iconName}
+            style={{
+              color: tintColor, fontSize: Typography.iconFontSize,
+            }}
+          />
+        );
+      },
+      tabBarOptions: {
+        activeTintColor: Colors.lightGreen,
+        inactiveTintColor: Colors.baseText,
+      },
+    }),
+    tabBarComponent: props => (
+      <CustomTabNavigator tabProps={props} />
+    ),
   }),
   android: createDrawerNavigator({
     Home: {
@@ -226,7 +260,7 @@ const MainNavigator = Platform.select({
     Radios: RadiosNavigator,
   },
   {
-    contentComponent: props => <LogoutButton drawerProps={props} navigation={props.navigation} />,
+    contentComponent: props => <CustomDrawer drawerProps={props} navigation={props.navigation} />,
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',

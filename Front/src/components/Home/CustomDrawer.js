@@ -5,7 +5,7 @@ import {
 import { DrawerItems } from 'react-navigation';
 import { Buttons, Colors } from '../../styles';
 
-export default class LogoutButton extends React.Component {
+export default class CustomDrawer extends React.Component {
   _logout = () => {
     const {
       setSocket,
