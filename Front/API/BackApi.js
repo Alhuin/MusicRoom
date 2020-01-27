@@ -392,7 +392,6 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
     })
       .then(async (response) => {
         const data = await response.json();
-        console.log(data);
         if (response.status === 200) {
           resolve(data);
         } else {

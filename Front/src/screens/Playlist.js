@@ -436,6 +436,15 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
+    let forEditor = (null);
+    if (editor) {
+      forEditor = (
+        <Components.AddFloatingButton
+          handlePress={() => this.setModalVisible(true)}
+          icon="addMusic"
+        />
+      );
+    }
     const playButton = (
       (!playlistLaunched && tracks.length > 0 && admin) && (
         <TouchableOpacity
@@ -557,10 +566,7 @@ class Playlist extends React.Component {
             />
           </View>
         </View>
-        <Components.AddFloatingButton
-          handlePress={() => this.setModalVisible(true)}
-          icon="addMusic"
-        />
+        {forEditor}
       </View>
     );
   }
