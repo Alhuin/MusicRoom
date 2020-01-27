@@ -176,6 +176,7 @@ export default class AdminPlayer extends Component {
     }
 
     console.log(`loggedUser = ${loggedUser}; track = ${track}; playlistId = ${playlistId}`);
+    // return (<View/>);
     return (
       <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
         {loggedUser !== null && track !== null && playlistId !== ''

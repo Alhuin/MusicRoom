@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, Text, View, TextInput, Switch, Alert, TouchableOpacity,
+  Modal, StyleSheet, Text, View, TextInput, Switch, Alert, TouchableOpacity, ScrollView,
 } from 'react-native';
 import { addPlaylist } from '../../../API/BackApi';
 import DatePickerModal from './DatePickerModal';
@@ -185,7 +185,7 @@ export default class AddPlaylistModal extends React.Component {
           setModalVisible();
         }}
       >
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           <DatePickerModal
             setModalVisible={this.setModalVisible}
             DateModalVisible={datePickerModalVisible}
@@ -257,7 +257,7 @@ export default class AddPlaylistModal extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
     );
   }

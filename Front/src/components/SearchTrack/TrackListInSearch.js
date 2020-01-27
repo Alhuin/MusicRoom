@@ -29,7 +29,7 @@ class TrackListInSearch extends React.Component {
 
   render() {
     const {
-      tracks, playlistId, updateTracks, userId, setModalVisible, displayLoader, playing,
+      tracks, playlistId, updateTracks, userId, setModalVisible, displayLoader, playing, roomType,
     } = this.props;
     return (
       <FlatList
@@ -46,6 +46,7 @@ class TrackListInSearch extends React.Component {
             updateTracks={updateTracks}
             userId={userId}
             setModalVisible={setModalVisible}
+            roomType={roomType}
           />
         )}
         // onEndReachThreashold={0.5}

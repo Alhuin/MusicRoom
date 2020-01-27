@@ -8,7 +8,7 @@ import SearchTrack from '../SearchTrack/SearchTrack';
 export default class AddMusicModal extends React.Component {
   render() {
     const {
-      setModalVisible, modalVisible, playlistId, userId, updateTracks,
+      setModalVisible, modalVisible, playlistId, userId, updateTracks, roomType,
     } = this.props;
     return (
       <Modal
@@ -25,6 +25,7 @@ export default class AddMusicModal extends React.Component {
           setModalVisible={setModalVisible}
           userId={userId}
           updateTracks={updateTracks}
+          roomType={roomType}
         />
       </Modal>
     );

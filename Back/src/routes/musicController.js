@@ -95,9 +95,11 @@ function downloadMusic(req, res) {
 function addMusicToPlaylist(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId) && req.body.userId
     && utils.isValidId(req.body.userId) && req.body.title && req.body.artist
-    && req.body.album && req.body.albumCover && req.body.preview && req.body.link) {
+    && req.body.album && req.body.albumCover && req.body.preview && req.body.link
+    && req.body.roomType) {
     musicService.addMusicToPlaylist(req.body.playlistId, req.body.userId, req.body.artist,
-      req.body.title, req.body.album, req.body.albumCover, req.body.preview, req.body.link)
+      req.body.title, req.body.album, req.body.albumCover, req.body.preview, req.body.link,
+      req.body.roomType)
       .then((response) => {
         res
           .status(response.status)

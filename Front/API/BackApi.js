@@ -7,6 +7,7 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
                     Users & Login
  */
 
+
 function login(userName, password) {
   console.log('login');
   console.log(`${SERVER}:${EXPRESS_PORT}`);
@@ -376,7 +377,8 @@ function getMyVotesInPlaylist(userId, playlistId) {
   });
 }
 
-function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover, preview, link) {
+function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover, preview, link,
+  roomType) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/musics/add`, {
       method: 'POST',
@@ -385,11 +387,12 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        playlistId, userId, title, artist, album, albumCover, preview, link,
+        playlistId, userId, title, artist, album, albumCover, preview, link, roomType,
       }),
     })
       .then(async (response) => {
         const data = await response.json();
+        console.log(data);
         if (response.status === 200) {
           resolve(data);
         } else {
