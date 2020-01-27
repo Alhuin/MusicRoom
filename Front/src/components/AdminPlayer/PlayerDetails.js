@@ -41,7 +41,9 @@ export default class PlayerDetails extends Component {
     const { audioElement, setCurrentPosition, paused } = this.props;
     const newTime = Math.round(time);
 
-    audioElement.seek(newTime);
+    if (audioElement) {
+      audioElement.seek(newTime);
+    }
     setCurrentPosition(newTime);
     paused(false);
   }
