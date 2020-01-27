@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, View, ScrollView, Alert,
+  StyleSheet, KeyboardAvoidingView, Platform, View, Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
@@ -8,6 +8,7 @@ import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import SignInForm from '../containers/SignInForm';
 import { login } from '../../API/BackApi';
 import Components from '../components';
+import { Colors } from '../styles';
 
 class Connexion extends React.Component {
   async componentDidMount(): void {
@@ -54,14 +55,13 @@ class Connexion extends React.Component {
 
     return (
       <KeyboardAvoidingView
-        style={styles.container}
+        style={styles.main_container}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={100}
       >
-        <ScrollView
-          style={styles.scrollView}
+        <View
+          style={styles.view}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
@@ -87,26 +87,24 @@ class Connexion extends React.Component {
               style={styles.loginContext}
             />
           </View>
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  scrollView: {
+  main_container: {
     width: '100%',
+    height: '100%',
+  },
+  view: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: Colors.background,
   },
   content: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   loginContext: {
     alignItems: 'flex-end',

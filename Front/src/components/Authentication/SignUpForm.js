@@ -1,11 +1,12 @@
 import React from 'react';
 
 import {
-  Button, Keyboard, View, StyleSheet, TextInput, Alert,
+  Keyboard, View, TextInput, Alert, Text, TouchableOpacity,
 } from 'react-native';
 import { addUser } from '../../../API/BackApi';
+import { Typography, Buttons, Colors } from '../../styles';
 
-export default class CustomForm extends React.Component {
+export default class SignUpForm extends React.Component {
   state = {
     email: '',
     password: '',
@@ -78,81 +79,78 @@ export default class CustomForm extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <TextInput
-          onChangeText={this.updateLogin}
-          autoCorrect={false}
-          autoCapitalize="none"
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Identifiant"
-        />
-        <TextInput
-          onChangeText={this.updatePassword}
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Mot de passe"
-          secureTextEntry
-        />
-        <TextInput
-          onChangeText={this.updateConfirmPassword}
-          underlineColorAndroid="grey"
-          secureTextEntry
-          style={styles.inputBox}
-          placeholder="Confirmer le mot de passe"
-        />
-        <TextInput
-          onChangeText={this.updateName}
-          autoCorrect={false}
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Nom"
-        />
-        <TextInput
-          onChangeText={this.updateFamilyName}
-          autoCorrect={false}
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Nom de famille"
-        />
-        <TextInput
-          onChangeText={this.updateEmail}
-          autoCorrect={false}
-          autoCapitalize="none"
-          keyboard-type="email-address"
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Email"
-        />
-        <View style={styles.submitButton}>
-          <Button
-            title="Sign Up"
-            onPress={() => {
-              Keyboard.dismiss();
-              this.SignUp();
-            }}
+      <View style={Typography.section}>
+        <View style={Typography.sectionHeader}>
+          <Text style={Typography.sectionHeaderText}>
+            Inscription
+          </Text>
+        </View>
+        <View style={Typography.sectionContent}>
+          <TextInput
+            onChangeText={this.updateLogin}
+            autoCorrect={false}
+            autoCapitalize="none"
+            style={Typography.textInput}
+            placeholder="Identifiant"
+            placeholderTextColor={Colors.placeholder}
           />
+          <TextInput
+            onChangeText={this.updatePassword}
+            style={Typography.textInput}
+            placeholder="Mot de passe"
+            secureTextEntry
+            placeholderTextColor={Colors.placeholder}
+          />
+          <TextInput
+            onChangeText={this.updateConfirmPassword}
+            secureTextEntry
+            style={Typography.textInput}
+            placeholder="Confirmer le mot de passe"
+            placeholderTextColor={Colors.placeholder}
+          />
+          <TextInput
+            onChangeText={this.updateName}
+            autoCorrect={false}
+            style={Typography.textInput}
+            placeholder="Nom"
+            placeholderTextColor={Colors.placeholder}
+          />
+          <TextInput
+            onChangeText={this.updateFamilyName}
+            autoCorrect={false}
+            style={Typography.textInput}
+            placeholder="Nom de famille"
+            placeholderTextColor={Colors.placeholder}
+          />
+          <TextInput
+            onChangeText={this.updateEmail}
+            autoCorrect={false}
+            autoCapitalize="none"
+            keyboard-type="email-address"
+            style={Typography.textInput}
+            placeholder="Email"
+            placeholderTextColor={Colors.placeholder}
+          />
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                Keyboard.dismiss();
+                this.SignUp();
+              }}
+              style={Buttons.largeButton}
+            >
+              <Text style={Buttons.text}>
+                Inscription
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20,
-    width: 300,
-  },
-  inputBox: {
-    width: 300,
-  },
-  submitButton: {
-    width: 150,
-  },
-  forgotPass: {
-    paddingTop: 10,
-  },
-});

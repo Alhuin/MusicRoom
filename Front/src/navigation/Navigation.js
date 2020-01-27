@@ -43,19 +43,6 @@ const createBurgerMenu = navigation => Platform.select({
 // Auth Navigator Handles Authentication screens by stack
 
 const AuthNavigator = createStackNavigator({
-  Inscription: {
-    screen: Inscription,
-    navigationOptions: {
-      header: null,
-    },
-    path: 'signUp/:DeezCode',
-  },
-  Inscription_noTransition: {
-    screen: Inscription,
-    navigationOptions: {
-      header: null,
-    },
-  },
   Connexion: {
     screen: Connexion,
     navigationOptions: {
@@ -65,6 +52,19 @@ const AuthNavigator = createStackNavigator({
   },
   Connexion_noTransition: {
     screen: Connexion,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  Inscription: {
+    screen: Inscription,
+    navigationOptions: {
+      header: null,
+    },
+    path: 'signUp/:DeezCode',
+  },
+  Inscription_noTransition: {
+    screen: Inscription,
     navigationOptions: {
       header: null,
     },

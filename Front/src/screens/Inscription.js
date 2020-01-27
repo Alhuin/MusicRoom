@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View, Alert,
+  StyleSheet, KeyboardAvoidingView, Platform, View, Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
@@ -8,6 +8,7 @@ import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import Components from '../components';
 import { addUser, findUserByidSocial } from '../../API/BackApi';
 import { getDeezerTokenLogin } from '../../API/DeezerApi';
+import { Colors } from '../styles';
 
 class Inscription extends React.Component {
   render() {
@@ -66,18 +67,18 @@ class Inscription extends React.Component {
 
     return (
       <KeyboardAvoidingView
-        style={styles.container}
+        style={styles.main_container}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={100}
       >
-        <ScrollView
-          style={styles.scrollView}
+        <View
+          style={styles.view}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
             <Components.Logo />
-            <Components.SignUpForm />
+            <Components.SignUpForm navigation={navigation} />
             <Components.SocialLogin
               type={type}
               navigation={navigation}
@@ -93,31 +94,29 @@ class Inscription extends React.Component {
               admin={admin}
             />
             <Components.LoginContext
-              navigation={navigation}
               type={type}
+              navigation={navigation}
               style={styles.loginContext}
             />
           </View>
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
+
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  scrollView: {
+  main_container: {
     width: '100%',
+    height: '100%',
+  },
+  view: {
+    flex: 1,
+    backgroundColor: Colors.background,
   },
   content: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   loginContext: {
     alignItems: 'flex-end',
