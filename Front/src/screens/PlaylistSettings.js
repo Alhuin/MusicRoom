@@ -1,5 +1,6 @@
 import {
-  View, StyleSheet, Text, Switch, TouchableOpacity, ScrollView, Clipboard, Alert, TextInput,
+  View, StyleSheet, Text, Switch, TouchableOpacity, ScrollView,
+  Clipboard, Alert, TextInput, SafeAreaView,
 } from 'react-native';
 import React from 'react';
 import { Icon } from 'native-base';
@@ -1338,21 +1339,23 @@ class PlaylistSettings extends React.Component {
       }
     }
     const rendering = (
-      <View style={styles.mainContainer}>
-        <View style={styles.screenHeader}>
-          <Text style={styles.screenHeaderText}>
-            Paramètres de la playlist
-          </Text>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
+        <View style={styles.mainContainer}>
+          <View style={styles.screenHeader}>
+            <Text style={styles.screenHeaderText}>
+              Paramètres de la playlist
+            </Text>
+          </View>
+          <View style={styles.body}>
+            <ScrollView>
+              {notAdminOptions}
+              {userOptions}
+              {adminOptions}
+              <Loader loading={loading} />
+            </ScrollView>
+          </View>
         </View>
-        <View style={styles.body}>
-          <ScrollView>
-            {notAdminOptions}
-            {userOptions}
-            {adminOptions}
-            <Loader loading={loading} />
-          </ScrollView>
-        </View>
-      </View>
+      </SafeAreaView>
     );
     return (rendering);
   }

@@ -174,14 +174,15 @@ export default class AdminPlayer extends Component {
         artist: track.artist,
       };
     }
-
-    console.log(`loggedUser = ${loggedUser}; track = ${track}; playlistId = ${playlistId}`);
-    // return (<View/>);
     return (
-      <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
+      <View>
         {loggedUser !== null && track !== null && playlistId !== ''
         && (
-          <>
+          <View
+            style={{
+              position: 'absolute', width: '100%', height: '100%',
+            }}
+          >
             <AudioPlayer onForward={this._onForward} />
             <MiniPlayer
               handlePress={() => this.player.open()}
@@ -204,7 +205,7 @@ export default class AdminPlayer extends Component {
             >
               <PlayerDetails track={track} playlistId={playlistId} onForward={this._onForward} />
             </Modal>
-          </>
+          </View>
         )}
       </View>
     );

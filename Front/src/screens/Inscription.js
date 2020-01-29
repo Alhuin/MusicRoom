@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, View, Alert,
+  StyleSheet, KeyboardAvoidingView, Platform, View, Alert, SafeAreaView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
@@ -66,42 +66,43 @@ class Inscription extends React.Component {
     }
 
     return (
-      <KeyboardAvoidingView
-        style={styles.main_container}
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        keyboardVerticalOffset={100}
-      >
-        <View
-          style={styles.view}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
+        <KeyboardAvoidingView
+          style={styles.main_container}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          keyboardVerticalOffset={100}
         >
-          <View style={styles.content}>
-            <Components.Logo />
-            <Components.SignUpForm navigation={navigation} />
-            <Components.SocialLogin
-              type={type}
-              navigation={navigation}
-              userChanged={userChanged}
-              setSocket={setSocket}
-              admin={admin}
-            />
-            <Components.DeezerLogin
-              type={type}
-              navigation={navigation}
-              userChanged={userChanged}
-              setSocket={setSocket}
-              admin={admin}
-            />
-            <Components.LoginContext
-              type={type}
-              navigation={navigation}
-              style={styles.loginContext}
-            />
+          <View
+            style={styles.view}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={styles.content}>
+              <Components.Logo />
+              <Components.SignUpForm navigation={navigation} />
+              <Components.SocialLogin
+                type={type}
+                navigation={navigation}
+                userChanged={userChanged}
+                setSocket={setSocket}
+                admin={admin}
+              />
+              <Components.DeezerLogin
+                type={type}
+                navigation={navigation}
+                userChanged={userChanged}
+                setSocket={setSocket}
+                admin={admin}
+              />
+              <Components.LoginContext
+                type={type}
+                navigation={navigation}
+                style={styles.loginContext}
+              />
+            </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
-
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 }

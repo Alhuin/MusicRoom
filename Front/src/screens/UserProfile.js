@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, ScrollView,
+  StyleSheet, View, Text, ScrollView, SafeAreaView,
 } from 'react-native';
 import {
   getUserByIdByPreferences,
@@ -55,70 +55,72 @@ class UserProfile extends React.Component {
       }
     });
     return (
-      <View style={styles.main_container}>
-        <View style={Typography.screenHeader}>
-          <Text style={Typography.screenHeaderText}>
-            Profil
-            { !user.name ? ' d\'un Anonyme' : ` de ${user.name}` }
-          </Text>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
+        <View style={styles.main_container}>
+          <View style={Typography.screenHeader}>
+            <Text style={Typography.screenHeaderText}>
+              Profil
+              { !user.name ? ' d\'un Anonyme' : ` de ${user.name}` }
+            </Text>
+          </View>
+          <ScrollView>
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>Nom</Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={Typography.bodyText}>
+                  { !user.name ? 'Anonyme' : user.name }
+                </Text>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>Nom de famille</Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={Typography.bodyText}>
+                  { !user.familyName ? 'Anonyme' : user.familyName }
+                </Text>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>Email</Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={Typography.bodyText}>
+                  { !user.email ? 'Privé' : user.email}
+                </Text>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>Tél</Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={Typography.bodyText}>
+                  { !user.phoneNumber ? 'Privé' : user.phoneNumber}
+                </Text>
+              </View>
+            </View>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>Préférences</Text>
+              </View>
+              <View style={styles.sectionContent}>
+                <Text style={Typography.bodyText}>
+                  { !preferences ? 'Privé' : preferences }
+                </Text>
+              </View>
+            </View>
+          </ScrollView>
         </View>
-        <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>Nom</Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <Text style={Typography.bodyText}>
-                { !user.name ? 'Anonyme' : user.name }
-              </Text>
-            </View>
-          </View>
-          <View style={Typography.sectionSeparator} />
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>Nom de famille</Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <Text style={Typography.bodyText}>
-                { !user.familyName ? 'Anonyme' : user.familyName }
-              </Text>
-            </View>
-          </View>
-          <View style={Typography.sectionSeparator} />
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>Email</Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <Text style={Typography.bodyText}>
-                { !user.email ? 'Privé' : user.email}
-              </Text>
-            </View>
-          </View>
-          <View style={Typography.sectionSeparator} />
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>Tél</Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <Text style={Typography.bodyText}>
-                { !user.phoneNumber ? 'Privé' : user.phoneNumber}
-              </Text>
-            </View>
-          </View>
-          <View style={Typography.sectionSeparator} />
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>Préférences</Text>
-            </View>
-            <View style={styles.sectionContent}>
-              <Text style={Typography.bodyText}>
-                { !preferences ? 'Privé' : preferences }
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }

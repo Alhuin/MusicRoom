@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TextInput, Alert, TouchableOpacity, ScrollView, FlatList, Linking,
+  StyleSheet, View, SafeAreaView, Text, TextInput, Alert, TouchableOpacity, ScrollView, FlatList, Linking,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Collapsible from 'react-native-collapsible';
@@ -147,287 +147,290 @@ class AppSettingsAndroid extends React.Component {
       collapsibleIcon = (<Icon name="ios-arrow-down" style={styles.icon} />);
     }
     return (
-      <View style={styles.main_container}>
-        <View style={Typography.screenHeader}>
-          <Text style={Typography.screenHeaderText}>
-                Paramètres
-          </Text>
-        </View>
-        <ScrollView>
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardHeaderText}>Identifiant</Text>
-            </View>
-            <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={this.updateLogin}
-              >
-                {user.login}
-              </TextInput>
-            </View>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
+        <View style={styles.main_container}>
+          <View style={Typography.screenHeader}>
+            <Text style={Typography.screenHeaderText}>
+              Paramètres & Préférences
+            </Text>
           </View>
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardHeaderText}>Nom</Text>
-            </View>
-            <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={this.updateName}
-              >
-                {user.name}
-              </TextInput>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardHeaderText}>Nom de famille</Text>
-            </View>
-            <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={this.updateFamilyName}
-              >
-                {user.familyName}
-              </TextInput>
-              <TouchableOpacity
-                style={styles.iconWrapper}
-                onPress={() => {
-                  this.onVisibilityChanged('familyName');
-                }}
-              >
-                <Icon
-                  name={iconFromVisibilityTable.familyName}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardHeaderText}>Email</Text>
-            </View>
-            <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={this.updateEmail}
-              >
-                {user.email}
-              </TextInput>
-              <TouchableOpacity
-                style={styles.iconWrapper}
-                onPress={() => {
-                  this.onVisibilityChanged('email');
-                }}
-              >
-                <Icon
-                  name={iconFromVisibilityTable.email}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardHeaderText}>Téléphone</Text>
-            </View>
-            <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={this.updatePhoneNumber}
-              >
-                {user.phoneNumber}
-              </TextInput>
-              <TouchableOpacity
-                style={styles.iconWrapper}
-                onPress={() => {
-                  this.onVisibilityChanged('phoneNumber');
-                }}
-              >
-                <Icon
-                  name={iconFromVisibilityTable.phoneNumber}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardHeaderText}>Préférences :</Text>
-            </View>
-            <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
-              <View style={styles.checkboxesWrapper}>
-                <View style={styles.checkboxRow}>
-                  <SettingsTagCheckbox
-                    checked={preferences.Rock}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Rock"
-                    textStyle={{ color: 'white' }}
-                  />
-                  <SettingsTagCheckbox
-                    checked={preferences.Rap}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Rap"
-                    textStyle={{ color: 'white' }}
-                  />
-                  <SettingsTagCheckbox
-                    checked={preferences.Classic}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Classic"
-                    textStyle={{ color: 'white' }}
-                  />
-                </View>
-                <View style={styles.checkboxRow}>
-                  <SettingsTagCheckbox
-                    checked={preferences.Electro}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Electro"
-                    textStyle={{ color: 'white' }}
-                  />
-                  <SettingsTagCheckbox
-                    checked={preferences.Reggae}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Reggae"
-                    textStyle={{ color: 'white' }}
-                  />
-                  <SettingsTagCheckbox
-                    checked={preferences.Metal}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Metal"
-                    textStyle={{ color: 'white' }}
-                  />
-                </View>
-                <View style={styles.checkboxRow}>
-                  <SettingsTagCheckbox
-                    checked={preferences.Pop}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Pop"
-                    textStyle={{ color: 'white' }}
-                  />
-                  <SettingsTagCheckbox
-                    checked={preferences.Dub}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Dub"
-                    textStyle={{ color: 'white' }}
-                  />
-                  <SettingsTagCheckbox
-                    checked={preferences.Country}
-                    tagsChanged={this.onPreferenceChanged}
-                    tag="Country"
-                    textStyle={{ color: 'white' }}
-                  />
-                </View>
+          <ScrollView>
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardHeaderText}>Identifiant</Text>
               </View>
-              <TouchableOpacity
-                style={styles.iconWrapper}
-                onPress={() => {
-                  this.onVisibilityChanged('preferences');
-                }}
-              >
-                <Icon
-                  name={iconFromVisibilityTable.preferences}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.section}>
-            <TouchableOpacity onPress={this.toggleExpanded}>
-              <View style={[styles.sectionHeader, { justifyContent: 'space-between', alignItems: 'center' }]}>
-                <Text style={styles.sectionHeaderText}>
-                      Amis
-                </Text>
-                {collapsibleIcon}
+              <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
+                <TextInput
+                  style={styles.inputStyle}
+                  onChangeText={this.updateLogin}
+                >
+                  {user.login}
+                </TextInput>
               </View>
-            </TouchableOpacity>
-            <View style={styles.sectionContent}>
-              <Collapsible collapsed={collapsed} align="center">
-                <FlatList
-                  data={friends}
-                  keyExtractor={item => item._id.toString()}
-                  renderItem={
-                          ({ item }) => {
-                            const friendId = item._id;
-                            const element = (
-                              <View style={styles.card}>
-                                <View
-                                  style={[
-                                    styles.cardContentRow,
-                                    { justifyContent: 'space-between', alignItems: 'center' },
-                                  ]}
+            </View>
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardHeaderText}>Nom</Text>
+              </View>
+              <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
+                <TextInput
+                  style={styles.inputStyle}
+                  onChangeText={this.updateName}
+                >
+                  {user.name}
+                </TextInput>
+              </View>
+            </View>
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardHeaderText}>Nom de famille</Text>
+              </View>
+              <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
+                <TextInput
+                  style={styles.inputStyle}
+                  onChangeText={this.updateFamilyName}
+                >
+                  {user.familyName}
+                </TextInput>
+                <TouchableOpacity
+                  style={styles.iconWrapper}
+                  onPress={() => {
+                    this.onVisibilityChanged('familyName');
+                  }}
+                >
+                  <Icon
+                    name={iconFromVisibilityTable.familyName}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardHeaderText}>Email</Text>
+              </View>
+              <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
+                <TextInput
+                  style={styles.inputStyle}
+                  onChangeText={this.updateEmail}
+                >
+                  {user.email}
+                </TextInput>
+                <TouchableOpacity
+                  style={styles.iconWrapper}
+                  onPress={() => {
+                    this.onVisibilityChanged('email');
+                  }}
+                >
+                  <Icon
+                    name={iconFromVisibilityTable.email}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardHeaderText}>Téléphone</Text>
+              </View>
+              <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
+                <TextInput
+                  style={styles.inputStyle}
+                  onChangeText={this.updatePhoneNumber}
+                >
+                  {user.phoneNumber}
+                </TextInput>
+                <TouchableOpacity
+                  style={styles.iconWrapper}
+                  onPress={() => {
+                    this.onVisibilityChanged('phoneNumber');
+                  }}
+                >
+                  <Icon
+                    name={iconFromVisibilityTable.phoneNumber}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardHeaderText}>Préférences :</Text>
+              </View>
+              <View style={[styles.cardContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
+                <View style={styles.checkboxesWrapper}>
+                  <View style={styles.checkboxRow}>
+                    <SettingsTagCheckbox
+                      checked={preferences.Rock}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Rock"
+                      textStyle={{ color: 'white' }}
+                    />
+                    <SettingsTagCheckbox
+                      checked={preferences.Rap}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Rap"
+                      textStyle={{ color: 'white' }}
+                    />
+                    <SettingsTagCheckbox
+                      checked={preferences.Classic}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Classic"
+                      textStyle={{ color: 'white' }}
+                    />
+                  </View>
+                  <View style={styles.checkboxRow}>
+                    <SettingsTagCheckbox
+                      checked={preferences.Electro}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Electro"
+                      textStyle={{ color: 'white' }}
+                    />
+                    <SettingsTagCheckbox
+                      checked={preferences.Reggae}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Reggae"
+                      textStyle={{ color: 'white' }}
+                    />
+                    <SettingsTagCheckbox
+                      checked={preferences.Metal}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Metal"
+                      textStyle={{ color: 'white' }}
+                    />
+                  </View>
+                  <View style={styles.checkboxRow}>
+                    <SettingsTagCheckbox
+                      checked={preferences.Pop}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Pop"
+                      textStyle={{ color: 'white' }}
+                    />
+                    <SettingsTagCheckbox
+                      checked={preferences.Dub}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Dub"
+                      textStyle={{ color: 'white' }}
+                    />
+                    <SettingsTagCheckbox
+                      checked={preferences.Country}
+                      tagsChanged={this.onPreferenceChanged}
+                      tag="Country"
+                      textStyle={{ color: 'white' }}
+                    />
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={styles.iconWrapper}
+                  onPress={() => {
+                    this.onVisibilityChanged('preferences');
+                  }}
+                >
+                  <Icon
+                    name={iconFromVisibilityTable.preferences}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.section}>
+              <TouchableOpacity onPress={this.toggleExpanded}>
+                <View style={[styles.sectionHeader, { justifyContent: 'space-between', alignItems: 'center' }]}>
+                  <Text style={styles.sectionHeaderText}>
+                    Amis
+                  </Text>
+                  {collapsibleIcon}
+                </View>
+              </TouchableOpacity>
+              <View style={styles.sectionContent}>
+                <Collapsible collapsed={collapsed} align="center">
+                  <FlatList
+                    data={friends}
+                    keyExtractor={item => item._id.toString()}
+                    renderItem={
+                        ({ item }) => {
+                          const friendId = item._id;
+                          const element = (
+                            <View style={styles.card}>
+                              <View
+                                style={[
+                                  styles.cardContentRow,
+                                  { justifyContent: 'space-between', alignItems: 'center' },
+                                ]}
+                              >
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    navigation.navigate('UserProfile', { userProfileId: item._id });
+                                  }}
+                                  style={{ flex: 6 }}
                                 >
-                                  <TouchableOpacity
-                                    onPress={() => {
-                                      navigation.navigate('UserProfile', { userProfileId: item._id });
-                                    }}
-                                    style={{ flex: 6 }}
-                                  >
-                                    <Text style={styles.cardHeaderText}>
-                                      {item.name}
-                                    </Text>
-                                  </TouchableOpacity>
-                                  <TouchableOpacity
-                                    onPress={() => {
-                                      deleteFriend(friendId, user._id)
-                                        .then(() => {
-                                          getFriends(user._id)
-                                            .then((newFriends) => {
-                                              this.setState({ friends: newFriends });
-                                            })
-                                            .catch((error) => {
-                                              console.error(error);
-                                            });
-                                        })
-                                        .catch((error) => {
-                                          console.error(error);
-                                        });
-                                    }}
-                                    style={styles.iconWrapper}
-                                  >
-                                    <Icon name="ios-remove" style={styles.icon} />
-                                  </TouchableOpacity>
-                                </View>
+                                  <Text style={styles.cardHeaderText}>
+                                    {item.name}
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    deleteFriend(friendId, user._id)
+                                      .then(() => {
+                                        getFriends(user._id)
+                                          .then((newFriends) => {
+                                            this.setState({ friends: newFriends });
+                                          })
+                                          .catch((error) => {
+                                            console.error(error);
+                                          });
+                                      })
+                                      .catch((error) => {
+                                        console.error(error);
+                                      });
+                                  }}
+                                  style={styles.iconWrapper}
+                                >
+                                  <Icon name="ios-remove" style={styles.icon} />
+                                </TouchableOpacity>
                               </View>
-                            );
-                            return (element);
-                          }
+                            </View>
+                          );
+                          return (element);
                         }
-                />
-              </Collapsible>
+                      }
+                  />
+                </Collapsible>
+              </View>
             </View>
-          </View>
-          <View style={styles.section}>
-            <View style={[styles.sectionContent, { alignItems: 'center' }]}>
-              <TouchableOpacity
-                onPress={this.getDeez}
-                style={Buttons.largeButton}
-              >
-                <Text style={Buttons.text}>
-                      Connection a Deezer
-                </Text>
-              </TouchableOpacity>
+            <View style={styles.section}>
+              <View style={[styles.sectionContent, { alignItems: 'center' }]}>
+                <TouchableOpacity
+                  onPress={this.getDeez}
+                  style={Buttons.largeButton}
+                >
+                  <Text style={Buttons.text}>
+                    Connexion Deezer
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          <Text style={Buttons.text}>
-                Votre compte est associé au compte Deezer de :
-            {' '}
-            {DeezerToken}
-          </Text>
-          <View style={styles.section}>
-            <View style={[styles.sectionContent, { alignItems: 'center' }]}>
-              <TouchableOpacity
-                onPress={this._onPressModify}
-                style={Buttons.largeButton}
-              >
-                <Text style={Buttons.text}>
-                      Confirmer
-                </Text>
-              </TouchableOpacity>
+            <Text style={Buttons.text}>
+              Votre compte est associé au compte Deezer de :
+              {' '}
+              {DeezerToken || 'Invalide'}
+            </Text>
+            <View style={Typography.sectionSeparator} />
+            <View style={styles.section}>
+              <View style={[styles.sectionContent, { alignItems: 'center' }]}>
+                <TouchableOpacity
+                  onPress={this._onPressModify}
+                  style={Buttons.largeButton}
+                >
+                  <Text style={Buttons.text}>
+                    Confirmer
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 }

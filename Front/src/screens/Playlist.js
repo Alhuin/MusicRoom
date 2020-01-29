@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity, Alert, AppState,
+  StyleSheet, View, Text, TouchableOpacity, Alert, AppState, SafeAreaView,
 } from 'react-native';
 import { Icon } from 'native-base';
 import MusicControl from 'react-native-music-control';
@@ -494,80 +494,82 @@ class Playlist extends React.Component {
       )
     );
     return (
-      <View style={styles.main_container}>
-        <View style={styles.screenHeader}>
-          <View style={Typography.headerSidesContainerStyle}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('PlaylistSettings', {
-                  playlistId, isAdmin: admin, authorId, roomType, name,
-                });
-              }}
-              style={Typography.iconWrapper}
-            >
-              <Icon name="settings" style={Typography.icon} />
-            </TouchableOpacity>
-          </View>
-          <View style={[styles.screenHeader, { width: 'auto', padding: 0, flex: 8 }]}>
-            <Text
-              style={styles.screenHeaderText}
-              numberOfLines={1}
-            >
-              {name}
-            </Text>
-          </View>
-          <View style={Typography.headerSidesContainerStyle}>
-            { playButton }
-          </View>
-        </View>
-        <Components.AddMusicModal
-          setModalVisible={this.setModalVisible}
-          modalVisible={modalVisible}
-          playlistId={playlistId}
-          updateTracks={() => this.updateTracks(roomType, playlistId)}
-          userId={userId}
-          roomType={roomType}
-        />
-        <View>
-          <Components.SearchBar
-            updateSearchedText={null}
-            searchTracks={this.searchTracks}
-            autoSearch
-          />
-        </View>
-        <View style={styles.section}>
-          <View style={styles.sectionContent}>
-            <TrackListInPlaylist
-              tracks={tracks}
-              updatePlaying={this.updatePlaying}
-              deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, playlistId, userId)}
-              playing={playing}
-              playlistId={playlistId}
-              updateTracks={() => this.updateTracks(roomType, playlistId)}
-              updateMyVotes={this.updateMyVotes}
-              refreshing={refreshing}
-              onRefresh={this._onRefresh}
-              userId={userId}
-              roomType={roomType}
-              myVotes={myVotes}
-              isUserInPlaylist={isUserInPlaylist}
-              editor={editor}
-              pos={pos}
-              admin={admin}
-              onMoveEnd={(id, newPosition) => {
-                moveTrackOrder(playlistId, id, newPosition)
-                  .then(() => {
-                    this._onRefresh();
-                  })
-                  .catch((error) => {
-                    console.error(error);
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
+        <View style={styles.main_container}>
+          <View style={styles.screenHeader}>
+            <View style={Typography.headerSidesContainerStyle}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('PlaylistSettings', {
+                    playlistId, isAdmin: admin, authorId, roomType, name,
                   });
-              }}
+                }}
+                style={Typography.iconWrapper}
+              >
+                <Icon name="settings" style={Typography.icon} />
+              </TouchableOpacity>
+            </View>
+            <View style={[styles.screenHeader, { width: 'auto', padding: 0, flex: 8 }]}>
+              <Text
+                style={styles.screenHeaderText}
+                numberOfLines={1}
+              >
+                {name}
+              </Text>
+            </View>
+            <View style={Typography.headerSidesContainerStyle}>
+              { playButton }
+            </View>
+          </View>
+          <Components.AddMusicModal
+            setModalVisible={this.setModalVisible}
+            modalVisible={modalVisible}
+            playlistId={playlistId}
+            updateTracks={() => this.updateTracks(roomType, playlistId)}
+            userId={userId}
+            roomType={roomType}
+          />
+          <View>
+            <Components.SearchBar
+              updateSearchedText={null}
+              searchTracks={this.searchTracks}
+              autoSearch
             />
           </View>
+          <View style={styles.section}>
+            <View style={styles.sectionContent}>
+              <TrackListInPlaylist
+                tracks={tracks}
+                updatePlaying={this.updatePlaying}
+                deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, playlistId, userId)}
+                playing={playing}
+                playlistId={playlistId}
+                updateTracks={() => this.updateTracks(roomType, playlistId)}
+                updateMyVotes={this.updateMyVotes}
+                refreshing={refreshing}
+                onRefresh={this._onRefresh}
+                userId={userId}
+                roomType={roomType}
+                myVotes={myVotes}
+                isUserInPlaylist={isUserInPlaylist}
+                editor={editor}
+                pos={pos}
+                admin={admin}
+                onMoveEnd={(id, newPosition) => {
+                  moveTrackOrder(playlistId, id, newPosition)
+                    .then(() => {
+                      this._onRefresh();
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                }}
+              />
+            </View>
+          </View>
+          {forEditor}
         </View>
-        {forEditor}
-      </View>
+      </SafeAreaView>
     );
   }
 }

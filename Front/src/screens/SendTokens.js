@@ -1,29 +1,30 @@
 import React from 'react';
 import {
+  SafeAreaView,
   StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
+import { Colors } from '../styles';
 
 class SendTokens extends React.Component {
   render() {
     const { type } = this.props.navigation.state.params;
 
     return (
-      <View style={styles.container}>
-        <Components.Logo />
-        <Components.SendToken type={type} />
-      </View>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
+        <View style={styles.main_container}>
+          <Components.Logo />
+          <Components.SendToken type={type} />
+        </View>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main_container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    //  borderWidth: 1,             LAISSEZ LES
-    //  borderColor: 'blue',
+    backgroundColor: Colors.background,
   },
 });
 

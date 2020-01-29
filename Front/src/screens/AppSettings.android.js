@@ -176,7 +176,7 @@ class AppSettingsAndroid extends React.Component {
       <View style={styles.main_container}>
         <View style={Typography.screenHeader}>
           <Text style={Typography.screenHeaderText}>
-                Paramètres
+            Paramètres & Préférences
           </Text>
         </View>
         <ScrollView>
@@ -430,11 +430,12 @@ class AppSettingsAndroid extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                      Connection a Google
+                      Connexion Google
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
+          <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity
@@ -442,7 +443,7 @@ class AppSettingsAndroid extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                      Connection a Deezer
+                      Connexion Deezer
                 </Text>
               </TouchableOpacity>
             </View>
@@ -450,8 +451,9 @@ class AppSettingsAndroid extends React.Component {
           <Text style={Buttons.text}>
                 Votre compte est associé au compte Deezer de :
             {' '}
-            {this.state.DeezerToken}
+            {DeezerToken || 'Invalide'}
           </Text>
+          <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity
