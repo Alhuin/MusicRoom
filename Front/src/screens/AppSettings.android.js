@@ -90,7 +90,7 @@ class AppSettingsAndroid extends React.Component {
       console.log('Erreur : entrée vide');
     } else {
       updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
-        visibilityTable)
+        visibilityTable, '', '')
         .then((newUser) => {
           userChanged(newUser);
           Alert.alert('Les paramètres ont bien été modifiés');
@@ -120,18 +120,23 @@ class AppSettingsAndroid extends React.Component {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
-      updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
-        visibilityTable, '', userInfo.user.id)
-        .then((newUser) => {
-          userChanged(newUser);
-          Alert.alert('Votre compte google est maintenant associé');
-        })
-        .catch(error => console.log(error));
+      if (!(name.length && familyName.length && email.length
+          && login.length && phoneNumber.length)) {
+        Alert.alert('Erreur : entrée vide');
+        console.log('Erreur : entrée vide');
+      } else {
+        updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
+          visibilityTable, '', userInfo.user.id)
+          .then((newUser) => {
+            userChanged(newUser);
+            Alert.alert('Votre compte google est maintenant associé');
+          })
+          .catch(error => console.log(error));
+      }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
 
   render() {
@@ -147,10 +152,16 @@ class AppSettingsAndroid extends React.Component {
       getDeezerToken(DeezerCode)
         .then((response) => {
           this.setState({ DeezerToken: response.firstname });
-          updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
-            visibilityTable, response.id.toString(), '')
-            .then(res => console.log(res))
-            .catch(error => console.log(error));
+          if (!(name.length && familyName.length && email.length
+            && login.length && phoneNumber.length)) {
+            Alert.alert('Erreur : entrée vide');
+            console.log('Erreur : entrée vide');
+          } else {
+            updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
+              visibilityTable, response.id.toString(), '')
+              .then(res => console.log(res))
+              .catch(error => console.log(error));
+          }
         })
         .catch(error => console.log(error));
     }

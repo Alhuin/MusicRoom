@@ -172,9 +172,12 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
         updatedUser.phoneNumber = phoneNumber;
         updatedUser.preferences = preferences;
         updatedUser.visibilityTable = visibilityTable;
-        updatedUser.idDeezer = idDeezer;
-        updatedUser.idGoogle = idGoogle;
-        console.log(updatedUser);
+        if (String(idDeezer) !== '') {
+          updatedUser.idDeezer = idDeezer;
+        }
+        if (String(idGoogle) !== '') {
+          updatedUser.idGoogle = idGoogle;
+        }
         updatedUser.save((saveError, newUser) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
