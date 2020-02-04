@@ -722,7 +722,6 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
         if ((playlist.roomType === 'radio' && utils.isEditorInPlaylist(playlist, userId, null))
         || (playlist.roomType === 'party' && utils.isAdminInPlaylist(playlist, userId))) {
           flag = true;
-          console.log('flag de merde', flag);
         }
         if (flag) {
           // console.log(playlist.musics);
@@ -734,7 +733,6 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
           for (i; i < playlist.musics.length; i += 1) {
             if (playlist.musics[i].toString() === musicId.toString()) {
               playlist.musics.splice(i, 1);
-              console.log('splice');
             }
           }
           playlist.save((saveError, savedPlaylist) => {
@@ -1065,7 +1063,6 @@ function getNextRadioTrack(playlistId, currentTrackId, nextIndex) {
       } else if (!radio.musics[0]) {
         reject(new CustomError('GetNextRadioTrack', 'No musics in this radio', 400));
       } else if (nextIndex === -1) { // get next Track in list
-        console.log(radio.musics);
         const index = radio.musics.indexOf(currentTrackId);
         if (index === radio.musics.length - 1) { // last track, loop to the beginning
           musicId = radio.musics[0];

@@ -163,7 +163,6 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
       } else if (!user) {
         reject(new CustomError('UpdateUser', 'No user with this id found in database', 404));
       } else {
-        console.log(idDeezer);
         const updatedUser = user;
         updatedUser.login = login;
         updatedUser.name = name;
@@ -322,6 +321,31 @@ function updatePassword(userId, newPassword) {
   });
 }
 
+function updatePremium(userId, premium) {
+  return new Promise((resolve, reject) => {
+    UserModel.findOne({ _id: userId }, async (error, user) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!user) {
+        reject(new CustomError('updatePremium', 'No user with this id found in database', 404));
+      } else {
+        const updatedUser = user;
+        updatedUser.premium = premium;
+        updatedUser.save((saveError, newUser) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: newUser,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 /*     Tokens         */
 
 //  Password
@@ -453,7 +477,6 @@ function confirmEmailToken(tokenString) {
 }
 
 function getDeezerCode(DeezerCode) {
-  console.log(DeezerCode);
   return new Promise((resolve, reject) => {
     if (DeezerCode !== '') {
       resolve({
@@ -518,4 +541,5 @@ export default {
   getFriends,
   getDeezerCode,
   findUserByidSocial,
+  updatePremium,
 };

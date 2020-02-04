@@ -189,8 +189,27 @@ function deleteFriend(req, res) {
 /*    User Interface    */
 
 function updatePassword(req, res) {
-  if (req.body.userId && req.body.password) {
+  if (req.body.userId && utils.isValidId(req.body.userId) && req.body.password) {
     userService.updatePassword(req.body.userId, req.body.password)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong parameters' });
+  }
+}
+
+function updatePremium(req, res) {
+  if (req.body.userId && utils.isValidId(req.body.userId) && req.body.premium !== undefined) {
+    userService.updatePremium(req.body.userId, req.body.premium)
       .then((response) => {
         res
           .status(response.status)
@@ -368,4 +387,5 @@ export default {
   getDeezerCode,
   getDeezerCodeForLogin,
   findUserByidSocial,
+  updatePremium,
 };

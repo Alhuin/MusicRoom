@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  StyleSheet, View,
+  StyleSheet, View, Alert,
 } from 'react-native';
+import { Icon } from 'native-base';
 import Components from '../components';
 import { getPlaylistsFiltered } from '../../API/BackApi';
 import { Colors } from '../styles';
@@ -19,38 +20,47 @@ class Radios extends React.Component {
   }
 
   componentDidMount(): void {
-    const { socket, navigation } = this.props;
+    const { socket, navigation, loggedUser } = this.props;
 
-    this.updatePlaylist()
-      .then(() => console.log('radiosList updated'))
-      .catch(error => console.error(error));
+    if (loggedUser.premium) {
+      this.updatePlaylist()
+        .then(() => console.log('radiosList updated'))
+        .catch(error => console.error(error));
 
-    this._isMounted = true;
-    this._focusListener = navigation.addListener('didFocus', () => {
-      const { shouldUpdate, shouldUpdatePlaylist } = this.props;
+      this._isMounted = true;
+      this._focusListener = navigation.addListener('didFocus', () => {
+        const { shouldUpdate, shouldUpdatePlaylist } = this.props;
 
-      socket.emit('userJoinedRadiosList');
-      // console.log(shouldUpdate);
-      if (shouldUpdate) {
-        this.updatePlaylist()
-          .then(shouldUpdatePlaylist(false))
-          .catch(error => console.error(error));
-      }
-    });
+        socket.emit('userJoinedRadiosList');
+        // console.log(shouldUpdate);
+        if (shouldUpdate) {
+          this.updatePlaylist()
+            .then(shouldUpdatePlaylist(false))
+            .catch(error => console.error(error));
+        }
+      });
 
-    this._blurListener = navigation.addListener('willBlur', () => {
-      socket.emit('userLeavedRadiosList');
-    });
+      this._blurListener = navigation.addListener('willBlur', () => {
+        socket.emit('userLeavedRadiosList');
+      });
+    } else {
+      Alert.alert('Vous devez posséder un compte Premium pour accéder à cette fonctionnalité.');
+    }
   }
 
   componentWillUnmount(): void {
-    this._isMounted = false;
-    this._focusListener.remove();
-    this._blurListener.remove();
+    const { loggedUser } = this.props;
+
+    if (loggedUser.premium) {
+      this._isMounted = false;
+      this._focusListener.remove();
+      this._blurListener.remove();
+    }
   }
 
   _onRefreshSignal = () => {
-    if (this._isMounted) {
+    const { loggedUser } = this.props;
+    if (this._isMounted && loggedUser.premium) {
       console.log('[Socket Server] : refresh signal radiosList received');
       this.updatePlaylist()
         .then(res => console.log(res))
@@ -59,14 +69,18 @@ class Radios extends React.Component {
   };
 
   _onRefresh = () => {
-    this.setState({ refreshing: true });
-    this.updatePlaylist()
-      .then(() => {
-        this.setState({ refreshing: false });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const { loggedUser } = this.props;
+
+    if (loggedUser.premium) {
+      this.setState({ refreshing: true });
+      this.updatePlaylist()
+        .then(() => {
+          this.setState({ refreshing: false });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   updatePlaylist = () => new Promise((resolve, reject) => {
@@ -97,30 +111,42 @@ class Radios extends React.Component {
       refreshing,
     } = this.state;
     const { navigation, loggedUser, socket } = this.props;
-    return (
-      <View style={{ height: '100%' }}>
-        <Components.AddPlaylistModal
-          socket={socket}
-          loggedUser={loggedUser}
-          setModalVisible={this.setModalVisible}
-          modalVisible={modalVisible}
-          userId={loggedUser._id}
-          roomType="radio"
-          updatePlaylist={this.updatePlaylist}
-        />
-        <View style={styles.container}>
-          <Components.PlaylistList
-            playlists={playlists}
-            navigation={navigation}
-            refreshing={refreshing}
-            onRefresh={this._onRefresh}
-            roomType="radio"
+    let render;
+    if (loggedUser.premium) {
+      render = (
+        <View style={{ height: '100%' }}>
+          <Components.AddPlaylistModal
+            socket={socket}
+            loggedUser={loggedUser}
+            setModalVisible={this.setModalVisible}
+            modalVisible={modalVisible}
             userId={loggedUser._id}
+            roomType="radio"
+            updatePlaylist={this.updatePlaylist}
           />
+          <View style={styles.container}>
+            <Components.PlaylistList
+              playlists={playlists}
+              navigation={navigation}
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
+              roomType="radio"
+              userId={loggedUser._id}
+            />
+          </View>
+          <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />
         </View>
-        <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />
-      </View>
-    );
+      );
+    } else {
+      render = (
+        <View style={{ height: '100%' }}>
+          <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+            <Icon name="ios-lock" style={{ fontSize: 100, color: Colors.baseText }} />
+          </View>
+        </View>
+      );
+    }
+    return (render);
   }
 }
 const styles = StyleSheet.create({

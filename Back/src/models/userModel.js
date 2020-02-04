@@ -81,6 +81,10 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: {
     type: Date,
   },
+  premium: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.statics.findByLoginOrEmail = async function (login) {

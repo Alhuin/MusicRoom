@@ -5,7 +5,9 @@ import {
 import { Icon } from 'native-base';
 import { GoogleSignin } from 'react-native-google-signin';
 import Collapsible from 'react-native-collapsible';
-import { updateUser, deleteFriend, getFriends } from '../../API/BackApi';
+import {
+  updateUser, deleteFriend, getFriends, updateUserPremium,
+} from '../../API/BackApi';
 import SettingsTagCheckbox from '../components/Playlist/SettingsTagCheckbox';
 import { getDeezerToken } from '../../API/DeezerApi';
 import {
@@ -24,6 +26,7 @@ class AppSettingsAndroid extends React.Component {
       phoneNumber: props.loggedUser.phoneNumber,
       preferences: props.loggedUser.preferences,
       visibilityTable: props.loggedUser.visibilityTable,
+      premium: props.loggedUser.premium,
       collapsed: true,
       friends: [],
       DeezerToken: '',
@@ -99,6 +102,23 @@ class AppSettingsAndroid extends React.Component {
     }
   };
 
+  _onPressPremium = () => {
+    const { user, premium } = this.state;
+    const { userChanged } = this.props;
+
+    updateUserPremium(user._id, !premium)
+      .then((newUser) => {
+        userChanged(newUser);
+        if (newUser.premium) {
+          Alert.alert('Vous avez désormais accès à l\'offre Premium !');
+        } else {
+          Alert.alert('Vous avez désormais seulement accès à l\'offre Freemium !');
+        }
+        this.setState({ user: newUser, premium: newUser.premium });
+      })
+      .catch(error => console.log(error));
+  };
+
   toggleExpanded = () => {
     const { collapsed } = this.state;
     this.setState({ collapsed: !collapsed });
@@ -145,7 +165,7 @@ class AppSettingsAndroid extends React.Component {
     const DeezerCode = navigation.getParam('DeezCode');
     const {
       user, preferences, visibilityTable, collapsed, friends,
-      login, name, familyName, email, phoneNumber,
+      login, name, familyName, email, phoneNumber, premium,
     } = this.state;
     const iconFromVisibilityTable = {};
     if (DeezerCode !== undefined && DeezerToken === '') {
@@ -177,7 +197,7 @@ class AppSettingsAndroid extends React.Component {
         }
       }
     });
-    let collapsibleIcon = (null);
+    let collapsibleIcon;
     if (collapsed) {
       collapsibleIcon = (<Icon name="ios-arrow-up" style={styles.icon} />);
     } else {
@@ -370,6 +390,19 @@ class AppSettingsAndroid extends React.Component {
             </View>
           </View>
           <View style={styles.section}>
+            <View style={[styles.sectionContent, { alignItems: 'center' }]}>
+              <TouchableOpacity
+                onPress={this._onPressModify}
+                style={Buttons.largeButton}
+              >
+                <Text style={Buttons.text}>
+                  Confirmer
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={Typography.sectionSeparator} />
+          <View style={styles.section}>
             <TouchableOpacity onPress={this.toggleExpanded}>
               <View style={[styles.sectionHeader, { justifyContent: 'space-between', alignItems: 'center' }]}>
                 <Text style={styles.sectionHeaderText}>
@@ -434,6 +467,7 @@ class AppSettingsAndroid extends React.Component {
               </Collapsible>
             </View>
           </View>
+          <View style={Typography.sectionSeparator} />
           <View style={styles.section}>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity
@@ -459,7 +493,7 @@ class AppSettingsAndroid extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={Buttons.text}>
+          <Text style={Typography.bodyText}>
                 Votre compte est associé au compte Deezer de :
             {' '}
             {DeezerToken || 'Invalide'}
@@ -468,11 +502,12 @@ class AppSettingsAndroid extends React.Component {
           <View style={styles.section}>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity
-                onPress={this._onPressModify}
+                onPress={this._onPressPremium}
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                      Confirmer
+                  Mode
+                  { premium ? ' Premium' : ' Freemium' }
                 </Text>
               </TouchableOpacity>
             </View>

@@ -36,6 +36,7 @@ router.post('/users/update', userController.updateUser);
 router.post('/users/addFriend', userController.addFriend);
 router.post('/users/deleteFriend', userController.deleteFriend);
 router.post('/users/newPass/', userController.updatePassword);
+router.post('/users/updatePremium/', userController.updatePremium);
 
 router.delete('/users/:userId', userController.deleteUserById);
 

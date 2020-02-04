@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Text, StyleSheet, View, TouchableOpacity,
+  Text, StyleSheet, View, TouchableOpacity, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
@@ -18,8 +18,12 @@ class Home extends React.Component {
   };
 
   _onPressRadio = () => {
-    const { navigation } = this.props;
-    navigation.navigate('RadiosList');
+    const { navigation, loggedUser } = this.props;
+    if (loggedUser.premium) {
+      navigation.navigate('RadiosList');
+    } else {
+      Alert.alert('Vous devez posséder un compte Premium pour accéder à cette fonctionnalité.');
+    }
   };
 
   setModalVisible = () => {

@@ -257,6 +257,30 @@ function getFriends(userId) {
   });
 }
 
+function updateUserPremium(userId, premium) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/updatePremium`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, premium,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('updateUserPremium', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                       Musics, Playlists & Votes
  */
@@ -1224,6 +1248,7 @@ export {
   sendEmailToken,
   sendPasswordToken,
   updatePassword,
+  updateUserPremium,
   getPlaylistsFiltered,
   getMusicsByVote,
   getUserByIdByPreferences,
