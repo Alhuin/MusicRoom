@@ -12,7 +12,6 @@ export default class AddFloatingButton extends React.Component {
   render() {
     const { icon, handlePress } = this.props;
     let image = '';
-    const { height } = Dimensions.get('window');
     if (icon === 'addPlaylist') {
       image = (
         <Image

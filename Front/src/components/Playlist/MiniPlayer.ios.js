@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, TouchableOpacity, View, Text, Image, Animated,
+  StyleSheet, TouchableOpacity, View, Text, Image, Animated, Dimensions,
 } from 'react-native';
 import { Icon } from 'native-base';
 import SeekBar from '../AdminPlayer/SeekBar';
@@ -20,7 +20,7 @@ export default class MiniPlayer extends React.Component {
     if (active) {
       Animated.timing(this._reduced, {
         duration: 300,
-        toValue: 140,
+        toValue: Dimensions.get('window').width - 35,
       }).start();
     } else {
       Animated.timing(this._reduced, {
@@ -49,10 +49,10 @@ export default class MiniPlayer extends React.Component {
     } = this.props;
     const { active } = this.state;
     this._onSeek = this.seek.bind(this);
-    let reduceArrow = 'ios-arrow-down';
-    if (!active) reduceArrow = 'ios-arrow-up';
+    let reduceArrow = 'ios-arrow-back';
+    if (active) reduceArrow = 'ios-arrow-forward';
     return (
-      <Animated.View style={[styles.mainContainer, { transform: [{ translateY: this._reduced }] }]}>
+      <Animated.View style={[styles.mainContainer, { transform: [{ translateX: this._reduced }] }]}>
         <TouchableOpacity
           style={[styles.reduceButton, Typography.iconWrapper]}
           onPress={this.onPressReduceButton}
@@ -122,24 +122,25 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    flexDirection: 'column',
+    flexDirection: 'row',
   },
   reduceButton: {
-    width: 70,
-    height: 35,
+    width: 35,
+    height: 70,
     backgroundColor: Colors.miniplayer,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
     borderColor: Colors.lightGreen,
-    borderTopWidth: 1,
-    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderBottomWidth: 1,
   },
   mainTouchable: {
     height: 140,
+    width: Dimensions.get('window').width - 35,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.miniplayer,
     borderColor: Colors.lightGreen,
-    width: '100%',
     flexDirection: 'column',
   },
   coverContainer: {
