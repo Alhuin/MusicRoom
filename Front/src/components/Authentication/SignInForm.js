@@ -84,6 +84,7 @@ export default class SignInForm extends React.Component {
           style={styles.inputBox}
           placeholder="Mot de passe"
           secureTextEntry
+          autoCapitalize="none"
         />
         <View
           style={styles.submitButton}

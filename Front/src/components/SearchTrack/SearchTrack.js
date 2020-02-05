@@ -71,6 +71,7 @@ export default class SearchTrack extends React.Component {
           updateSearchedText={this.updateSearchedText}
           searchTracks={this.searchTracks}
           autoSearch={false}
+          type="add"
         />
         <TrackListInSearch
           tracks={tracks}

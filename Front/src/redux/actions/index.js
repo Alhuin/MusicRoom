@@ -1,7 +1,7 @@
 import {
   CHANGE_TRACK, CHANGE_PLAYLIST, SET_TIME, SET_TOTAL_LENGTH, ADMIN, SET_SOCKET,
   SET_DURATION, PAUSED, SET_AUDIO_ELEMENT, IS_CHANGING, SET_CURRENT_POSITION, USER_CHANGED,
-  SHOULD_UPDATE_PLAYLIST, LOG_OUT, CHANGE_PLAYLIST_TYPE, SET_NEXT_INDEX,
+  SHOULD_UPDATE_PLAYLIST, LOG_OUT, CHANGE_PLAYLIST_TYPE, SET_NEXT_INDEX, SET_PLAYER_OPEN,
 } from './types';
 
 export function changeTrack(payload) {
@@ -66,4 +66,8 @@ export function logOut(payload) {
 
 export function setNextIndex(payload) {
   return ({ type: SET_NEXT_INDEX, payload });
+}
+
+export function setPlayerOpen(payload) {
+  return ({ type: SET_PLAYER_OPEN, payload });
 }

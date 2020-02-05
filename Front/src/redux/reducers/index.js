@@ -10,14 +10,15 @@ const appReducer = combineReducers({
   playerReducer,
 });
 
-const initialState = appReducer({}, {});
+// const initialState = appReducer({}, {});
 
 // Catch logOut action to reinitialise state
 const rootReducer = (state, action) => {
+  let newState = state;
   if (action.type === 'LOG_OUT') {
-    return appReducer(initialState, action);
+    newState = undefined;
   }
-  return appReducer(state, action);
+  return appReducer(newState, action);
 };
 
 export default rootReducer;

@@ -8,9 +8,10 @@ import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
   isEditor, moveTrackOrder, getEditRestriction, getPlaylistName, deleteTrackFromPlaylistRight,
-  deleteTrackFromPlaylist, getNextRadioTrack,
+  deleteTrackFromPlaylist, getNextRadioTrack, setNowPlaying, getNowPlaying,
 } from '../../API/BackApi';
 import TrackListInPlaylist from '../containers/TrackListInPlaylist';
+import AddFloatingButton from '../containers/AddFloatingButton';
 import { Colors, Typography, Buttons } from '../styles';
 
 class Playlist extends React.Component {
@@ -28,6 +29,7 @@ class Playlist extends React.Component {
       playlistLaunched: false,
       pos: 0,
       appState: AppState.currentState,
+      nowPlaying: null,
     };
 
     // this.onRefresh = this._onRefresh.bind(this);
@@ -45,6 +47,7 @@ class Playlist extends React.Component {
     props.socket.on('playlistEnd', () => {
       console.log('playlist End recieved');
       if (this._isMounted) {
+        console.log('E');
         this.setState({ playlistLaunched: false });
       }
     });
@@ -73,27 +76,29 @@ class Playlist extends React.Component {
       socket.emit('userLeavedPlaylist', playlistId);
     });
 
+    getNowPlaying(playlistId)
+      .then((data) => {
+        if (data !== null) {
+          const { nowPlaying } = this.state;
+          if (nowPlaying !== data.nowPlaying) {
+            this.setState({ nowPlaying: data.nowPlaying });
+          }
+        }
+      })
+      .catch(error => console.log(error));
+
     // Follow Appstate changes
     AppState.addEventListener('change', this._handleAppStateChange);
 
     this.isAdminAndIsEditor();
     this.getName();
     this.updateMyVotes()
-      .then(() => {
-        this.updateTracks(roomType, playlistId)
-          .then(res => console.log(res))
-          .catch((error) => {
-            console.log(error);
-          });
+      .then((votes) => {
+        this.updateTracks(roomType, playlistId, votes)
+          .then(({ tracks, myVotes }) => this.setState({ tracks, myVotes }))
+          .catch(error => console.log(error));
       })
       .catch(error => console.log(error));
-    getNextTrackByVote(playlistId)
-      .then((track) => {
-        this.setState(track);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   componentWillUnmount(): void {
@@ -107,7 +112,6 @@ class Playlist extends React.Component {
   _handleAppStateChange = (nextAppState) => {
     const { appState } = this.state;
     if (appState.match(/inactive|background/) && nextAppState === 'active') {
-      console.log(this.props);
       const { socket, navigation } = this.props;
       const { playlistId } = navigation.state.params;
 
@@ -115,6 +119,7 @@ class Playlist extends React.Component {
       console.log(`emited userJoindedPlaylist ${playlistId}`);
       this._onRefresh();
     }
+    console.log('F');
     this.setState({ appState: nextAppState });
   };
 
@@ -140,44 +145,39 @@ class Playlist extends React.Component {
       const playlistId = navigation.getParam('playlistId');
       this.isAdminAndIsEditor();
       this.getName();
+      getNowPlaying(playlistId)
+        .then((data) => {
+          if (data !== null) {
+            this.setState({ nowPlaying: data.nowPlaying });
+          }
+        })
+        .catch(error => console.log(error));
       if (roomType === 'party') {
         this.updateMyVotes()
-          .then(() => {
-            this.updateTracks(roomType, playlistId)
-              .then()
-              .catch((error) => {
-                console.error(error);
-              });
+          .then((votes) => {
+            this.updateTracks(roomType, playlistId, votes)
+              .then(({ tracks, myVotes }) => this.setState({ tracks, myVotes }))
+              .catch(error => console.log(error));
           })
-          .catch((error) => {
-            console.error(error);
-          });
+          .catch(error => console.log(error));
       } else if (roomType === 'radio') {
-        this.updateTracks(roomType, playlistId)
-          .then()
-          .catch((error) => {
-            console.error(error);
-          });
+        this.updateTracks(roomType, playlistId, null)
+          .then(({ tracks }) => this.setState({ tracks }))
+          .catch(error => console.log(error));
       }
     }
   };
 
   setModalVisible = () => {
     const { modalVisible } = this.state;
-    const visible = !modalVisible;
-    this.setState({ modalVisible: visible });
+    console.log('H');
+    this.setState({ modalVisible: !modalVisible });
   };
 
-  updateTracks = (roomType, playlistId) => new Promise((resolve, reject) => {
+  updateTracks = (roomType, playlistId, votes) => new Promise((resolve, reject) => {
     getMusicsByVote(playlistId, roomType)
-      .then((response) => {
-        this.setState({ tracks: response });
-        resolve(true);
-      })
-      .catch((error) => {
-        console.error(error);
-        reject(error);
-      });
+      .then(response => resolve({ tracks: response, myVotes: votes }))
+      .catch(error => reject(error));
   });
 
   updateMyVotes = () => new Promise((resolve, reject) => {
@@ -185,74 +185,62 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     const userId = loggedUser._id;
     getMyVotesInPlaylist(userId, playlistId)
-      .then((votes) => {
-        this.setState({ myVotes: votes });
-        resolve('true');
-      })
-      .catch((error) => {
-        console.error(error);
-        reject(error);
-      });
+      .then(votes => resolve(votes))
+      .catch(error => reject(error));
   });
 
   isAdminAndIsEditor = () => {
     const { navigation, loggedUser } = this.props;
     const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');
+    let admin = false;
+
     isAdmin(userId, playlistId)
       .then((response) => {
         if (response === true) {
-          this.setState({ admin: true });
+          admin = true;
         }
-        this._isEditor();
+        this._isEditor(admin);
       })
       .catch((error) => {
+        this._isEditor(false);
         console.error(error);
       });
   };
 
-  _isEditor = () => {
+  _isEditor = (admin) => {
     const { navigation, loggedUser } = this.props;
     const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');
+    let pos = 0;
     getEditRestriction(playlistId)
       .then((data) => {
         if (data === 'EVENT_RESTRICTED') {
           navigator.geolocation.getCurrentPosition(
             (position) => {
-              this.setState({ pos: position });
-              isEditor(playlistId, userId, position)
-                .then((response) => {
-                  if (response === true) {
-                    this.setState({ editor: true });
-                  } else {
-                    this.setState({ editor: false });
-                  }
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-            },
-            error => Alert.alert(
-              `${error.message}\n Position introuvable.`,
-            ),
+              pos = position;
+            }, error => Alert.alert(`${error.message}\n Position introuvable.`),
             { enableHighAccuracy: false, timeout: 10000 },
           );
-        } else {
-          isEditor(playlistId, userId, 0)
-            .then((response) => {
-              if (response === true) {
-                this.setState({ editor: true });
-              } else {
-                this.setState({ editor: false });
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
         }
+        isEditor(playlistId, userId, pos)
+          .then((response) => {
+            if (response === true) {
+              console.log('C');
+              this.setState({ editor: true, admin, pos });
+            } else {
+              console.log('D');
+              this.setState({ editor: false, admin, pos });
+            }
+          })
+          .catch((error) => {
+            console.log('B');
+            this.setState({ editor: false, admin, pos });
+            console.error(error);
+          });
       })
       .catch((error) => {
+        this.setState({ admin });
         console.error(error);
       });
   };
@@ -262,12 +250,14 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     getPlaylistName(playlistId)
       .then((name) => {
+        console.log('K');
         this.setState({ name });
       })
       .catch(error => console.log(error));
   };
 
   updatePlaying = (playing) => {
+    console.log('L');
     this.setState({ playing });
   };
 
@@ -277,6 +267,7 @@ class Playlist extends React.Component {
       tracks = tracks.filter(track => track.title.search(new RegExp(text, 'i')) > -1
         || track.artist.search(new RegExp(text, 'i')) > -1);
     }
+    console.log('M');
     this.setState({ tracks });
   };
 
@@ -299,20 +290,18 @@ class Playlist extends React.Component {
       setNextIndex,
     } = this.props;
 
-    console.log('playlistType', playlistType);
     if (playlistType === 'party') {
       if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
-        console.log('onForward : playlist already launched, del + nextTrack');
         deleteTrackFromPlaylist(track.id, playlistId)
           .then(() => {
-            socket.emit('deleteMusic', playlistId);
+            // socket.emit('deleteMusic', playlistId);
             this._nextTrackByVote(playlistId);
           })
           .catch(error => console.log(error));
       } else {
-        console.log('onForward : playlist not launched yet, just nextTrack');
         this._nextTrackByVote(playlistId);
       }
+      socket.emit('musicChanged', playlistId);
     } else {
       this._nextRadioTrack(playlistId, nextIndex);
       setNextIndex(-1);
@@ -333,14 +322,13 @@ class Playlist extends React.Component {
     getNextRadioTrack(playlistId, currentTrackId, nextIndex)
       .then((nextTrack) => {
         changing(true);
-        console.log(nextTrack);
         setTimeout(() => {
           setCurrentPosition(0);
           setTotalLength(1);
           changing(false);
           changeTrack(nextTrack);
           setNextIndex(-1);
-          this._setBackGroundTrack(nextTrack);
+          this._setBackGroundTrack(playlistId, nextTrack);
         });
       })
       .catch(error => console.log(error));
@@ -368,7 +356,7 @@ class Playlist extends React.Component {
             setTotalLength(1);
             changing(false);
             changeTrack(nextTrack);
-            this._setBackGroundTrack(nextTrack);
+            this._setBackGroundTrack(playlistId, nextTrack);
           }, 0);
         } else { // playlist end reached
           MusicControl.resetNowPlaying();
@@ -383,55 +371,72 @@ class Playlist extends React.Component {
       .catch(error => console.log(error));
   };
 
-  _setBackGroundTrack = (backgroundTrack) => {
-    const { paused, isPaused, playlistType } = this.props;
+  _setBackGroundTrack = (playlistId, backgroundTrack) => {
+    setNowPlaying(playlistId, backgroundTrack.id)
+      .then(() => {
+        const {
+          paused,
+          isPaused,
+          playlistType,
+          socket,
+        } = this.props;
 
-    // Enable buttons
-    MusicControl.enableBackgroundMode(true);
-    MusicControl.enableControl('play', true);
-    MusicControl.enableControl('pause', true);
-    MusicControl.enableControl('nextTrack', true);
-    MusicControl.enableControl('previousTrack', playlistType === 'radio');
-    MusicControl.enableControl('closeNotification', true, { when: 'always' });
+        socket.emit('musicChanged', playlistId);
+        // Enable buttons
+        MusicControl.enableBackgroundMode(true);
+        MusicControl.enableControl('play', true);
+        MusicControl.enableControl('pause', true);
+        MusicControl.enableControl('nextTrack', true);
+        MusicControl.enableControl('previousTrack', playlistType === 'radio');
+        MusicControl.enableControl('closeNotification', true, { when: 'always' });
 
-    console.log('isPaused', isPaused);
-    MusicControl.updatePlayback({
-      state: isPaused === true ? MusicControl.STATE_PAUSED : MusicControl.STATE_PLAYING,
-    });
+        MusicControl.updatePlayback({
+          state: isPaused === true ? MusicControl.STATE_PAUSED : MusicControl.STATE_PLAYING,
+        });
 
-    // Background events
-    MusicControl.on('play', () => {
-      MusicControl.updatePlayback({
-        state: MusicControl.STATE_PLAYING,
-      });
-      paused(false);
-    });
-    MusicControl.on('pause', () => {
-      MusicControl.updatePlayback({
-        state: MusicControl.STATE_PAUSED,
-      });
-      paused(true);
-    });
-    MusicControl.on('nextTrack', () => this._onForward());
+        // Background events
+        MusicControl.on('play', () => {
+          MusicControl.updatePlayback({
+            state: MusicControl.STATE_PLAYING,
+          });
+          paused(false);
+        });
+        MusicControl.on('pause', () => {
+          MusicControl.updatePlayback({
+            state: MusicControl.STATE_PAUSED,
+          });
+          paused(true);
+        });
+        MusicControl.on('nextTrack', () => this._onForward());
 
-    // Displayed infos
-    MusicControl.setNowPlaying({
-      title: backgroundTrack.title,
-      artwork: backgroundTrack.albumArtUrl,
-      artist: backgroundTrack.artist,
-      album: backgroundTrack.album,
-    });
+        // Displayed infos
+        MusicControl.setNowPlaying({
+          title: backgroundTrack.title,
+          artwork: backgroundTrack.albumArtUrl,
+          artist: backgroundTrack.artist,
+          album: backgroundTrack.album,
+        });
+      })
+      .catch(error => console.log(error));
   };
 
   render() {
+    console.log('--------------------------IN RENDER PLAYLIST-----------------------------------');
     const {
       tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched, pos,
-      name,
+      name, nowPlaying,
     } = this.state;
     const {
-      navigation, changeTrack, changePlaylist, loggedUser, changePlaylistType,
+      navigation,
+      changeTrack,
+      changePlaylist,
+      loggedUser,
+      changePlaylistType,
+      setPlayerOpen,
+      playlistId,
+      playerOpen,
     } = this.props;
-    const playlistId = navigation.getParam('playlistId');
+    const paramPlaylistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
@@ -447,36 +452,55 @@ class Playlist extends React.Component {
               paused,
             } = this.props;
             if (roomType === 'party') {
-              getNextTrackByVote(playlistId)
-                .then((nextTrack) => {
-                  paused(true);
-                  if (Object.keys(nextTrack).length) {
-                    changing(true);
-                    setTimeout(() => {
-                      setCurrentPosition(0);
-                      setTotalLength(1);
-                      changing(false);
-                      changeTrack(nextTrack);
-                      changePlaylist(playlistId);
-                      changePlaylistType(roomType);
-                      this._setBackGroundTrack(nextTrack);
-                      this.setState({ playlistLaunched: true });
-                    }, 0);
-                  } else {
-                    MusicControl.resetNowPlaying();
-                    changeTrack(null);
-                    changePlaylist('');
-                    changePlaylistType('');
-                    setTotalLength(1);
-                    setCurrentPosition(0);
-                  }
+              setNowPlaying(playlistId, null) // reset previous nowPlaying
+                .then(() => {
+                  getNextTrackByVote(paramPlaylistId)
+                    .then((nextTrack) => {
+                      paused(true);
+                      if (Object.keys(nextTrack).length) {
+                        changing(true);
+                        setTimeout(() => {
+                          setCurrentPosition(0);
+                          setTotalLength(1);
+                          changing(false);
+                          changeTrack(nextTrack);
+                          changePlaylist(paramPlaylistId);
+                          changePlaylistType(roomType);
+                          console.log('N');
+                          this.setState({ playlistLaunched: true });
+                          this._setBackGroundTrack(paramPlaylistId, nextTrack);
+                          if (!playerOpen) {
+                            setPlayerOpen(true);
+                          }
+                        }, 0);
+                      } else {
+                        if (playerOpen) {
+                          setPlayerOpen(false);
+                        }
+                        MusicControl.resetNowPlaying();
+                        changeTrack(null);
+                        changePlaylist('');
+                        changePlaylistType('');
+                        setTotalLength(1);
+                        setCurrentPosition(0);
+                      }
+                    })
+                    .catch(error => console.log(error));
                 })
                 .catch(error => console.log(error));
             } else {
-              this._nextRadioTrack(playlistId, 0);
-              this.setState({ playlistLaunched: true });
-              changePlaylist(playlistId);
-              changePlaylistType(roomType);
+              setNowPlaying(playlistId, null) // reset previous nowPlaying
+                .then(() => {
+                  console.log('O');
+                  this.setState({ playlistLaunched: true });
+                  this._nextRadioTrack(paramPlaylistId, 0);
+                  if (!playerOpen) {
+                    setPlayerOpen(true);
+                  }
+                  changePlaylist(paramPlaylistId);
+                  changePlaylistType(roomType);
+                })
+                .catch(error => console.log(error));
             }
           }}
         >
@@ -484,6 +508,7 @@ class Playlist extends React.Component {
         </TouchableOpacity>
       )
     );
+
     return (
       <View style={styles.main_container}>
         <View style={styles.screenHeader}>
@@ -491,7 +516,7 @@ class Playlist extends React.Component {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('PlaylistSettings', {
-                  playlistId, isAdmin: admin, authorId, roomType, name,
+                  playlistId: paramPlaylistId, isAdmin: admin, authorId, roomType, name,
                 });
               }}
               style={Typography.iconWrapper}
@@ -514,8 +539,8 @@ class Playlist extends React.Component {
         <Components.AddMusicModal
           setModalVisible={this.setModalVisible}
           modalVisible={modalVisible}
-          playlistId={playlistId}
-          updateTracks={() => this.updateTracks(roomType, playlistId)}
+          playlistId={paramPlaylistId}
+          updateTracks={() => this.updateTracks(roomType, paramPlaylistId)}
           userId={userId}
           roomType={roomType}
         />
@@ -524,6 +549,7 @@ class Playlist extends React.Component {
             updateSearchedText={null}
             searchTracks={this.searchTracks}
             autoSearch
+            type="search"
           />
         </View>
         <View style={styles.section}>
@@ -531,11 +557,10 @@ class Playlist extends React.Component {
             <TrackListInPlaylist
               tracks={tracks}
               updatePlaying={this.updatePlaying}
-              deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, playlistId, userId)}
+              deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, paramPlaylistId, userId)}
               playing={playing}
-              playlistId={playlistId}
-              updateTracks={() => this.updateTracks(roomType, playlistId)}
-              updateMyVotes={this.updateMyVotes}
+              nowPlaying={nowPlaying}
+              playlistId={paramPlaylistId}
               refreshing={refreshing}
               onRefresh={this._onRefresh}
               userId={userId}
@@ -546,7 +571,7 @@ class Playlist extends React.Component {
               pos={pos}
               admin={admin}
               onMoveEnd={(id, newPosition) => {
-                moveTrackOrder(playlistId, id, newPosition)
+                moveTrackOrder(paramPlaylistId, id, newPosition)
                   .then(() => {
                     this._onRefresh();
                   })
@@ -557,7 +582,7 @@ class Playlist extends React.Component {
             />
           </View>
         </View>
-        <Components.AddFloatingButton
+        <AddFloatingButton
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
         />

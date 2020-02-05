@@ -844,7 +844,51 @@ function getPrevRadioTrack(req, res) {
   }
 }
 
+function setNowPlaying(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+      && (utils.isValidId(req.body.trackId) || req.body.trackId === null)) {
+    playlistService.setNowPlaying(
+      req.body.playlistId,
+      req.body.trackId,
+    )
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function getNowPlaying(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getNowPlaying(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
+  setNowPlaying,
+  getNowPlaying,
   getPlaylistById,
   getPlaylists,
   getPlaylistsFilteredByRoom,

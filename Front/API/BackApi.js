@@ -7,6 +7,7 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
                     Users & Login
  */
 
+
 function login(userName, password) {
   console.log('login');
   console.log(`${SERVER}:${EXPRESS_PORT}`);
@@ -51,6 +52,56 @@ function getUserByIdByPreferences(userId, requesterId) {
           resolve(data);
         } else if (response.status === 404) {
           reject(new CustomError('GetUser', data.msg, 404));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function setNowPlaying(playlistId, trackId) {
+  return new Promise((resolve, reject) => {
+    if (playlistId === '') {
+      resolve({
+        status: 200,
+        data: { msg: 'No previous playlist' },
+      });
+    } else {
+      fetch(`${api}/playlists/nowPlaying`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ playlistId, trackId }),
+      })
+        .then(async (response) => {
+          const data = await response.json();
+          if (response.status === 200) {
+            resolve(data);
+          } else {
+            reject(new CustomError('setNowPlaying', data.msg, response.status));
+          }
+        })
+        .catch(error => reject(error));
+    }
+  });
+}
+
+function getNowPlaying(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/nowPlaying/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getNowPlaying', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -1216,6 +1267,8 @@ function findUserByidSocial(DeezerId, SocialType) {
 
 
 export {
+  setNowPlaying,
+  getNowPlaying,
   login,
   addUser,
   updateUser,

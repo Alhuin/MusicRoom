@@ -93,6 +93,7 @@ export default class CustomForm extends React.Component {
           style={styles.inputBox}
           placeholder="Mot de passe"
           secureTextEntry
+          autoCapitalize="none"
         />
         <TextInput
           onChangeText={this.updateConfirmPassword}
@@ -100,6 +101,7 @@ export default class CustomForm extends React.Component {
           secureTextEntry
           style={styles.inputBox}
           placeholder="Confirmer le mot de passe"
+          autoCapitalize="none"
         />
         <TextInput
           onChangeText={this.updateName}

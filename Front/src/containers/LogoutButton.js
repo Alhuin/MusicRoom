@@ -4,6 +4,7 @@ import LogoutButton from '../components/Home/LogoutButton';
 
 const mapStateToProps = state => ({
   socket: state.playerReducer.socket,
+  playlistId: state.playerReducer.playlistId,
 });
 
 const mapDispatchToProps = dispatch => ({

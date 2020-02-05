@@ -16,6 +16,7 @@ router.get('/', (req, res) => {
  *    of the arguments and then redirects to a service which handles the action.
  */
 
+
 /*             Login                 */
 
 router.post('/login', loginController.login);
@@ -38,6 +39,7 @@ router.post('/users/deleteFriend', userController.deleteFriend);
 router.post('/users/newPass/', userController.updatePassword);
 
 router.delete('/users/:userId', userController.deleteUserById);
+
 
 // Mail Tokens
 
@@ -64,6 +66,7 @@ router.delete('/musics/:musicId', musicController.deleteMusicById);
 
 router.get('/playlists', playlistController.getPlaylists);
 router.get('/playlists/name/:playlistId', playlistController.getPlaylistName);
+router.get('/playlists/nowPlaying/:playlistId', playlistController.getNowPlaying);
 router.get('/playlists/users/:playlistId', playlistController.getUsersByPlaylistId);
 router.get('/playlists/admins/:playlistId', playlistController.getAdminsByPlaylistId);
 router.get('/playlists/bans/:playlistId', playlistController.getBansByPlaylistId);
@@ -78,6 +81,7 @@ router.get('/playlists/nextPartyTrack/:playlistId', playlistController.getNextTr
 router.get('/playlists/:roomType', playlistController.getPlaylistsFilteredByRoom);
 router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 
+router.post('/playlists/nowPlaying', playlistController.setNowPlaying);
 router.post('/playlists/filtered', playlistController.getPlaylistsFiltered);
 router.post('/playlists/setDelegatedPlayerAdmin', playlistController.setDelegatedPlayerAdmin);
 router.post('/playlists/admins/downgrade', playlistController.adminInPlaylistDowngrade);
