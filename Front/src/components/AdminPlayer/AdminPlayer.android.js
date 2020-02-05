@@ -16,14 +16,14 @@ export default class AdminPlayer extends Component {
   constructor(props) {
     super(props);
 
-    // this.onForward = this._onForward.bind(this);
+    this.onForward = this._onForward.bind(this);
     this.setBackGroundTrack = this._setBackGroundTrack.bind(this);
     this.nextTrackByVote = this._nextTrackByVote.bind(this);
     this.nextRadioTrack = this._nextRadioTrack.bind(this);
   }
 
   componentWillUnmount(): void {
-    // this.onForward.remove();
+    this.onForward.remove();
     this.setBackGroundTrack.remove();
     this.nextTrackByVote.remove();
     this.nextRadioTrack.remove();
@@ -214,32 +214,22 @@ export default class AdminPlayer extends Component {
     }
 
     return (
-      <View>
+      <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
         {loggedUser !== null && track !== null && playlistId !== ''
         && (
-          <View
-            style={{
-              position: 'absolute', width: '100%', height: '100%',
-            }}
-          >
+          <>
             <AudioPlayer onForward={this._onForward} />
             <MiniPlayer
               handlePress={() => this.player.open()}
               onPressPlay={() => {
-                MusicControl.updatePlayback({
-                  state: MusicControl.STATE_PLAYING,
-                });
                 paused(false);
               }}
               onPressPause={() => {
-                MusicControl.updatePlayback({
-                  state: MusicControl.STATE_PAUSED,
-                });
                 paused(true);
               }}
               cover={nowPlayingCover}
               details={nowPlayingDetails}
-              onForward={() => this._onForward()}
+              onForward={() => this.onForward()}
             />
             <Modal
               style={styles.playerModal}
@@ -250,7 +240,7 @@ export default class AdminPlayer extends Component {
             >
               <PlayerDetails track={track} playlistId={playlistId} onForward={this._onForward} />
             </Modal>
-          </View>
+          </>
         )}
       </View>
     );

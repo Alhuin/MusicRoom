@@ -469,7 +469,7 @@ class AppSettings extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                  Connexion a Google
+                  Connexion Google
                 </Text>
               </TouchableOpacity>
             </View>
@@ -482,7 +482,7 @@ class AppSettings extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                  Connexion a Deezer
+                  Connexion Deezer
                 </Text>
               </TouchableOpacity>
             </View>
@@ -501,7 +501,7 @@ class AppSettings extends React.Component {
               >
                 <Text style={Buttons.text}>
                   Mode
-                  { premium ? ' Premium' : ' Freemium' }
+                  { !premium ? ' Premium' : ' Freemium' }
                 </Text>
               </TouchableOpacity>
             </View>

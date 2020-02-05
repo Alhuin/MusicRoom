@@ -444,7 +444,7 @@ class Playlist extends React.Component {
     let forEditor = (null);
     if (editor) {
       forEditor = (
-        <Components.AddFloatingButton
+        <AddFloatingButton
           handlePress={() => this.setModalVisible(true)}
           icon="addMusic"
         />

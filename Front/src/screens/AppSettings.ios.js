@@ -14,7 +14,7 @@ import {
   Colors, Typography, Cards, Buttons,
 } from '../styles';
 
-class AppSettingsAndroid extends React.Component {
+class AppSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -93,7 +93,7 @@ class AppSettingsAndroid extends React.Component {
       console.log('Erreur : entrée vide');
     } else {
       updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
-        visibilityTable)
+        visibilityTable, '', '')
         .then((newUser) => {
           userChanged(newUser);
           Alert.alert('Les paramètres ont bien été modifiés');
@@ -528,4 +528,4 @@ let styles = StyleSheet.create({
   },
 });
 
-export default AppSettingsAndroid;
+export default AppSettings;

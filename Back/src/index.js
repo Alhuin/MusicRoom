@@ -176,6 +176,7 @@ connectDb().then(async () => {
     email: 'julien.janinre@gmail.com',
     phoneNumber: '00',
     isVerified: true,
+    premium: false,
   });
 
   user1.save();
@@ -188,6 +189,7 @@ connectDb().then(async () => {
     email: 'ju@gmail.com',
     phoneNumber: '00',
     isVerified: true,
+    premium: false,
   });
   user2.save();
 
