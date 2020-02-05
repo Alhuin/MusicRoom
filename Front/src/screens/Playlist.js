@@ -567,7 +567,8 @@ class Playlist extends React.Component {
               <TrackListInPlaylist
                 tracks={tracks}
                 updatePlaying={this.updatePlaying}
-                deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, paramPlaylistId, userId)}
+                deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, paramPlaylistId,
+                  userId)}
                 playing={playing}
                 nowPlaying={nowPlaying}
                 playlistId={paramPlaylistId}

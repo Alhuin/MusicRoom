@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, Text, View, TextInput, Switch, Alert, TouchableOpacity, ScrollView,
+  Modal, StyleSheet, Text, View, TextInput, Switch, Alert, TouchableOpacity, ScrollView, Platform,
 } from 'react-native';
 import { addPlaylist } from '../../../API/BackApi';
 import DatePickerModal from './DatePickerModal';
 import { Colors, Buttons, Typography } from '../../styles';
+import {Icon} from "native-base";
 
 export default class AddPlaylistModal extends React.Component {
   state = {
@@ -176,6 +177,19 @@ export default class AddPlaylistModal extends React.Component {
       );
     }
 
+    let returnIconForiOS = (null);
+    if (Platform.OS === 'ios') {
+      returnIconForiOS = (
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisible();
+          }}
+          style={styles.iconWrapper}
+        >
+          <Icon name="ios-arrow-back" style={Typography.icon} />
+        </TouchableOpacity>
+      );
+    }
     return (
       <Modal
         animationType="fade"
@@ -258,6 +272,7 @@ export default class AddPlaylistModal extends React.Component {
             </View>
           </View>
         </ScrollView>
+        {returnIconForiOS}
       </Modal>
     );
   }
@@ -274,5 +289,11 @@ const styles = StyleSheet.create({
   },
   textInput: {
     ...Typography.textInput,
+  },
+  iconWrapper: {
+    ...Typography.iconWrapper,
+    position: 'absolute',
+    top: 12,
+    left: 12,
   },
 });

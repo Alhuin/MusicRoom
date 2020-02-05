@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, TouchableOpacity, Text, View,
+  Modal, StyleSheet, TouchableOpacity, Text, View, Platform,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import { Colors, Buttons } from '../../styles';
+import {Colors, Buttons, Typography} from '../../styles';
+import {Icon} from "native-base";
 
 export default class DatePickerModal extends React.Component {
   state = {
@@ -28,6 +29,19 @@ export default class DatePickerModal extends React.Component {
     let usedDate = date;
     if (initialDate !== undefined) {
       usedDate = initialDate;
+    }
+    let returnIconForiOS = (null);
+    if (Platform.OS === 'ios') {
+      returnIconForiOS = (
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisible();
+          }}
+          style={styles.iconWrapper}
+        >
+          <Icon name="ios-arrow-back" style={Typography.icon} />
+        </TouchableOpacity>
+      );
     }
     return (
       <Modal
@@ -57,6 +71,7 @@ export default class DatePickerModal extends React.Component {
             <Text style={Buttons.text}>Confirmer</Text>
           </TouchableOpacity>
         </View>
+        {returnIconForiOS}
       </Modal>
     );
   }
@@ -69,5 +84,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
+  },
+  iconWrapper: {
+    ...Typography.iconWrapper,
+    position: 'absolute',
+    top: 12,
+    left: 12,
   },
 });
