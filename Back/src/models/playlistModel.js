@@ -83,6 +83,10 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     default: 'ALL', // OR 'USER_RESTRICTED' OR 'ADMIN_RESTRICTED' OR 'EVENT_RESTRICTED' if it's a party room
   },
+  nowPlaying: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
+  },
 });
 playlistSchema.plugin(uniqueValidator);
 

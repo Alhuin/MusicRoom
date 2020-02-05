@@ -100,6 +100,7 @@ export default class SignUpForm extends React.Component {
             placeholder="Mot de passe"
             secureTextEntry
             placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
           />
           <TextInput
             onChangeText={this.updateConfirmPassword}
@@ -107,6 +108,7 @@ export default class SignUpForm extends React.Component {
             style={Typography.textInput}
             placeholder="Confirmer le mot de passe"
             placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
           />
           <TextInput
             onChangeText={this.updateName}
@@ -114,6 +116,7 @@ export default class SignUpForm extends React.Component {
             style={Typography.textInput}
             placeholder="Nom"
             placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
           />
           <TextInput
             onChangeText={this.updateFamilyName}
@@ -121,6 +124,7 @@ export default class SignUpForm extends React.Component {
             style={Typography.textInput}
             placeholder="Nom de famille"
             placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
           />
           <TextInput
             onChangeText={this.updateEmail}
@@ -130,6 +134,7 @@ export default class SignUpForm extends React.Component {
             style={Typography.textInput}
             placeholder="Email"
             placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
           />
           <View
             style={{

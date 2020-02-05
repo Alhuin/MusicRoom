@@ -3,7 +3,7 @@ import Inscription from '../screens/Inscription';
 import * as actions from '../redux/actions';
 
 const mapStateToProps = state => ({
-  socket: state.authReducer.socket,
+  socket: state.playerReducer.socket,
 });
 
 const mapDispatchToProps = dispatch => ({

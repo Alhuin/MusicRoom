@@ -10,7 +10,9 @@ import {
   IS_CHANGING,
   SET_CURRENT_POSITION,
   SHOULD_UPDATE_PLAYLIST,
-  CHANGE_PLAYLIST_TYPE, SET_NEXT_INDEX,
+  CHANGE_PLAYLIST_TYPE,
+  SET_NEXT_INDEX,
+  SET_PLAYER_OPEN,
 } from '../actions/types';
 
 const initialState = {
@@ -25,6 +27,7 @@ const initialState = {
   socket: null,
   shouldUpdatePlaylist: false,
   nextIndex: -1,
+  playerOpen: false,
 };
 
 const playerReducer = (state = initialState, action) => {
@@ -81,6 +84,10 @@ const playerReducer = (state = initialState, action) => {
     case SET_NEXT_INDEX:
       return {
         ...state, nextIndex: action.payload,
+      };
+    case SET_PLAYER_OPEN:
+      return {
+        ...state, playerOpen: action.payload,
       };
     default:
       return state;

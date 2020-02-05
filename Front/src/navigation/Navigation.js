@@ -279,13 +279,13 @@ const RootSwitch = createSwitchNavigator(
     Loading: {
       screen: Loading,
     },
-    app: {
-      screen: MainNavigator,
-      path: 'home',
-    },
     auth: {
       screen: AuthNavigator,
       path: 'auth',
+    },
+    app: {
+      screen: MainNavigator,
+      path: 'home',
     },
   },
 );

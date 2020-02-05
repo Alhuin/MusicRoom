@@ -77,6 +77,11 @@ io.on('connection', (socket) => {
     io.sockets.in(playlistId).emit('deleted', trackId, nextIndex);
   });
 
+  socket.on('musicChanged', (playlistId) => {
+    console.log(`[Socket Server] : music changed, Emitting refresh for playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('refresh');
+  });
+
   socket.on('voteMusic', (playlistId) => {
     console.log(`[Socket Server] : music voted, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');

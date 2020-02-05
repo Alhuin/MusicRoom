@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
   playlistType: state.playerReducer.playlistType,
   isPaused: state.playerReducer.isPaused,
   nextIndex: state.playerReducer.nextIndex,
+  playerOpen: state.playerReducer.playerOpen,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentPosition: payload => dispatch(actions.setCurrentPosition(payload)),
   paused: payload => dispatch(actions.paused(payload)),
   setNextIndex: payload => dispatch(actions.setNextIndex(payload)),
+  setPlayerOpen: payload => dispatch(actions.setPlayerOpen(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist);

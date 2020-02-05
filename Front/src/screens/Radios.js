@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import Components from '../components';
+import AddFloatingButton from '../containers/AddFloatingButton';
 import { getPlaylistsFiltered } from '../../API/BackApi';
 import { Colors } from '../styles';
 
@@ -134,7 +135,7 @@ class Radios extends React.Component {
               userId={loggedUser._id}
             />
           </View>
-          <Components.AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />
+          <AddFloatingButton handlePress={() => this.setModalVisible()} icon="addPlaylist" />
         </View>
       );
     } else {

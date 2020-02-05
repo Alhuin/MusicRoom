@@ -3,6 +3,8 @@ import {
   View, SafeAreaView, TouchableOpacity, Text, StyleSheet,
 } from 'react-native';
 import { DrawerItems } from 'react-navigation';
+import MusicControl from 'react-native-music-control';
+import { setNowPlaying } from '../../../API/BackApi';
 import { Buttons, Colors } from '../../styles';
 
 export default class CustomDrawer extends React.Component {
@@ -12,12 +14,20 @@ export default class CustomDrawer extends React.Component {
       socket,
       navigation,
       logOut,
+      playlistId,
     } = this.props;
 
-    socket.disconnect();
-    setSocket(null);
-    logOut();
-    navigation.navigate('auth');
+    setNowPlaying(playlistId, null)
+      .then(() => {
+        socket.disconnect();
+        setSocket(null);
+        navigation.navigate('auth');
+        logOut();
+        MusicControl.resetNowPlaying();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   render() {

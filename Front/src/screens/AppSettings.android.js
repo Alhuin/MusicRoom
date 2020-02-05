@@ -14,7 +14,7 @@ import {
   Colors, Typography, Cards, Buttons,
 } from '../styles';
 
-class AppSettingsAndroid extends React.Component {
+class AppSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,7 +88,7 @@ class AppSettingsAndroid extends React.Component {
       user, login, name, familyName, email, phoneNumber, preferences, visibilityTable,
     } = this.state;
     if (!(name.length && familyName.length && email.length
-        && login.length && phoneNumber.length)) {
+      && login.length && phoneNumber.length)) {
       Alert.alert('Erreur : entrée vide');
       console.log('Erreur : entrée vide');
     } else {
@@ -140,19 +140,13 @@ class AppSettingsAndroid extends React.Component {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const userInfo = await GoogleSignin.signIn();
-      if (!(name.length && familyName.length && email.length
-          && login.length && phoneNumber.length)) {
-        Alert.alert('Erreur : entrée vide');
-        console.log('Erreur : entrée vide');
-      } else {
-        updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
-          visibilityTable, '', userInfo.user.id)
-          .then((newUser) => {
-            userChanged(newUser);
-            Alert.alert('Votre compte google est maintenant associé');
-          })
-          .catch(error => console.log(error));
-      }
+      updateUser(user._id, login, name, familyName, email, phoneNumber, preferences,
+        visibilityTable, '', userInfo.user.id)
+        .then((newUser) => {
+          userChanged(newUser);
+          Alert.alert('Votre compte google est maintenant associé');
+        })
+        .catch(error => console.log(error));
     } catch (error) {
       console.error(error);
     }
@@ -406,7 +400,7 @@ class AppSettingsAndroid extends React.Component {
             <TouchableOpacity onPress={this.toggleExpanded}>
               <View style={[styles.sectionHeader, { justifyContent: 'space-between', alignItems: 'center' }]}>
                 <Text style={styles.sectionHeaderText}>
-                      Amis
+                  Amis
                 </Text>
                 {collapsibleIcon}
               </View>
@@ -417,52 +411,52 @@ class AppSettingsAndroid extends React.Component {
                   data={friends}
                   keyExtractor={item => item._id.toString()}
                   renderItem={
-                          ({ item }) => {
-                            const friendId = item._id;
-                            const element = (
-                              <View style={styles.card}>
-                                <View
-                                  style={[
-                                    styles.cardContentRow,
-                                    { justifyContent: 'space-between', alignItems: 'center' },
-                                  ]}
-                                >
-                                  <TouchableOpacity
-                                    onPress={() => {
-                                      navigation.navigate('UserProfile', { userProfileId: item._id });
-                                    }}
-                                    style={{ flex: 6 }}
-                                  >
-                                    <Text style={styles.cardHeaderText}>
-                                      {item.name}
-                                    </Text>
-                                  </TouchableOpacity>
-                                  <TouchableOpacity
-                                    onPress={() => {
-                                      deleteFriend(friendId, user._id)
-                                        .then(() => {
-                                          getFriends(user._id)
-                                            .then((newFriends) => {
-                                              this.setState({ friends: newFriends });
-                                            })
-                                            .catch((error) => {
-                                              console.error(error);
-                                            });
-                                        })
-                                        .catch((error) => {
-                                          console.error(error);
-                                        });
-                                    }}
-                                    style={styles.iconWrapper}
-                                  >
-                                    <Icon name="ios-remove" style={styles.icon} />
-                                  </TouchableOpacity>
-                                </View>
-                              </View>
-                            );
-                            return (element);
-                          }
-                        }
+                    ({ item }) => {
+                      const friendId = item._id;
+                      const element = (
+                        <View style={styles.card}>
+                          <View
+                            style={[
+                              styles.cardContentRow,
+                              { justifyContent: 'space-between', alignItems: 'center' },
+                            ]}
+                          >
+                            <TouchableOpacity
+                              onPress={() => {
+                                navigation.navigate('UserProfile', { userProfileId: item._id });
+                              }}
+                              style={{ flex: 6 }}
+                            >
+                              <Text style={styles.cardHeaderText}>
+                                {item.name}
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => {
+                                deleteFriend(friendId, user._id)
+                                  .then(() => {
+                                    getFriends(user._id)
+                                      .then((newFriends) => {
+                                        this.setState({ friends: newFriends });
+                                      })
+                                      .catch((error) => {
+                                        console.error(error);
+                                      });
+                                  })
+                                  .catch((error) => {
+                                    console.error(error);
+                                  });
+                              }}
+                              style={styles.iconWrapper}
+                            >
+                              <Icon name="ios-remove" style={styles.icon} />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      );
+                      return (element);
+                    }
+                  }
                 />
               </Collapsible>
             </View>
@@ -475,7 +469,7 @@ class AppSettingsAndroid extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                      Connexion Google
+                  Connexion a Google
                 </Text>
               </TouchableOpacity>
             </View>
@@ -488,13 +482,13 @@ class AppSettingsAndroid extends React.Component {
                 style={Buttons.largeButton}
               >
                 <Text style={Buttons.text}>
-                      Connexion Deezer
+                  Connexion a Deezer
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
           <Text style={Typography.bodyText}>
-                Votre compte est associé au compte Deezer de :
+            Votre compte est associé au compte Deezer de :
             {' '}
             {DeezerToken || 'Invalide'}
           </Text>
@@ -575,4 +569,4 @@ let styles = StyleSheet.create({
   },
 });
 
-export default AppSettingsAndroid;
+export default AppSettings;

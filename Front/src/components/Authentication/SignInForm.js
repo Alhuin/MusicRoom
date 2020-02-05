@@ -90,6 +90,7 @@ export default class SignInForm extends React.Component {
             placeholder="Mot de passe"
             secureTextEntry
             placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
           />
           <View
             style={{

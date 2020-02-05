@@ -10,25 +10,31 @@ export default class MiniPlayer extends React.Component {
   constructor(props) {
     super(props);
     this._reduced = new Animated.Value(0);
-    this.state = {
-      active: true,
-    };
+  }
+
+  shouldComponentUpdate(nextProps): boolean {
+    const { playerOpen } = nextProps;
+    const { prevPlayerOpen } = this.props;
+
+    if (playerOpen !== prevPlayerOpen) {
+      if (!playerOpen) {
+        Animated.timing(this._reduced, {
+          duration: 300,
+          toValue: 140,
+        }).start();
+      } else {
+        Animated.timing(this._reduced, {
+          duration: 300,
+          toValue: 0,
+        }).start();
+      }
+    }
+    return true;
   }
 
   onPressReduceButton = () => {
-    const { active } = this.state;
-    if (active) {
-      Animated.timing(this._reduced, {
-        duration: 300,
-        toValue: 140,
-      }).start();
-    } else {
-      Animated.timing(this._reduced, {
-        duration: 300,
-        toValue: 0,
-      }).start();
-    }
-    this.setState({ active: !active });
+    const { setPlayerOpen, playerOpen } = this.props;
+    setPlayerOpen(!playerOpen);
   };
 
   seek(time) {
@@ -44,13 +50,12 @@ export default class MiniPlayer extends React.Component {
 
   render() {
     const {
-      handlePress, cover, details, totalLength, onForward,
+      handlePress, cover, details, totalLength, onForward, playerOpen,
       onPressPause, onPressPlay, currentPosition, isPaused, paused,
     } = this.props;
-    const { active } = this.state;
     this._onSeek = this.seek.bind(this);
     let reduceArrow = 'ios-arrow-down';
-    if (active) reduceArrow = 'ios-arrow-up';
+    if (!playerOpen) reduceArrow = 'ios-arrow-up';
     return (
       <Animated.View style={[styles.mainContainer, { transform: [{ translateY: this._reduced }] }]}>
         <TouchableOpacity

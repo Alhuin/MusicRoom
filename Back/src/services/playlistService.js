@@ -1144,7 +1144,51 @@ function getPrevRadioTrack(playlistId, currentTrackId, prevIndex) {
   });
 }
 
+function setNowPlaying(playlistId, trackId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('SetNowPlaying', 'No playlist with this id in database', 404));
+      } else {
+        const newPlaylist = playlist;
+        newPlaylist.nowPlaying = trackId;
+        newPlaylist.save((saveError, playlistWithNowPlaying) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: playlistWithNowPlaying,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+function getNowPlaying(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('GetNowPlaying', 'No playlist with this id in database', 404));
+      } else {
+        resolve({
+          status: 200,
+          data: { nowPlaying: playlist.nowPlaying },
+        });
+      }
+    });
+  });
+}
+
 export default {
+  setNowPlaying,
+  getNowPlaying,
   getPlaylists,
   getPlaylistById,
   getPlaylistsFilteredByRoom,

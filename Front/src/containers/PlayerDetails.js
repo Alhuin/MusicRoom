@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
   totalLength: state.playerReducer.totalLength,
   isPaused: state.playerReducer.isPaused,
   socket: state.playerReducer.socket,
+  playlistType: state.playerReducer.playlistType,
 });
 
 const mapDispatchToProps = dispatch => ({
