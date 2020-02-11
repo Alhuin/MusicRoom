@@ -110,18 +110,24 @@ export default class SignInForm extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
+          <View
             style={styles.forgotPass}
-            onPress={() => this.sendTokensPage('password')}
           >
-            <Text style={Typography.bodyText}>Mot de passe oublié ?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+            <TouchableOpacity
+              onPress={() => this.sendTokensPage('password')}
+            >
+              <Text style={Typography.bodyText}>Mot de passe oublié ?</Text>
+            </TouchableOpacity>
+          </View>
+          <View
             style={styles.forgotPass}
-            onPress={() => this.sendTokensPage('mail')}
           >
-            <Text style={Typography.bodyText}>Compte non vérifié ?</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.sendTokensPage('mail')}
+            >
+              <Text style={Typography.bodyText}>Compte non vérifié ?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
