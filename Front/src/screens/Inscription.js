@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, View, Alert, SafeAreaView,
+  StyleSheet, View, Alert, SafeAreaView, ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
@@ -67,11 +67,7 @@ class Inscription extends React.Component {
 
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
-        <KeyboardAvoidingView
-          style={styles.main_container}
-          behavior={Platform.OS === 'ios' ? 'padding' : null}
-          keyboardVerticalOffset={100}
-        >
+        <ScrollView style={styles.main_container}>
           <View
             style={styles.view}
             showsVerticalScrollIndicator={false}
@@ -101,7 +97,7 @@ class Inscription extends React.Component {
               />
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
       </SafeAreaView>
     );
   }

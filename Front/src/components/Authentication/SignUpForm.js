@@ -134,7 +134,6 @@ export default class SignUpForm extends React.Component {
             style={Typography.textInput}
             placeholder="Email"
             placeholderTextColor={Colors.placeholder}
-            autoCapitalize="none"
           />
           <View
             style={{
