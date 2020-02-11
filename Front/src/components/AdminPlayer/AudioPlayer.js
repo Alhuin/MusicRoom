@@ -10,11 +10,13 @@ export default class AudioPlayer extends Component {
 
     let video = null;
     if (!isChanging && track != null) {
-      // console.log(track.audioUrl);
-      // console.log(isPaused);
+      track.audioUrl = track.audioUrl.replace(/\s/g, '%20');
       video = (
         <Video
           source={{ uri: track.audioUrl }} // Can be a URL or a local file.
+          // source={{ uri: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }} // Can be a URL or a local file.
+          // source={{ uri: 'http://www.hochmuth.com/mp3/Haydn_Cello_Concerto_D-1.mp3' }} // Can be a URL or a local file.
+          // source={{ uri: 'http://10.3.1.2:3000/tracks/Lenni-Kim/(2017)%20-%20Yolo/1-01%20-%20Yolo.mp3' }} // Can be a URL or a local file.
           ref={(r) => { this.audioElement = r; }}
           audioOnly
           playInBackground
