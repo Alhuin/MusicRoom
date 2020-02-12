@@ -73,7 +73,7 @@ class Playlist extends React.Component {
     });
 
     this._blurListener = navigation.addListener('willBlur', () => {
-      console.log(`emited userLeeavedPlaylist ${playlistId}`);
+      console.log(`emited userLeavedPlaylist ${playlistId}`);
       socket.emit('userLeavedPlaylist', playlistId);
     });
 

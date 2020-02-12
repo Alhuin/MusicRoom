@@ -19,6 +19,7 @@ export default class SearchBar extends React.Component {
           placeholderTextColor={Colors.placeholder}
           onChangeText={text => searchTracks(text)}
           autoCorrect={false}
+          autoCapitalize="none"
         />
       );
     }
@@ -31,6 +32,7 @@ export default class SearchBar extends React.Component {
         onSubmitEditing={() => {
           searchTracks();
         }}
+        autoCapitalize="none"
       />
     );
   }

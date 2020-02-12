@@ -54,11 +54,13 @@ class Connexion extends React.Component {
     const type = 'Sign In';
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
-        <ScrollView style={styles.main_container}>
+        <ScrollView
+          style={styles.main_container}
+          keyboardShouldPersistTaps="handled"
+        >
           <View
             style={styles.view}
             showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
           >
             <View style={styles.content}>
               <Components.Logo />

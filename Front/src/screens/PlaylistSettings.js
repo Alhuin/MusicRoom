@@ -836,6 +836,7 @@ class PlaylistSettings extends React.Component {
                 onEndEditing={(e: any) => {
                   this.setName(e.nativeEvent.text);
                 }}
+                autoCapitalize="none"
               >
                 {name}
               </TextInput>

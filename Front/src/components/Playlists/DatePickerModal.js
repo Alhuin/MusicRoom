@@ -2,9 +2,9 @@ import React from 'react';
 import {
   Modal, StyleSheet, TouchableOpacity, Text, View, Platform,
 } from 'react-native';
+import { Icon } from 'native-base';
 import DatePicker from 'react-native-date-picker';
-import {Colors, Buttons, Typography} from '../../styles';
-import {Icon} from "native-base";
+import { Colors, Buttons, Typography } from '../../styles';
 
 export default class DatePickerModal extends React.Component {
   state = {

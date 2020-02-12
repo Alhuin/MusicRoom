@@ -231,6 +231,7 @@ export default class AddPlaylistModal extends React.Component {
                 style={styles.textInput}
                 placeholder="Écrire ici"
                 placeholderTextColor={Colors.placeholder}
+                autoCapitalize="none"
               />
             </View>
           </View>
