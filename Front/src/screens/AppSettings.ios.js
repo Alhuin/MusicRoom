@@ -184,6 +184,7 @@ class AppSettings extends React.Component {
                 <TextInput
                   style={styles.inputStyle}
                   onChangeText={this.updateLogin}
+                  autoCapitalize="none"
                 >
                   {user.login}
                 </TextInput>
@@ -197,6 +198,7 @@ class AppSettings extends React.Component {
                 <TextInput
                   style={styles.inputStyle}
                   onChangeText={this.updateName}
+                  autoCapitalize="none"
                 >
                   {user.name}
                 </TextInput>
@@ -210,6 +212,7 @@ class AppSettings extends React.Component {
                 <TextInput
                   style={styles.inputStyle}
                   onChangeText={this.updateFamilyName}
+                  autoCapitalize="none"
                 >
                   {user.familyName}
                 </TextInput>
@@ -234,6 +237,7 @@ class AppSettings extends React.Component {
                 <TextInput
                   style={styles.inputStyle}
                   onChangeText={this.updateEmail}
+                  autoCapitalize="none"
                 >
                   {user.email}
                 </TextInput>
@@ -258,6 +262,7 @@ class AppSettings extends React.Component {
                 <TextInput
                   style={styles.inputStyle}
                   onChangeText={this.updatePhoneNumber}
+                  autoCapitalize="none"
                 >
                   {user.phoneNumber}
                 </TextInput>

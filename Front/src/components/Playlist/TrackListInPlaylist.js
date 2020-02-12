@@ -50,8 +50,10 @@ class TrackListInPlaylist extends React.Component {
 
     if (roomType === 'party' && playlistId === currentPlaylistId && tracks[0] && currentTrack) {
       const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
-      sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
-      sortedTracks.unshift(currentTrackInPlaylist);
+      if (currentTrackInPlaylist) {
+        sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
+        sortedTracks.unshift(currentTrackInPlaylist);
+      }
     }
     if (/*
       isUserInPlaylist === true && */ roomType === 'radio') {
@@ -81,7 +83,7 @@ class TrackListInPlaylist extends React.Component {
             />
           )}
           contentContainerStyle={{ paddingBottom: Dimensions.get('window').height / 2 }}
-          style={{ maxHeight: (Dimensions.get('window').height / 100) * 80}}
+          style={{ maxHeight: (Dimensions.get('window').height / 100) * 80 }}
           onReleaseRow={(key, currentOrder) => {
             let newPosition;
             for (newPosition = 0; newPosition < currentOrder.length; newPosition += 1) {

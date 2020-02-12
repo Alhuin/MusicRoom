@@ -8,7 +8,7 @@ import Components from '../components';
 import {
   getMusicsByVote, isAdmin, getMyVotesInPlaylist, getNextTrackByVote,
   isEditor, moveTrackOrder, getEditRestriction, getPlaylistName, deleteTrackFromPlaylistRight,
-  deleteTrackFromPlaylist, getNextRadioTrack, setNowPlaying, getNowPlaying,
+  deleteTrackFromPlaylist, getNextRadioTrack, setNowPlaying, getNowPlaying, getDelegatedPlayerAdmin,
 } from '../../API/BackApi';
 import TrackListInPlaylist from '../containers/TrackListInPlaylist';
 import AddFloatingButton from '../containers/AddFloatingButton';
@@ -22,6 +22,7 @@ class Playlist extends React.Component {
       admin: false,
       editor: false,
       tracks: [],
+      filteredTracks: [],
       playing: null,
       refreshing: false,
       modalVisible: false,
@@ -30,6 +31,7 @@ class Playlist extends React.Component {
       pos: 0,
       appState: AppState.currentState,
       nowPlaying: null,
+      delegated: false,
     };
 
     // this.onRefresh = this._onRefresh.bind(this);
@@ -47,7 +49,6 @@ class Playlist extends React.Component {
     props.socket.on('playlistEnd', () => {
       console.log('playlist End recieved');
       if (this._isMounted) {
-        console.log('E');
         this.setState({ playlistLaunched: false });
       }
     });
@@ -90,12 +91,12 @@ class Playlist extends React.Component {
     // Follow Appstate changes
     AppState.addEventListener('change', this._handleAppStateChange);
 
-    this.isAdminAndIsEditor();
+    this.isAdminEditorDelegated();
     this.getName();
     this.updateMyVotes()
       .then((votes) => {
         this.updateTracks(roomType, playlistId, votes)
-          .then(({ tracks, myVotes }) => this.setState({ tracks, myVotes }))
+          .then(({ tracks, myVotes }) => this.setState({ tracks, filteredTracks: tracks, myVotes }))
           .catch(error => console.log(error));
       })
       .catch(error => console.log(error));
@@ -119,7 +120,6 @@ class Playlist extends React.Component {
       console.log(`emited userJoindedPlaylist ${playlistId}`);
       this._onRefresh();
     }
-    console.log('F');
     this.setState({ appState: nextAppState });
   };
 
@@ -134,7 +134,7 @@ class Playlist extends React.Component {
     if (this._isMounted) {
       console.log('[Socket Server] : refresh because a change of parameters received');
       this.getName();
-      this.isAdminAndIsEditor();
+      this.isAdminEditorDelegated();
     }
   };
 
@@ -143,7 +143,7 @@ class Playlist extends React.Component {
       const { navigation } = this.props;
       const roomType = navigation.getParam('roomType');
       const playlistId = navigation.getParam('playlistId');
-      this.isAdminAndIsEditor();
+      this.isAdminEditorDelegated();
       this.getName();
       getNowPlaying(playlistId)
         .then((data) => {
@@ -156,13 +156,14 @@ class Playlist extends React.Component {
         this.updateMyVotes()
           .then((votes) => {
             this.updateTracks(roomType, playlistId, votes)
-              .then(({ tracks, myVotes }) => this.setState({ tracks, myVotes }))
+              // eslint-disable-next-line max-len
+              .then(({ tracks, myVotes }) => this.setState({ tracks, filteredTracks: tracks, myVotes }))
               .catch(error => console.log(error));
           })
           .catch(error => console.log(error));
       } else if (roomType === 'radio') {
         this.updateTracks(roomType, playlistId, null)
-          .then(({ tracks }) => this.setState({ tracks }))
+          .then(({ tracks }) => this.setState({ tracks, filteredTracks: tracks }))
           .catch(error => console.log(error));
       }
     }
@@ -170,13 +171,12 @@ class Playlist extends React.Component {
 
   setModalVisible = () => {
     const { modalVisible } = this.state;
-    console.log('H');
     this.setState({ modalVisible: !modalVisible });
   };
 
   updateTracks = (roomType, playlistId, votes) => new Promise((resolve, reject) => {
     getMusicsByVote(playlistId, roomType)
-      .then(response => resolve({ tracks: response, myVotes: votes }))
+      .then(response => resolve({ tracks: response, filteredTracks: response, myVotes: votes }))
       .catch(error => reject(error));
   });
 
@@ -189,7 +189,7 @@ class Playlist extends React.Component {
       .catch(error => reject(error));
   });
 
-  isAdminAndIsEditor = () => {
+  isAdminEditorDelegated = () => {
     const { navigation, loggedUser } = this.props;
     const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');
@@ -200,7 +200,18 @@ class Playlist extends React.Component {
         if (response === true) {
           admin = true;
         }
-        this._isEditor(admin);
+        getDelegatedPlayerAdmin(playlistId)
+          .then((res) => {
+            if (String(userId) === String(res)) {
+              this._isEditor(admin, true);
+            } else {
+              this._isEditor(admin, false);
+            }
+          })
+          .catch((error) => {
+            this._isEditor(admin, false);
+            console.error(error);
+          });
       })
       .catch((error) => {
         this._isEditor(false);
@@ -208,7 +219,7 @@ class Playlist extends React.Component {
       });
   };
 
-  _isEditor = (admin) => {
+  _isEditor = (admin, delegated) => {
     const { navigation, loggedUser } = this.props;
     const userId = loggedUser._id;
     const playlistId = navigation.getParam('playlistId');
@@ -226,21 +237,24 @@ class Playlist extends React.Component {
         isEditor(playlistId, userId, pos)
           .then((response) => {
             if (response === true) {
-              console.log('C');
-              this.setState({ editor: true, admin, pos });
+              this.setState({
+                editor: true, admin, pos, delegated,
+              });
             } else {
-              console.log('D');
-              this.setState({ editor: false, admin, pos });
+              this.setState({
+                editor: false, admin, pos, delegated,
+              });
             }
           })
           .catch((error) => {
-            console.log('B');
-            this.setState({ editor: false, admin, pos });
+            this.setState({
+              editor: false, admin, pos, delegated,
+            });
             console.error(error);
           });
       })
       .catch((error) => {
-        this.setState({ admin });
+        this.setState({ admin, delegated });
         console.error(error);
       });
   };
@@ -250,25 +264,23 @@ class Playlist extends React.Component {
     const playlistId = navigation.getParam('playlistId');
     getPlaylistName(playlistId)
       .then((name) => {
-        console.log('K');
         this.setState({ name });
       })
       .catch(error => console.log(error));
   };
 
   updatePlaying = (playing) => {
-    console.log('L');
     this.setState({ playing });
   };
 
   searchTracks = (text) => {
-    let { tracks } = this.state;
+    let { filteredTracks } = this.state;
+    const { tracks } = this.state;
     if (text !== '') {
-      tracks = tracks.filter(track => track.title.search(new RegExp(text, 'i')) > -1
+      filteredTracks = tracks.filter(track => track.title.search(new RegExp(text, 'i')) > -1
         || track.artist.search(new RegExp(text, 'i')) > -1);
     }
-    console.log('M');
-    this.setState({ tracks });
+    this.setState({ filteredTracks });
   };
 
   deleteTrack = (trackId, playlistId, userId) => {
@@ -421,10 +433,9 @@ class Playlist extends React.Component {
   };
 
   render() {
-    console.log('--------------------------IN RENDER PLAYLIST-----------------------------------');
     const {
       tracks, playing, refreshing, modalVisible, admin, myVotes, editor, playlistLaunched, pos,
-      name, nowPlaying,
+      name, nowPlaying, delegated, filteredTracks,
     } = this.state;
     const {
       navigation,
@@ -451,7 +462,7 @@ class Playlist extends React.Component {
       );
     }
     const playButton = (
-      (!playlistLaunched && tracks.length > 0 && admin) && (
+      (!playlistLaunched && tracks.length > 0 && admin && (delegated || roomType === 'radio')) && (
         <TouchableOpacity
           onPress={() => {
             const {
@@ -475,7 +486,6 @@ class Playlist extends React.Component {
                           changeTrack(nextTrack);
                           changePlaylist(paramPlaylistId);
                           changePlaylistType(roomType);
-                          console.log('N');
                           this.setState({ playlistLaunched: true });
                           this._setBackGroundTrack(paramPlaylistId, nextTrack);
                           if (!playerOpen) {
@@ -500,7 +510,6 @@ class Playlist extends React.Component {
             } else {
               setNowPlaying(playlistId, null) // reset previous nowPlaying
                 .then(() => {
-                  console.log('O');
                   this.setState({ playlistLaunched: true });
                   this._nextRadioTrack(paramPlaylistId, 0);
                   if (!playerOpen) {
@@ -565,7 +574,7 @@ class Playlist extends React.Component {
           <View style={styles.section}>
             <View style={styles.sectionContent}>
               <TrackListInPlaylist
-                tracks={tracks}
+                tracks={filteredTracks}
                 updatePlaying={this.updatePlaying}
                 deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, paramPlaylistId,
                   userId)}

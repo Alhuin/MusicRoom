@@ -1192,6 +1192,7 @@ class PlaylistSettings extends React.Component {
                 </Text>
               </View>
             </View>
+            <View style={Typography.sectionSeparator} />
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionHeaderText}>
