@@ -9,7 +9,7 @@ import MiniPlayer from '../../containers/MiniPlayer';
 import {
   deleteTrackFromPlaylist,
   getNextRadioTrack,
-  getNextTrackByVote,
+  getNextTrackByVote, setNowPlaying,
 } from '../../../API/BackApi';
 
 export default class AdminPlayer extends Component {
@@ -25,6 +25,13 @@ export default class AdminPlayer extends Component {
     };
   }
 
+  componentWillUnmount(): void {
+    this.onForward.remove();
+    this.setBackGroundTrack.remove();
+    this.nextTrackByVote.remove();
+    this.nextRadioTrack.remove();
+  }
+
   setModalVisible() {
     const { modalVisible } = this.state;
     this.setState({ modalVisible: !modalVisible });
@@ -38,20 +45,18 @@ export default class AdminPlayer extends Component {
       playlistType,
     } = this.props;
 
-    console.log('playlistType', playlistType);
     if (playlistType === 'party') {
       if (track !== null) { // Playlist Launched, delete currentTrack & getNextTrack
-        console.log('onForward : playlist already launched, del + nextTrack');
         deleteTrackFromPlaylist(track.id, playlistId)
           .then(() => {
-            socket.emit('deleteMusic', playlistId);
+            // socket.emit('deleteMusic', playlistId);
             this.nextTrackByVote(playlistId);
           })
           .catch(error => console.log(error));
       } else {
-        console.log('onForward : playlist not launched yet, just nextTrack');
         this.nextTrackByVote(playlistId);
       }
+      socket.emit('musicChanged', playlistId);
     } else {
       this.nextRadioTrack(playlistId);
     }
@@ -66,7 +71,6 @@ export default class AdminPlayer extends Component {
       changeTrack,
     } = this.props;
     const currentTrackId = track === null ? null : track.id;
-    console.log(`nextRadioTrack('${playlistId}, ${track === null ? null : track.id}, -1');`);
     getNextRadioTrack(playlistId, currentTrackId, -1)
       .then((nextTrack) => {
         changing(true);
@@ -75,7 +79,7 @@ export default class AdminPlayer extends Component {
           setTotalLength(1);
           changing(false);
           changeTrack(nextTrack);
-          this.setBackGroundTrack(nextTrack);
+          this.setBackGroundTrack(playlistId, nextTrack);
         });
       })
       .catch(error => console.log(error));
@@ -106,7 +110,7 @@ export default class AdminPlayer extends Component {
             changing(false);
             changeTrack(nextTrack);
             paused(false);
-            this.setBackGroundTrack(nextTrack);
+            this.setBackGroundTrack(playlistId, nextTrack);
           }, 0);
         } else { // playlist end reached
           MusicControl.resetNowPlaying();
@@ -121,14 +125,82 @@ export default class AdminPlayer extends Component {
       .catch(error => console.log(error));
   };
 
+  _setBackGroundTrack = (playlistId, backgroundTrack) => {
+    setNowPlaying(playlistId, backgroundTrack.id)
+      .then(() => {
+        const {
+          paused,
+          isPaused,
+          playlistType,
+          socket,
+        } = this.props;
 
-  _setBackGroundTrack = (backgroundTrack) => {
-    MusicControl.setNowPlaying({
-      title: backgroundTrack.title,
-      artwork: backgroundTrack.albumArtUrl,
-      artist: backgroundTrack.artist,
-      album: backgroundTrack.album,
-    });
+        socket.emit('musicChanged', playlistId);
+        // Enable buttons
+        MusicControl.enableBackgroundMode(true);
+        MusicControl.enableControl('play', true);
+        MusicControl.enableControl('pause', true);
+        MusicControl.enableControl('nextTrack', true);
+        MusicControl.enableControl('previousTrack', playlistType === 'radio');
+        MusicControl.enableControl('closeNotification', true, { when: 'always' });
+
+        MusicControl.updatePlayback({
+          state: isPaused === true ? MusicControl.STATE_PAUSED : MusicControl.STATE_PLAYING,
+        });
+
+        // Background events
+        MusicControl.on('play', () => {
+          MusicControl.updatePlayback({
+            state: MusicControl.STATE_PLAYING,
+          });
+          paused(false);
+        });
+        MusicControl.on('pause', () => {
+          MusicControl.updatePlayback({
+            state: MusicControl.STATE_PAUSED,
+          });
+          paused(true);
+        });
+        MusicControl.on('nextTrack', () => this._onForward());
+
+        // Displayed infos
+        MusicControl.setNowPlaying({
+          title: backgroundTrack.title,
+          artwork: backgroundTrack.albumArtUrl,
+          artist: backgroundTrack.artist,
+          album: backgroundTrack.album,
+        });
+      })
+      .catch(error => console.log(error));
+    // const { paused } = this.props;
+    //
+    // // Enable buttons
+    // MusicControl.enableBackgroundMode(true);
+    // MusicControl.enableControl('play', true);
+    // MusicControl.enableControl('pause', true);
+    // MusicControl.enableControl('nextTrack', true);
+    // MusicControl.enableControl('closeNotification', true, { when: 'always' });
+    // // Paused by default
+    // MusicControl.updatePlayback({
+    //   state: MusicControl.STATE_PAUSED,
+    // });
+    //
+    // // Background events
+    // MusicControl.on('play', () => {
+    //   MusicControl.updatePlayback({
+    //     state: MusicControl.STATE_PLAYING,
+    //   });
+    //   paused(false);
+    // });
+    // MusicControl.on('pause', () => {
+    //   MusicControl.updatePlayback({
+    //     state: MusicControl.STATE_PAUSED,
+    //   });
+    //   paused(true);
+    // });
+    // MusicControl.on('nextTrack', () => this._onForward());
+    //
+    // // Displayed infos
   };
 
   render() {
