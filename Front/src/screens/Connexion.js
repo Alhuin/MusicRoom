@@ -2,7 +2,6 @@ import React from 'react';
 import {
   StyleSheet, KeyboardAvoidingView, Platform, View, ScrollView, Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import SignInForm from '../containers/SignInForm';
@@ -10,23 +9,24 @@ import { login } from '../../API/BackApi';
 import Components from '../components';
 
 class Connexion extends React.Component {
-  async componentDidMount(): void {
+  componentDidMount(): void {
     // passer dans redux les globales comme ca on esquive l'async sur CDM
     const {
-      navigation, userChanged, admin, setSocket,
+      navigation, userChanged, admin, setSocket, tmpLogUser, logPassLogin,
     } = this.props;
-
-    const pass = await AsyncStorage.getItem('pass');
-    const log = await AsyncStorage.getItem('log');
-    const loging = await AsyncStorage.getItem('login');
-    if (log === 'autoLog') {
+    if (tmpLogUser !== null) {
+      const { pass, loging } = tmpLogUser;
       login(loging, pass)
-        .then((user) => {
+        .then(async (user) => {
           userChanged(user);
           if (user.isAdmin) {
             admin(true);
           }
           setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
+          /* await AsyncStorage.setItem('log', '');
+            await AsyncStorage.setItem('pass', '');
+            await AsyncStorage.setItem('login', ''); */
+          logPassLogin(null);
           navigation.navigate('app');
         })
         .catch((error) => {
@@ -45,10 +45,10 @@ class Connexion extends React.Component {
 
   render() {
     const {
-      navigation, userChanged, setSocket, admin,
+      navigation, userChanged, setSocket, admin, logPassLogin,
     } = this.props;
     const type = 'Sign In';
-
+    console.log('OUI');
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -70,6 +70,7 @@ class Connexion extends React.Component {
               userChanged={userChanged}
               setSocket={setSocket}
               admin={admin}
+              logPassLogin={logPassLogin}
             />
             <Components.DeezerLogin
               type={type}

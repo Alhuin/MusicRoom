@@ -4,9 +4,9 @@ import {
 import React, { Component } from 'react';
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import SocketIOClient from 'socket.io-client';
-import AsyncStorage from '@react-native-community/async-storage';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import { addUser, findUserByidSocial } from '../../../API/BackApi';
+import { logPassLogin } from '../../redux/actions';
 
 
 export default class SocialLogin extends Component {
@@ -36,20 +36,25 @@ export default class SocialLogin extends Component {
             addUser(userInfo.user.familyName, userInfo.user.id + userInfo.user.familyName,
               userInfo.user.givenName, userInfo.user.familyName, userInfo.user.email, '', userInfo.user.id)
               .then(async () => {
-                await AsyncStorage.setItem('log', 'autoLog');
+                /* await AsyncStorage.setItem('log', 'autoLog');
                 await AsyncStorage.setItem('pass', userInfo.user.id + userInfo.user.familyName);
-                await AsyncStorage.setItem('login', userInfo.user.familyName);
+                await AsyncStorage.setItem('login', userInfo.user.familyName); */
+                logPassLogin({
+                  pass: userInfo.user.id + userInfo.user.familyName,
+                  loging: userInfo.user.familyName,
+                });
                 Alert.alert(
                   'Validation de compte',
                   'Un email de vérification vous a été envoyé.',
                 );
               })
-              .catch((error) => {
+              .catch(async (error) => {
                 if (error.status === 400) { // validation error
                   Alert.alert(
                     'Inscription',
                     `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
                   );
+                  await GoogleSignin.signOut();
                 } else {
                   console.log(error);
                 }

@@ -107,6 +107,7 @@ class AppSettings extends React.Component {
   getDeez = () => {
     Linking.openURL('https://connect.deezer.com/oauth/auth.php?app_id=385364&redirect_uri=http://10.3.1.1:3000/api/users/deezer')
       .catch(err => console.error("Couldn't load page", err));
+    Alert.alert('Votre compte Deezer est maintenant associé');
   };
 
   getGoogle = async () => {
@@ -447,11 +448,6 @@ class AppSettings extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={Buttons.text}>
-                Votre compte est associé au compte Deezer de :
-            {' '}
-            {this.state.DeezerToken}
-          </Text>
           <View style={styles.section}>
             <View style={[styles.sectionContent, { alignItems: 'center' }]}>
               <TouchableOpacity

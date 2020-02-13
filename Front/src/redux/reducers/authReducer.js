@@ -1,8 +1,9 @@
-import { ADMIN, USER_CHANGED } from '../actions/types';
+import { ADMIN, USER_CHANGED, LOG_PASS_LOGIN } from '../actions/types';
 
 const initialState = {
   isAdmin: false,
   loggedUser: null,
+  tmpLogUser: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -16,6 +17,10 @@ const authReducer = (state = initialState, action) => {
     case USER_CHANGED:
       return {
         ...state, loggedUser: action.payload,
+      };
+    case LOG_PASS_LOGIN:
+      return {
+        ...state, tmpLogUser: action.payload,
       };
     default:
       return state;

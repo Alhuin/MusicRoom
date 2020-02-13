@@ -1,6 +1,7 @@
 import { SERVER, EXPRESS_PORT } from 'react-native-dotenv';
 import CustomError from './errorHandler';
 
+
 const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 /*

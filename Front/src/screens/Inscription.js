@@ -2,12 +2,12 @@ import React from 'react';
 import {
   StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View, Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import Components from '../components';
 import { addUser, findUserByidSocial } from '../../API/BackApi';
 import { getDeezerTokenLogin } from '../../API/DeezerApi';
+import { logPassLogin } from '../redux/actions';
 
 class Inscription extends React.Component {
   render() {
@@ -15,7 +15,7 @@ class Inscription extends React.Component {
     const {
       navigation, userChanged, setSocket, admin,
     } = this.props;
-    const DeezerCode = navigation.getParam('DeezCode');
+    let DeezerCode = navigation.getParam('DeezCode');
 
     userChanged(null);
     admin(false);
@@ -39,9 +39,10 @@ class Inscription extends React.Component {
                       'Validation de compte',
                       'Un email de vérification vous a été envoyé.',
                     );
-                    await AsyncStorage.setItem('log', 'autoLog');
+                    /* await AsyncStorage.setItem('log', 'autoLog');
                     await AsyncStorage.setItem('pass', response.id.toString());
-                    await AsyncStorage.setItem('login', response.firstname);
+                    await AsyncStorage.setItem('login', response.firstname); */
+                    logPassLogin({ pass: response.id.toString(), loging: response.firstname });
                   })
                   .catch((error) => {
                     if (error.status === 400) { // validation error
@@ -49,9 +50,7 @@ class Inscription extends React.Component {
                         'Inscription',
                         `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
                       );
-                      // TODO Si ca pète (eg validation error),
-                      //  pouvoir resélectionner un compte, pas tenter a nouveau le addUser
-                      //  sinon on est kéblo
+                      DeezerCode = null;
                     } else {
                       console.log(error);
                     }
