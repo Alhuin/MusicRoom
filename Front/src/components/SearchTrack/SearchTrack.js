@@ -63,6 +63,7 @@ export default class SearchTrack extends React.Component {
       userId,
       updateTracks,
       setModalVisible,
+      roomType,
     } = this.props;
 
     return (
@@ -71,6 +72,7 @@ export default class SearchTrack extends React.Component {
           updateSearchedText={this.updateSearchedText}
           searchTracks={this.searchTracks}
           autoSearch={false}
+          type="add"
         />
         <TrackListInSearch
           tracks={tracks}
@@ -81,6 +83,7 @@ export default class SearchTrack extends React.Component {
           userId={userId}
           updateTracks={updateTracks}
           setModalVisible={setModalVisible}
+          roomType={roomType}
         />
         <Loader loading={loading} />
       </View>

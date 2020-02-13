@@ -676,9 +676,10 @@ function deleteTrackFromPlaylist(playlistId, musicId) {
       .then((dataPlaylist) => {
         let i = 0;
         for (i = 0; i < dataPlaylist.data.musics.length; i += 1) {
-          if (dataPlaylist.data.musics[i] === musicId) dataPlaylist.data.musics.splice(i, 1);
+          if (dataPlaylist.data.musics[i].toString() === musicId.toString()) {
+            dataPlaylist.data.musics.splice(i, 1);
+          }
         }
-        // eslint-disable-next-line no-unused-vars
         dataPlaylist.data.save((saveError, savedPlaylist) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
@@ -723,11 +724,17 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
           flag = true;
         }
         if (flag) {
+          // console.log(playlist.musics);
+          // console.log('toRemove', musicId);
+          // playlist.musics.filter((itemId) => itemId.toString() !== musicId.toString());
+          // console.log(playlist.musics);
+
           let i = 0;
           for (i; i < playlist.musics.length; i += 1) {
-            if (playlist.musics[i] === musicId) playlist.musics.splice(i, 1);
+            if (playlist.musics[i].toString() === musicId.toString()) {
+              playlist.musics.splice(i, 1);
+            }
           }
-          // eslint-disable-next-line no-unused-vars
           playlist.save((saveError, savedPlaylist) => {
             if (saveError) {
               reject(new CustomError('MongoError', saveError.message, 500));
@@ -738,7 +745,6 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
                 } else if (!musics[0]) {
                   reject(new CustomError('DeleteTrackFromPlaylistRight', 'No Music with this id in database', 404));
                 } else {
-                  // eslint-disable-next-line no-unused-vars
                   musics[0].remove((removeError, removedMusic) => {
                     if (removeError) {
                       reject(new CustomError('MongoError', removeError, 500));
@@ -1045,7 +1051,144 @@ function setPlaylistName(playlistId, userId, newName) {
   });
 }
 
+function getNextRadioTrack(playlistId, currentTrackId, nextIndex) {
+  return new Promise((resolve, reject) => {
+    let musicId = null;
+
+    PlaylistModel.findById(playlistId, (error, radio) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!radio) {
+        reject(new CustomError('GetNextRadioTrack', 'No radio with this id in database', 404));
+      } else if (!radio.musics[0]) {
+        reject(new CustomError('GetNextRadioTrack', 'No musics in this radio', 400));
+      } else if (nextIndex === -1) { // get next Track in list
+        const index = radio.musics.indexOf(currentTrackId);
+        if (index === radio.musics.length - 1) { // last track, loop to the beginning
+          musicId = radio.musics[0];
+        } else {
+          musicId = radio.musics[index + 1];
+        }
+      } else if (nextIndex === radio.musics.length - 1) { // last track, loop to beginning
+        musicId = radio.musics[0];
+      } else {
+        musicId = radio.musics[nextIndex];
+      }
+      if (musicId !== null) {
+        MusicModel.findById(musicId, (findError, music) => {
+          if (error) {
+            reject(new CustomError('MongoError', findError.message, 500));
+          } else if (!music) {
+            reject(new CustomError('GetNextRadioTrack', 'No Music with this id in database', 404));
+          } else {
+            const formatedTrack = {
+              id: music._id,
+              audioUrl: music.path,
+              albumArtUrl: music.albumCover,
+              artist: music.artist,
+              title: music.title,
+              album: music.album,
+            };
+            resolve({
+              status: 200,
+              data: formatedTrack,
+            });
+          }
+        });
+      } else {
+        reject(new CustomError('GetNextRadioTrack', 'No next music found !', 400));
+      }
+    });
+  });
+}
+
+function getPrevRadioTrack(playlistId, currentTrackId, prevIndex) {
+  return new Promise((resolve, reject) => {
+    let musicId = null;
+    PlaylistModel.findById(playlistId, (error, radio) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!radio) {
+        reject(new CustomError('GetPrevRadioTrack', 'No radio with this id in database', 404));
+      } else if (!radio.musics[0]) {
+        reject(new CustomError('GetPrevRadioTrack', 'No musics in this radio', 400));
+      } else if (prevIndex === -1) { // get prev Track in list
+        const index = radio.musics.indexOf(currentTrackId);
+        if (index === 0) { // first track, loop to the end
+          musicId = radio.musics[radio.musics.length - 1];
+        } else {
+          musicId = radio.musics[index - 1];
+        }
+      } else if (prevIndex === 0) { // first track, loop to the end
+        musicId = radio.musics[radio.musics.length - 1];
+      } else {
+        musicId = radio.musics[prevIndex - 1];
+      }
+      if (musicId !== null) {
+        MusicModel.findById(musicId, (findError, music) => {
+          if (error) {
+            reject(new CustomError('MongoError', findError.message, 500));
+          } else if (!music) {
+            reject(new CustomError('GetPrevRadioTrack', 'No Music with this id in database', 404));
+          } else {
+            resolve({
+              status: 200,
+              data: music,
+            });
+          }
+        });
+      } else {
+        reject(new CustomError('GetPrevRadioTrack', 'No previous music found !', 400));
+      }
+    });
+  });
+}
+
+function setNowPlaying(playlistId, trackId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('SetNowPlaying', 'No playlist with this id in database', 404));
+      } else {
+        const newPlaylist = playlist;
+        newPlaylist.nowPlaying = trackId;
+        newPlaylist.save((saveError, playlistWithNowPlaying) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: playlistWithNowPlaying,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+function getNowPlaying(playlistId) {
+  return new Promise((resolve, reject) => {
+    PlaylistModel.findById(playlistId, (findError, playlist) => {
+      if (findError) {
+        reject(new CustomError('MongoError', findError.message, 500));
+      } else if (!playlist) {
+        reject(new CustomError('GetNowPlaying', 'No playlist with this id in database', 404));
+      } else {
+        resolve({
+          status: 200,
+          data: { nowPlaying: playlist.nowPlaying },
+        });
+      }
+    });
+  });
+}
+
 export default {
+  setNowPlaying,
+  getNowPlaying,
   getPlaylists,
   getPlaylistById,
   getPlaylistsFilteredByRoom,
@@ -1085,4 +1228,6 @@ export default {
   setPlaylistLocation,
   setPlaylistName,
   getPlaylistName,
+  getNextRadioTrack,
+  getPrevRadioTrack,
 };

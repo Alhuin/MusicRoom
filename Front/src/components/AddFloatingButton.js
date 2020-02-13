@@ -4,15 +4,13 @@ import {
   StyleSheet,
   Text,
   Image,
-  Dimensions,
 } from 'react-native';
 import { Buttons } from '../styles';
 
 export default class AddFloatingButton extends React.Component {
   render() {
-    const { icon, handlePress } = this.props;
+    const { icon, handlePress, playerOpen } = this.props;
     let image = '';
-    const { height } = Dimensions.get('window');
     if (icon === 'addPlaylist') {
       image = (
         <Image
@@ -41,7 +39,7 @@ export default class AddFloatingButton extends React.Component {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={handlePress}
-        style={[styles.fab, { bottom: icon === 'addMusic' ? 150 : 70 }]}
+        style={[styles.fab, { bottom: playerOpen ? 150 : 40 }]}
       >
         {image}
       </TouchableOpacity>

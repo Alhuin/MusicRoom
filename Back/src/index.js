@@ -71,8 +71,14 @@ io.on('connection', (socket) => {
     io.sockets.in(playlistId).emit('refresh');
   });
 
-  socket.on('deleteMusic', (playlistId) => {
+  socket.on('deleteMusic', (playlistId, trackId, nextIndex) => {
     console.log(`[Socket Server] : music deleted, Emitting refresh for playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('refresh');
+    io.sockets.in(playlistId).emit('deleted', trackId, nextIndex);
+  });
+
+  socket.on('musicChanged', (playlistId) => {
+    console.log(`[Socket Server] : music changed, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
   });
 
@@ -170,6 +176,7 @@ connectDb().then(async () => {
     email: 'julien.janinre@gmail.com',
     phoneNumber: '00',
     isVerified: true,
+    premium: false,
   });
 
   user1.save();
@@ -182,6 +189,7 @@ connectDb().then(async () => {
     email: 'ju@gmail.com',
     phoneNumber: '00',
     isVerified: true,
+    premium: false,
   });
   user2.save();
 

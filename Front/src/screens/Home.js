@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Text, StyleSheet, View, TouchableOpacity,
+  Text, StyleSheet, View, TouchableOpacity, Alert,
 } from 'react-native';
 import { Icon } from 'native-base';
-import Components from '../components';
+import AddFloatingButton from '../containers/AddFloatingButton';
 import JoinPrivateRoom from '../containers/JoinPrivateRoom';
 import { Colors, Typography } from '../styles';
 
@@ -18,8 +18,12 @@ class Home extends React.Component {
   };
 
   _onPressRadio = () => {
-    const { navigation } = this.props;
-    navigation.navigate('RadiosList');
+    const { navigation, loggedUser } = this.props;
+    if (loggedUser.premium) {
+      navigation.navigate('RadiosList');
+    } else {
+      Alert.alert('Vous devez posséder un compte Premium pour accéder à cette fonctionnalité.');
+    }
   };
 
   setModalVisible = () => {
@@ -31,6 +35,7 @@ class Home extends React.Component {
   render() {
     const { modalVisible } = this.state;
     const { loggedUser } = this.props;
+
     return (
       <View style={styles.container}>
         <JoinPrivateRoom
@@ -58,7 +63,7 @@ class Home extends React.Component {
             <Icon name="radio" style={{ ...Typography.icon }} />
           </View>
         </TouchableOpacity>
-        <Components.AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="joinPrivateRoom" />
+        <AddFloatingButton handlePress={() => this.setModalVisible(true)} icon="joinPrivateRoom" />
       </View>
     );
   }

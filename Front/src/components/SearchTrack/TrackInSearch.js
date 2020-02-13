@@ -10,12 +10,12 @@ import {
 class TrackInSearch extends React.Component {
   addMusic = () => {
     const {
-      track, playlistId, userId, setModalVisible, displayLoader, socket,
+      track, playlistId, userId, setModalVisible, displayLoader, socket, roomType,
     } = this.props;
 
     displayLoader();
     addMusicToPlaylist(playlistId, userId, track.title, track.artist.name,
-      track.album.title, track.album.cover, track.preview, track.link)
+      track.album.title, track.album.cover, track.preview, track.link, roomType)
       .then(() => {
         console.log(`emitting addMusic for playlist ${playlistId}`);
         socket.emit('addMusic', playlistId);

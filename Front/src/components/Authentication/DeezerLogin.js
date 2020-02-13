@@ -1,7 +1,8 @@
 import {
-  View, StyleSheet, Button, Linking,
+  View, StyleSheet, Linking, Text, TouchableOpacity,
 } from 'react-native';
 import React, { Component } from 'react';
+import { Buttons } from '../../styles';
 
 const redirectUri = 'https://connect.deezer.com/oauth/auth.php?app_id=389504&redirect_uri=http://10.3.1.1:3000/api/users/deezerlogin&perms=basic_access,email';
 
@@ -14,10 +15,14 @@ export default class DeezerLogin extends Component {
     render() {
       return (
         <View style={styles.container}>
-          <Button
+          <TouchableOpacity
             onPress={this.callDeez}
-            title="Deezer"
-          />
+            style={Buttons.largeButton}
+          >
+            <Text style={Buttons.text}>
+              Connexion Deezer
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     }

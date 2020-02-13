@@ -78,13 +78,15 @@ class TrackInPlaylist extends React.Component {
       roomType,
       myVoteValue,
       editor,
-      currentTrack,
       admin,
       deleteTrackInPlaylist,
+      nowPlaying,
+      currentTrack,
     } = this.props;
     let renderForParty = null;
     let deletionMod = null;
-    if (currentTrack && track && currentTrack.id === track._id) {
+    if ((roomType === 'party' && track._id === nowPlaying)
+      || (currentTrack !== null && roomType === 'radio' && track._id === currentTrack.id)) {
       renderForParty = (<Text style={Typography.bodyText}>Now playing</Text>);
     } else if (roomType === 'party') {
       let arrowUpStyle = { color: 'grey' };

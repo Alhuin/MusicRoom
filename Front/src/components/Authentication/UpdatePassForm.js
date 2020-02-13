@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  StyleSheet, View, TextInput, Button, Keyboard, Alert,
+  View, TextInput, TouchableOpacity, Keyboard, Alert, Text,
 } from 'react-native';
 import NavigationUtils from '../../navigation/NavigationUtils';
 import { updatePassword } from '../../../API/BackApi';
+import { Typography, Buttons, Colors } from '../../styles';
 
 export default class UpdatePassForm extends React.Component {
   state = {
@@ -41,50 +42,41 @@ export default class UpdatePassForm extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <TextInput
-          secureTextEntry
-          onChangeText={this.updateNewPass}
-          autoCorrect={false}
-          autoCapitalize="none"
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="New password"
-        />
-        <TextInput
-          secureTextEntry
-          onChangeText={this.updateNewPassConfirm}
-          autoCorrect={false}
-          autoCapitalize="none"
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Confirm new password"
-        />
-        <View style={styles.submitButton}>
-          <Button
-            title="Update Password"
-            onPress={() => {
-              Keyboard.dismiss();
-              this.updatePassword();
-            }}
+      <View style={Typography.section}>
+        <View style={Typography.sectionContent}>
+          <TextInput
+            secureTextEntry
+            onChangeText={this.updateNewPass}
+            autoCorrect={false}
+            autoCapitalize="none"
+            style={Typography.textInput}
+            placeholder="Nouveau mot de passe"
+            placeholderTextColor={Colors.baseText}
           />
+          <TextInput
+            secureTextEntry
+            onChangeText={this.updateNewPassConfirm}
+            autoCorrect={false}
+            autoCapitalize="none"
+            style={Typography.textInput}
+            placeholder="Confirmation"
+            placeholderTextColor={Colors.baseText}
+          />
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity
+              onPress={() => {
+                Keyboard.dismiss();
+                this.updatePassword();
+              }}
+              style={Buttons.largeButton}
+            >
+              <Text style={Buttons.text}>
+                Mettre à jour
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 20,
-    width: 300,
-  },
-  inputBox: {
-    width: 300,
-  },
-  submitButton: {
-    width: 150,
-  },
-});

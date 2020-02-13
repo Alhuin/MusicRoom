@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
 } from 'react-native';
+import MusicControl from 'react-native-music-control';
 import Header from './Header';
 import AlbumArt from './AlbumArt';
 import TrackDetails from './TrackDetails';
@@ -41,14 +42,16 @@ export default class PlayerDetails extends Component {
     const { audioElement, setCurrentPosition, paused } = this.props;
     const newTime = Math.round(time);
 
-    audioElement.seek(newTime);
+    if (audioElement) {
+      audioElement.seek(newTime);
+    }
     setCurrentPosition(newTime);
     paused(false);
   }
 
   render() {
     const {
-      onDownPress, currentPosition, track, paused, totalLength, isPaused, onForward,
+      onDownPress, currentPosition, track, paused, totalLength, isPaused, onForward, playlistType,
     } = this.props;
 
     this._onSeek = this.seek.bind(this);
@@ -69,12 +72,18 @@ export default class PlayerDetails extends Component {
           currentPosition={currentPosition}
         />
         <Controls
-          // forwardDisabled={selectedTrack === tracks.length - 1}
-          backDisabled
+          forwardDisabled={false}
+          backDisabled={playlistType === 'Radio'}
           onPressPlay={() => {
+            MusicControl.updatePlayback({
+              state: MusicControl.STATE_PLAYING,
+            });
             paused(false);
           }}
           onPressPause={() => {
+            MusicControl.updatePlayback({
+              state: MusicControl.STATE_PAUSED,
+            });
             paused(true);
           }}
           onBack={this._onBack}

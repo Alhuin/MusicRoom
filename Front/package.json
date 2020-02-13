@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.3",
+    "axios": "^0.19.2",
     "native-base": "^2.12.1",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
@@ -55,7 +56,8 @@
   },
   "rnpm": {
     "assets": [
-      "./assets/fonts"
+      "./assets/fonts",
+      "./assets/images"
     ]
   },
   "isSwift": true

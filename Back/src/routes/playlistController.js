@@ -770,7 +770,6 @@ function isEditor(req, res) {
   }
 }
 
-
 function setPlaylistName(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId) && req.body.newName) {
@@ -791,7 +790,105 @@ function setPlaylistName(req, res) {
   }
 }
 
+function getNextRadioTrack(req, res) {
+  console.log(req.body);
+  console.log('playlistId', req.body.playlistId && utils.isValidId(req.body.playlistId));
+  console.log('currentTrackId', req.body.currentTrackId === null || utils.isValidId(req.body.currentTrackId));
+  console.log('nextIndex', parseInt(req.body.nextIndex, 10));
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && (req.body.currentTrackId === null || utils.isValidId(req.body.currentTrackId))
+    && Number.isInteger(parseInt(req.body.nextIndex, 10))) {
+    playlistService.getNextRadioTrack(
+      req.body.playlistId,
+      req.body.currentTrackId,
+      req.body.nextIndex,
+    )
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function getPrevRadioTrack(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+    && (utils.isValidId(req.body.currentTrackId) || req.body.currentTrackId === null)
+    && Number.isInteger(req.body.prevIndex)) {
+    playlistService.getPrevRadioTrack(
+      req.body.playlistId,
+      req.body.currentTrackId,
+      req.body.prevIndex,
+    )
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function setNowPlaying(req, res) {
+  if (req.body.playlistId && utils.isValidId(req.body.playlistId)
+      && (utils.isValidId(req.body.trackId) || req.body.trackId === null)) {
+    playlistService.setNowPlaying(
+      req.body.playlistId,
+      req.body.trackId,
+    )
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
+function getNowPlaying(req, res) {
+  if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
+    playlistService.getNowPlaying(req.params.playlistId)
+      .then((response) => {
+        res
+          .status(response.status)
+          .send(response.data);
+      })
+      .catch((error) => {
+        console.error(error.msg);
+        res
+          .status(error.status)
+          .send({ msg: error.msg });
+      });
+  } else {
+    res.status(422).send({ msg: 'Wrong Parameters' });
+  }
+}
+
 export default {
+  setNowPlaying,
+  getNowPlaying,
   getPlaylistById,
   getPlaylists,
   getPlaylistsFilteredByRoom,
@@ -809,6 +906,8 @@ export default {
   banUserInPlaylist,
   deleteUserInPlaylist,
   getNextTrackByVote,
+  getNextRadioTrack,
+  getPrevRadioTrack,
   addUserToPlaylistAndUnbanned,
   joinPlaylistWithCode,
   joinPlaylistWithId,

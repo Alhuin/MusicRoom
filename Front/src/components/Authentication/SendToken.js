@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  StyleSheet, View, TextInput, Button, Keyboard, Alert,
+  View, TextInput, Keyboard, Alert, TouchableOpacity, Text,
 } from 'react-native';
 import { sendPasswordToken, sendEmailToken } from '../../../API/BackApi';
+import { Buttons, Colors, Typography } from '../../styles';
 
 export default class SendToken extends React.Component {
   state = {
@@ -44,40 +45,29 @@ export default class SendToken extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={Typography.section}>
         <TextInput
           onChangeText={this._updateLoginOrEmail}
           autoCorrect={false}
           autoCapitalize="none"
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Login or email"
+          style={Typography.textInput}
+          placeholder="Identifiant ou mail"
+          placeholderTextColor={Colors.baseText}
         />
-        <View style={styles.submitButton}>
-          <Button
-            title="Send email"
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <TouchableOpacity
             onPress={() => {
               Keyboard.dismiss();
               this._submitAction();
             }}
-          />
+            style={Buttons.largeButton}
+          >
+            <Text style={Buttons.text}>
+              Envoi Mail
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 20,
-    width: 300,
-  },
-  inputBox: {
-    width: 300,
-  },
-  submitButton: {
-    width: 150,
-  },
-});

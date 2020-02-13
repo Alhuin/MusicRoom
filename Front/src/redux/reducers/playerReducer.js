@@ -10,11 +10,15 @@ import {
   IS_CHANGING,
   SET_CURRENT_POSITION,
   SHOULD_UPDATE_PLAYLIST,
+  CHANGE_PLAYLIST_TYPE,
+  SET_NEXT_INDEX,
+  SET_PLAYER_OPEN,
 } from '../actions/types';
 
 const initialState = {
   track: null,
   playlistId: '',
+  playlistType: '',
   totalLength: 1,
   isPaused: true,
   audioElement: null,
@@ -22,6 +26,8 @@ const initialState = {
   isChanging: false,
   socket: null,
   shouldUpdatePlaylist: false,
+  nextIndex: -1,
+  playerOpen: false,
 };
 
 const playerReducer = (state = initialState, action) => {
@@ -34,6 +40,10 @@ const playerReducer = (state = initialState, action) => {
     case CHANGE_PLAYLIST:
       return {
         ...state, playlistId: action.payload,
+      };
+    case CHANGE_PLAYLIST_TYPE:
+      return {
+        ...state, playlistType: action.payload,
       };
     case PAUSED:
       return {
@@ -70,6 +80,14 @@ const playerReducer = (state = initialState, action) => {
     case SHOULD_UPDATE_PLAYLIST:
       return {
         ...state, shouldUpdatePlaylist: action.payload,
+      };
+    case SET_NEXT_INDEX:
+      return {
+        ...state, nextIndex: action.payload,
+      };
+    case SET_PLAYER_OPEN:
+      return {
+        ...state, playerOpen: action.payload,
       };
     default:
       return state;

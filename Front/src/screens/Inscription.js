@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView, View, Alert,
+  StyleSheet, View, Alert, SafeAreaView, ScrollView,
 } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
@@ -8,6 +8,7 @@ import Components from '../components';
 import { addUser, findUserByidSocial } from '../../API/BackApi';
 import { getDeezerTokenLogin } from '../../API/DeezerApi';
 import { logPassLogin } from '../redux/actions';
+import { Colors } from '../styles';
 
 class Inscription extends React.Component {
   render() {
@@ -39,9 +40,6 @@ class Inscription extends React.Component {
                       'Validation de compte',
                       'Un email de vérification vous a été envoyé.',
                     );
-                    /* await AsyncStorage.setItem('log', 'autoLog');
-                    await AsyncStorage.setItem('pass', response.id.toString());
-                    await AsyncStorage.setItem('login', response.firstname); */
                     logPassLogin({ pass: response.id.toString(), loging: response.firstname });
                   })
                   .catch((error) => {
@@ -64,59 +62,57 @@ class Inscription extends React.Component {
     }
 
     return (
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        keyboardVerticalOffset={100}
-      >
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
         <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
+          style={styles.main_container}
+          keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.content}>
-            <Components.Logo />
-            <Components.SignUpForm />
-            <Components.SocialLogin
-              type={type}
-              navigation={navigation}
-              userChanged={userChanged}
-              setSocket={setSocket}
-              admin={admin}
-            />
-            <Components.DeezerLogin
-              type={type}
-              navigation={navigation}
-              userChanged={userChanged}
-              setSocket={setSocket}
-              admin={admin}
-            />
-            <Components.LoginContext
-              navigation={navigation}
-              type={type}
-              style={styles.loginContext}
-            />
+          <View
+            style={styles.view}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.content}>
+              <Components.Logo />
+              <Components.SignUpForm navigation={navigation} />
+              <Components.SocialLogin
+                type={type}
+                navigation={navigation}
+                userChanged={userChanged}
+                setSocket={setSocket}
+                admin={admin}
+              />
+              <Components.DeezerLogin
+                type={type}
+                navigation={navigation}
+                userChanged={userChanged}
+                setSocket={setSocket}
+                admin={admin}
+              />
+              <Components.LoginContext
+                type={type}
+                navigation={navigation}
+                style={styles.loginContext}
+              />
+            </View>
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  scrollView: {
+  main_container: {
     width: '100%',
+    height: '100%',
+    backgroundColor: Colors.background,
+  },
+  view: {
+    flex: 1,
+    backgroundColor: Colors.background,
   },
   content: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   loginContext: {
     alignItems: 'flex-end',

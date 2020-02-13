@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
-import Inscription from '../screens/Inscription';
 import * as actions from '../redux/actions';
+import CustomDrawer from '../components/Home/CustomDrawer';
 
 const mapStateToProps = state => ({
   socket: state.playerReducer.socket,
+  playlistId: state.playerReducer.playlistId,
 });
 
 const mapDispatchToProps = dispatch => ({
-  userChanged: payload => dispatch(actions.userChanged(payload)),
-  admin: payload => dispatch(actions.admin(payload)),
   setSocket: payload => dispatch(actions.setSocket(payload)),
+  logOut: payload => dispatch(actions.logOut(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Inscription);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawer);

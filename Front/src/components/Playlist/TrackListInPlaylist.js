@@ -6,6 +6,7 @@ import Player from '../../services/Player';
 import { Spacing } from '../../styles';
 
 class TrackListInPlaylist extends React.Component {
+
   handlePress = (preview) => {
     const { playing, updatePlaying } = this.props;
     if (playing !== null) {
@@ -29,13 +30,11 @@ class TrackListInPlaylist extends React.Component {
     const {
       tracks,
       playlistId,
-      updateTracks,
       refreshing,
       onRefresh,
       userId,
       roomType,
       myVotes,
-      updateMyVotes,
       // isUserInPlaylist,
       editor,
       onMoveEnd,
@@ -44,13 +43,17 @@ class TrackListInPlaylist extends React.Component {
       admin,
       deleteTrackInPlaylist,
       currentPlaylistId,
+      nowPlaying,
     } = this.props;
     let render;
     let sortedTracks = tracks;
+
     if (roomType === 'party' && playlistId === currentPlaylistId && tracks[0] && currentTrack) {
       const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
-      sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
-      sortedTracks.unshift(currentTrackInPlaylist);
+      if (currentTrackInPlaylist) {
+        sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
+        sortedTracks.unshift(currentTrackInPlaylist);
+      }
     }
     if (/*
       isUserInPlaylist === true && */ roomType === 'radio') {
@@ -63,7 +66,7 @@ class TrackListInPlaylist extends React.Component {
       render = (
         <SortableList
           data={tracks}
-          renderRow={({ key, index, data, disabled, active }) => (
+          renderRow={({ data, active }) => (
             // TODO check necessary parameters ?
             <TrackInPlaylist
               active={active}
@@ -71,8 +74,6 @@ class TrackListInPlaylist extends React.Component {
               track={data}
               handlePress={this.handlePress}
               playlistId={playlistId}
-              updateTracks={updateTracks}
-              updateMyVotes={updateMyVotes}
               deleteTrackInPlaylist={deleteTrackInPlaylist}
               roomType={roomType}
               myVoteValue={0}
@@ -82,7 +83,7 @@ class TrackListInPlaylist extends React.Component {
             />
           )}
           contentContainerStyle={{ paddingBottom: Dimensions.get('window').height / 2 }}
-          style={{ maxHeight: (Dimensions.get('window').height / 100) * 80}}
+          style={{ maxHeight: (Dimensions.get('window').height / 100) * 80 }}
           onReleaseRow={(key, currentOrder) => {
             let newPosition;
             for (newPosition = 0; newPosition < currentOrder.length; newPosition += 1) {
@@ -112,10 +113,9 @@ class TrackListInPlaylist extends React.Component {
               <TrackInPlaylist
                 userId={userId}
                 track={item}
+                nowPlaying={nowPlaying}
                 handlePress={this.handlePress}
                 playlistId={playlistId}
-                updateTracks={updateTracks}
-                updateMyVotes={updateMyVotes}
                 deleteTrackInPlaylist={deleteTrackInPlaylist}
                 roomType={roomType}
                 myVoteValue={myVoteValue}

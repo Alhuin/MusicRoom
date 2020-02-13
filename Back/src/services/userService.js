@@ -163,7 +163,6 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
       } else if (!user) {
         reject(new CustomError('UpdateUser', 'No user with this id found in database', 404));
       } else {
-        console.log(idDeezer);
         const updatedUser = user;
         updatedUser.login = login;
         updatedUser.name = name;
@@ -172,9 +171,12 @@ function updateUser(userId, login, name, familyName, email, phoneNumber, prefere
         updatedUser.phoneNumber = phoneNumber;
         updatedUser.preferences = preferences;
         updatedUser.visibilityTable = visibilityTable;
-        updatedUser.idDeezer = idDeezer;
-        updatedUser.idGoogle = idGoogle;
-        console.log(updatedUser);
+        if (String(idDeezer) !== '') {
+          updatedUser.idDeezer = idDeezer;
+        }
+        if (String(idGoogle) !== '') {
+          updatedUser.idGoogle = idGoogle;
+        }
         updatedUser.save((saveError, newUser) => {
           if (saveError) {
             reject(new CustomError('MongoError', saveError.message, 500));
@@ -319,6 +321,31 @@ function updatePassword(userId, newPassword) {
   });
 }
 
+function updatePremium(userId, premium) {
+  return new Promise((resolve, reject) => {
+    UserModel.findOne({ _id: userId }, async (error, user) => {
+      if (error) {
+        reject(new CustomError('MongoError', error.message, 500));
+      } else if (!user) {
+        reject(new CustomError('updatePremium', 'No user with this id found in database', 404));
+      } else {
+        const updatedUser = user;
+        updatedUser.premium = premium;
+        updatedUser.save((saveError, newUser) => {
+          if (saveError) {
+            reject(new CustomError('MongoError', saveError.message, 500));
+          } else {
+            resolve({
+              status: 200,
+              data: newUser,
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
 /*     Tokens         */
 
 //  Password
@@ -340,8 +367,8 @@ function sendPasswordToken(loginOrEmail) {
             const mailOptions = {
               from: '"MusicRoom Team" <team@musicroom.com>',
               to: user.email,
-              subject: 'New Password Request',
-              html: `Bonjour !\n\nTu peux réinitialiser ton mot de passe en cliquant sur <a href='${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/passToken/${savedToken.token}'>ce lien</a>.`,
+              subject: 'Requête nouveau mot de passe',
+              html: `Bonjour !\n\nTu peux réinitialiser ton mot de passe en cliquant sur <a href='${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/passToken/${savedToken.token}'>ce lien</a> depuis votre téléphone.`,
             };
             utils.sendMail(mailOptions, resolve, reject);
           }
@@ -406,7 +433,7 @@ function _sendEmailToken(user, resolve, reject) {
       const mailOptions = {
         from: '"MusicRoom Team" <team@musicroom.com>',
         to: user.email,
-        subject: 'Account Verification',
+        subject: 'Vérification de compte',
         html: `Bonjour !\n\nVérifie ton compte en cliquant sur <a href='${process.env.SERVER}:${process.env.EXPRESS_PORT}/api/users/emailToken/${savedToken.token}'>ce lien</a>.`,
       };
       utils.sendMail(mailOptions, resolve, reject);
@@ -450,7 +477,6 @@ function confirmEmailToken(tokenString) {
 }
 
 function getDeezerCode(DeezerCode) {
-  console.log(DeezerCode);
   return new Promise((resolve, reject) => {
     if (DeezerCode !== '') {
       resolve({
@@ -515,4 +541,5 @@ export default {
   getFriends,
   getDeezerCode,
   findUserByidSocial,
+  updatePremium,
 };

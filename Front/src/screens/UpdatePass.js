@@ -1,38 +1,29 @@
 import React from 'react';
 import {
+  SafeAreaView,
   StyleSheet, View,
 } from 'react-native';
 import Components from '../components';
+import { Colors } from '../styles';
 
 class UpdatePass extends React.Component {
   render() {
     const { navigation } = this.props;
     return (
-      <View style={styles.container}>
-        <Components.Logo />
-        <Components.UpdatePassForm userId={navigation.getParam('userId')} navigation={navigation} />
-      </View>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
+        <View style={styles.main_container}>
+          <Components.Logo />
+          <Components.UpdatePassForm userId={navigation.getParam('userId')} navigation={navigation} />
+        </View>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main_container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  scrollView: {
-    width: '100%',
-  },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  loginContext: {
-    alignItems: 'flex-end',
+    backgroundColor: Colors.background,
   },
 });
 

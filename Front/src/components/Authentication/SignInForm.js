@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  Button, Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text, Alert,
+  Keyboard, View, StyleSheet, TextInput, TouchableOpacity, Text, Alert,
 } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import { login } from '../../../API/BackApi';
+import { Typography, Buttons, Colors } from '../../styles';
 
 export default class SignInForm extends React.Component {
   state = {
@@ -68,65 +69,75 @@ export default class SignInForm extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <TextInput
-          onChangeText={this.updateLogin}
-          autoCorrect={false}
-          autoCapitalize="none"
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Identifiant"
-        />
-        <TextInput
-          onChangeText={this.updatePassword}
-          underlineColorAndroid="grey"
-          style={styles.inputBox}
-          placeholder="Mot de passe"
-          secureTextEntry
-        />
-        <View
-          style={styles.submitButton}
-        >
-          <Button
-            title="Sign In"
-            onPress={() => {
-              Keyboard.dismiss();
-              this.SignIn();
-            }}
-          />
+      <View style={Typography.section}>
+        <View style={Typography.sectionHeader}>
+          <Text style={Typography.sectionHeaderText}>
+            Identification
+          </Text>
         </View>
-        <TouchableOpacity
-          style={styles.forgotPass}
-          onPress={() => this.sendTokensPage('password')}
-        >
-          <Text>Mot de passe oublié ?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.forgotPass}
-          onPress={() => this.sendTokensPage('mail')}
-        >
-          <Text>Compte non vérifié ?</Text>
-        </TouchableOpacity>
+        <View style={Typography.sectionContent}>
+          <TextInput
+            onChangeText={this.updateLogin}
+            autoCorrect={false}
+            autoCapitalize="none"
+            style={Typography.textInput}
+            placeholder="Identifiant"
+            placeholderTextColor={Colors.placeholder}
+          />
+          <TextInput
+            onChangeText={this.updatePassword}
+            style={Typography.textInput}
+            placeholder="Mot de passe"
+            secureTextEntry
+            placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
+          />
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                Keyboard.dismiss();
+                this.SignIn();
+              }}
+              style={Buttons.largeButton}
+            >
+              <Text style={Buttons.text}>
+                Connexion
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={styles.forgotPass}
+          >
+            <TouchableOpacity
+              onPress={() => this.sendTokensPage('password')}
+            >
+              <Text style={Typography.bodyText}>Mot de passe oublié ?</Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={styles.forgotPass}
+          >
+            <TouchableOpacity
+              onPress={() => this.sendTokensPage('mail')}
+            >
+              <Text style={Typography.bodyText}>Compte non vérifié ?</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20,
-    width: 300,
-  },
-  inputBox: {
-    width: 300,
-  },
-  submitButton: {
-    width: 150,
-  },
   forgotPass: {
     paddingTop: 10,
+    width: '100%',
+    alignItems: 'center',
   },
 });

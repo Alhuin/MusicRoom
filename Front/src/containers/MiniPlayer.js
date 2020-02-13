@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
   playlistId: state.playerReducer.playlistId,
   isPaused: state.playerReducer.isPaused,
   socket: state.playerReducer.socket,
+  playerOpen: state.playerReducer.playerOpen,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -18,6 +19,7 @@ const mapDispatchToProps = dispatch => ({
   paused: payload => dispatch(actions.paused(payload)),
   setTotalLength: payload => dispatch(actions.setTotalLength(payload)),
   changeTrack: payload => dispatch(actions.changeTrack(payload)),
+  setPlayerOpen: payload => dispatch(actions.setPlayerOpen(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MiniPlayer);

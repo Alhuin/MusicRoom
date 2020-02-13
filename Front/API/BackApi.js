@@ -10,27 +10,31 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 function login(userName, password) {
   console.log('login');
-  return new Promise((resolve, reject) => fetch(
-    `${api}/login`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
+  console.log(`${SERVER}:${EXPRESS_PORT}`);
+  return new Promise((resolve, reject) => {
+    console.log('in login promise before fetch');
+    fetch(
+      `${api}/login`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login: userName,
+          password,
+        }),
       },
-      body: JSON.stringify({
-        login: userName,
-        password,
-      }),
-    },
-  ).then(async (response) => {
-    const data = await response.json();
-    if (response.status === 200) {
-      resolve(data);
-    } else {
-      reject(new CustomError('LoginError', data.msg, response.status));
-    }
-  }).catch(error => reject(error)));
+    ).then(async (response) => {
+      const data = await response.json();
+      if (response.status === 200) {
+        resolve(data);
+      } else {
+        reject(new CustomError('LoginError', data.msg, response.status));
+      }
+    }).catch(error => reject(error));
+  });
 }
 
 function getUserByIdByPreferences(userId, requesterId) {
@@ -48,6 +52,56 @@ function getUserByIdByPreferences(userId, requesterId) {
           resolve(data);
         } else if (response.status === 404) {
           reject(new CustomError('GetUser', data.msg, 404));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function setNowPlaying(playlistId, trackId) {
+  return new Promise((resolve, reject) => {
+    if (playlistId === '') {
+      resolve({
+        status: 200,
+        data: { msg: 'No previous playlist' },
+      });
+    } else {
+      fetch(`${api}/playlists/nowPlaying`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ playlistId, trackId }),
+      })
+        .then(async (response) => {
+          const data = await response.json();
+          if (response.status === 200) {
+            resolve(data);
+          } else {
+            reject(new CustomError('setNowPlaying', data.msg, response.status));
+          }
+        })
+        .catch(error => reject(error));
+    }
+  });
+}
+
+function getNowPlaying(playlistId) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/nowPlaying/${playlistId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getNowPlaying', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -253,6 +307,30 @@ function getFriends(userId) {
   });
 }
 
+function updateUserPremium(userId, premium) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/users/updatePremium`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, premium,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('updateUserPremium', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
 /*
                       Musics, Playlists & Votes
  */
@@ -373,7 +451,8 @@ function getMyVotesInPlaylist(userId, playlistId) {
   });
 }
 
-function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover, preview, link) {
+function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover, preview, link,
+  roomType) {
   return new Promise((resolve, reject) => {
     fetch(`${api}/musics/add`, {
       method: 'POST',
@@ -382,7 +461,7 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        playlistId, userId, title, artist, album, albumCover, preview, link,
+        playlistId, userId, title, artist, album, albumCover, preview, link, roomType,
       }),
     })
       .then(async (response) => {
@@ -1082,7 +1161,7 @@ function setPlaylistName(playlistId, userId, newName) {
 
 function getNextTrackByVote(playlistId) {
   return new Promise((resolve, reject) => {
-    fetch(`${api}/playlists/nextTrack/${playlistId}`, {
+    fetch(`${api}/playlists/nextPartyTrack/${playlistId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -1095,6 +1174,51 @@ function getNextTrackByVote(playlistId) {
           resolve(data);
         } else {
           reject(new CustomError('getNextTrackByVote', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+function getNextRadioTrack(playlistId, currentTrackId, nextIndex) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/nextRadioTrack/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, currentTrackId, nextIndex }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getNextRadioTrack', data.msg, response.status));
+        }
+      })
+      .catch(error => reject(error));
+  });
+}
+
+
+function getPrevRadioTrack(playlistId, currentTrackId, prevIndex) {
+  return new Promise((resolve, reject) => {
+    fetch(`${api}/playlists/prevRadioTrack/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ playlistId, currentTrackId, prevIndex }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.status === 200) {
+          resolve(data);
+        } else {
+          reject(new CustomError('getPrevRadioTrack', data.msg, response.status));
         }
       })
       .catch(error => reject(error));
@@ -1168,12 +1292,15 @@ function findUserByidSocial(DeezerId, SocialType) {
 
 
 export {
+  setNowPlaying,
+  getNowPlaying,
   login,
   addUser,
   updateUser,
   sendEmailToken,
   sendPasswordToken,
   updatePassword,
+  updateUserPremium,
   getPlaylistsFiltered,
   getMusicsByVote,
   getUserByIdByPreferences,
@@ -1218,4 +1345,6 @@ export {
   getPlaylistName,
   findUserByidSocial,
   deleteTrackFromPlaylistRight,
+  getNextRadioTrack,
+  getPrevRadioTrack,
 };

@@ -154,7 +154,8 @@ function downloadMusic(musicUrl) {
 // si une musique existe deja, il y a un warning UnhandledPromiseRejectionWarning,
 // mais la musique n'est pas add, as intended
 
-function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link) {
+function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link,
+  roomType) {
   return new Promise((resolve, reject) => {
     isNotInPlaylist(playlistId, link)
       .then(() => {
@@ -178,7 +179,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
             music.save((saveError, savedMusic) => {
               if (saveError) {
                 reject(new CustomError('MongoError', saveError.message, 500));
-              } else {
+              } else if (String(roomType) === 'radio') {
                 playlistService.getPlaylistById(playlistId)
                   .then((response) => {
                     response.data.musics.push(savedMusic._id);
@@ -196,6 +197,13 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
                   .catch((error) => {
                     console.error(error);
                   });
+              } else if (saveError) {
+                reject(new CustomError('MongoError', saveError.message, 500));
+              } else {
+                resolve({
+                  status: 200,
+                  data: savedMusic,
+                });
               }
             });
           })

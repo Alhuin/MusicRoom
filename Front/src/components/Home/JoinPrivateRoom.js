@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  Modal, StyleSheet, TextInput, View, Text, Alert,
+  Modal, StyleSheet, TextInput, View, Text, Alert, Platform, TouchableOpacity,
 } from 'react-native';
 import { joinPlaylistWithCode } from '../../../API/BackApi';
 import {
   Colors, Typography,
 } from '../../styles';
+import {Icon} from "native-base";
 
 export default class JoinPrivateRoom extends React.Component {
   constructor(props) {
@@ -41,6 +42,19 @@ export default class JoinPrivateRoom extends React.Component {
     const {
       setModalVisible, modalVisible,
     } = this.props;
+    let returnIconForiOS = (null);
+    if (Platform.OS === 'ios') {
+      returnIconForiOS = (
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisible();
+          }}
+          style={styles.iconWrapper}
+        >
+          <Icon name="ios-arrow-back" style={Typography.icon} />
+        </TouchableOpacity>
+      );
+    }
     return (
       <Modal
         animationType="slide"
@@ -72,6 +86,7 @@ export default class JoinPrivateRoom extends React.Component {
             </View>
           </View>
         </View>
+        {returnIconForiOS}
       </Modal>
     );
   }
@@ -93,6 +108,12 @@ const styles = StyleSheet.create({
   },
   sectionContent: {
     ...Typography.sectionContent,
+  },
+  iconWrapper: {
+    ...Typography.iconWrapper,
+    position: 'absolute',
+    top: 12,
+    left: 12,
   },
   container: {
     flex: 1,

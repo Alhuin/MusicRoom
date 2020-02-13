@@ -23,7 +23,8 @@ import SearchTrack from '../components/SearchTrack/SearchTrack';
 import Playlist from '../containers/Playlist';
 import Radios from '../containers/Radios';
 import Partys from '../containers/Partys';
-import LogoutButton from '../containers/LogoutButton';
+import CustomDrawer from '../containers/CustomDrawer';
+import CustomTabNavigator from '../containers/CustomTabNavigator';
 
 // Menu creation on Android
 
@@ -42,19 +43,6 @@ const createBurgerMenu = navigation => Platform.select({
 // Auth Navigator Handles Authentication screens by stack
 
 const AuthNavigator = createStackNavigator({
-  Inscription: {
-    screen: Inscription,
-    navigationOptions: {
-      header: null,
-    },
-    path: 'signUp/:DeezCode',
-  },
-  Inscription_noTransition: {
-    screen: Inscription,
-    navigationOptions: {
-      header: null,
-    },
-  },
   Connexion: {
     screen: Connexion,
     navigationOptions: {
@@ -64,6 +52,19 @@ const AuthNavigator = createStackNavigator({
   },
   Connexion_noTransition: {
     screen: Connexion,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  Inscription: {
+    screen: Inscription,
+    navigationOptions: {
+      header: null,
+    },
+    path: 'signUp/:DeezCode',
+  },
+  Inscription_noTransition: {
+    screen: Inscription,
     navigationOptions: {
       header: null,
     },
@@ -99,7 +100,7 @@ const HomeNavigator = createStackNavigator({
     screen: Home,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Home',
-      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerStyle: { backgroundColor: Colors.screenHeader },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
       headerLeftContainerStyle: Typography.headerSidesContainerStyle,
@@ -117,7 +118,7 @@ const PartysNavigator = createStackNavigator({
     screen: Partys,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Parties',
-      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerStyle: { backgroundColor: Colors.screenHeader },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
       headerLeftContainerStyle: Typography.headerSidesContainerStyle,
@@ -157,7 +158,7 @@ const RadiosNavigator = createStackNavigator({
     screen: Radios,
     navigationOptions: ({ navigation }: NavigationScreenProps) => ({
       headerTitle: 'Radios',
-      headerStyle: { backgroundColor: Colors.darkestGrey },
+      headerStyle: { backgroundColor: Colors.screenHeader },
       headerTitleContainerStyle: { ...Typography.screenHeader, width: 'auto', flex: 8 },
       headerTitleStyle: { ...Typography.screenHeaderText },
       headerLeftContainerStyle: Typography.headerSidesContainerStyle,
@@ -203,12 +204,45 @@ const MainNavigator = Platform.select({
     Settings: {
       screen: AppSettings,
       navigationOptions: {
-        drawerLabel: 'Paramètres',
+        title: 'Paramètres',
       },
       path: 'AppSettings/:DeezCode',
     },
     Parties: PartysNavigator,
     Radios: RadiosNavigator,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      // eslint-disable-next-line no-unused-vars
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = 'ios-home';
+        } else if (routeName === 'Settings') {
+          iconName = 'md-build';
+        } else if (routeName === 'Parties') {
+          iconName = 'musical-notes';
+        } else if (routeName === 'Radios') {
+          iconName = 'radio';
+        }
+        return (
+          <Icon
+            name={iconName}
+            style={{
+              color: tintColor, fontSize: Typography.iconFontSize,
+            }}
+          />
+        );
+      },
+      tabBarOptions: {
+        activeTintColor: Colors.lightGreen,
+        inactiveTintColor: Colors.baseText,
+      },
+    }),
+    tabBarComponent: props => (
+      <CustomTabNavigator tabProps={props} navigation={props.navigation} />
+    ),
   }),
   android: createDrawerNavigator({
     Home: {
@@ -226,7 +260,7 @@ const MainNavigator = Platform.select({
     Radios: RadiosNavigator,
   },
   {
-    contentComponent: props => <LogoutButton drawerProps={props} navigation={props.navigation} />,
+    contentComponent: props => <CustomDrawer drawerProps={props} navigation={props.navigation} />,
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
@@ -245,13 +279,13 @@ const RootSwitch = createSwitchNavigator(
     Loading: {
       screen: Loading,
     },
-    app: {
-      screen: MainNavigator,
-      path: 'home',
-    },
     auth: {
       screen: AuthNavigator,
       path: 'auth',
+    },
+    app: {
+      screen: MainNavigator,
+      path: 'home',
     },
   },
 );
