@@ -27,10 +27,12 @@ class TrackInSearch extends React.Component {
             'Ajout d\'une musique',
             'Cette musique existe déjà dans la playlist !',
           );
-          setModalVisible();
+          displayLoader();
+          // setModalVisible();
         } else {
           console.error(error);
           Alert.alert('An error occured, please try again later.');
+          displayLoader();
         }
       });
   };
