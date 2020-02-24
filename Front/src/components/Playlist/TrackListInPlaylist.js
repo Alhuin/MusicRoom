@@ -39,19 +39,16 @@ class TrackListInPlaylist extends React.Component {
       editor,
       onMoveEnd,
       pos,
-      currentTrack,
       admin,
       deleteTrackInPlaylist,
-      currentPlaylistId,
       nowPlaying,
     } = this.props;
     let render;
     let sortedTracks = tracks;
-
-    if (roomType === 'party' && playlistId === currentPlaylistId && tracks[0] && currentTrack) {
-      const currentTrackInPlaylist = tracks.filter(item => item._id === currentTrack.id)[0];
+    if (roomType === 'party' && tracks[0] && nowPlaying) {
+      const currentTrackInPlaylist = tracks.filter(item => item._id === nowPlaying)[0];
       if (currentTrackInPlaylist) {
-        sortedTracks = tracks.filter(item => item._id !== currentTrack.id);
+        sortedTracks = tracks.filter(item => item._id !== nowPlaying);
         sortedTracks.unshift(currentTrackInPlaylist);
       }
     }

@@ -450,11 +450,6 @@ class AppSettings extends React.Component {
                 </TouchableOpacity>
               </View>
             </View>
-            <Text style={Typography.bodyText}>
-              Votre compte est associé au compte Deezer de :
-              {' '}
-              {DeezerToken || 'Invalide'}
-            </Text>
             <View style={Typography.sectionSeparator} />
             <View style={styles.section}>
               <View style={[styles.sectionContent, { alignItems: 'center' }]}>

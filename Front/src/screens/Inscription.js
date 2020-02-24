@@ -7,14 +7,13 @@ import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import Components from '../components';
 import { addUser, findUserByidSocial } from '../../API/BackApi';
 import { getDeezerTokenLogin } from '../../API/DeezerApi';
-import { logPassLogin } from '../redux/actions';
 import { Colors } from '../styles';
 
 class Inscription extends React.Component {
   render() {
     const type = 'Sign Up';
     const {
-      navigation, userChanged, setSocket, admin,
+      navigation, userChanged, setSocket, admin, logPassLogin
     } = this.props;
     let DeezerCode = navigation.getParam('DeezCode');
 

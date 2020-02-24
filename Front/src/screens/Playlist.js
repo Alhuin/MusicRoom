@@ -10,7 +10,6 @@ import {
   isEditor, moveTrackOrder, getEditRestriction, getPlaylistName, deleteTrackFromPlaylistRight,
   deleteTrackFromPlaylist, getNextRadioTrack, setNowPlaying, getNowPlaying, getDelegatedPlayerAdmin,
 } from '../../API/BackApi';
-import TrackListInPlaylist from '../containers/TrackListInPlaylist';
 import AddFloatingButton from '../containers/AddFloatingButton';
 import { Colors, Typography, Buttons } from '../styles';
 
@@ -573,7 +572,7 @@ class Playlist extends React.Component {
           </View>
           <View style={styles.section}>
             <View style={styles.sectionContent}>
-              <TrackListInPlaylist
+              <Components.TrackListInPlaylist
                 tracks={filteredTracks}
                 updatePlaying={this.updatePlaying}
                 deleteTrackInPlaylist={trackId => this.deleteTrack(trackId, paramPlaylistId,

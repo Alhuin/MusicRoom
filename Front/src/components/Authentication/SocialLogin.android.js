@@ -36,9 +36,6 @@ export default class SocialLogin extends Component {
             addUser(userInfo.user.familyName, userInfo.user.id + userInfo.user.familyName,
               userInfo.user.givenName, userInfo.user.familyName, userInfo.user.email, '', userInfo.user.id)
               .then(async () => {
-                /* await AsyncStorage.setItem('log', 'autoLog');
-                await AsyncStorage.setItem('pass', userInfo.user.id + userInfo.user.familyName);
-                await AsyncStorage.setItem('login', userInfo.user.familyName); */
                 logPassLogin({
                   pass: userInfo.user.id + userInfo.user.familyName,
                   loging: userInfo.user.familyName,
