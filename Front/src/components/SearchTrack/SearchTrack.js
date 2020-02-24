@@ -23,7 +23,8 @@ export default class SearchTrack extends React.Component {
   }
 
   displayLoader = () => {
-    this.setState({ loading: true });
+    const { loading } = this.state;
+    this.setState({ loading: !loading });
   };
 
   _stopPlaying = () => {
