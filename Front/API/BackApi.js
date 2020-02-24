@@ -153,7 +153,6 @@ function sendEmailToken(loginOrEmail) {
         const data = await response.json();
         if (response.status === 200 || response.status === 202) {
           resolve(data);
-          // alert('An email has been sent');
         } else {
           reject(new CustomError('EmailToken', data.msg, response.status));
         }
@@ -470,7 +469,6 @@ function addMusicToPlaylist(playlistId, userId, title, artist, album, albumCover
           resolve(data);
         } else {
           reject(new CustomError('addMusic', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));
@@ -506,7 +504,6 @@ function addPlaylist(name, publicFlag, userId, author, authorName,
           resolve(data);
         } else {
           reject(new CustomError('AddPlaylist', data.msg, response.status));
-          // console.log(data.msg);
         }
       })
       .catch(error => reject(error));

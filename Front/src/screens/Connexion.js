@@ -28,7 +28,6 @@ class Connexion extends React.Component {
           navigation.navigate('app');
         })
         .catch((error) => {
-          // console.log(error);
           if (error.status === 401) {
             Alert.alert('Erreur d\'authentification', 'Mauvais identifiant ou mot de passe.');
           } else if (error.status === 403) {

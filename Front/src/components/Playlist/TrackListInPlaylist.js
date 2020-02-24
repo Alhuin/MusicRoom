@@ -52,14 +52,11 @@ class TrackListInPlaylist extends React.Component {
         sortedTracks.unshift(currentTrackInPlaylist);
       }
     }
-    if (/*
-      isUserInPlaylist === true && */ roomType === 'radio') {
+    if (roomType === 'radio') {
       const sortableListMapping = {};
       for (let i = 0; i < tracks.length; i += 1) {
         sortableListMapping[`${i}`] = tracks[i]._id;
       }
-      // console.log(tracks.map(a => a._id));
-      // console.log(sortableListMapping);
       render = (
         <SortableList
           data={tracks}

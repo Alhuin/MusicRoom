@@ -1,7 +1,7 @@
 import loginService from '../services/loginService';
 
 function login(req, res) {
-  console.log('FETCH');
+  // console.log('FETCH');
   if ((req.body.login && req.body.password)) {
     loginService.login(req.body.login, req.body.password)
       .then((response) => {

@@ -52,8 +52,6 @@ function getUserByIdByPreferences(userId, requesterId) {
         // Object.assign(iconFromVisibilityTable, user.visibilityTable);
         Object.keys(user.visibilityTable).forEach((key) => {
           if (Object.prototype.hasOwnProperty.call(user.visibilityTable, key)) {
-            /* if (user.visibilityTable[key] === 'ALL') {
-            } else */
             if (user.visibilityTable[key] === 'PRIVATE') {
               newUser[key] = '';
             } else if (user.visibilityTable[key] === 'FRIEND_ONLY') {

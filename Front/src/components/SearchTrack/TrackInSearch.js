@@ -28,7 +28,6 @@ class TrackInSearch extends React.Component {
             'Cette musique existe déjà dans la playlist !',
           );
           displayLoader();
-          // setModalVisible();
         } else {
           console.error(error);
           Alert.alert('An error occured, please try again later.');
