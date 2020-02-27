@@ -1,7 +1,6 @@
 import { SERVER, EXPRESS_PORT } from 'react-native-dotenv';
 import CustomError from './errorHandler';
 
-
 const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 /*
@@ -9,10 +8,10 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
  */
 
 function login(userName, password) {
-  console.log('login');
-  console.log(`${SERVER}:${EXPRESS_PORT}`);
+  // console.log('login');
+  // console.log(`${SERVER}:${EXPRESS_PORT}`);
   return new Promise((resolve, reject) => {
-    console.log('in login promise before fetch');
+    // console.log('in login promise before fetch');
     fetch(
       `${api}/login`,
       {

@@ -11,7 +11,7 @@ export default class Loading extends React.Component {
     // }, 5000); // catcher infinite loading
     // clearTimeout(timer);
     if (loggedUser !== null) {
-      setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
+      setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${loggedUser._id}` }));
       navigation.navigate('app');
     } else {
       navigation.navigate('auth');

@@ -13,7 +13,7 @@ class Inscription extends React.Component {
   render() {
     const type = 'Sign Up';
     const {
-      navigation, userChanged, setSocket, admin, logPassLogin
+      navigation, userChanged, setSocket, admin, logPassLogin,
     } = this.props;
     let DeezerCode = navigation.getParam('DeezCode');
 
@@ -24,7 +24,7 @@ class Inscription extends React.Component {
         .then((response) => {
           findUserByidSocial(response.id.toString(), 'Deezer')
             .then((res) => {
-              const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`);
+              const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${res._id}` });
               socket.connect();
               setSocket(socket);
               userChanged(res);

@@ -5,6 +5,7 @@ import CustomDrawer from '../components/Home/CustomDrawer';
 const mapStateToProps = state => ({
   socket: state.playerReducer.socket,
   playlistId: state.playerReducer.playlistId,
+  loggedUser: state.authReducer.loggedUser,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, SafeAreaView, TouchableOpacity, Text, StyleSheet,
+  View, SafeAreaView, TouchableOpacity, Text, StyleSheet, Alert,
 } from 'react-native';
 import { DrawerItems } from 'react-navigation';
 import MusicControl from 'react-native-music-control';
@@ -8,6 +8,36 @@ import { setNowPlaying } from '../../../API/BackApi';
 import { Buttons, Colors } from '../../styles';
 
 export default class CustomDrawer extends React.Component {
+  constructor(props) {
+    super(props);
+    props.socket.on('delog', () => {
+      Alert.alert('Votre compte est utilisé sur un autre appareil.');
+      this._logoutMulti();
+    });
+  }
+
+  _logoutMulti = () => {
+    const {
+      setSocket,
+      navigation,
+      logOut,
+      playlistId,
+      socket,
+    } = this.props;
+
+    setNowPlaying(playlistId, null)
+      .then(() => {
+        socket.disconnect();
+        setSocket(null);
+        navigation.navigate('auth');
+        logOut();
+        MusicControl.resetNowPlaying();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   _logout = () => {
     const {
       setSocket,

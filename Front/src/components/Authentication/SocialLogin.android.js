@@ -25,7 +25,7 @@ export default class SocialLogin extends Component {
       const userInfo = await GoogleSignin.signIn();
       findUserByidSocial(userInfo.user.id, 'Google')
         .then((res) => {
-          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`);
+          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${res._id}` });
           socket.connect();
           setSocket(socket);
           userChanged(res);

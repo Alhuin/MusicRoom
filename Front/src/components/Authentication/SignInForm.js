@@ -40,7 +40,7 @@ export default class SignInForm extends React.Component {
           if (user.isAdmin) {
             admin(true);
           }
-          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`);
+          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${user._id}` });
           socket.connect();
           setSocket(socket);
           navigation.navigate('app');

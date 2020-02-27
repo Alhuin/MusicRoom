@@ -1,24 +1,63 @@
 import React from 'react';
 import {
-  View, TouchableOpacity, StyleSheet, Dimensions,
+  View, TouchableOpacity, StyleSheet, Dimensions, Alert,
 } from 'react-native';
+import MusicControl from 'react-native-music-control';
 import { Icon } from 'native-base';
 import { BottomTabBar } from 'react-navigation';
 import { Typography, Colors } from '../../styles';
+import { setNowPlaying } from '../../../API/BackApi';
 
 export default class CustomTabNavigator extends React.Component {
+  constructor(props) {
+    super(props);
+    props.socket.on('delog', () => {
+      Alert.alert('Votre compte est utilisé sur un autre appareil.');
+      this._logoutMulti();
+    });
+  }
+
+  _logoutMulti = () => {
+    const {
+      setSocket,
+      navigation,
+      logOut,
+      playlistId,
+      socket,
+    } = this.props;
+    setNowPlaying(playlistId, null)
+      .then(() => {
+        socket.disconnect();
+        setSocket(null);
+        navigation.navigate('auth');
+        logOut();
+        MusicControl.resetNowPlaying();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   _logout = () => {
     const {
       setSocket,
       socket,
       navigation,
       logOut,
+      playlistId,
     } = this.props;
 
-    socket.disconnect();
-    setSocket(null);
-    logOut();
-    navigation.navigate('auth');
+    setNowPlaying(playlistId, null)
+      .then(() => {
+        socket.disconnect();
+        setSocket(null);
+        navigation.navigate('auth');
+        logOut();
+        MusicControl.resetNowPlaying();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   render() {

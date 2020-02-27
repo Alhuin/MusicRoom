@@ -10,7 +10,7 @@ import Components from '../components';
 import { Colors } from '../styles';
 
 class Connexion extends React.Component {
-    componentDidMount(): void {
+  componentDidMount(): void {
     // passer dans redux les globales comme ca on esquive l'async sur CDM
     const {
       navigation, userChanged, admin, setSocket, tmpLogUser, logPassLogin,
@@ -23,7 +23,9 @@ class Connexion extends React.Component {
           if (user.isAdmin) {
             admin(true);
           }
-          setSocket(SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`));
+          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${user._id}` });
+          socket.connect();
+          setSocket(socket);
           logPassLogin(null);
           navigation.navigate('app');
         })
