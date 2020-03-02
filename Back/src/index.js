@@ -91,6 +91,11 @@ io.on('connection', (socket) => {
     io.sockets.in(playlistId).emit('refresh');
   });
 
+  socket.on('musicMoved', (playlistId) => {
+    console.log(`[Socket Server] : music moved, Emitting refresh for playlist ${playlistId}`);
+    io.sockets.in(playlistId).emit('refresh');
+  });
+
   socket.on('voteMusic', (playlistId) => {
     console.log(`[Socket Server] : music voted, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
