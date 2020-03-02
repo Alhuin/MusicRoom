@@ -8,7 +8,6 @@ import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import { addUser, findUserByidSocial } from '../../../API/BackApi';
 import { logPassLogin } from '../../redux/actions';
 
-
 export default class SocialLogin extends Component {
   signIn = async () => {
     const {

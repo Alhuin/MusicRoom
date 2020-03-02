@@ -437,14 +437,8 @@ class Playlist extends React.Component {
       name, nowPlaying, delegated, filteredTracks,
     } = this.state;
     const {
-      navigation,
-      changeTrack,
-      changePlaylist,
-      loggedUser,
-      changePlaylistType,
-      setPlayerOpen,
-      playlistId,
-      playerOpen,
+      navigation, changeTrack, changePlaylist, loggedUser, changePlaylistType, setPlayerOpen,
+      playlistId, playerOpen, socket,
     } = this.props;
     const paramPlaylistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
@@ -461,7 +455,7 @@ class Playlist extends React.Component {
       );
     }
     const playButton = (
-      (!playlistLaunched && tracks.length > 0 && admin && (delegated || roomType === 'radio')) && (
+      (!playlistLaunched && tracks.length > 0 && (admin || roomType === 'radio') && (delegated || roomType === 'radio')) && (
         <TouchableOpacity
           onPress={() => {
             const {
@@ -592,7 +586,8 @@ class Playlist extends React.Component {
                 onMoveEnd={(id, newPosition) => {
                   moveTrackOrder(paramPlaylistId, id, newPosition)
                     .then(() => {
-                      this._onRefresh();
+                      socket.emit('musicMoved', paramPlaylistId);
+                      // this._onRefresh();
                     })
                     .catch((error) => {
                       console.error(error);
