@@ -40,7 +40,7 @@ class PlaylistSettings extends React.Component {
       users: [],
       bans: [],
       friends: [],
-      switchValue: false,
+      switchValue: true,
       loading: false,
       privateId: '',
       delegatedPlayerAdmin: '',
@@ -810,9 +810,7 @@ class PlaylistSettings extends React.Component {
           { label: 'Admin.', value: 2 },
         ];
         editRestrictionString = "Droits d'édition :";
-        specificRoomSettings = (
-          null
-        );
+        specificRoomSettings = (null);
       }
       adminOptions = (
         <View>

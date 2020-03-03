@@ -85,6 +85,7 @@ class TrackInPlaylist extends React.Component {
     } = this.props;
     let renderForParty = null;
     let deletionMod = null;
+    let previewCover = null;
     if ((roomType === 'party' && track._id === nowPlaying)
       || (currentTrack !== null && roomType === 'radio' && track._id === currentTrack.id)) {
       renderForParty = (<Text style={Typography.bodyText}>Now playing</Text>);
@@ -160,8 +161,8 @@ class TrackInPlaylist extends React.Component {
         </TouchableOpacity>
       );
     }
-    return (
-      <Animated.View style={[styles.card, this._style]}>
+    if (roomType === 'party') {
+      previewCover = (
         <TouchableOpacity
           style={styles.previewCover}
           onPress={() => {
@@ -177,6 +178,24 @@ class TrackInPlaylist extends React.Component {
             style={{ height: 80, width: 80, position: 'absolute' }}
           />
         </TouchableOpacity>
+      );
+    } else {
+      previewCover = (
+        <TouchableOpacity
+          style={styles.previewCover}
+          disabled
+        >
+          <Image
+            style={styles.image}
+            source={{ uri: track.albumCover }}
+          />
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <Animated.View style={[styles.card, this._style]}>
+        {previewCover}
         <View style={styles.content_container}>
           <View style={styles.title_container}>
             <Text style={styles.title_text} numberOfLines={2}>{track.title}</Text>
