@@ -6,7 +6,6 @@ import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import SocketIOClient from 'socket.io-client';
 import { SERVER, WEBSOCKET_PORT } from 'react-native-dotenv';
 import { addUser, findUserByidSocial } from '../../../API/BackApi';
-import { logPassLogin } from '../../redux/actions';
 
 export default class SocialLogin extends Component {
   signIn = async () => {
@@ -14,6 +13,7 @@ export default class SocialLogin extends Component {
       navigation,
       userChanged,
       setSocket,
+      logPassLogin,
     } = this.props;
     GoogleSignin.configure({
       webClientId: '1032045608110-fk8aiqduat8c6oiltm1uneqbuqhumfsn.apps.googleusercontent.com',
@@ -24,10 +24,10 @@ export default class SocialLogin extends Component {
       const userInfo = await GoogleSignin.signIn();
       findUserByidSocial(userInfo.user.id, 'Google')
         .then((res) => {
-          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${res._id}` });
-          socket.connect();
-          setSocket(socket);
           userChanged(res);
+          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${res._id}` });
+          // socket.connect();
+          setSocket(socket);
           navigation.navigate('app');
         })
         .catch((idGoogleerror) => {
@@ -36,7 +36,7 @@ export default class SocialLogin extends Component {
               userInfo.user.givenName, userInfo.user.familyName, userInfo.user.email, '', userInfo.user.id)
               .then(async () => {
                 logPassLogin({
-                  pass: userInfo.user.id + userInfo.user.familyName,
+                  pass: String(userInfo.user.id + userInfo.user.familyName),
                   loging: userInfo.user.familyName,
                 });
                 Alert.alert(

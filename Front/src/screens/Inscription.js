@@ -9,6 +9,7 @@ import { addUser, findUserByidSocial } from '../../API/BackApi';
 import { getDeezerTokenLogin } from '../../API/DeezerApi';
 import { Colors } from '../styles';
 
+
 class Inscription extends React.Component {
   render() {
     const type = 'Sign Up';
@@ -24,16 +25,16 @@ class Inscription extends React.Component {
         .then((response) => {
           findUserByidSocial(response.id.toString(), 'Deezer')
             .then((res) => {
-              const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${res._id}` });
-              socket.connect();
-              setSocket(socket);
               userChanged(res);
+              const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${res._id}` });
+              // socket.connect();
+              setSocket(socket);
               navigation.navigate('app');
             })
             .catch((idDeezError) => {
               if (idDeezError.status === 404) {
                 addUser(response.firstname, response.id.toString() + response.lastname,
-                  response.firstname, response.lastname, response.email, response.id.toString())
+                  response.firstname, response.lastname, response.email, response.id.toString(), '')
                   .then(async () => {
                     Alert.alert(
                       'Validation de compte',

@@ -26,10 +26,10 @@ export default class AdminPlayer extends Component {
   }
 
   componentWillUnmount(): void {
-    this.onForward.remove();
-    this.setBackGroundTrack.remove();
-    this.nextTrackByVote.remove();
-    this.nextRadioTrack.remove();
+    // this.onForward.remove();
+    // this.setBackGroundTrack.remove();
+    // this.nextTrackByVote.remove();
+    // this.nextRadioTrack.remove();
   }
 
   setModalVisible() {

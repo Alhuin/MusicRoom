@@ -124,20 +124,16 @@ function addUser(login, password, name, familyName, email, idDeezer, idGoogle) {
   return new Promise((resolve, reject) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
-    let user = new UserModel({
+    const user = new UserModel({
       login,
       password: hash,
       name,
       familyName,
       email,
       isVerified: false,
+      idDeezer,
+      idGoogle,
     });
-    if (idDeezer) {
-      user = { ...user, ...idDeezer };
-    }
-    if (idGoogle) {
-      user = { ...user, ...idGoogle };
-    }
     user.save((error, savedUser) => {
       if (error) {
         if (error.name === 'ValidationError') {

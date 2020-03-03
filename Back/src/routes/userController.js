@@ -97,13 +97,11 @@ function deleteUserById(req, res) {
 }
 
 function addUser(req, res) {
-  // checker email valide et les champs uniques
-  const idDeezer = req.body.idDeezer ? req.body.idDeezer : null;
-  const idGoogle = req.body.idGoogle ? req.body.idGoogle : null;
   if ((req.body.login && req.body.password && req.body.name
-    && req.body.familyName && req.body.email)) {
+    && req.body.familyName && req.body.email && req.body.idDeezer !== undefined
+    && req.body.idGoogle !== undefined)) {
     userService.addUser(req.body.login, req.body.password, req.body.name,
-      req.body.familyName, req.body.email, idDeezer, idGoogle)
+      req.body.familyName, req.body.email, req.body.idDeezer, req.body.idGoogle)
       .then((response) => {
         res
           .status(response.status)
@@ -255,7 +253,7 @@ function confirmEmailToken(req, res) {
       .then((response) => {
         res
           .status(response.status)
-          .redirect('musicroom://music/auth/signIn/');
+          .redirect('musicroom://music/auth/signIn?redirect=true');
       })
       .catch((error) => {
         console.error(error);

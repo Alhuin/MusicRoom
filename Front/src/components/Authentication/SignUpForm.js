@@ -57,7 +57,7 @@ export default class SignUpForm extends React.Component {
         'Les deux mots de passes ne correspondent pas',
       );
     } else {
-      addUser(userName, password, name, familyName, email)
+      addUser(userName, password, name, familyName, email, '', '')
         .then(() => {
           Alert.alert(
             'Bienvenue !',

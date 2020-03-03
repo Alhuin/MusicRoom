@@ -10,43 +10,39 @@ import Components from '../components';
 import { Colors } from '../styles';
 
 class Connexion extends React.Component {
-  componentDidMount(): void {
-    // passer dans redux les globales comme ca on esquive l'async sur CDM
-    const {
-      navigation, userChanged, admin, setSocket, tmpLogUser, logPassLogin,
-    } = this.props;
-    if (tmpLogUser !== null) {
-      const { pass, loging } = tmpLogUser;
-      login(loging, pass)
-        .then((user) => {
-          userChanged(user);
-          if (user.isAdmin) {
-            admin(true);
-          }
-          const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${user._id}` });
-          socket.connect();
-          setSocket(socket);
-          logPassLogin(null);
-          navigation.navigate('app');
-        })
-        .catch((error) => {
-          if (error.status === 401) {
-            Alert.alert('Erreur d\'authentification', 'Mauvais identifiant ou mot de passe.');
-          } else if (error.status === 403) {
-            Alert.alert(
-              'Erreur d\'authentification',
-              'Votre adresse email n\'a pas été vérifiée.',
-            );
-          }
-        });
-    }
-  }
-
   render() {
     const {
-      navigation, userChanged, setSocket, admin, logPassLogin,
+      navigation, userChanged, setSocket, admin, logPassLogin, tmpLogUser,
     } = this.props;
     const type = 'Sign In';
+    if (navigation.state.params !== undefined && navigation.state.params.redirect === 'true') {
+      if (tmpLogUser !== null) {
+        const { pass, loging } = tmpLogUser;
+        login(loging, pass)
+          .then((user) => {
+            userChanged(user);
+            if (user.isAdmin) {
+              admin(true);
+            }
+            const socket = SocketIOClient(`${SERVER}:${WEBSOCKET_PORT}`, { query: `userId=${user._id}` });
+            // socket.connect();
+            logPassLogin(null);
+            setSocket(socket);
+            navigation.navigate('app');
+          })
+          .catch((error) => {
+            if (error.status === 401) {
+              Alert.alert('Erreur d\'authentification', 'Mauvais identifiant ou mot de passe.');
+            } else if (error.status === 403) {
+              Alert.alert(
+                'Erreur d\'authentification',
+                'Votre adresse email n\'a pas été vérifiée.',
+              );
+            }
+          });
+      }
+    }
+
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Colors.screenHeader }}>
         <ScrollView

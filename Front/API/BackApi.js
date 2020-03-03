@@ -109,15 +109,9 @@ function getNowPlaying(playlistId) {
 
 function addUser(userName, password, name, familyName, email, idDeezer, idGoogle) {
   return new Promise((resolve, reject) => {
-    let body = {
-      login: userName, password, name, familyName, email,
+    const body = {
+      login: userName, password, name, familyName, email, idDeezer: (idDeezer === undefined ? '' : idDeezer), idGoogle: (idGoogle === undefined ? '' : idGoogle),
     };
-    if (idDeezer) {
-      body = { ...body, ...idDeezer };
-    }
-    if (idGoogle) {
-      body = { ...body, ...idGoogle };
-    }
     fetch(`${api}/users`, {
       method: 'POST',
       headers: {

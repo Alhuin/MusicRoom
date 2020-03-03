@@ -36,12 +36,10 @@ const userSchema = new mongoose.Schema({
   idDeezer: {
     type: String,
     unique: true,
-    sparse: true,
   },
   idGoogle: {
     type: String,
     unique: true,
-    sparse: true,
   },
   preferences: {
     type: {},
