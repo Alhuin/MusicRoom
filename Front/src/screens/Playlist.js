@@ -57,6 +57,18 @@ class Playlist extends React.Component {
         props.setNextIndex(nextIndex);
       }
     });
+
+    props.socket.on('kick', () => {
+      props.changeTrack(null);
+      props.setPlayerOpen(false);
+      props.navigation.goBack();
+    });
+
+    props.socket.on('refreshDelegatedPermissions', () => {
+      props.changeTrack(null);
+      props.setPlayerOpen(false);
+      this._onRefresh();
+    });
   }
 
 
@@ -355,6 +367,7 @@ class Playlist extends React.Component {
       setTotalLength,
       setCurrentPosition,
       socket,
+      setPlayerOpen,
     } = this.props;
 
     getNextTrackByVote(playlistId)
@@ -376,6 +389,7 @@ class Playlist extends React.Component {
           changePlaylistType('');
           setTotalLength(1);
           setCurrentPosition(0);
+          setPlayerOpen(false);
           socket.emit('playlistEnd', playlistId);
         }
       })

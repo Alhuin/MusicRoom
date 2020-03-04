@@ -11,14 +11,18 @@ import { Cards, Typography } from '../../styles';
 
 class AdminListInSettings extends React.Component {
   _pressSetDelegatedPlayerAdmin = (userId, playlistId, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser, socket } = this.props;
+    const {
+      loggedUser, socket, changeTrack, setPlayerOpen,
+    } = this.props;
     if (!isLoading()) {
       displayLoader();
       setDelegatedPlayerAdmin(playlistId, userId, loggedUser._id)
         .then(() => {
           onRefresh();
+          setPlayerOpen(false);
+          changeTrack(null);
           if (socket) {
-            socket.emit('personalParameterChanged', playlistId, userId);
+            socket.emit('delegatedParameterChanged', playlistId, userId);
           }
         })
         .catch((error) => {
@@ -29,12 +33,16 @@ class AdminListInSettings extends React.Component {
 
   _pressAdminInPlaylistDowngrade = (userId, item, playlistId, parent,
     roomType, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser, socket } = this.props;
+    const {
+      loggedUser, socket, changeTrack, setPlayerOpen,
+    } = this.props;
     if (!isLoading()) {
       displayLoader();
       adminInPlaylistDowngrade(playlistId, userId, loggedUser._id)
         .then(() => {
           if (String(userId) === String(loggedUser._id)) {
+            setPlayerOpen(false);
+            changeTrack(null);
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
             } else if (roomType === 'radio') {
@@ -55,12 +63,16 @@ class AdminListInSettings extends React.Component {
 
   _pressDeleteUserInPlaylist = (userId, item, playlistId, parent,
     roomType, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser, socket } = this.props;
+    const {
+      loggedUser, socket, changeTrack, setPlayerOpen,
+    } = this.props;
     if (!isLoading()) {
       displayLoader();
       deleteUserInPlaylist(playlistId, userId, true, loggedUser._id)
         .then(() => {
           if (String(userId) === String(loggedUser._id)) {
+            setPlayerOpen(false);
+            changeTrack(null);
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
             } else if (roomType === 'radio') {
@@ -69,7 +81,7 @@ class AdminListInSettings extends React.Component {
           } else {
             onRefresh();
             if (socket) {
-              socket.emit('personalParameterChanged', playlistId, userId);
+              socket.emit('kickOrBanFromPlaylist', playlistId, userId);
             }
           }
         })
@@ -81,12 +93,16 @@ class AdminListInSettings extends React.Component {
 
   _pressBanUserInPlaylist = (userId, item, playlistId, parent,
     roomType, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser, socket } = this.props;
+    const {
+      loggedUser, socket, changeTrack, setPlayerOpen,
+    } = this.props;
     if (!isLoading()) {
       displayLoader();
       banUserInPlaylist(playlistId, userId, true, loggedUser._id)
         .then(() => {
           if (String(userId) === String(loggedUser._id)) {
+            setPlayerOpen(false);
+            changeTrack(null);
             if (roomType === 'party') {
               NavigationUtils.resetStack(parent, 'PartysList', null);
             } else if (roomType === 'radio') {
@@ -95,7 +111,7 @@ class AdminListInSettings extends React.Component {
           } else {
             onRefresh();
             if (socket) {
-              socket.emit('personalParameterChanged', playlistId, userId);
+              socket.emit('kickOrBanFromPlaylist', playlistId, userId);
             }
           }
         })

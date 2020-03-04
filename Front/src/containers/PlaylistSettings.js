@@ -9,6 +9,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   userChanged: payload => dispatch(actions.userChanged(payload)),
+  changeTrack: payload => dispatch(actions.changeTrack(payload)),
+  setPlayerOpen: payload => dispatch(actions.setPlayerOpen(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistSettings);

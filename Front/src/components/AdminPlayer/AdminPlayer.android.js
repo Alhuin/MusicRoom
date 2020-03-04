@@ -86,6 +86,7 @@ export default class AdminPlayer extends Component {
       changePlaylistType,
       setTotalLength,
       setCurrentPosition,
+      setPlayerOpen,
       paused,
       socket,
     } = this.props;
@@ -111,6 +112,7 @@ export default class AdminPlayer extends Component {
           changePlaylistType('');
           setTotalLength(1);
           setCurrentPosition(0);
+          setPlayerOpen(false);
           socket.emit('playlistEnd', playlistId);
         }
       })

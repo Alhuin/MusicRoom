@@ -19,6 +19,7 @@ const mapDispatchToProps = dispatch => ({
   changeTrack: payload => dispatch(actions.changeTrack(payload)),
   changePlaylist: payload => dispatch(actions.changePlaylist(payload)),
   changePlaylistType: payload => dispatch(actions.changePlaylistType(payload)),
+  setPlayerOpen: payload => dispatch(actions.setPlayerOpen(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminPlayer);

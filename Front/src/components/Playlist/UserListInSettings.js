@@ -103,7 +103,7 @@ class UserListInSettings extends React.Component {
                               } else {
                                 onRefresh();
                                 if (socket) {
-                                  socket.emit('personalParameterChanged', playlistId, userId);
+                                  socket.emit('kickOrBanFromPlaylist', playlistId, userId);
                                 }
                               }
                             })
@@ -131,7 +131,7 @@ class UserListInSettings extends React.Component {
                               } else {
                                 onRefresh();
                                 if (socket) {
-                                  socket.emit('personalParameterChanged', playlistId, userId);
+                                  socket.emit('kickOrBanFromPlaylist', playlistId, userId);
                                 }
                               }
                             })

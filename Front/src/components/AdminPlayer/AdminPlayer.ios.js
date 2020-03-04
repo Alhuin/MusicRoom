@@ -96,6 +96,7 @@ export default class AdminPlayer extends Component {
       setCurrentPosition,
       paused,
       socket,
+      setPlayerOpen,
     } = this.props;
 
     getNextTrackByVote(playlistId)
@@ -119,6 +120,7 @@ export default class AdminPlayer extends Component {
           changePlaylistType('');
           setTotalLength(1);
           setCurrentPosition(0);
+          setPlayerOpen(false);
           socket.emit('playlistEnd', playlistId);
         }
       })

@@ -158,7 +158,9 @@ class PlaylistSettings extends React.Component {
   };
 
   leavingPlaylist = () => {
-    const { navigation, loggedUser } = this.props;
+    const {
+      navigation, loggedUser, changeTrack, setPlayerOpen,
+    } = this.props;
     const { delegatedPlayerAdmin } = this.state;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
@@ -167,6 +169,8 @@ class PlaylistSettings extends React.Component {
     if (String(delegatedPlayerAdmin) !== String(loggedUser._id)) {
       deleteUserInPlaylist(playlistId, loggedUser._id, isAdmin, loggedUser._id)
         .then(() => {
+          setPlayerOpen(false);
+          changeTrack(null);
           if (roomType === 'party') {
             NavigationUtils.resetStack(this, 'PartysList', null);
           } else if (roomType === 'radio') {
@@ -589,7 +593,9 @@ class PlaylistSettings extends React.Component {
 
   onDeletePlaylistTouchable = () => {
     const { deletePlaylistState } = this.state;
-    const { navigation, loggedUser } = this.props;
+    const {
+      navigation, loggedUser, changeTrack, setPlayerOpen,
+    } = this.props;
     const playlistId = navigation.getParam('playlistId');
     const roomType = navigation.getParam('roomType');
 
@@ -600,6 +606,8 @@ class PlaylistSettings extends React.Component {
     } else if (deletePlaylistState === 'Dernière chance !' && this._isMounted) {
       deletePlaylistByAdmin(playlistId, loggedUser._id)
         .then(() => {
+          setPlayerOpen(false);
+          changeTrack(null);
           if (roomType === 'party') {
             NavigationUtils.resetStack(this, 'PartysList', null);
           } else if (roomType === 'radio') {
@@ -642,7 +650,7 @@ class PlaylistSettings extends React.Component {
     }
     let radioProps = [];
     const {
-      navigation, loggedUser, userChanged, socket,
+      navigation, loggedUser, userChanged, socket, changeTrack, setPlayerOpen,
     } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
@@ -1035,6 +1043,8 @@ class PlaylistSettings extends React.Component {
             <Collapsible collapsed={collapsedAdmins} align="center">
               <View style={styles.sectionContent}>
                 <AdminListInSettings
+                  setPlayerOpen={setPlayerOpen}
+                  changeTrack={changeTrack}
                   loggedUser={loggedUser}
                   socket={socket}
                   displayLoader={this.displayLoader}
@@ -1064,6 +1074,7 @@ class PlaylistSettings extends React.Component {
             <Collapsible collapsed={collapsedUsers} align="center">
               <View style={styles.sectionContent}>
                 <UserListInSettings
+                  setPlayerOpen={setPlayerOpen}
                   loggedUser={loggedUser}
                   socket={socket}
                   displayLoader={this.displayLoader}
@@ -1283,6 +1294,7 @@ class PlaylistSettings extends React.Component {
               <Collapsible collapsed={collapsedUsers} align="center">
                 <View style={styles.sectionContent}>
                   <UserListInSettings
+                    setPlayerOpen={setPlayerOpen}
                     loggedUser={loggedUser}
                     socket={socket}
                     displayLoader={this.displayLoader}

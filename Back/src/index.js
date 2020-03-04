@@ -102,11 +102,31 @@ io.on('connection', (socket) => {
     io.sockets.in(playlistId).emit('refresh');
   });
 
+  socket.on('delegatedParameterChanged', (playlistId, userId) => {
+    for (i; i < clients.length; i += 1) {
+      if (String(clients[i].handshake.query.userId) === String(userId)) {
+        console.log(`[Socket Server] : delegated parameters changed. Emitting refreshPermissions for playlist ${playlistId} and user ${userId} `);
+        io.sockets.in(playlistId).to(clients[i].client).emit('refreshDelegatedPermissions');
+        break;
+      }
+    }
+  });
+
   socket.on('personalParameterChanged', (playlistId, userId) => {
     for (i; i < clients.length; i += 1) {
       if (String(clients[i].handshake.query.userId) === String(userId)) {
         console.log(`[Socket Server] : personal parameters changed. Emitting refreshPermissions for playlist ${playlistId} and user ${userId} `);
         io.sockets.in(playlistId).to(clients[i].client).emit('refreshPermissions');
+        break;
+      }
+    }
+  });
+
+  socket.on('kickOrBanFromPlaylist', (playlistId, userId) => {
+    for (i; i < clients.length; i += 1) {
+      if (String(clients[i].handshake.query.userId) === String(userId)) {
+        console.log(`[Socket Server] : kick from playlist. Emitting kick for playlist ${playlistId} and user ${userId} `);
+        io.sockets.in(playlistId).to(clients[i].client).emit('kick');
         break;
       }
     }
