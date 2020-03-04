@@ -17,6 +17,7 @@ export default class FriendsInSettings extends React.Component {
       displayLoader,
       isLoading,
       navigation,
+      socket,
     } = this.props;
     return (
       <FlatList
@@ -35,6 +36,9 @@ export default class FriendsInSettings extends React.Component {
                       joinPlaylistWithId(friendId, playlistId)
                         .then(() => {
                           onRefresh();
+                          if (socket) {
+                            socket.emit('personalParameterChanged', playlistId, friendId);
+                          }
                         })
                         .catch((error) => {
                           console.error(error);

@@ -9,12 +9,7 @@ import { Cards, Typography } from '../../styles';
 class BansListInSettings extends React.Component {
   render() {
     const {
-      bans,
-      onRefresh,
-      playlistId,
-      displayLoader,
-      isLoading,
-      navigation,
+      bans, onRefresh, playlistId, displayLoader, isLoading, navigation, socket,
     } = this.props;
     return (
       <FlatList
@@ -48,6 +43,9 @@ class BansListInSettings extends React.Component {
                         addUserToPlaylistAndUnbanned(playlistId, userId)
                           .then(() => {
                             onRefresh();
+                            if (socket) {
+                              socket.emit('personalParameterChanged', playlistId, userId);
+                            }
                           })
                           .catch((error) => {
                             console.error(error);

@@ -11,12 +11,15 @@ import { Cards, Typography } from '../../styles';
 
 class AdminListInSettings extends React.Component {
   _pressSetDelegatedPlayerAdmin = (userId, playlistId, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser } = this.props;
+    const { loggedUser, socket } = this.props;
     if (!isLoading()) {
       displayLoader();
       setDelegatedPlayerAdmin(playlistId, userId, loggedUser._id)
         .then(() => {
           onRefresh();
+          if (socket) {
+            socket.emit('personalParameterChanged', playlistId, userId);
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -26,7 +29,7 @@ class AdminListInSettings extends React.Component {
 
   _pressAdminInPlaylistDowngrade = (userId, item, playlistId, parent,
     roomType, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser } = this.props;
+    const { loggedUser, socket } = this.props;
     if (!isLoading()) {
       displayLoader();
       adminInPlaylistDowngrade(playlistId, userId, loggedUser._id)
@@ -39,6 +42,9 @@ class AdminListInSettings extends React.Component {
             }
           } else {
             onRefresh();
+            if (socket) {
+              socket.emit('personalParameterChanged', playlistId, userId);
+            }
           }
         })
         .catch((error) => {
@@ -49,7 +55,7 @@ class AdminListInSettings extends React.Component {
 
   _pressDeleteUserInPlaylist = (userId, item, playlistId, parent,
     roomType, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser } = this.props;
+    const { loggedUser, socket } = this.props;
     if (!isLoading()) {
       displayLoader();
       deleteUserInPlaylist(playlistId, userId, true, loggedUser._id)
@@ -62,6 +68,9 @@ class AdminListInSettings extends React.Component {
             }
           } else {
             onRefresh();
+            if (socket) {
+              socket.emit('personalParameterChanged', playlistId, userId);
+            }
           }
         })
         .catch((error) => {
@@ -72,7 +81,7 @@ class AdminListInSettings extends React.Component {
 
   _pressBanUserInPlaylist = (userId, item, playlistId, parent,
     roomType, onRefresh, isLoading, displayLoader) => {
-    const { loggedUser } = this.props;
+    const { loggedUser, socket } = this.props;
     if (!isLoading()) {
       displayLoader();
       banUserInPlaylist(playlistId, userId, true, loggedUser._id)
@@ -85,6 +94,9 @@ class AdminListInSettings extends React.Component {
             }
           } else {
             onRefresh();
+            if (socket) {
+              socket.emit('personalParameterChanged', playlistId, userId);
+            }
           }
         })
         .catch((error) => {
@@ -95,17 +107,8 @@ class AdminListInSettings extends React.Component {
 
   render() {
     const {
-      admins,
-      onRefresh,
-      authorId,
-      playlistId,
-      displayLoader,
-      isLoading,
-      roomType,
-      parent,
-      delegatedPlayerAdmin,
-      loggedUser,
-      navigation,
+      admins, onRefresh, authorId, playlistId, displayLoader, isLoading, roomType, parent,
+      delegatedPlayerAdmin, loggedUser, navigation,
     } = this.props;
     return (
       <FlatList

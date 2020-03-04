@@ -642,7 +642,7 @@ class PlaylistSettings extends React.Component {
     }
     let radioProps = [];
     const {
-      navigation, loggedUser, userChanged,
+      navigation, loggedUser, userChanged, socket,
     } = this.props;
     const isAdmin = navigation.getParam('isAdmin');
     const playlistId = navigation.getParam('playlistId');
@@ -1036,6 +1036,7 @@ class PlaylistSettings extends React.Component {
               <View style={styles.sectionContent}>
                 <AdminListInSettings
                   loggedUser={loggedUser}
+                  socket={socket}
                   displayLoader={this.displayLoader}
                   admins={admins}
                   onRefresh={this._onRefresh}
@@ -1064,6 +1065,7 @@ class PlaylistSettings extends React.Component {
               <View style={styles.sectionContent}>
                 <UserListInSettings
                   loggedUser={loggedUser}
+                  socket={socket}
                   displayLoader={this.displayLoader}
                   users={users}
                   onRefresh={this._onRefresh}
@@ -1091,6 +1093,8 @@ class PlaylistSettings extends React.Component {
             <Collapsible collapsed={collapsedBans} align="center">
               <View style={styles.sectionContent}>
                 <BansListInSettings
+                  loggedUser={loggedUser}
+                  socket={socket}
                   displayLoader={this.displayLoader}
                   bans={bans}
                   onRefresh={this._onRefresh}
@@ -1114,6 +1118,7 @@ class PlaylistSettings extends React.Component {
             <View style={styles.sectionContent}>
               <Collapsible collapsed={collapsedFriends} align="center">
                 <FriendsInSettings
+                  socket={socket}
                   friends={friends}
                   users={users}
                   admins={admins}
@@ -1279,6 +1284,7 @@ class PlaylistSettings extends React.Component {
                 <View style={styles.sectionContent}>
                   <UserListInSettings
                     loggedUser={loggedUser}
+                    socket={socket}
                     displayLoader={this.displayLoader}
                     users={users}
                     onRefresh={this._onRefresh}
@@ -1306,6 +1312,7 @@ class PlaylistSettings extends React.Component {
               <View style={styles.sectionContent}>
                 <Collapsible collapsed={collapsedFriends} align="center">
                   <FriendsInSettings
+                    socket={socket}
                     friends={friends}
                     users={users}
                     admins={admins}

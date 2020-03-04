@@ -12,16 +12,8 @@ import { Cards, Typography } from '../../styles';
 class UserListInSettings extends React.Component {
   render() {
     const {
-      users,
-      playlistId,
-      onRefresh,
-      displayLoader,
-      isLoading,
-      roomType,
-      parent,
-      loggedUser,
-      isAdmin,
-      navigation,
+      users, playlistId, onRefresh, displayLoader, isLoading, roomType, parent, loggedUser,
+      isAdmin, navigation, socket,
     } = this.props;
     return (
       <FlatList
@@ -83,6 +75,9 @@ class UserListInSettings extends React.Component {
                           userInPlaylistUpgrade(playlistId, userId, loggedUser._id)
                             .then(() => {
                               onRefresh();
+                              if (socket) {
+                                socket.emit('personalParameterChanged', playlistId, userId);
+                              }
                             })
                             .catch((error) => {
                               if (error.status !== 401) console.error(error);
@@ -107,6 +102,9 @@ class UserListInSettings extends React.Component {
                                 }
                               } else {
                                 onRefresh();
+                                if (socket) {
+                                  socket.emit('personalParameterChanged', playlistId, userId);
+                                }
                               }
                             })
                             .catch((error) => {
@@ -132,6 +130,9 @@ class UserListInSettings extends React.Component {
                                 }
                               } else {
                                 onRefresh();
+                                if (socket) {
+                                  socket.emit('personalParameterChanged', playlistId, userId);
+                                }
                               }
                             })
                             .catch((error) => {

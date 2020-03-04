@@ -33,6 +33,7 @@ io.on('connection', (socket) => {
     if (String(clients[i].handshake.query.userId) === String(socket.handshake.query.userId)) {
       console.log(`[Socket Server] : user to delog is ${id}`);
       clients[i].to(id).emit('delog');
+      break;
     }
   }
   console.log(`[Socket Server] : user is ${id} logged in`);
@@ -101,8 +102,18 @@ io.on('connection', (socket) => {
     io.sockets.in(playlistId).emit('refresh');
   });
 
+  socket.on('personalParameterChanged', (playlistId, userId) => {
+    for (i; i < clients.length; i += 1) {
+      if (String(clients[i].handshake.query.userId) === String(userId)) {
+        console.log(`[Socket Server] : personal parameters changed. Emitting refreshPermissions for playlist ${playlistId} and user ${userId} `);
+        io.sockets.in(playlistId).to(clients[i].client).emit('refreshPermissions');
+        break;
+      }
+    }
+  });
+
   socket.on('parameterChanged', (playlistId) => {
-    console.log(`[Socket Server] : parameters changed ? Emitting refreshPermissions for playlist ${playlistId}`);
+    console.log(`[Socket Server] : parameters changed. Emitting refreshPermissions for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refreshPermissions');
   });
 
