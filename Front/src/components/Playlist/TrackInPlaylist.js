@@ -82,6 +82,7 @@ class TrackInPlaylist extends React.Component {
       deleteTrackInPlaylist,
       nowPlaying,
       currentTrack,
+      isPaused,
     } = this.props;
     let renderForParty = null;
     let deletionMod = null;
@@ -168,15 +169,19 @@ class TrackInPlaylist extends React.Component {
           onPress={() => {
             handlePress(track.preview);
           }}
+          disabled={!isPaused}
         >
           <Image
             style={styles.image}
             source={{ uri: track.albumCover }}
           />
+          { isPaused === true
+          && (
           <Image
             source={require('../../assets/images/play.png')}
             style={{ height: 80, width: 80, position: 'absolute' }}
           />
+          )}
         </TouchableOpacity>
       );
     } else {
