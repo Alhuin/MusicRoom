@@ -59,14 +59,12 @@ class Playlist extends React.Component {
     });
 
     props.socket.on('kick', () => {
-      props.changeTrack(null);
-      props.setPlayerOpen(false);
+      props.exitPlayer(null);
       props.navigation.goBack();
     });
 
     props.socket.on('refreshDelegatedPermissions', () => {
-      props.changeTrack(null);
-      props.setPlayerOpen(false);
+      props.exitPlayer(null);
       this._onRefresh();
     });
   }
@@ -460,7 +458,6 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
-    console.log('RENDER PLAYLIST');
     let forEditor = (null);
     if (editor) {
       forEditor = (

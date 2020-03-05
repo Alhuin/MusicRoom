@@ -13,6 +13,7 @@ import {
   CHANGE_PLAYLIST_TYPE,
   SET_NEXT_INDEX,
   SET_PLAYER_OPEN, SET_PLAYLIST_NAME,
+  EXIT_PLAYER,
 } from '../actions/types';
 
 const initialState = {
@@ -92,6 +93,16 @@ const playerReducer = (state = initialState, action) => {
     case SET_PLAYLIST_NAME:
       return {
         ...state, playlistName: action.payload,
+      };
+    case EXIT_PLAYER:
+      return {
+        ...state,
+        track: null,
+        playlistId: '',
+        playlistType: '',
+        totalLength: 1,
+        currentPosition: 0,
+        playerOpen: false,
       };
     default:
       return state;

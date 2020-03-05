@@ -213,18 +213,6 @@ connectDb().then(async () => {
   // seedDatas();
   const salt = await bcrypt.genSaltSync(10);
   const hash = await bcrypt.hashSync('a', salt);
-  const user1 = new models.User({
-    login: 'a',
-    password: hash,
-    name: 'JulA',
-    familyName: 'Janin-R',
-    email: 'julien.janinre@gmail.com',
-    phoneNumber: '00',
-    isVerified: true,
-    premium: false,
-  });
-
-  user1.save();
 
   const user2 = new models.User({
     login: 'b',
@@ -236,7 +224,34 @@ connectDb().then(async () => {
     isVerified: true,
     premium: false,
   });
+
+  const user3 = new models.User({
+    login: 'c',
+    password: hash,
+    name: 'JulC',
+    familyName: 'Janin-R',
+    email: 'juz@gmail.com',
+    phoneNumber: '00',
+    isVerified: true,
+    premium: false,
+  });
+
+  const user1 = new models.User({
+    login: 'a',
+    password: hash,
+    name: 'JulA',
+    familyName: 'Janin-R',
+    email: 'julien.janinre@gmail.com',
+    phoneNumber: '00',
+    isVerified: true,
+    premium: false,
+    friends: [user2, user3],
+  });
+  user2.friends = [user1];
+  user3.friends = [user1];
+  user1.save();
   user2.save();
+  user3.save();
 
   app.listen(process.env.EXPRESS_PORT, () => console.log(`App listening on port ${process.env.EXPRESS_PORT}!`));
 });

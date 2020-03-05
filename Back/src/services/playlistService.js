@@ -98,8 +98,9 @@ function getPlaylistsFiltered(roomType, userId) {
       if (findError) {
         reject(new CustomError('MongoError', findError.message, 500));
       } else {
-        const isPublicOrIncludesUser = (playlist) => playlist.publicFlag
-          || playlist.users.includes(userId);
+        const isPublicOrIncludesUser = (playlist) => (playlist.publicFlag
+          || playlist.users.includes(userId))
+          && !playlist.bans.includes(userId);
         const filteredPlaylists = playlists.filter(isPublicOrIncludesUser);
 
         resolve({
