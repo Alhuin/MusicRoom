@@ -37,7 +37,7 @@ class TrackInSearch extends React.Component {
   };
 
   render() {
-    const { track, handlePress } = this.props;
+    const { track, handlePress, isPaused } = this.props;
 
     return (
       <TouchableOpacity
@@ -49,15 +49,18 @@ class TrackInSearch extends React.Component {
           onPress={() => {
             handlePress(track.preview);
           }}
+          disabled={!isPaused}
         >
           <Image
             style={styles.image}
             source={{ uri: track.album.cover }}
           />
-          <Image
-            source={require('../../assets/images/play.png')}
-            style={{ height: 80, width: 80, position: 'absolute' }}
-          />
+          {isPaused === true && (
+            <Image
+              source={require('../../assets/images/play.png')}
+              style={{ height: 80, width: 80, position: 'absolute' }}
+            />
+          )}
         </TouchableOpacity>
         <View style={styles.content_container}>
           <View style={styles.title_container}>
