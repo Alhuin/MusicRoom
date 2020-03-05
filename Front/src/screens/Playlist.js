@@ -459,6 +459,7 @@ class Playlist extends React.Component {
     const authorId = navigation.getParam('authorId');
     const isUserInPlaylist = navigation.getParam('isUserInPlaylist');
     const userId = loggedUser._id;
+    console.log('RENDER PLAYLIST');
     let forEditor = (null);
     if (editor) {
       forEditor = (
@@ -469,7 +470,8 @@ class Playlist extends React.Component {
       );
     }
     const playButton = (
-      (!playlistLaunched && tracks.length > 0 && (admin || roomType === 'radio') && (delegated || roomType === 'radio')) && (
+      ((playlistId === '' || playlistId !== paramPlaylistId) && !playlistLaunched && tracks.length > 0 && (admin || roomType === 'radio')
+        && (delegated || roomType === 'radio')) && (
         <TouchableOpacity
           onPress={() => {
             const {

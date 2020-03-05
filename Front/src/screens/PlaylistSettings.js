@@ -707,7 +707,7 @@ class PlaylistSettings extends React.Component {
       if (roomType === 'party') {
         radioProps = [
           { label: 'Tout le monde', value: 0 },
-          { label: 'Utilisateur + Admin.', value: 1 },
+          { label: 'Invité + Admin.', value: 1 },
           { label: 'Admin.', value: 2 },
           { label: 'Localisation et Date', value: 3 },
         ];
@@ -814,7 +814,7 @@ class PlaylistSettings extends React.Component {
       } else {
         radioProps = [
           { label: 'Tout le monde', value: 0 },
-          { label: 'Utilisateur + Admin.', value: 1 },
+          { label: 'Invité + Admin.', value: 1 },
           { label: 'Admin.', value: 2 },
         ];
         editRestrictionString = "Droits d'édition :";
@@ -827,7 +827,7 @@ class PlaylistSettings extends React.Component {
             {' '}
             et peuvent être modifiés en même temps
             {' '}
-            par d&apos;autres utilisateurs ou administrateurs.
+            par d&apos;autres utilisateurs.
           </Text>
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
@@ -1013,11 +1013,11 @@ class PlaylistSettings extends React.Component {
                 </View>
                 <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="arrow-down" style={styles.icon} />
-                  <Text style={styles.bodyText}> Admin. vers Utilisateur </Text>
+                  <Text style={styles.bodyText}> Admin. vers Invité </Text>
                 </View>
                 <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="arrow-up" style={styles.icon} />
-                  <Text style={styles.bodyText}> Promotion Utilisateur vers Admin. | Unban</Text>
+                  <Text style={styles.bodyText}> Promotion Invité vers Admin. | Unban</Text>
                 </View>
                 <View style={[styles.sectionContentRow, { justifyContent: 'space-between', alignItems: 'center' }]}>
                   <Icon name="md-walk" style={styles.icon} />
@@ -1066,7 +1066,7 @@ class PlaylistSettings extends React.Component {
             <TouchableOpacity onPress={this.toggleExpandedUsers}>
               <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
                 <Text style={styles.sectionHeaderText}>
-                  Utilisateurs
+                  Invités
                 </Text>
                 {collapsibleIconUsers}
               </View>
@@ -1286,7 +1286,7 @@ class PlaylistSettings extends React.Component {
               <TouchableOpacity onPress={this.toggleExpandedUsers}>
                 <View style={[styles.sectionHeader, { justifyContent: 'space-between' }]}>
                   <Text style={styles.sectionHeaderText}>
-                    Utilisateurs
+                    Invités
                   </Text>
                   {collapsibleIconUsers}
                 </View>
