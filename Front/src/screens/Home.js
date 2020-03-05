@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Text, StyleSheet, View, TouchableOpacity, Alert,
+  Text, StyleSheet, View, TouchableOpacity, Alert, BackHandler,
 } from 'react-native';
 import { Icon } from 'native-base';
 import AddFloatingButton from '../containers/AddFloatingButton';
@@ -12,14 +12,24 @@ class Home extends React.Component {
     modalVisible: false,
   };
 
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
   _onPressParty = () => {
     const { navigation } = this.props;
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
     navigation.navigate('PartysList');
   };
 
   _onPressRadio = () => {
     const { navigation, loggedUser } = this.props;
     if (loggedUser.premium) {
+      BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
       navigation.navigate('RadiosList');
     } else {
       Alert.alert('Vous devez posséder un compte Premium pour accéder à cette fonctionnalité.');
@@ -30,6 +40,13 @@ class Home extends React.Component {
     const { modalVisible } = this.state;
     const visible = !modalVisible;
     this.setState({ modalVisible: visible });
+  };
+
+  handleBackPress = () => {
+    const { socket } = this.props;
+    socket.disconnect();
+    BackHandler.exitApp();
+    return true;
   };
 
   render() {
