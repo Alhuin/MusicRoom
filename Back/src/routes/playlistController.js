@@ -54,6 +54,7 @@ function getPlaylistName(req, res) {
   }
 }
 
+// is Playlist Public or Private ?
 function getPublicityOfPlaylistById(req, res) {
   if (req.params.playlistId && utils.isValidId(req.params.playlistId)) {
     playlistService.getPublicityOfPlaylistById(req.params.playlistId)
@@ -73,6 +74,7 @@ function getPublicityOfPlaylistById(req, res) {
   }
 }
 
+// get all Radios or all Parties
 function getPlaylistsFilteredByRoom(req, res) {
   if (req.params.roomType) {
     playlistService.getPlaylistsFilteredByRoom(req.params.roomType)
@@ -92,6 +94,7 @@ function getPlaylistsFilteredByRoom(req, res) {
   }
 }
 
+// get Playlists available for a precise user
 function getPlaylistsFiltered(req, res) {
   if (req.body.roomType && req.body.userId && utils.isValidId(req.body.userId)) {
     playlistService.getPlaylistsFiltered(req.body.roomType, req.body.userId)
@@ -162,6 +165,7 @@ function deletePlaylistById(req, res) {
   }
 }
 
+// Delete playlist if the user is admin
 function deletePlaylistByAdmin(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)) {
@@ -261,6 +265,7 @@ function getBansByPlaylistId(req, res) {
   }
 }
 
+// Downgrade an admin rights for a playlist
 function adminInPlaylistDowngrade(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
@@ -283,6 +288,7 @@ function adminInPlaylistDowngrade(req, res) {
   }
 }
 
+// Upgrade admin rights of a user in playlist
 function userInPlaylistUpgrade(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)
@@ -353,6 +359,7 @@ function deleteUserInPlaylist(req, res) {
   }
 }
 
+// Unban a user and add him back to playlist
 function addUserToPlaylistAndUnbanned(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && req.body.userId && utils.isValidId(req.body.userId)) {
@@ -393,7 +400,6 @@ function getNextTrackByVote(req, res) {
 }
 
 function joinPlaylistWithCode(req, res) {
-  // console.log(req);
   if (utils.isValidId(req.body.userId) && req.body.playlistCode) {
     playlistService.joinPlaylistWithCode(req.body.userId, req.body.playlistCode)
       .then((response) => {
@@ -791,10 +797,6 @@ function setPlaylistName(req, res) {
 }
 
 function getNextRadioTrack(req, res) {
-  console.log(req.body);
-  console.log('playlistId', req.body.playlistId && utils.isValidId(req.body.playlistId));
-  console.log('currentTrackId', req.body.currentTrackId === null || utils.isValidId(req.body.currentTrackId));
-  console.log('nextIndex', parseInt(req.body.nextIndex, 10));
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
     && (req.body.currentTrackId === null || utils.isValidId(req.body.currentTrackId))
     && Number.isInteger(parseInt(req.body.nextIndex, 10))) {
@@ -843,7 +845,7 @@ function getPrevRadioTrack(req, res) {
     res.status(422).send({ msg: 'Wrong Parameters' });
   }
 }
-
+// TODO reset nowPlaying at logout
 function setNowPlaying(req, res) {
   if (req.body.playlistId && utils.isValidId(req.body.playlistId)
       && (utils.isValidId(req.body.trackId) || req.body.trackId === null)) {

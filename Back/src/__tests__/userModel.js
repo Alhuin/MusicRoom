@@ -35,8 +35,6 @@ expect.extend({
 });
 
 describe('User Model Tests', () => {
-  // It's just so easy to connect to the MongoDB Memory Server
-  // By using mongoose.connect
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__,
       { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
@@ -63,8 +61,6 @@ describe('User Model Tests', () => {
     expect(savedUser.preview).toBe(userData.preview);
   });
 
-  // Test Schema is working!!!
-  // You shouldn't be able to add in any field that isn't defined in the schema
   it('insert user successfully, but the field not defined in schema should be undefined', async () => {
     const userWithInvalidField = new UserModel({
       login: 'login',
@@ -83,8 +79,6 @@ describe('User Model Tests', () => {
     expect(savedUserWithInvalidField.undefinedField).toBeUndefined();
   });
 
-  // Test Validation is working!!!
-  // It should us told us the errors in on gender field.
   it('create user without required field should failed', async () => {
     const userWithoutLoginField = new UserModel({
       name: 'name',

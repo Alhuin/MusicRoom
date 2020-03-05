@@ -117,7 +117,6 @@ function deleteMusicById(musicId) {
 
 function downloadMusic(musicUrl) {
   return new Promise((resolve, reject) => {
-    // eslint-disable-next-line global-require
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';
@@ -139,6 +138,7 @@ function downloadMusic(musicUrl) {
         if (path === null) {
           path = stdout.replace('\n', '').match(/^(.*) already exists!$/);
           if (path === null) {
+            // TODO Catch Token expired + No Space Left
             reject(new CustomError('DeezPy', stdout, 500));
           }
         }
@@ -150,9 +150,6 @@ function downloadMusic(musicUrl) {
     });
   });
 }
-
-// si une musique existe deja, il y a un warning UnhandledPromiseRejectionWarning,
-// mais la musique n'est pas add, as intended
 
 function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover, preview, link,
   roomType) {

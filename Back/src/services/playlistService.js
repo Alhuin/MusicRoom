@@ -106,20 +106,6 @@ function getPlaylistsFiltered(roomType, userId) {
           status: 200,
           data: filteredPlaylists,
         });
-        // for (let i = 0; i < playlists.length; i += 1) {
-        // if (!playlists[i].publicFlag) {
-        //   let flag = false;
-        //   for (let j = 0; j < playlists[i].users.length; j += 1) {
-        //     if (String(playlists[i].users[j]._id) === userId) {
-        //       flag = true;
-        //     }
-        //   }
-        //   if (flag === false) {
-        //     playlists.splice(i, 1);
-        //     i -= 1;
-        //   }
-        // }
-        // }
       }
     },
   ));
@@ -668,7 +654,7 @@ function setDelegatedPlayerAdmin(playlistId, userId, requesterId) {
   });
 }
 
-/* return the index of the deleted music */
+// Returns the index of the deleted music
 
 function deleteTrackFromPlaylist(playlistId, musicId) {
   return new Promise((resolve, reject) => {
@@ -724,11 +710,6 @@ function deleteTrackFromPlaylistRight(playlistId, musicId, userId) {
           flag = true;
         }
         if (flag) {
-          // console.log(playlist.musics);
-          // console.log('toRemove', musicId);
-          // playlist.musics.filter((itemId) => itemId.toString() !== musicId.toString());
-          // console.log(playlist.musics);
-
           let i = 0;
           for (i; i < playlist.musics.length; i += 1) {
             if (playlist.musics[i].toString() === musicId.toString()) {

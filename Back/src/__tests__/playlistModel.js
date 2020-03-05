@@ -42,8 +42,6 @@ expect.extend({
 });
 
 describe('Playlist Model Tests', () => {
-  // It's just so easy to connect to the MongoDB Memory Server
-  // By using mongoose.connect
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__,
       { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
@@ -57,7 +55,6 @@ describe('Playlist Model Tests', () => {
   it('create & save playlist successfully', async () => {
     const validPlaylist = new PlaylistModel(playlistData);
     const savedPlaylist = await validPlaylist.save();
-    // Object Id should be defined when successfully saved to MongoDB.
     expect(savedPlaylist._id).toBeDefined();
     expect(savedPlaylist.name).toBe(playlistData.name);
     expect(savedPlaylist.allowVotes).toBe(playlistData.allowVotes);
@@ -77,8 +74,6 @@ describe('Playlist Model Tests', () => {
     expect(savedPlaylist.tags).toContain(playlistData.tags[0]);
   });
 
-  // Test Schema is working!!!
-  // You shouldn't be able to add in any field that isn't defined in the schema
   it('insert playlist successfully, but the field not defined in schema should be undefined', async () => {
     const playlistWithInvalidField = new PlaylistModel({
       name: 'name',
@@ -104,8 +99,6 @@ describe('Playlist Model Tests', () => {
     expect(savedPlaylistWithInvalidField.undefinedField).toBeUndefined();
   });
 
-  // Test Validation is working!!!
-  // It should us told us the errors in on gender field.
   it('create playlist without required field should failed', async () => {
     const playlistWithoutNameField = new PlaylistModel({
       allowVotes: true,

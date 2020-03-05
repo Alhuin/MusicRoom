@@ -17,8 +17,6 @@ const musicData = {
 };
 
 describe('Music Model Tests', () => {
-  // It's just so easy to connect to the MongoDB Memory Server
-  // By using mongoose.connect
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__,
       { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
@@ -48,8 +46,6 @@ describe('Music Model Tests', () => {
     expect(savedMusic.votes).toBe(musicData.votes);
   });
 
-  // Test Schema is working!!!
-  // You shouldn't be able to add in any field that isn't defined in the schema
   it('insert music successfully, but the field not defined in schema should be undefined', async () => {
     const musicWithInvalidField = new MusicModel({
       title: 'title',
@@ -70,8 +66,6 @@ describe('Music Model Tests', () => {
     expect(savedMusicWithInvalidField.undefinedField).toBeUndefined();
   });
 
-  // Test Validation is working!!!
-  // It should us told us the errors in on gender field.
   it('create music without required field should failed', async () => {
     const musicWithoutTitleField = new MusicModel({
       artist: 'artist',
