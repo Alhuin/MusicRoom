@@ -9,27 +9,27 @@ import {
 
 const Controls = ({
   paused,
-  shuffleOn,
-  repeatOn,
+  // shuffleOn,
+  // repeatOn,
   onPressPlay,
   onPressPause,
   onBack,
   onForward,
-  onPressShuffle,
-  onPressRepeat,
+  // onPressShuffle,
+  // onPressRepeat,
   forwardDisabled,
   backDisabled,
 }) => (
   <View style={styles.container}>
-    <TouchableOpacity
-      activeOpacity={0.0}
-      onPress={onPressShuffle}
-    >
-      <Image
-        style={[styles.secondaryControl, shuffleOn ? [] : styles.off]}
-        source={require('../../assets/images/ic_shuffle_white.png')}
-      />
-    </TouchableOpacity>
+    {/*<TouchableOpacity*/}
+    {/*  activeOpacity={0.0}*/}
+    {/*  onPress={onPressShuffle}*/}
+    {/*>*/}
+    {/*  <Image*/}
+    {/*    style={[styles.secondaryControl, shuffleOn ? [] : styles.off]}*/}
+    {/*    source={require('../../assets/images/ic_shuffle_white.png')}*/}
+    {/*  />*/}
+    {/*</TouchableOpacity>*/}
     <View style={{ width: 40 }} />
     <TouchableOpacity
       onPress={onBack}
@@ -67,15 +67,15 @@ const Controls = ({
       />
     </TouchableOpacity>
     <View style={{ width: 40 }} />
-    <TouchableOpacity
-      activeOpacity={0.0}
-      onPress={onPressRepeat}
-    >
-      <Image
-        style={[styles.secondaryControl, repeatOn ? [] : styles.off]}
-        source={require('../../assets/images/ic_repeat_white.png')}
-      />
-    </TouchableOpacity>
+    {/*<TouchableOpacity*/}
+    {/*  activeOpacity={0.0}*/}
+    {/*  onPress={onPressRepeat}*/}
+    {/*>*/}
+    {/*  <Image*/}
+    {/*    style={[styles.secondaryControl, repeatOn ? [] : styles.off]}*/}
+    {/*    source={require('../../assets/images/ic_repeat_white.png')}*/}
+    {/*  />*/}
+    {/*</TouchableOpacity>*/}
   </View>
 );
 

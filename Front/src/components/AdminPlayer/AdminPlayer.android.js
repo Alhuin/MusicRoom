@@ -166,35 +166,6 @@ export default class AdminPlayer extends Component {
         });
       })
       .catch(error => console.log(error));
-    // const { paused } = this.props;
-    //
-    // // Enable buttons
-    // MusicControl.enableBackgroundMode(true);
-    // MusicControl.enableControl('play', true);
-    // MusicControl.enableControl('pause', true);
-    // MusicControl.enableControl('nextTrack', true);
-    // MusicControl.enableControl('closeNotification', true, { when: 'always' });
-    // // Paused by default
-    // MusicControl.updatePlayback({
-    //   state: MusicControl.STATE_PAUSED,
-    // });
-    //
-    // // Background events
-    // MusicControl.on('play', () => {
-    //   MusicControl.updatePlayback({
-    //     state: MusicControl.STATE_PLAYING,
-    //   });
-    //   paused(false);
-    // });
-    // MusicControl.on('pause', () => {
-    //   MusicControl.updatePlayback({
-    //     state: MusicControl.STATE_PAUSED,
-    //   });
-    //   paused(true);
-    // });
-    // MusicControl.on('nextTrack', () => this._onForward());
-    //
-    // // Displayed infos
   };
 
   render() {
@@ -240,7 +211,12 @@ export default class AdminPlayer extends Component {
               swipeToClose
               backButtonClose
             >
-              <PlayerDetails track={track} playlistId={playlistId} onForward={this._onForward} />
+              <PlayerDetails
+                track={track}
+                playlistId={playlistId}
+                onForward={this._onForward}
+                onDownPress={() => this.player.close()}
+              />
             </Modal>
           </>
         )}

@@ -271,11 +271,12 @@ class Playlist extends React.Component {
   };
 
   getName = () => {
-    const { navigation } = this.props;
+    const { navigation, setPlaylistName } = this.props;
     const playlistId = navigation.getParam('playlistId');
     getPlaylistName(playlistId)
       .then((name) => {
         this.setState({ name });
+        setPlaylistName(name);
       })
       .catch(error => console.log(error));
   };

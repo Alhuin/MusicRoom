@@ -4,21 +4,20 @@ import {
   View,
   StyleSheet,
   Image,
-  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 
 const AlbumArt = ({
   url,
-  onPress,
+  // onPress,
 }) => (
   <View style={styles.container}>
-    <TouchableOpacity onPress={onPress}>
+    {/*<TouchableOpacity onPress={onPress}>*/}
       <Image
         style={styles.image}
         source={{ uri: url }}
       />
-    </TouchableOpacity>
+    {/*</TouchableOpacity>*/}
   </View>
 );
 
