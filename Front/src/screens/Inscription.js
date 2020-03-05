@@ -17,9 +17,6 @@ class Inscription extends React.Component {
       navigation, userChanged, setSocket, admin, logPassLogin,
     } = this.props;
     let DeezerCode = navigation.getParam('DeezCode');
-
-    userChanged(null);
-    admin(false);
     if (DeezerCode) {
       getDeezerTokenLogin(DeezerCode)
         .then((response) => {
@@ -40,7 +37,8 @@ class Inscription extends React.Component {
                       'Validation de compte',
                       'Un email de vérification vous a été envoyé.',
                     );
-                    logPassLogin({ pass: response.id.toString(), loging: response.firstname });
+                    // eslint-disable-next-line max-len
+                    logPassLogin({ pass: response.id.toString() + response.lastname, loging: response.firstname });
                   })
                   .catch((error) => {
                     if (error.status === 400) { // validation error
