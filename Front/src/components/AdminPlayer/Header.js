@@ -27,12 +27,12 @@ const Header = ({
     >
       {message.toUpperCase()}
     </Text>
-    <TouchableOpacity onPress={onQueuePress}>
-      <Image
-        style={styles.button}
-        source={require('../../assets/images/ic_queue_music_white.png')}
-      />
-    </TouchableOpacity>
+    {/*<TouchableOpacity onPress={onQueuePress}>*/}
+    {/*  <Image*/}
+    {/*    style={styles.button}*/}
+    {/*    source={require('../../assets/images/ic_queue_music_white.png')}*/}
+    {/*  />*/}
+    {/*</TouchableOpacity>*/}
   </View>
 );
 

@@ -29,13 +29,6 @@ export default class PlayerDetails extends Component {
     }
   }
 
-  // onDownPress() {
-  //   const { navigation, playlistId } = this.props;
-  //
-  //   navigation.navigate('Parties', { playlistId });
-  // }
-
-
   seek(time) {
     const { audioElement, setCurrentPosition, paused } = this.props;
     const newTime = Math.round(time);

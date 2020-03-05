@@ -30,14 +30,6 @@ export default class PlayerDetails extends Component {
     }
   }
 
-  // TODO downPress usage
-  // onDownPress() {
-  //   const { navigation, playlistId } = this.props;
-  //
-  //   navigation.navigate('Parties', { playlistId });
-  // }
-
-
   seek(time) {
     const { audioElement, setCurrentPosition, paused } = this.props;
     const newTime = Math.round(time);
@@ -65,9 +57,6 @@ export default class PlayerDetails extends Component {
     this._onSeek = this.seek.bind(this);
     this._onBack = this.onBack.bind(this);
 
-    // console.log(currentPosition);
-    // console.log('length = ');
-    // console.log(totalLength);
     return (
       <View style={styles.container}>
         <Header message={`Playing From ${playlistName}`} onDownPress={onDownPress} />
