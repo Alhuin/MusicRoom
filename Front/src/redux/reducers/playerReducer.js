@@ -12,7 +12,7 @@ import {
   SHOULD_UPDATE_PLAYLIST,
   CHANGE_PLAYLIST_TYPE,
   SET_NEXT_INDEX,
-  SET_PLAYER_OPEN,
+  SET_PLAYER_OPEN, SET_PLAYLIST_NAME,
 } from '../actions/types';
 
 const initialState = {
@@ -28,6 +28,7 @@ const initialState = {
   shouldUpdatePlaylist: false,
   nextIndex: -1,
   playerOpen: false,
+  playlistName: 'playlist',
 };
 
 const playerReducer = (state = initialState, action) => {
@@ -87,6 +88,10 @@ const playerReducer = (state = initialState, action) => {
     case SET_PLAYER_OPEN:
       return {
         ...state, playerOpen: action.payload,
+      };
+    case SET_PLAYLIST_NAME:
+      return {
+        ...state, playlistName: action.payload,
       };
     default:
       return state;

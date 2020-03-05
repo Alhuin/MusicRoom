@@ -24,6 +24,7 @@ const mapDispatchToProps = dispatch => ({
   paused: payload => dispatch(actions.paused(payload)),
   setNextIndex: payload => dispatch(actions.setNextIndex(payload)),
   setPlayerOpen: payload => dispatch(actions.setPlayerOpen(payload)),
+  setPlaylistName: payload => dispatch(actions.setPlaylistName(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist);

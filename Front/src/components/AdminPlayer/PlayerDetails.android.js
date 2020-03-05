@@ -51,7 +51,15 @@ export default class PlayerDetails extends Component {
 
   render() {
     const {
-      onDownPress, currentPosition, track, paused, totalLength, isPaused, onForward, playlistType,
+      onDownPress,
+      currentPosition,
+      track,
+      paused,
+      totalLength,
+      isPaused,
+      onForward,
+      playlistType,
+      playlistName,
     } = this.props;
 
     this._onSeek = this.seek.bind(this);
@@ -62,7 +70,7 @@ export default class PlayerDetails extends Component {
     // console.log(totalLength);
     return (
       <View style={styles.container}>
-        <Header message="Playing From Charts" onDownPress={onDownPress} />
+        <Header message={`Playing From ${playlistName}`} onDownPress={onDownPress} />
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails title={track.title} artist={track.artist} />
         <SeekBar

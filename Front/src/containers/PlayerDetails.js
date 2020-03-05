@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
   isPaused: state.playerReducer.isPaused,
   socket: state.playerReducer.socket,
   playlistType: state.playerReducer.playlistType,
+  playlistName: state.playerReducer.playlistName,
 });
 
 const mapDispatchToProps = dispatch => ({
