@@ -10,8 +10,6 @@ const voteData = {
 };
 
 describe('Vote Model Tests', () => {
-  // It's just so easy to connect to the MongoDB Memory Server
-  // By using mongoose.connect
   beforeAll(async () => {
     await mongoose.connect(global.__MONGO_URI__,
       { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err) => {
@@ -33,8 +31,6 @@ describe('Vote Model Tests', () => {
     expect(savedVote.playlist).toBe(voteData.playlist);
   });
 
-  // Test Schema is working!!!
-  // You shouldn't be able to add in any field that isn't defined in the schema
   it('insert vote successfully, but the field not defined in schema should be undefined', async () => {
     const voteWithInvalidField = new VoteModel({
       value: 1,
@@ -48,8 +44,6 @@ describe('Vote Model Tests', () => {
     expect(savedVoteWithInvalidField.undefinedField).toBeUndefined();
   });
 
-  // Test Validation is working!!!
-  // It should us told us the errors in on gender field.
   it('create vote without required field should failed', async () => {
     const voteWithoutValueField = new VoteModel({
       user: mongoose.Types.ObjectId(),

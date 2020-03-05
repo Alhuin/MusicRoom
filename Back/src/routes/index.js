@@ -24,13 +24,13 @@ router.post('/login', loginController.login);
 
 /*             Users                 */
 
-router.get('/users', userController.getUsers);
-router.get('/users/:userId', userController.getUserById);
 router.get('/users/deezer', userController.getDeezerCode);
 router.get('/users/deezerlogin', userController.getDeezerCodeForLogin);
 router.get('/users/findDeezer/:idSocial&:SocialType', userController.findUserByidSocial);
 router.get('/users/getByPreferences/:userId&:requesterId', userController.getUserByIdByPreferences);
 router.get('/users/getFriends/:userId', userController.getFriends);
+router.get('/users', userController.getUsers);
+router.get('/users/:userId', userController.getUserById);
 
 router.post('/users', userController.addUser);
 router.post('/users/update', userController.updateUser);
@@ -66,7 +66,6 @@ router.delete('/musics/:musicId', musicController.deleteMusicById);
 /*             Playlists                 */
 
 router.get('/playlists', playlistController.getPlaylists);
-router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 router.get('/playlists/name/:playlistId', playlistController.getPlaylistName);
 router.get('/playlists/nowPlaying/:playlistId', playlistController.getNowPlaying);
 router.get('/playlists/users/:playlistId', playlistController.getUsersByPlaylistId);
@@ -81,6 +80,7 @@ router.get('/playlists/delegatedPlayerAdmin/:playlistId', playlistController.get
 router.get('/playlists/publicity/:playlistId', playlistController.getPublicityOfPlaylistById);
 router.get('/playlists/nextPartyTrack/:playlistId', playlistController.getNextTrackByVote);
 router.get('/playlists/:roomType', playlistController.getPlaylistsFilteredByRoom);
+router.get('/playlists/:playlistId', playlistController.getPlaylistById);
 
 router.post('/playlists/nowPlaying', playlistController.setNowPlaying);
 router.post('/playlists/filtered', playlistController.getPlaylistsFiltered);

@@ -48,8 +48,6 @@ function getUserByIdByPreferences(userId, requesterId) {
         reject(new CustomError('GetUserByIdByPreferences', 'No user with this id found in database', 404));
       } else {
         const newUser = user;
-        // let keys;
-        // Object.assign(iconFromVisibilityTable, user.visibilityTable);
         Object.keys(user.visibilityTable).forEach((key) => {
           if (Object.prototype.hasOwnProperty.call(user.visibilityTable, key)) {
             if (user.visibilityTable[key] === 'PRIVATE') {

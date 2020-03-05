@@ -23,12 +23,13 @@ const server = http.Server(app);
 const io = socketio(server);
 const clients = [];
 
-// Handle socket connection & events
+/**     Handle socket connection & events     */
 
 io.on('connection', (socket) => {
   const { id } = socket.client;
   let i = 0;
 
+  // Disconnect client if someone is already logged with this account
   for (i; i < clients.length; i += 1) {
     if (String(clients[i].handshake.query.userId) === String(socket.handshake.query.userId)) {
       console.log(`[Socket Server] : user to delog is ${id}`);
@@ -62,14 +63,20 @@ io.on('connection', (socket) => {
     console.log('[SocketServer] : Radio added, Emitting refresh for radiosList');
     io.sockets.in('radiosList').emit('refresh');
   });
+
+  // Adding a party
   socket.on('addParty', () => {
     console.log('[Socket Server] : Party added, Emitting refresh for partyList');
     io.sockets.in('partysList').emit('refresh');
   });
+
+  // Removing a party
   socket.on('removeParty', () => {
     console.log('[Socket Server] : Party deleted, Emitting refresh for radiosList');
     io.sockets.in('partysList').emit('refresh');
   });
+
+  // Removing a radio
   socket.on('removeRadio', () => {
     console.log('[Socket Server] : Radio removed, Emitting refresh for radiosList');
     io.sockets.in('radiosList').emit('refresh');
@@ -81,27 +88,32 @@ io.on('connection', (socket) => {
     io.sockets.in(playlistId).emit('refresh');
   });
 
+  // Deleting a music
   socket.on('deleteMusic', (playlistId, trackId, nextIndex) => {
     console.log(`[Socket Server] : music deleted, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
     io.sockets.in(playlistId).emit('deleted', trackId, nextIndex);
   });
 
+  // Changing a music
   socket.on('musicChanged', (playlistId) => {
     console.log(`[Socket Server] : music changed, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
   });
 
+  // Reordered musics in a radio
   socket.on('musicMoved', (playlistId) => {
     console.log(`[Socket Server] : music moved, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
   });
 
+  // Voted for a music in a party
   socket.on('voteMusic', (playlistId) => {
     console.log(`[Socket Server] : music voted, Emitting refresh for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refresh');
   });
 
+  // User with playing rights changed in a party
   socket.on('delegatedParameterChanged', (playlistId, userId) => {
     for (i; i < clients.length; i += 1) {
       if (String(clients[i].handshake.query.userId) === String(userId)) {
@@ -112,6 +124,7 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Modified admin rights
   socket.on('personalParameterChanged', (playlistId, userId) => {
     for (i; i < clients.length; i += 1) {
       if (String(clients[i].handshake.query.userId) === String(userId)) {
@@ -122,6 +135,7 @@ io.on('connection', (socket) => {
     }
   });
 
+  // User banned or kicked from playlist
   socket.on('kickOrBanFromPlaylist', (playlistId, userId) => {
     for (i; i < clients.length; i += 1) {
       if (String(clients[i].handshake.query.userId) === String(userId)) {
@@ -132,11 +146,13 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Playlist parameters changed
   socket.on('parameterChanged', (playlistId) => {
     console.log(`[Socket Server] : parameters changed. Emitting refreshPermissions for playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('refreshPermissions');
   });
 
+  // Playlist end reached
   socket.on('playlistEnd', (playlistId) => {
     console.log(`end playlist ${playlistId}`);
     io.sockets.in(playlistId).emit('playlistEnd');
@@ -170,6 +186,7 @@ io.on('connection', (socket) => {
 
 
 server.listen(process.env.WEBSOCKET_PORT, () => console.log(`[Socket Server] : listening on port ${process.env.WEBSOCKET_PORT} at ${process.env.SERVER}`));
+
 /**
  *          Core Express Server
  */
@@ -182,9 +199,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/tracks', express.static('downloads'));
 
-/**
- *          Request logger Middleware
- */
+/**         Request logger Middleware       */
 
 const dateOptions = {
   year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric',
@@ -196,9 +211,8 @@ app.use(requestLogger);
 
 app.use('/api', API);
 
-/**
- *        Clean all datas in DB
- */
+/**       Clean all datas in DB             */
+
 connectDb().then(async () => {
   /* Erase the database if ERASE_DATABASE_ONSYNC is true in .env */
   if (process.env.ERASE_DATABASE_ONSYNC) {

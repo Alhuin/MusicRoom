@@ -40,6 +40,7 @@ function getUserById(req, res) {
   }
 }
 
+// Show user information filtered by his visibility preferences
 function getUserByIdByPreferences(req, res) {
   if ((req.params.userId && utils.isValidId(req.params.userId)
     && req.params.requesterId && utils.isValidId(req.params.requesterId))) {
@@ -118,7 +119,6 @@ function addUser(req, res) {
 }
 
 function updateUser(req, res) {
-  // checker email valide et les champs uniques
   if ((req.body.userId && utils.isValidId(req.body.userId)
     && req.body.newLogin && req.body.name && req.body.familyName
     && req.body.email && (req.body.phoneNumber || req.body.phoneNumber === '') && req.body.preferences
@@ -143,7 +143,6 @@ function updateUser(req, res) {
 }
 
 function addFriend(req, res) {
-  // checker email valide et les champs uniques
   if ((req.body.friendId && utils.isValidId(req.body.friendId)
     && req.body.userId && utils.isValidId(req.body.userId))) {
     userService.addFriend(req.body.friendId, req.body.userId)
@@ -164,7 +163,6 @@ function addFriend(req, res) {
 }
 
 function deleteFriend(req, res) {
-  // checker email valide et les champs uniques
   if ((req.body.friendId && utils.isValidId(req.body.friendId)
     && req.body.userId && utils.isValidId(req.body.userId))) {
     userService.deleteFriend(req.body.friendId, req.body.userId)
