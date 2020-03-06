@@ -13,11 +13,13 @@ class Home extends React.Component {
   };
 
   componentDidMount() {
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-  }
-
-  componentWillUnmount() {
-    this.backHandler.remove();
+    const { navigation } = this.props;
+    this._blurListener = navigation.addListener('willBlur', () => {
+      this.backHandler.remove();
+    });
+    this._focusListener = navigation.addListener('didFocus', () => {
+      this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+    });
   }
 
   _onPressParty = () => {
@@ -43,6 +45,7 @@ class Home extends React.Component {
   };
 
   handleBackPress = () => {
+    console.log('BP Home');
     const { socket } = this.props;
     socket.disconnect();
     BackHandler.exitApp();

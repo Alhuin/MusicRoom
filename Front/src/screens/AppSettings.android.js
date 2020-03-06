@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TextInput, Alert, TouchableOpacity, ScrollView, FlatList, Linking,
+  StyleSheet, View, Text, TextInput, Alert,
+  TouchableOpacity, ScrollView, FlatList, Linking, BackHandler,
 } from 'react-native';
 import { Icon } from 'native-base';
 import { GoogleSignin } from 'react-native-google-signin';
@@ -35,6 +36,7 @@ class AppSettings extends React.Component {
 
   componentDidMount(): void {
     const { user } = this.state;
+    const { navigation } = this.props;
     getFriends(user._id)
       .then((friends) => {
         this.setState({ friends });
@@ -42,7 +44,21 @@ class AppSettings extends React.Component {
       .catch((error) => {
         console.error(error);
       });
+    this._focusListener = navigation.addListener('didFocus', () => {
+      this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+    });
+    this._blurListener = navigation.addListener('willBlur', () => {
+      this.backHandler.remove();
+    });
   }
+
+  handleBackPress = () => {
+    console.log('BP AppSettings');
+    const { navigation } = this.props;
+    this.backHandler.remove();
+    navigation.goBack();
+    return true;
+  };
 
   updateLogin = (text) => {
     this.setState({ login: text });
