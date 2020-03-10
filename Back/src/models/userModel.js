@@ -35,11 +35,17 @@ const userSchema = new mongoose.Schema({
   },
   idDeezer: {
     type: String,
+    trim: true,
+    index: true,
     unique: true,
+    sparse: true,
   },
   idGoogle: {
     type: String,
+    trim: true,
+    index: true,
     unique: true,
+    sparse: true,
   },
   preferences: {
     type: {},

@@ -37,14 +37,26 @@ class Inscription extends React.Component {
                       'Validation de compte',
                       'Un email de vérification vous a été envoyé.',
                     );
-                    // eslint-disable-next-line max-len
-                    logPassLogin({ pass: response.id.toString() + response.lastname, loging: response.firstname });
+                    logPassLogin({
+                      pass: response.id.toString() + response.lastname,
+                      loging: response.firstname,
+                    });
                   })
                   .catch((error) => {
                     if (error.status === 400) { // validation error
+                      let msg = 'Un compte avec ce';
+                      if (error.msg === 'login') {
+                        msg += ' login existe déjà !';
+                      } else if (error.msg === 'idGoogle') {
+                        msg += ' compte Google existe déjà !';
+                      } else if (error.msg === 'idDeezer') {
+                        msg += ' compte Deezer existe déjà !';
+                      } else if (error.msg === 'email') {
+                        msg += 't email existe déjà !';
+                      }
                       Alert.alert(
                         'Inscription',
-                        `Un compte avec ${error.msg === ' login' ? 'ce login' : 'cet email'} existe déjà !`,
+                        msg,
                       );
                       DeezerCode = null;
                     } else {
