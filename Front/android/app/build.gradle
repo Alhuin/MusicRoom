@@ -116,6 +116,12 @@ android {
                 keyPassword MYAPP_UPLOAD_KEY_PASSWORD
             }
         }
+        release {
+            storeFile file('musicroom.keystore')
+            storePassword 'lpcvpt1$'
+            keyAlias 'MusicRoomKey'
+            keyPassword 'lpcvpt1$'
+        }
     }
     splits {
         abi {
@@ -129,6 +135,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
