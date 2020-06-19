@@ -120,31 +120,29 @@ function downloadMusic(musicUrl) {
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';
-    const deezpy = spawn('python3', [process.env.DEEZPY_PATH, '-l', musicUrl]);
+    const deezpy = spawn('deemix', ['-l', musicUrl], { cwd: './downloads' });
 
     deezpy.stdout.on('data', (data) => {
-      stdout += data;
+      stdout += data.toString();
     });
 
     deezpy.stderr.on('data', (data) => {
-      stderr += data;
+      stderr += data.toString();
     });
 
     deezpy.on('close', (code) => {
       if (code !== 0) {
         reject(new CustomError('DeezPy', stderr, 500));
       } else {
-        let path = stdout.replace('\n', '').match(/^Downloading: (.*)\.\.\.Done!$/);
-        if (path === null) {
-          path = stdout.replace('\n', '').match(/^(.*) already exists!$/);
-          if (path === null) {
-            // TODO Catch Token expired + No Space Left
-            reject(new CustomError('DeezPy', stdout, 500));
-          }
+        const fileName = stderr.match(/\[(.*?)]\sTrack download completed/);
+        const dir = stderr.match(/download folder:\s(.*?)\n/);
+        if (fileName === null) {
+          // TODO Catch Token expired + No Space Left
+          reject(new CustomError('DeezPy', stdout, 500));
         }
         resolve({
           status: 200,
-          data: path[1],
+          data: `${__dirname}/../../downloads/${dir[1]}/${fileName[1]}.mp3`,
         });
       }
     });
@@ -158,8 +156,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
       .then(() => {
         downloadMusic(link)
           .then((path) => {
-            const staticMusicPath = path.data.replace('downloads', `${process.env.SERVER}:${process.env.EXPRESS_PORT}/tracks`);
-            const staticCoverPath = staticMusicPath.replace(staticMusicPath.split('/')[6], 'cover.png');
+            const staticMusicPath = path.data.replace(`${__dirname}/../../downloads`, `${process.env.SERVER}:${process.env.EXPRESS_PORT}/tracks`);
             const music = new MusicModel({
               user: userId,
               playlist: playlistId,
@@ -167,7 +164,7 @@ function addMusicToPlaylist(playlistId, userId, artist, title, album, albumCover
               date: Date.now(),
               title,
               album,
-              albumCover: staticCoverPath,
+              albumCover,
               preview,
               link,
               path: staticMusicPath,

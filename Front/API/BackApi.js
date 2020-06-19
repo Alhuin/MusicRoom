@@ -9,10 +9,7 @@ const api = `${SERVER}:${EXPRESS_PORT}/api`;
 
 
 function login(userName, password) {
-  // console.log('login');
-  // console.log(`${SERVER}:${EXPRESS_PORT}`);
   return new Promise((resolve, reject) => {
-    // console.log('in login promise before fetch');
     fetch(
       `${api}/login`,
       {
