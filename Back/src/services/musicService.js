@@ -142,7 +142,7 @@ function downloadMusic(musicUrl) {
         }
         resolve({
           status: 200,
-          data: `${__dirname}/../../downloads/${dir[1]}/${fileName[1]}.mp3`,
+          data: `${__dirname}/../../downloads/${dir[1]}/${fileName[1].replace('?', '_')}.mp3`,
         });
       }
     });

@@ -141,7 +141,7 @@ class AppSettings extends React.Component {
   };
 
   getDeez = () => {
-    Linking.openURL('https://connect.deezer.com/oauth/auth.php?app_id=385364&redirect_uri=http://10.3.1.1:3000/api/users/deezer')
+    Linking.openURL('https://connect.deezer.com/oauth/auth.php?app_id=385364&redirect_uri=http://192.168.0.49:3000/api/users/deezer')
       .catch(err => console.error("Couldn't load page", err));
     Alert.alert('Votre compte Deezer est maintenant associé');
   };

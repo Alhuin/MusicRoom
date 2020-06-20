@@ -4,7 +4,7 @@ import {
 import React, { Component } from 'react';
 import { Buttons } from '../../styles';
 
-const redirectUri = 'https://connect.deezer.com/oauth/auth.php?app_id=389504&redirect_uri=http://10.3.1.1:3000/api/users/deezerlogin&perms=basic_access,email';
+const redirectUri = 'https://connect.deezer.com/oauth/auth.php?app_id=389504&redirect_uri=http://192.168.0.49:3000/api/users/deezerlogin&perms=basic_access,email';
 
 export default class DeezerLogin extends Component {
     callDeez = () => {

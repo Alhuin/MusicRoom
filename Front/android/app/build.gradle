@@ -119,7 +119,7 @@ android {
         release {
             storeFile file('musicroom.keystore')
             storePassword 'lpcvpt1$'
-            keyAlias 'MusicRoomKey'
+            keyAlias 'musicroom'
             keyPassword 'lpcvpt1$'
         }
     }

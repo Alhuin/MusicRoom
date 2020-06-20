@@ -131,14 +131,13 @@ function addUser(login, password, name, familyName, email, idDeezer, idGoogle) {
       isVerified: false,
     });
     if (idDeezer !== null) {
-      user.push({ idDeezer });
+      user.idDeezer = idDeezer;
     }
     if (idGoogle !== null) {
-      user.push({ idGoogle });
+      user.idGoogle = idGoogle;
     }
     user.save((error, savedUser) => {
       if (error) {
-        console.log(error);
         if (error.name === 'ValidationError') {
           reject(new CustomError('AddUser', error.message.split(':')[1], 400)); // duplicate
         } else {
@@ -424,6 +423,7 @@ function _sendEmailToken(user, resolve, reject) {
   });
   token.save((tokenSaveError, savedToken) => {
     if (tokenSaveError) {
+      console.log('10à00àààà000000');
       reject(new CustomError('MongoError', tokenSaveError.message, 500));
     } else {
       const mailOptions = {
