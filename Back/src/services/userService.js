@@ -139,7 +139,7 @@ function addUser(login, password, name, familyName, email, idDeezer, idGoogle) {
     user.save((error, savedUser) => {
       if (error) {
         if (error.name === 'ValidationError') {
-          reject(new CustomError('AddUser', error.message.split(':')[1], 400)); // duplicate
+          reject(new CustomError('AddUser', error.message.split(':')[1], 409)); // duplicate
         } else {
           reject(new CustomError('MongoError', error.message, 500));
         }

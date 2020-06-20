@@ -361,7 +361,7 @@ function findUserByidSocial(req, res) {
           .send({ msg: error.msg });
       });
   } else {
-    res.status(404).send({ msg: 'User not found' });
+    res.status(422).send({ msg: 'User not found' });
   }
 }
 
