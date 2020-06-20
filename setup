@@ -4,13 +4,6 @@ ip=$(ifconfig | grep -Eo '10\.\d\.\d\.\d')
 
 FrontServerLine=$(cat Front/.env | grep -Eo "^SERVER ?= ?(.*)$")
 BackServerLine=$(cat Back/.env | grep -Eo "^SERVER ?= ?(.*)$")
-DeezpyPathLine=$(cat Back/.env | grep -Eo "^DEEZPY_PATH ?= ?(.*)$")
-
-
-cd Back/src/deezpy/
-deezpyPath=$(pwd)/deezpy.py
-cd ../../../
 
 sed -i "" "s|$FrontServerLine|SERVER=http://$ip|g" ./Front/.env
 sed -i "" "s|$BackServerLine|SERVER=http://$ip|g" ./Back/.env
-sed -i "" "s|$DeezpyPathLine|DEEZPY_PATH=$deezpyPath|g" ./Back/.env

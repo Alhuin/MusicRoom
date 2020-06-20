@@ -11,7 +11,6 @@ function getUsers(req, res) {
         .send(response.data);
     })
     .catch((error) => {
-      console.error(error.msg);
       res
         .status(error.status)
         .send({ msg: error.msg });
@@ -355,7 +354,6 @@ function findUserByidSocial(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error);
         res
           .status(error.status)
           .send({ msg: error.msg });

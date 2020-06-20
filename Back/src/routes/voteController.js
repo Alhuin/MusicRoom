@@ -9,7 +9,6 @@ function getVotes(req, res) {
         .send(response.data);
     })
     .catch((error) => {
-      console.error(error.msg);
       res
         .status(error.status)
         .send({ msg: error.msg });
@@ -25,7 +24,6 @@ function getVoteById(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });
@@ -45,7 +43,6 @@ function getMyVotesInPlaylist(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });
@@ -64,7 +61,6 @@ function deleteVoteById(req, res) {
           .send(response.data);
       })
       .catch((error) => {
-        console.error(error.msg);
         res
           .status(error.status)
           .send({ msg: error.msg });
