@@ -120,7 +120,7 @@ function downloadMusic(musicUrl) {
     const { spawn } = require('child_process');
     let stdout = '';
     let stderr = '';
-    const deezpy = spawn('deemix', ['-l', musicUrl], { cwd: './downloads' });
+    const deezpy = spawn('deemix', ['-l', '-b', 1, musicUrl], { cwd: './downloads' });
 
     deezpy.stdout.on('data', (data) => {
       stdout += data.toString();

@@ -33,7 +33,7 @@ export const screenHeader = {
 };
 
 export const screenHeaderText = {
-  fontFamily: 'Roboto',
+  fontFamily: 'System',
   color: Colors.baseText,
   fontSize: largeHeaderFontSize,
   fontWeight: 'bold',
