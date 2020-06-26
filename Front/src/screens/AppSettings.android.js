@@ -152,7 +152,7 @@ class AppSettings extends React.Component {
     } = this.state;
     const { userChanged } = this.props;
     GoogleSignin.configure({
-      webClientId: '1032045608110-fk8aiqduat8c6oiltm1uneqbuqhumfsn.apps.googleusercontent.com',
+      webClientId: '252653250150-1gbg93ohlra2tpr90p3ajg8qb4jmi2f8.apps.googleusercontent.com',
     });
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
