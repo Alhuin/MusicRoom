@@ -239,28 +239,47 @@ class Playlist extends React.Component {
           navigator.geolocation.getCurrentPosition(
             (position) => {
               pos = position;
+              isEditor(playlistId, userId, pos)
+                .then((response) => {
+                  if (response === true) {
+                    this.setState({
+                      editor: true, admin, pos, delegated,
+                    });
+                  } else {
+                    this.setState({
+                      editor: false, admin, pos, delegated,
+                    });
+                  }
+                })
+                .catch((error) => {
+                  this.setState({
+                    editor: false, admin, pos, delegated,
+                  });
+                  console.error(error);
+                });
             }, error => Alert.alert(`${error.message}\n Position introuvable.`),
             { enableHighAccuracy: false, timeout: 10000 },
           );
-        }
-        isEditor(playlistId, userId, pos)
-          .then((response) => {
-            if (response === true) {
-              this.setState({
-                editor: true, admin, pos, delegated,
-              });
-            } else {
+        } else {
+          isEditor(playlistId, userId, pos)
+            .then((response) => {
+              if (response === true) {
+                this.setState({
+                  editor: true, admin, pos, delegated,
+                });
+              } else {
+                this.setState({
+                  editor: false, admin, pos, delegated,
+                });
+              }
+            })
+            .catch((error) => {
               this.setState({
                 editor: false, admin, pos, delegated,
               });
-            }
-          })
-          .catch((error) => {
-            this.setState({
-              editor: false, admin, pos, delegated,
+              console.error(error);
             });
-            console.error(error);
-          });
+        }
       })
       .catch((error) => {
         this.setState({ admin, delegated });
