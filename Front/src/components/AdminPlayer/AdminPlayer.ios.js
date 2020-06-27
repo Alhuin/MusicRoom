@@ -209,9 +209,15 @@ export default class AdminPlayer extends Component {
                 this.setModalVisible();
               }}
               onPressPlay={() => {
+                MusicControl.updatePlayback({
+                  state: MusicControl.STATE_PLAYING,
+                });
                 paused(false);
               }}
               onPressPause={() => {
+                MusicControl.updatePlayback({
+                  state: MusicControl.STATE_PAUSED,
+                });
                 paused(true);
               }}
               cover={nowPlayingCover}

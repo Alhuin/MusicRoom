@@ -155,7 +155,7 @@ export default class AdminPlayer extends Component {
           });
           paused(true);
         });
-        MusicControl.on('nextTrack', () => this._onForward());
+        MusicControl.on('nextTrack', () => this.onForward());
 
         // Displayed infos
         MusicControl.setNowPlaying({
@@ -195,9 +195,15 @@ export default class AdminPlayer extends Component {
             <MiniPlayer
               handlePress={() => this.player.open()}
               onPressPlay={() => {
+                MusicControl.updatePlayback({
+                  state: MusicControl.STATE_PLAYING,
+                });
                 paused(false);
               }}
               onPressPause={() => {
+                MusicControl.updatePlayback({
+                  state: MusicControl.STATE_PAUSED,
+                });
                 paused(true);
               }}
               cover={nowPlayingCover}
